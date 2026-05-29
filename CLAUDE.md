@@ -169,11 +169,21 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 
 ## 9. Git-Konventionen
 
-- Entwicklung **ausschließlich** auf dem zugewiesenen Branch
-  `claude/n-acht-n-workflows-guide-EWQxg`. Nicht auf andere Branches pushen.
+- Entwickelt wird auf `claude/n-acht-n-workflows-guide-EWQxg`.
+- **`main` und der Feature-Branch werden synchron gehalten** (beide enthalten denselben Stand),
+  damit eine frisch gestartete Session den kompletten Stand vorfindet — egal welcher Branch als
+  Default ausgecheckt wird. Nach dem Commit also **beide** Branches pushen:
+  ```bash
+  node build.js
+  git add -A && git commit -m "…"
+  git push origin claude/n-acht-n-workflows-guide-EWQxg
+  git branch -f main HEAD && git push origin main
+  ```
 - Commit-Messages auf Deutsch, beschreibend, im Imperativ/Sachstil.
-- Nach Änderungen: `node build.js` (Bundle aktualisieren) **vor** dem Commit, damit `dist/` aktuell ist.
+- `node build.js` (Bundle aktualisieren) **vor** dem Commit, wenn sich Inhalt/CSS/JS geändert hat
+  (reine `CLAUDE.md`-Änderungen brauchen keinen Rebuild).
 - **Keine** Pull Requests erstellen, außer es wird ausdrücklich verlangt.
+- GitHub Pages: `.github/workflows/pages.yml` deployt bei Push auf `main` **oder** den Feature-Branch.
 
 ---
 
@@ -199,6 +209,12 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 ---
 
 ## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 — main-Branch angelegt, Branches synchron, Pages-Trigger erweitert
+- Ursache „keine Commits“ in frischer Session: es gab nur den Feature-Branch, **kein `main`**.
+- **`main` angelegt** mit komplettem Stand; ab jetzt werden beide Branches synchron gehalten
+  (siehe Abschnitt 9). Frischer Session-Start funktioniert damit von jedem Default-Branch aus.
+- `pages.yml` triggert jetzt auf `main` **und** Feature-Branch.
 
 ### 2026-05-29 — Mobile-Fidelity, Pfeile, Kapitel 4, Doku
 - Verbindungs-**Pfeilspitzen** (n8n-getreu) eingebaut: SVG-Marker `#n8n-arrow`/`#n8n-arrow-active`,

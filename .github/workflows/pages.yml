@@ -1,9 +1,9 @@
 name: Deploy n8n-Werkbuch to GitHub Pages
 
-# Veröffentlicht die statische Buch-Website bei jedem Push auf den Feature-Branch.
+# Veröffentlicht die statische Buch-Website bei jedem Push auf main oder den Feature-Branch.
 on:
   push:
-    branches: ["claude/n-acht-n-workflows-guide-EWQxg"]
+    branches: ["main", "claude/n-acht-n-workflows-guide-EWQxg"]
   workflow_dispatch: {}
 
 # Rechte, die der Pages-Deploy benötigt
