@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Was ist n8n? — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="01-was-ist-n8n" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">1</span> Grundlagen</div>
+      <h1 class="chap-title">Was ist n8n? Konzept & Einsatzgebiete</h1>
+      <p class="chap-lede">n8n (gesprochen „n-eight-n“, kurz für <em>nodemation</em>) ist ein Werkzeug, mit dem du
+        Software-Bausteine per Drag-and-drop zu automatischen Abläufen verbindest — ohne (oder mit nur wenig) Code.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 14 Minuten</span>
+        <span>🎯 Niveau: Einstieg</span>
+        <span>🧩 Voraussetzung: Kapitel 0.1</span>
+      </div>
+
+      <h2>Die Idee in einem Bild</h2>
+      <p>Stell dir vor, du hättest einen sehr zuverlässigen, sehr schnellen Assistenten, dem du eine Abfolge von
+        Anweisungen gibst: „Hol jeden Morgen den Wechselkurs, rechne ihn um, und wenn er unter X fällt, schick mir
+        eine Nachricht.“ In n8n malst du genau diese Anweisungskette als Diagramm auf — und n8n führt sie aus,
+        so oft du willst, völlig automatisch.</p>
+
+      <p>Jeder Kasten in diesem Diagramm heißt <strong>Node</strong> und macht genau eine Sache. Die Linien dazwischen
+        sind der Weg, den die Daten nehmen. Diese Kombination aus Nodes und Verbindungen ist ein <strong>Workflow</strong>.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n__chrome"><i></i><i></i><i></i><span>Ein Workflow = Nodes + Verbindungen</span></div>
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 820 340" preserveAspectRatio="none">
+                <path d="M 158 160 C 230 160, 250 160, 320 160"></path>
+                <path d="M 412 160 C 490 160, 500 160, 560 160"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:42px; top:114px;">
+                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__label">Jeden Morgen 8 Uhr</span>
+              </div>
+              <div class="n8n-node" style="left:320px; top:114px;">
+                <span class="n8n-node__icon">💱</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Wechselkurs holen</span>
+              </div>
+              <div class="n8n-node" style="left:560px; top:114px;">
+                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Nachricht senden</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 1.1</span>Ein winziger, aber vollständiger Workflow. Genau so „liest“ sich n8n: von links nach rechts.</figcaption>
+      </figure>
+
+      <h2>Was bedeutet „Workflow-Automatisierung“ konkret?</h2>
+      <p>Automatisieren heißt: eine Aufgabe, die du sonst <em>manuell und wiederholt</em> machst, einmal als Ablauf
+        beschreiben und dann die Maschine machen lassen. Typische Kandidaten erkennst du an drei Merkmalen:</p>
+      <ul>
+        <li>Es passiert <strong>regelmäßig</strong> oder <strong>als Reaktion</strong> auf ein Ereignis.</li>
+        <li>Es folgt <strong>festen Regeln</strong> („wenn X, dann Y“).</li>
+        <li>Es verbindet <strong>mehrere Werkzeuge</strong> (E-Mail, Tabelle, Chat, Datenbank …).</li>
+      </ul>
+
+      <h2>Wann lohnt sich n8n — und wann nicht?</h2>
+      <div class="cards">
+        <div class="card"><div class="ic">✅</div><b>Ideal für</b>
+          <p>Daten zwischen Apps schaufeln, Benachrichtigungen, Reports, Lead-Verarbeitung, KI-Aufgaben, API-Integrationen, Prototypen.</p></div>
+        <div class="card"><div class="ic">🤔</div><b>Geht auch, aber überleg</b>
+          <p>Sehr rechenintensive Datenverarbeitung großer Mengen, harte Echtzeit-Anforderungen im Millisekunden-Bereich.</p></div>
+        <div class="card"><div class="ic">🚫</div><b>Eher nicht</b>
+          <p>Komplette Endnutzer-Apps mit Oberfläche, sicherheitskritische Systeme ohne Aufsicht, Dinge mit nur einem einzigen Schritt.</p></div>
+      </div>
+
+      <h2>n8n im Vergleich zu Zapier & Make</h2>
+      <p>Wahrscheinlich hast du von <strong>Zapier</strong> oder <strong>Make</strong> (früher Integromat) gehört. Alle drei lösen
+        dasselbe Grundproblem. Die Unterschiede, die in der Praxis wirklich zählen:</p>
+
+      <table class="btable">
+        <thead><tr><th>Aspekt</th><th>n8n</th><th>Zapier</th><th>Make</th></tr></thead>
+        <tbody>
+          <tr><td>Selbst hosten</td><td>✅ Ja (Open Source, fair-code)</td><td>❌ Nein</td><td>❌ Nein</td></tr>
+          <tr><td>Eigener Code möglich</td><td>✅ JS & Python im Code-Node</td><td>eingeschränkt</td><td>eingeschränkt</td></tr>
+          <tr><td>Beliebige API (HTTP)</td><td>✅ voll & komfortabel</td><td>möglich</td><td>möglich</td></tr>
+          <tr><td>Verzweigungen/Loops</td><td>✅ frei verdrahtbar</td><td>begrenzt</td><td>✅ gut</td></tr>
+          <tr><td>KI-/Agenten-Bausteine</td><td>✅ stark integriert</td><td>vorhanden</td><td>vorhanden</td></tr>
+          <tr><td>Preismodell</td><td>pro Ausführung günstig / self-host kostenlos</td><td>pro Task</td><td>pro Operation</td></tr>
+          <tr><td>Einstiegshürde</td><td>etwas steiler, dafür mächtiger</td><td>sehr einfach</td><td>mittel</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die Entscheidung in einem Satz</b>
+        Willst du maximale Flexibilität, Kontrolle über deine Daten und niedrige Kosten bei viel Volumen — und scheust
+        eine etwas steilere Lernkurve nicht — ist n8n die richtige Wahl. Genau dafür ist dieses Buch da.
+      </div>
+
+      <h2>„Fair-Code“, Open Source & Cloud — was heißt das für dich?</h2>
+      <p>n8n ist <strong>quelloffen</strong> unter einer „fair-code“-Lizenz. Praktisch heißt das:</p>
+      <ul>
+        <li>Du darfst n8n <strong>kostenlos selbst betreiben</strong> (lokal oder auf deinem Server) und intern frei nutzen.</li>
+        <li>Du kannst den Quellcode einsehen und anpassen.</li>
+        <li>Es gibt zusätzlich eine bezahlte <strong>Cloud-Variante</strong>, bei der n8n den Betrieb für dich übernimmt —
+          ideal zum Starten, weil du dich um nichts kümmern musst.</li>
+      </ul>
+      <p>Für dieses Buch ist beides gleichwertig: Die Oberfläche und die Workflows sind identisch. Im nächsten Kapitel
+        wählst du einfach den Weg, der dir lieber ist.</p>
+
+      <h2>Ein paar Begriffe, die ab jetzt ständig vorkommen</h2>
+      <table class="btable">
+        <tbody>
+          <tr><td>Node</td><td>Ein einzelner Baustein, der eine Aufgabe erledigt (z. B. „E-Mail senden“).</td></tr>
+          <tr><td>Workflow</td><td>Mehrere verbundene Nodes, die zusammen einen Ablauf bilden.</td></tr>
+          <tr><td>Trigger</td><td>Der erste Node — er bestimmt, wann der Workflow startet.</td></tr>
+          <tr><td>Execution</td><td>Ein einzelner Durchlauf des Workflows („Ausführung“).</td></tr>
+          <tr><td>Item</td><td>Ein einzelnes Datenpaket, das durch den Workflow fließt.</td></tr>
+          <tr><td>Credential</td><td>Ein gespeicherter, sicher abgelegter Zugang (Passwort/API-Schlüssel) zu einem Dienst.</td></tr>
+          <tr><td>Canvas</td><td>Die Arbeitsfläche, auf der du Nodes anordnest und verbindest.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Keine Sorge, wenn noch nicht alles sitzt</b>
+        Diese Begriffe werden in den nächsten Kapiteln lebendig, sobald du sie anklickst. Du musst hier nichts auswendig lernen —
+        das Glossar im Anhang bleibt als Nachschlagewerk.
+      </div>
+
+      <p>Du weißt jetzt, <em>was</em> n8n ist und <em>wofür</em> es taugt. Im nächsten Kapitel bringen wir es bei dir zum Laufen —
+        wahlweise in der Cloud (Null Installation) oder lokal (ein Befehl).</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

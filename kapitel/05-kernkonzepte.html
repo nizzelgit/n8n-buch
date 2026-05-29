@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kernkonzepte: Items & Datenfluss — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="05-kernkonzepte" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">5</span> Grundlagen</div>
+      <h1 class="chap-title">Kernkonzepte: Nodes, Items & Datenfluss</h1>
+      <p class="chap-lede">Wenn ein einziges Kapitel dieses Buchs darüber entscheidet, ob du n8n wirklich verstehst,
+        dann dieses. Hier klären wir, <em>was genau</em> zwischen den Nodes hin- und herfließt — und wie du darauf zugreifst.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 24 Minuten</span>
+        <span>🎯 Niveau: Einstieg → Mittel</span>
+        <span>⚡ Das Herzstück des Buchs</span>
+      </div>
+
+      <h2>Die eine Sache, die alles erklärt: das Item</h2>
+      <p>Zwischen zwei Nodes fließen keine „Texte“ oder „Zahlen“, sondern <strong>Items</strong>. Ein Item ist ein kleines
+        Datenpaket. Und ganz wichtig:</p>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die goldene Regel</b>
+        Ein Node bekommt immer eine <strong>Liste von Items</strong> herein und gibt eine <strong>Liste von Items</strong> heraus.
+        Auch wenn es nur ein einziges Item ist, ist es technisch eine Liste mit einem Eintrag. Verinnerliche das, und
+        n8n wird durchschaubar.
+      </div>
+
+      <p>Jedes Item hat zwei Fächer:</p>
+      <ul>
+        <li><strong>json</strong> – die eigentlichen Daten als JSON-Objekt (Felder mit Werten). 95 % der Zeit arbeitest du hiermit.</li>
+        <li><strong>binary</strong> – optionale Dateianhänge (Bild, PDF, …). Brauchst du erst bei Datei-Workflows.</li>
+      </ul>
+
+      <h2>Wie Items in der Oberfläche aussehen</h2>
+      <p>n8n zeigt dieselben Items in drei Ansichten an — du wählst sie über die Reiter <strong>Tabelle / JSON / Schema</strong>
+        im Eingangs- und Ausgangspanel. Es ist immer dasselbe darunter, nur anders dargestellt:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">📊</span><b>Dieselben 3 Items, drei Ansichten</b></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">Tabelle <span class="count">3 Items</span></div>
+                <div class="ndv-panel__body">
+                  <table class="n8n-table">
+                    <thead><tr><th>name</th><th>stadt</th><th>alter</th></tr></thead>
+                    <tbody>
+                      <tr><td>Anna</td><td>Berlin</td><td>29</td></tr>
+                      <tr><td>Ben</td><td>Köln</td><td>34</td></tr>
+                      <tr><td>Cem</td><td>Wien</td><td>41</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">JSON <span class="count">3 Items</span></div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-json">[
+  { <span class="k">"name"</span>:<span class="s">"Anna"</span>, <span class="k">"stadt"</span>:<span class="s">"Berlin"</span>, <span class="k">"alter"</span>:<span class="n">29</span> },
+  { <span class="k">"name"</span>:<span class="s">"Ben"</span>,  <span class="k">"stadt"</span>:<span class="s">"Köln"</span>,   <span class="k">"alter"</span>:<span class="n">34</span> },
+  { <span class="k">"name"</span>:<span class="s">"Cem"</span>,  <span class="k">"stadt"</span>:<span class="s">"Wien"</span>,   <span class="k">"alter"</span>:<span class="n">41</span> }
+]</div>
+                </div>
+              </div>
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">Schema</div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-schema">
+                    <div class="field"><span class="dot"></span>name <span class="type">string</span></div>
+                    <div class="field"><span class="dot"></span>stadt <span class="type">string</span></div>
+                    <div class="field"><span class="dot"></span>alter <span class="type">number</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 5.1</span><b>Tabelle:</b> eine Zeile = ein Item. <b>JSON:</b> die Rohdaten.
+          <b>Schema:</b> nur die Feldnamen und ihre Typen. Lerne, flink zwischen ihnen zu wechseln.</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">⚡ Tabelle zum Überblicken, JSON zum Verstehen, Schema zum Verdrahten</b>
+        Die <strong>Schema</strong>-Ansicht ist beim Bauen am wertvollsten: Du siehst alle verfügbaren Feldnamen — und kannst
+        sie per Drag-and-drop direkt in ein Expression-Feld ziehen, statt sie abzutippen.
+      </div>
+
+      <h2>JSON in 3 Minuten (für alle, die unsicher sind)</h2>
+      <p>JSON ist nur eine Schreibweise für strukturierte Daten. Du musst es nicht <em>schreiben</em> können, aber
+        <em>lesen</em> schon. Es gibt genau diese Bausteine:</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Die JSON-Bausteine</div>
+<pre>{
+  <span class="pr">"text"</span>:    <span class="st">"in Anführungszeichen"</span>,   <span class="cm">// String (Text)</span>
+  <span class="pr">"zahl"</span>:    <span class="nm">42</span>,                  <span class="cm">// Number</span>
+  <span class="pr">"wahr"</span>:    <span class="ky">true</span>,                <span class="cm">// Boolean (true/false)</span>
+  <span class="pr">"leer"</span>:    <span class="ky">null</span>,                <span class="cm">// nichts</span>
+  <span class="pr">"liste"</span>:   [<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>],           <span class="cm">// Array (geordnete Liste)</span>
+  <span class="pr">"objekt"</span>:  {                       <span class="cm">// verschachteltes Objekt</span>
+    <span class="pr">"stadt"</span>: <span class="st">"Berlin"</span>
+  }
+}</pre>
+      </div>
+
+      <p>Das Wichtigste ist <strong>Verschachtelung</strong>: Objekte können in Objekten stecken. Um an
+        <code>Berlin</code> heranzukommen, schreibst du den Pfad mit Punkten: <code>objekt.stadt</code>. Genau das machst
+        du in Expressions ständig.</p>
+
+      <h2>Der Zugriff: Expressions & <code>$json</code></h2>
+      <p>Eine <strong>Expression</strong> ist ein kleines Stück Code in doppelten geschweiften Klammern, das n8n beim
+        Ausführen durch den echten Wert ersetzt. Die wichtigste Variable darin ist <code>$json</code>:</p>
+
+      <table class="btable">
+        <thead><tr><th>Expression</th><th>Bedeutung / Ergebnis</th></tr></thead>
+        <tbody>
+          <tr><td><code>{{ $json.name }}</code></td><td>Das Feld <code>name</code> des aktuellen Items → „Anna“</td></tr>
+          <tr><td><code>{{ $json.current.temperature_2m }}</code></td><td>Verschachtelt: in <code>current</code> das Feld <code>temperature_2m</code></td></tr>
+          <tr><td><code>{{ $json.liste[0] }}</code></td><td>Das erste Element einer Liste (Zählung beginnt bei 0!)</td></tr>
+          <tr><td><code>{{ $json.alter + 1 }}</code></td><td>Rechnen geht auch → 30</td></tr>
+          <tr><td><code>{{ $json.name.toUpperCase() }}</code></td><td>Funktionen anwenden → „ANNA“</td></tr>
+          <tr><td><code>{{ $now }}</code></td><td>Aktuelles Datum/Uhrzeit</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Woher weiß ich die Feldnamen?</b>
+        Aus dem <strong>Eingangspanel</strong> des Nodes (Schema-Ansicht). n8n zeigt dir dort genau die Felder, die gerade
+        ankommen. Du musst nichts raten — und kannst Felder per Drag-and-drop ins Feld ziehen.
+      </div>
+
+      <h2>Auf <em>andere</em> Nodes zugreifen: <code>$('Node-Name')</code></h2>
+      <p><code>$json</code> bezieht sich immer auf den <strong>direkt vorherigen</strong> Node. Manchmal brauchst du aber einen
+        Wert aus einem weiter zurückliegenden Node — etwa die ursprüngliche E-Mail aus dem Trigger, nachdem schon drei
+        Nodes dazwischenliegen. Dafür gibt es:</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Zugriff auf einen benannten Node</div>
+<pre><span class="cm">// Hol das Feld "email" aus dem Node namens "Webhook"</span>
+{{ $(<span class="st">'Webhook'</span>).item.json.email }}</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die zwei Zugriffe, die du wirklich brauchst</b>
+        <p style="margin:0 0 6px"><code>$json.feld</code> → Wert aus dem <strong>vorherigen</strong> Node.</p>
+        <p style="margin:0"><code>$('Name').item.json.feld</code> → Wert aus einem <strong>beliebigen früheren</strong> Node.</p>
+        Mit diesen beiden verdrahtest du gefühlt jeden Workflow.
+      </div>
+
+      <h2>Ein Item oder viele? Das „läuft pro Item“-Prinzip</h2>
+      <p>Hier passiert der häufigste Aha-Moment. Bekommt ein Node <strong>mehrere</strong> Items, führt er seine Aktion
+        <strong>für jedes Item einzeln</strong> aus. Drei Items rein → Aktion läuft dreimal → drei Items raus.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 820 300" preserveAspectRatio="none">
+                <path d="M 178 140 C 250 140, 270 140, 340 140"></path>
+                <path d="M 432 140 C 510 140, 520 140, 580 140"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:94px;">
+                <span class="n8n-node__icon">📊</span><span class="ep out"></span>
+                <span class="n8n-node__label">3 Kontakte lesen</span><span class="items">3 Items</span></div>
+              <div class="n8n-node" style="left:340px; top:94px;">
+                <span class="n8n-node__icon">✉️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">E-Mail senden</span><span class="items">läuft 3×</span></div>
+              <div class="n8n-node n8n-node--code" style="left:580px; top:94px;">
+                <span class="n8n-node__icon">📝</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Log</span><span class="items">3 Items</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 5.2</span>Drei Kontakte kommen aus dem ersten Node. Der E-Mail-Node verschickt
+          automatisch <b>drei</b> E-Mails — eine pro Item. Du baust den Node nur <em>einmal</em>.</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">⚡ Warum das so genial ist</b>
+        Du musst keine Schleife programmieren. Willst du „für jede Zeile in der Tabelle eine Nachricht“, sorgst du
+        einfach dafür, dass jede Zeile ein Item ist — den Rest erledigt n8n automatisch durch Wiederholung pro Item.
+      </div>
+
+      <h2>Daten „festpinnen“ zum Testen (Pinning)</h2>
+      <p>Beim Entwickeln willst du nicht bei jedem Test echte E-Mails verschicken oder eine API hundertmal aufrufen.
+        Lösung: <strong>Pin Data</strong>. Du führst einen Node einmal aus und „pinnst“ sein Ergebnis fest — bei den nächsten
+        Tests benutzt n8n diese gespeicherten Daten, statt neu abzurufen. Ein angepinnter Node bekommt ein 📌-Symbol.</p>
+      <div class="clickpath">
+        <span class="step"><span class="n">1</span> Node ausführen</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">2</span> im Ausgangspanel auf 📌 „Pin“ klicken</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">3</span> ab jetzt fixe Testdaten</span>
+      </div>
+
+      <h2>Wie das alles zusammenspielt — ein Durchlauf</h2>
+      <p>Fügen wir das Wissen zusammen. So „denkt“ n8n, wenn du auf Test klickst:</p>
+      <ol class="steps">
+        <li><h4>Trigger erzeugt das/die Start-Item(s)</h4><p>Beim manuellen Trigger ist das ein leeres Item, bei „Sheets lesen“ z. B. eine Zeile pro Item.</p></li>
+        <li><h4>Items wandern in den nächsten Node</h4><p>Der nimmt sie als <em>Eingang</em> (linkes Panel).</p></li>
+        <li><h4>Der Node arbeitet — pro Item</h4><p>Er wendet seine Einstellungen an; Expressions werden jetzt zu echten Werten ausgewertet.</p></li>
+        <li><h4>Er gibt neue Items aus</h4><p>Diese erscheinen im <em>Ausgang</em> (rechtes Panel) und sind der Eingang des nächsten Nodes.</p></li>
+        <li><h4>… und so weiter bis zum Ende</h4><p>Bis kein Node mehr folgt. Jeder Schritt ist in den Ausführungen nachvollziehbar.</p></li>
+      </ol>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest — verstehst du den Kern?</h4>
+        <ul>
+          <li>Was ist der Unterschied zwischen <code>$json</code> und <code>$('Trigger').item.json</code>?</li>
+          <li>Du hast 5 Items im Eingang eines „Slack senden“-Nodes. Wie viele Nachrichten gehen raus?</li>
+          <li>Welche Ansicht (Tabelle/JSON/Schema) nutzt du, um schnell alle Feldnamen zu sehen?</li>
+          <li>Wozu pinnst du Daten?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) <code>$json</code> = vorheriger Node, <code>$('Trigger')…</code> = ein bestimmter, beliebiger Node. ·
+        2) Fünf — der Node läuft pro Item. · 3) Schema. · 4) Um beim Testen keine echten Aktionen auszulösen und APIs zu schonen.
+      </div>
+
+      <p>Damit hast du das mentale Modell, auf dem alles andere aufbaut. Im nächsten Kapitel machen wir Expressions zur
+        echten Stärke: Datumsrechnen, Texte bauen, Bedingungen, kleine Tricks — der Werkzeugkasten, mit dem du Daten
+        in jede gewünschte Form bringst.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Die Oberfläche im Detail — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="03-oberflaeche" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">3</span> Grundlagen</div>
+      <h1 class="chap-title">Die Oberfläche im Detail</h1>
+      <p class="chap-lede">Dieses Kapitel ist deine Landkarte des n8n-Editors. Danach erkennst du jeden Bereich,
+        jeden wichtigen Knopf und jedes Bedienelement sofort wieder — die Grundlage, um in Kapitel 4 zügig zu bauen.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 22 Minuten</span>
+        <span>🎯 Niveau: Einstieg</span>
+        <span>🧩 Voraussetzung: n8n läuft (Kapitel 2)</span>
+      </div>
+
+      <h2>Die fünf Bereiche im Überblick</h2>
+      <p>Der Editor besteht aus fünf Bereichen. Präge sie dir an dieser einen Abbildung ein — danach gehen wir jeden
+        einzeln durch.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n__chrome"><i></i><i></i><i></i><span>Editor — Gesamtüberblick</span></div>
+            <div class="n8n-topbar">
+              <div class="n8n-logo">n8</div>
+              <div class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><span class="n8n-wfname">Newsletter-Versand</span></div>
+              <span class="n8n-tag">marketing</span>
+              <div class="n8n-topbar__right">
+                <span class="n8n-saved">Gespeichert</span>
+                <div class="n8n-toggle"><span>Aktiv</span><span class="n8n-switch is-on"></span></div>
+                <button class="n8n-btn n8n-btn--sm">Teilen</button>
+                <button class="n8n-btn n8n-btn--sm">⋯</button>
+              </div>
+            </div>
+            <div class="n8n-tabs"><span class="n8n-tab is-active">Editor</span><span class="n8n-tab">Ausführungen</span></div>
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 860 420" preserveAspectRatio="none">
+                <path d="M 168 170 C 240 170, 250 170, 320 170"></path>
+                <path d="M 412 170 C 480 170, 490 170, 540 170"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:52px; top:124px;">
+                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__label">Zeitplan</span></div>
+              <div class="n8n-node" style="left:320px; top:124px;">
+                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Sheets lesen</span></div>
+              <div class="n8n-node" style="left:540px; top:124px;">
+                <span class="n8n-node__icon">✉️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">E-Mail senden</span></div>
+              <div class="n8n-sticky" style="right:18px; bottom:54px; max-width:170px;">
+                <b>A</b> Top-Toolbar · <b>B</b> Tabs · <b>C</b> Canvas · <b>D</b> Nodes · <b>E</b> Zoom
+              </div>
+              <div class="n8n-zoom"><b>+</b><b>−</b><b>⊡</b></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 3.1</span>
+          <b>A</b> Top-Toolbar (oben) · <b>B</b> Editor/Ausführungen-Tabs · <b>C</b> Canvas (Arbeitsfläche) ·
+          <b>D</b> Nodes auf dem Canvas · <b>E</b> Zoom-Steuerung unten links.</figcaption>
+      </figure>
+
+      <hr>
+
+      <h2>A — Die Top-Toolbar</h2>
+      <p>Die Leiste ganz oben steuert den Workflow als Ganzes. Von links nach rechts:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-topbar">
+              <div class="n8n-logo">n8</div>
+              <div class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><span class="n8n-wfname">Newsletter-Versand</span></div>
+              <span class="n8n-tag">marketing</span>
+              <div class="n8n-topbar__right">
+                <span class="n8n-saved">Gespeichert</span>
+                <div class="n8n-toggle"><span>Aktiv</span><span class="n8n-switch is-on"></span></div>
+                <button class="n8n-btn n8n-btn--sm">Teilen</button>
+                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Speichern</button>
+                <button class="n8n-btn n8n-btn--sm">⋯</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 3.2</span>Die Top-Toolbar im Detail.</figcaption>
+      </figure>
+
+      <table class="btable">
+        <tbody>
+          <tr><td>n8-Logo</td><td>Zurück zur Übersicht aller Workflows.</td></tr>
+          <tr><td>Persönlich / Projekt</td><td>In welchem Bereich (Projekt) der Workflow liegt. Allein arbeitest du in „Persönlich“.</td></tr>
+          <tr><td>Workflow-Name</td><td>Klick darauf, um umzubenennen. <strong>Tipp: Benenne früh sinnvoll</strong> — „Unbenannt“ × 20 ist die Hölle.</td></tr>
+          <tr><td>Tags</td><td>Frei vergebbare Etiketten zum Sortieren vieler Workflows.</td></tr>
+          <tr><td>Speichern-Status</td><td>„Gespeichert“ / „Nicht gespeichert“. ⚡ <strong>n8n speichert nicht automatisch.</strong></td></tr>
+          <tr><td>Aktiv-Schalter</td><td>Schaltet den Workflow scharf, sodass Trigger automatisch feuern (siehe unten).</td></tr>
+          <tr><td>Teilen / ⋯-Menü</td><td>Workflow teilen, exportieren, importieren, duplizieren, löschen.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">⚡ Der wichtigste Schalter überhaupt: Aktiv vs. Inaktiv</b>
+        <p style="margin:0 0 8px"><strong>Inaktiv (grau):</strong> Der Workflow läuft nur, wenn du ihn von Hand testest. Zum Bauen genau richtig.</p>
+        <p style="margin:0"><strong>Aktiv (grün):</strong> Trigger feuern automatisch — der Zeitplan läuft wirklich, der Webhook nimmt
+        echte Anfragen an. Erst <em>einschalten</em>, wenn der Workflow fertig getestet ist.</p>
+      </div>
+
+      <h2>Speichern: <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></h2>
+      <p>Weil n8n nicht automatisch speichert, wird diese Tastenkombi dein bester Freund. Eine ungespeicherte
+        Änderung erkennst du am Status „Nicht gespeichert“ oben rechts.</p>
+
+      <hr>
+
+      <h2>B — Die Tabs: Editor & Ausführungen</h2>
+      <p>Direkt unter der Toolbar wechselst du zwischen zwei Ansichten desselben Workflows:</p>
+      <ul>
+        <li><strong>Editor</strong> – die Arbeitsfläche zum Bauen (hier verbringst du 95 % der Zeit).</li>
+        <li><strong>Ausführungen (Executions)</strong> – die Historie: jeder vergangene Durchlauf mit Ergebnis,
+          Zeitstempel und — bei Fehlern — der genauen Stelle, an der es hakte. Dein wichtigstes Debugging-Werkzeug.</li>
+      </ul>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-tabs"><span class="n8n-tab">Editor</span><span class="n8n-tab is-active">Ausführungen</span></div>
+            <div style="background:#fff; padding:0;">
+              <table class="n8n-table" style="border:0;">
+                <thead><tr><th>Status</th><th>Gestartet</th><th>Dauer</th><th>Modus</th></tr></thead>
+                <tbody>
+                  <tr><td style="color:#2bbf6c">● Erfolg</td><td>29.05. 08:00:03</td><td>1,2 s</td><td>Zeitplan</td></tr>
+                  <tr><td style="color:#2bbf6c">● Erfolg</td><td>28.05. 08:00:02</td><td>1,1 s</td><td>Zeitplan</td></tr>
+                  <tr><td style="color:#e03e52">● Fehler</td><td>27.05. 08:00:04</td><td>0,7 s</td><td>Zeitplan</td></tr>
+                  <tr><td style="color:#2bbf6c">● Erfolg</td><td>26.05. 14:22:10</td><td>1,0 s</td><td>Manuell</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 3.3</span>Die Ausführungen-Ansicht. Ein Klick auf eine Zeile öffnet den
+          Workflow mit den Daten <em>genau dieses Laufs</em> — Gold wert bei der Fehlersuche.</figcaption>
+      </figure>
+
+      <hr>
+
+      <h2>C — Der Canvas</h2>
+      <p>Die große, gepunktete Fläche ist deine Werkbank. Hier ordnest, verbindest und testest du Nodes. Die wichtigsten
+        Gesten — sie sitzen schnell:</p>
+
+      <table class="btable">
+        <thead><tr><th>Aktion</th><th>So geht's</th></tr></thead>
+        <tbody>
+          <tr><td>Verschieben (pan)</td><td>Leerfläche packen und ziehen, oder mit Leertaste + Ziehen</td></tr>
+          <tr><td>Zoomen</td><td><span class="kbd">Strg/⌘</span> + Mausrad, oder die <b>+ / −</b>-Knöpfe unten links</td></tr>
+          <tr><td>Alles einpassen</td><td>Das <b>⊡</b>-Symbol unten links (zoom to fit)</td></tr>
+          <tr><td>Node auswählen</td><td>Einmal klicken (Rahmen wird pink)</td></tr>
+          <tr><td>Node öffnen</td><td><strong>Doppelklick</strong> → öffnet die Detailansicht (NDV)</td></tr>
+          <tr><td>Node verschieben</td><td>Anfassen und ziehen</td></tr>
+          <tr><td>Node löschen</td><td>Auswählen, dann <span class="kbd">Entf</span> / <span class="kbd">Backspace</span></td></tr>
+        </tbody>
+      </table>
+
+      <h2>D — Anatomie eines Nodes</h2>
+      <p>Jeder Node sieht nach demselben Schema aus. Wenn du diese Teile kennst, kennst du <em>alle</em> Nodes:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <div class="n8n-node n8n-node--selected" style="left:330px; top:96px;">
+                <span class="n8n-node__icon">🌐</span>
+                <span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">HTTP Request</span>
+                <span class="items">1 Item</span>
+                <span class="badge badge--ok">✓</span>
+                <div class="n8n-node__tools"><b>▶</b><b>⏻</b><b>⧉</b><b>🗑</b></div>
+              </div>
+              <div class="n8n-sticky" style="left:40px; top:40px; max-width:230px;">
+                <b>So liest du einen Node</b>
+                Links der <b>Eingang</b>, rechts der <b>Ausgang</b>, oben die Mini-Werkzeugleiste, oben rechts
+                das Status-Häkchen nach erfolgreichem Lauf, darunter die Zahl der erzeugten Items.
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 3.4</span>Ein ausgewählter Node (pinker Rahmen) mit eingeblendeter Werkzeugleiste.</figcaption>
+      </figure>
+
+      <table class="btable">
+        <tbody>
+          <tr><td>Icon & Name</td><td>Zeigt, welche Integration/Funktion der Node erfüllt.</td></tr>
+          <tr><td>Eingang (links) ●</td><td>Hier kommen Daten vom vorherigen Node an. Trigger haben keinen Eingang.</td></tr>
+          <tr><td>Ausgang (rechts) ●</td><td>Hier verlassen die Daten den Node Richtung nächstem Node. Von hier ziehst du eine Verbindung.</td></tr>
+          <tr><td>▶ Ausführen</td><td>Führt nur diesen Node (und das Nötige davor) aus — perfekt zum schrittweisen Testen.</td></tr>
+          <tr><td>⏻ Deaktivieren</td><td>Schaltet den Node stumm, ohne ihn zu löschen (Daten fließen durch ihn hindurch).</td></tr>
+          <tr><td>⧉ Duplizieren · 🗑 Löschen</td><td>Kopie anlegen bzw. entfernen.</td></tr>
+          <tr><td>✓ / ✕ Badge</td><td>Ergebnis des letzten Laufs: grün = ok, rot = Fehler.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--tip">
+        <b class="t">⚡ Trigger erkennst du an der Form</b>
+        Trigger-Nodes haben eine charakteristisch <strong>abgerundete linke Seite</strong> (wie in Abb. 3.1 der „Zeitplan“-Node)
+        und besitzen keinen Eingangspunkt. So unterscheidest du auf einen Blick, wo ein Workflow beginnt.
+      </div>
+
+      <hr>
+
+      <h2>Nodes hinzufügen — das Auswahl-Panel</h2>
+      <p>Es gibt drei Wege, einen Node hinzuzufügen. Alle öffnen dasselbe Such-Panel:</p>
+      <div class="clickpath">
+        <span class="step"><span class="n">1</span> <span class="kbd">Tab</span> drücken</span>
+        <span class="arrow">oder</span>
+        <span class="step"><span class="n">2</span> den <span class="kbd">+</span>-Knopf oben rechts</span>
+        <span class="arrow">oder</span>
+        <span class="step"><span class="n">3</span> vom Ausgang eines Nodes eine Linie ins Leere ziehen</span>
+      </div>
+
+      <figure class="figure">
+        <div class="frame" style="display:flex; justify-content:center; padding:24px; background:#eef0f4; border-radius:12px;">
+          <div class="nodes-panel">
+            <div class="nodes-panel__head"><h5>Was soll als Nächstes passieren?</h5></div>
+            <div class="nodes-panel__search"><span>🔎</span><span>Nodes durchsuchen…</span><span class="cursor"></span></div>
+            <div class="nodes-panel__list">
+              <div class="nodes-panel__item is-active">
+                <div class="nodes-panel__ic">🌐</div>
+                <div class="nodes-panel__txt"><b>HTTP Request</b><small>Beliebige API/URL aufrufen</small></div>
+                <span class="chev">›</span>
+              </div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">✏️</div>
+                <div class="nodes-panel__txt"><b>Edit Fields (Set)</b><small>Felder setzen, umbenennen, bereinigen</small></div>
+                <span class="chev">›</span>
+              </div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">🔀</div>
+                <div class="nodes-panel__txt"><b>IF</b><small>Verzweigung nach einer Bedingung</small></div>
+                <span class="chev">›</span>
+              </div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">🤖</div>
+                <div class="nodes-panel__txt"><b>AI Agent</b><small>KI-Agent mit Werkzeugen & Gedächtnis</small></div>
+                <span class="chev">›</span>
+              </div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">💬</div>
+                <div class="nodes-panel__txt"><b>Telegram</b><small>Nachrichten senden/empfangen</small></div>
+                <span class="chev">›</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 3.5</span>Das Node-Auswahl-Panel. Tippe einfach los — die Liste filtert sofort.
+          Mit <span class="kbd">↑</span><span class="kbd">↓</span> und <span class="kbd">Enter</span> wählst du ohne Maus.</figcaption>
+      </figure>
+
+      <hr>
+
+      <h2>Die Node-Detailansicht (NDV)</h2>
+      <p>Doppelklickst du einen Node, öffnet sich die <strong>Node Detail View</strong> — der Ort, an dem du den Node
+        konfigurierst und sein Ergebnis siehst. Sie ist in drei Spalten aufgeteilt und nach diesem Prinzip immer gleich:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar">
+              <span class="ndvic">🌐</span><b>HTTP Request</b>
+              <span class="ndv-docs">Doku ↗</span>
+              <span class="ndv__exec-step">▶ Schritt ausführen</span>
+            </div>
+            <div class="ndv__cols">
+              <!-- INPUT -->
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-viewtabs"><b>Tabelle</b><b class="is-active">JSON</b><b>Schema</b></div>
+                  <div class="n8n-schema" style="margin-top:10px;">
+                    <div class="field"><span class="dot"></span>stadt <span class="type">string</span></div>
+                    <div class="field"><span class="dot"></span>land <span class="type">string</span></div>
+                  </div>
+                </div>
+              </div>
+              <!-- PARAMETER -->
+              <div class="ndv-panel ndv-params">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row">
+                    <label>Methode</label>
+                    <div class="n8n-select">GET <span class="chev">▾</span></div>
+                  </div>
+                  <div class="row">
+                    <label>URL <span class="req">*</span></label>
+                    <div class="ndv-fxtab"><b class="is-active">Fest</b><b>Expression</b></div>
+                    <input class="n8n-input" value="https://api.open-meteo.com/v1/forecast">
+                  </div>
+                  <div class="row">
+                    <label>Query-Parameter senden <span class="hint">(optional)</span></label>
+                    <div class="n8n-select">Eingeschaltet <span class="chev">▾</span></div>
+                  </div>
+                </div>
+              </div>
+              <!-- OUTPUT -->
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-viewtabs"><b>Tabelle</b><b class="is-active">JSON</b><b>Schema</b></div>
+                  <div class="n8n-json" style="margin-top:10px;">{
+  <span class="k">"temperatur"</span>: <span class="n">17.4</span>,
+  <span class="k">"einheit"</span>: <span class="s">"°C"</span>,
+  <span class="k">"wind"</span>: <span class="n">12</span>
+}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 3.6</span>Die NDV: <b>links</b> die Daten, die hereinkommen ·
+          <b>Mitte</b> die Einstellungen des Nodes · <b>rechts</b> das Ergebnis nach dem Ausführen.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Das wichtigste Arbeitsmuster in n8n</b>
+        Du baust einen Node, klickst <strong>▶ Schritt ausführen</strong>, siehst rechts das Ergebnis, korrigierst, führst
+        erneut aus — Node für Node. Dieses „bauen → ausführen → schauen“ ist der Rhythmus, in dem fast jeder Workflow entsteht.
+      </div>
+
+      <h4>Fest vs. Expression — der kleine Umschalter über jedem Feld</h4>
+      <p>Über vielen Feldern siehst du zwei Reiter: <strong>Fest</strong> (du tippst einen festen Wert) und
+        <strong>Expression</strong> (der Wert wird aus den Daten berechnet, z. B. <code>{{ $json.stadt }}</code>).
+        Das ist der Mechanismus, mit dem Nodes Daten voneinander übernehmen — Kapitel 5 und 6 widmen sich ihm ausführlich.</p>
+
+      <hr>
+
+      <h2>Die wichtigsten Tastenkürzel</h2>
+      <p>Drei, vier Kürzel beschleunigen dich enorm. Den Rest findest du im <a href="../index.html">Anhang A</a>.</p>
+      <table class="btable">
+        <thead><tr><th>Kürzel</th><th>Wirkung</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Tab</span></td><td>Node-Auswahl-Panel öffnen</td></tr>
+          <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></td><td>Workflow speichern</td></tr>
+          <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span> oder Klick auf „Test“</td><td>Ganzen Workflow ausführen</td></tr>
+          <tr><td><span class="kbd">Entf</span></td><td>Ausgewählten Node löschen</td></tr>
+          <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">A</span></td><td>Alle Nodes auswählen</td></tr>
+          <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">C</span> / <span class="kbd">V</span></td><td>Nodes kopieren/einfügen (auch zwischen Workflows!)</td></tr>
+          <tr><td><span class="kbd">1</span></td><td>Auf 100 % zoomen · <span class="kbd">2</span> auf Auswahl · <span class="kbd">0</span> alles einpassen</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Bevor du weiterblätterst</h4>
+        <ul>
+          <li>Du kannst die fünf Bereiche (Toolbar, Tabs, Canvas, Nodes, Zoom) benennen.</li>
+          <li>Du weißt, was „Aktiv“ bedeutet und warum du es beim Bauen <em>aus</em> lässt.</li>
+          <li>Du kannst das Node-Panel mit <span class="kbd">Tab</span> öffnen und eine NDV per Doppelklick.</li>
+        </ul>
+      </div>
+
+      <p>Du kennst jetzt das Cockpit. Zeit, es zu fliegen: Im nächsten Kapitel bauen wir gemeinsam deinen ersten,
+        vollständigen Workflow — jeder Klick einzeln.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

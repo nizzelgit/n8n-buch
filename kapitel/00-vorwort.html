@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vorwort — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="00-vorwort" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">00</span> Orientierung</div>
+      <h1 class="chap-title">Vorwort & wie du dieses Buch nutzt</h1>
+      <p class="chap-lede">Dieses Buch hat ein einziges, sehr konkretes Ziel: Nach dem Lesen kannst du
+        jeden gezeigten Workflow selbst nachbauen — nicht „so ungefähr“, sondern Klick für Klick,
+        Feld für Feld.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 8 Minuten</span>
+        <span>🎯 Niveau: alle</span>
+        <span>🧩 keine Vorkenntnisse nötig</span>
+      </div>
+
+      <h2>Für wen ist dieses Buch?</h2>
+      <p>Für alle, die wiederkehrende Aufgaben automatisieren wollen, ohne ein Software-Team zu sein:
+        Solo-Selbstständige, Marketing- und Ops-Leute, Entwickler:innen, die schneller prototypen wollen,
+        und Neugierige, die KI sinnvoll in echte Abläufe einbauen möchten. Du brauchst
+        <strong>keine Programmierkenntnisse</strong>. An den wenigen Stellen, an denen ein bisschen Code oder
+        JSON hilft, fangen wir bei null an.</p>
+
+      <h2>Die drei Prinzipien dieses Buchs</h2>
+      <div class="cards">
+        <div class="card"><div class="ic">👆</div><b>Nachbaubar</b>
+          <p>Jede Aktion steht als exakter Klick-Pfad da. Du sollst das Buch links und n8n rechts offen haben.</p></div>
+        <div class="card"><div class="ic">🖼️</div><b>Bebildert</b>
+          <p>Die Oberfläche ist als scharfe 1:1-Nachbildung eingebettet — du erkennst jeden Button wieder.</p></div>
+        <div class="card"><div class="ic">⚡</div><b>80/20-fokussiert</b>
+          <p>Wir lernen zuerst den kleinen Kern, der die meisten Ergebnisse bringt — und vertiefen erst danach.</p></div>
+      </div>
+
+      <h2>So sind die Kapitel aufgebaut</h2>
+      <p>Damit du dich schnell zurechtfindest, wiederholen sich dieselben Bausteine. Hier sind sie alle einmal,
+        damit du sie ab Kapitel 1 sofort einordnen kannst.</p>
+
+      <div class="prereq">
+        <h4>📋 Voraussetzungs-Box</h4>
+        <p style="margin:0 0 8px;font-size:14.5px">Steht am Anfang jedes Praxis-Kapitels und sagt dir <em>genau</em>, was du können und vorbereitet haben musst:</p>
+        <ul>
+          <li>Welche Konten/Zugänge du brauchst (z. B. ein Telegram-Bot-Token)</li>
+          <li>Welche Konzepte aus früheren Kapiteln vorausgesetzt werden</li>
+          <li>Geschätzte Bauzeit</li>
+        </ul>
+      </div>
+
+      <p>Ein <strong>Klick-Pfad</strong> zeigt eine Bedienabfolge kompakt an. Lies ihn von links nach rechts:</p>
+      <div class="clickpath">
+        <span class="step"><span class="n">1</span> Canvas öffnen</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">2</span> auf <span class="kbd">+</span> klicken</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">3</span> „Schedule“ tippen</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">4</span> <kbd class="kbd">Enter</kbd></span>
+      </div>
+
+      <p>Wichtige Hinweise erscheinen als farbige Boxen:</p>
+      <div class="callout callout--tip"><b class="t">Tipp</b>Eine Abkürzung oder Best Practice, die dir Zeit spart.</div>
+      <div class="callout callout--warn"><b class="t">Achtung</b>Eine häufige Stolperfalle — hier lohnt genaues Hinsehen.</div>
+      <div class="callout callout--info"><b class="t">Hintergrund</b>Vertiefung für alle, die verstehen wollen, <em>warum</em> etwas so ist.</div>
+      <div class="callout callout--pareto"><b class="t">⚡ 80/20</b>Markiert das Wissen aus dem entscheidenden Kern — wenn du wenig Zeit hast, lies zuerst diese Stellen.</div>
+
+      <h2>Was du an deinem Rechner brauchst</h2>
+      <p>Mehr nicht als das hier — die konkrete Einrichtung machen wir gemeinsam in Kapitel 2:</p>
+      <ul>
+        <li>Einen <strong>aktuellen Browser</strong> (Chrome, Firefox, Edge oder Safari).</li>
+        <li>Entweder einen <strong>kostenlosen n8n-Cloud-Account</strong> <em>oder</em> die Bereitschaft,
+          n8n lokal zu starten (ein einziger Befehl). Beide Wege zeige ich.</li>
+        <li>Etwas Zeit und Lust zum Ausprobieren. Kaputtmachen kannst du nichts.</li>
+      </ul>
+
+      <div class="callout callout--info">
+        <b class="t">Zur Oberfläche in diesem Buch</b>
+        Die abgebildeten „Screenshots“ sind detailgetreue Nachbildungen der n8n-Oberfläche (Stand 2025).
+        n8n entwickelt sich schnell weiter — Farben oder Beschriftungen können minimal abweichen, die
+        <em>Struktur</em> und der <em>Bedienablauf</em> bleiben aber stabil. Wo n8n etwas umbenannt hat,
+        nenne ich beide Begriffe.
+      </div>
+
+      <h2>Wie du am meisten mitnimmst</h2>
+      <ol class="steps">
+        <li><h4>Bau mit, nicht nur lesen</h4><p>Öffne n8n in einem zweiten Fenster und tippe jeden Schritt selbst.
+          Verstehen entsteht in den Fingern, nicht im Überfliegen.</p></li>
+        <li><h4>Brich Beispiele absichtlich</h4><p>Ändere einen Wert, lass es fehlschlagen, schau dir die Fehlermeldung an.
+          Du lernst n8n am schnellsten, indem du beobachtest, wie es reagiert.</p></li>
+        <li><h4>Folge erst dem ⚡-Pfad</h4><p>Wenn die Zeit knapp ist: Kapitel 0.1 (das 80/20) und Kapitel 3–5 geben dir
+          das Fundament für fast alles Weitere.</p></li>
+      </ol>
+
+      <p>Genug Vorrede. Schauen wir uns zuerst an, welche <strong>35 % von n8n</strong> dir die meisten Ergebnisse bringen —
+        und dann bauen wir.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+/* ==========================================================================
+   n8n-ui.css  —  High-Fidelity-Nachbau der n8n-Editor-Oberfläche
+   --------------------------------------------------------------------------
+   Diese Datei stellt wiederverwendbare Komponenten bereit, die der echten
+   n8n-Oberfläche (Stand 2025, Canvas v2 / Vue-Flow) nachempfunden sind.
+   Sie wird in den Lehrbuch-Kapiteln genutzt, um "Screenshots" pixelnah
+   und scharf skalierbar direkt im Browser zu erzeugen.
+   ========================================================================== */
+
+:root {
+  /* n8n Markenfarben & Design-Tokens (nachgebildet) */
+  --n8n-primary:        #ea4b71;   /* n8n Pink/Coral – Buttons, Akzente */
+  --n8n-primary-dark:   #cf4063;
+  --n8n-primary-tint:   #fde8ee;
+  --n8n-secondary:      #6a4bff;
+
+  --n8n-canvas-bg:      #f7f7fb;   /* heller Canvas-Hintergrund */
+  --n8n-dot:            #d9dbe3;   /* Punkte des Canvas-Rasters */
+  --n8n-surface:        #ffffff;
+  --n8n-surface-2:      #fbfbfc;
+  --n8n-border:         #dbdfe7;
+  --n8n-border-strong:  #c4c9d4;
+  --n8n-text:           #2d2e3a;
+  --n8n-text-light:     #6e7079;
+  --n8n-text-faint:     #909399;
+
+  --n8n-success:        #2bbf6c;
+  --n8n-warning:        #f6a609;
+  --n8n-danger:         #e03e52;
+
+  --n8n-radius:         8px;
+  --n8n-shadow:         0 2px 6px rgba(34, 36, 56, .08), 0 1px 2px rgba(34,36,56,.06);
+  --n8n-shadow-lg:      0 12px 36px rgba(34, 36, 56, .18);
+
+  --n8n-font:           "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         Roboto, Helvetica, Arial, sans-serif;
+  --n8n-mono:           "JetBrains Mono", "SF Mono", "Fira Code", ui-monospace,
+                         Menlo, Consolas, monospace;
+}
+
+/* --------------------------------------------------------------------------
+   Rahmen: jeder UI-Nachbau steht in einem .n8n-Frame (wie ein Browserfenster)
+   -------------------------------------------------------------------------- */
+.n8n {
+  font-family: var(--n8n-font);
+  color: var(--n8n-text);
+  border: 1px solid var(--n8n-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--n8n-surface);
+  box-shadow: var(--n8n-shadow);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  line-height: 1.4;
+}
+.n8n * { box-sizing: border-box; }
+
+/* Optional: simulierte Fenster-Titelleiste (Ampel-Punkte) */
+.n8n__chrome {
+  display: flex; align-items: center; gap: 7px;
+  padding: 9px 12px;
+  background: #edeef2;
+  border-bottom: 1px solid var(--n8n-border);
+}
+.n8n__chrome i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+.n8n__chrome i:nth-child(1){ background:#ff5f57; }
+.n8n__chrome i:nth-child(2){ background:#febc2e; }
+.n8n__chrome i:nth-child(3){ background:#28c840; }
+.n8n__chrome span {
+  margin-left: 10px; font-size: 12px; color: var(--n8n-text-light);
+  font-family: var(--n8n-mono);
+}
+
+/* --------------------------------------------------------------------------
+   Top-Toolbar des Editors
+   -------------------------------------------------------------------------- */
+.n8n-topbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 14px;
+  background: var(--n8n-surface);
+  border-bottom: 1px solid var(--n8n-border);
+  font-size: 13px;
+  min-height: 50px;
+}
+.n8n-logo {
+  width: 26px; height: 26px; border-radius: 6px;
+  background: #2d2e3a; color:#fff;
+  display: grid; place-items: center;
+  font-weight: 800; font-size: 13px; letter-spacing: -1px;
+  flex: none;
+}
+.n8n-breadcrumb { display:flex; align-items:center; gap:7px; color: var(--n8n-text-light); }
+.n8n-breadcrumb b { color: var(--n8n-text); font-weight: 600; }
+.n8n-breadcrumb .sep { color: var(--n8n-text-faint); }
+.n8n-wfname {
+  font-weight: 600; color: var(--n8n-text);
+  border: 1px solid transparent; border-radius: 6px; padding: 3px 7px;
+}
+.n8n-wfname:hover { border-color: var(--n8n-border); background: var(--n8n-surface-2); }
+.n8n-tag {
+  font-size: 11px; color: var(--n8n-text-light);
+  background: #eef0f4; border-radius: 20px; padding: 3px 9px;
+}
+.n8n-topbar__right { margin-left:auto; display:flex; align-items:center; gap:10px; }
+.n8n-saved { font-size: 12px; color: var(--n8n-text-faint); }
+
+/* Aktiv/Inaktiv-Schalter */
+.n8n-toggle { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--n8n-text-light); }
+.n8n-switch {
+  width: 34px; height: 18px; border-radius: 20px; background: #c8ccd6;
+  position: relative; flex:none; transition: background .15s;
+}
+.n8n-switch::after {
+  content:""; position:absolute; top:2px; left:2px;
+  width:14px; height:14px; border-radius:50%; background:#fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: left .15s;
+}
+.n8n-switch.is-on { background: var(--n8n-success); }
+.n8n-switch.is-on::after { left: 18px; }
+
+/* Editor-Tabs (Editor / Executions) */
+.n8n-tabs {
+  display:flex; gap: 4px; padding: 0 14px;
+  background: var(--n8n-surface); border-bottom: 1px solid var(--n8n-border);
+  font-size: 13px;
+}
+.n8n-tab {
+  padding: 9px 4px; margin-right: 18px; color: var(--n8n-text-light);
+  border-bottom: 2px solid transparent; cursor: default;
+}
+.n8n-tab.is-active { color: var(--n8n-text); border-bottom-color: var(--n8n-primary); font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+.n8n-btn {
+  font-family: var(--n8n-font); font-size: 13px; font-weight: 600;
+  padding: 7px 14px; border-radius: 6px; border: 1px solid var(--n8n-border-strong);
+  background: var(--n8n-surface); color: var(--n8n-text); cursor: default;
+  display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+}
+.n8n-btn--primary { background: var(--n8n-primary); border-color: var(--n8n-primary); color:#fff; }
+.n8n-btn--ghost   { background: transparent; border-color: transparent; color: var(--n8n-text-light); }
+.n8n-btn--sm      { padding: 5px 10px; font-size: 12px; }
+.n8n-btn .ic { font-size: 14px; line-height: 1; }
+
+/* --------------------------------------------------------------------------
+   Canvas mit Punkt-Raster
+   -------------------------------------------------------------------------- */
+.n8n-canvas {
+  position: relative;
+  background-color: var(--n8n-canvas-bg);
+  background-image: radial-gradient(var(--n8n-dot) 1.4px, transparent 1.4px);
+  background-size: 22px 22px;
+  background-position: -11px -11px;
+  min-height: 340px;
+  overflow: hidden;
+}
+.n8n-canvas--tall { min-height: 460px; }
+
+/* Verbindungslinien (SVG liegt unter den Nodes) */
+.n8n-canvas > svg.n8n-conns {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 1;
+}
+.n8n-conns path { fill: none; stroke: #b3b9c7; stroke-width: 2.2; }
+.n8n-conns path.is-active { stroke: var(--n8n-primary); }
+.n8n-conns .plus {
+  fill:#fff; stroke:#b3b9c7; stroke-width: 1.4;
+}
+.n8n-conns .plus-sign { stroke:#7d8190; stroke-width:1.6; }
+
+/* --------------------------------------------------------------------------
+   Node (Standard) – quadratische Kachel mit Icon + Label darunter
+   -------------------------------------------------------------------------- */
+.n8n-node {
+  position: absolute; z-index: 2;
+  width: 92px; height: 92px;
+  background: var(--n8n-surface);
+  border: 1.5px solid var(--n8n-border-strong);
+  border-radius: 12px;
+  display: grid; place-items: center;
+  box-shadow: var(--n8n-shadow);
+}
+.n8n-node__icon { font-size: 34px; line-height: 1; }
+.n8n-node__label {
+  position: absolute; top: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%);
+  font-size: 12.5px; font-weight: 600; color: var(--n8n-text);
+  white-space: nowrap; text-align: center;
+}
+.n8n-node__sublabel {
+  position:absolute; top: calc(100% + 26px); left:50%; transform:translateX(-50%);
+  font-size: 11px; color: var(--n8n-text-faint); white-space: nowrap;
+}
+/* Trigger: linke Seite stark abgerundet (charakteristische n8n-Form) */
+.n8n-node--trigger { border-radius: 46px 12px 12px 46px; }
+/* Auswahl */
+.n8n-node--selected { border-color: var(--n8n-primary); box-shadow: 0 0 0 2px var(--n8n-primary-tint), var(--n8n-shadow); }
+/* Farbakzent oben (integration color bar wie bei manchen Nodes) */
+.n8n-node--ai     { border-color:#b398cf; }
+.n8n-node--code   { border-color:#7c84ff; }
+
+/* Ein-/Ausgangspunkte (Connector-Handles) */
+.n8n-node .ep {
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:11px; height:11px; border-radius:50%;
+  background:#fff; border:2px solid #b3b9c7;
+}
+.n8n-node .ep.in  { left:-7px; }
+.n8n-node .ep.out { right:-7px; }
+.n8n-node--trigger .ep.in { display:none; }
+
+/* Status-Häkchen (nach erfolgreicher Ausführung) */
+.n8n-node .badge {
+  position:absolute; top:-9px; right:-9px;
+  width:20px; height:20px; border-radius:50%;
+  display:grid; place-items:center; font-size:11px; color:#fff;
+  border:2px solid #fff;
+}
+.n8n-node .badge--ok { background: var(--n8n-success); }
+.n8n-node .badge--err{ background: var(--n8n-danger); }
+/* kleine Items-Zahl unter dem Output-Punkt */
+.n8n-node .items {
+  position:absolute; right:-6px; top:-22px; transform:translateX(50%);
+  font-size:10.5px; color: var(--n8n-text-faint); white-space:nowrap;
+}
+
+/* Toolbar, die über einem ausgewählten Node erscheint */
+.n8n-node__tools {
+  position:absolute; bottom: calc(100% + 8px); left:50%; transform:translateX(-50%);
+  display:flex; gap:2px; background:#fff; border:1px solid var(--n8n-border);
+  border-radius:7px; padding:3px; box-shadow: var(--n8n-shadow); z-index:5;
+}
+.n8n-node__tools b {
+  width:24px; height:22px; display:grid; place-items:center;
+  font-size:12px; color:var(--n8n-text-light); border-radius:5px;
+}
+
+/* Großes Plus zum ersten Trigger hinzufügen (leerer Canvas) */
+.n8n-addfirst {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width: 110px; height: 110px; border-radius: 16px;
+  border: 2px dashed var(--n8n-border-strong); background: #fff;
+  display:grid; place-items:center; color: var(--n8n-text-faint);
+  z-index:2; text-align:center;
+}
+.n8n-addfirst .big { font-size:38px; line-height:1; color:var(--n8n-primary); }
+.n8n-addfirst small { display:block; margin-top:6px; font-size:11px; max-width:90px; }
+
+/* Sticky Note */
+.n8n-sticky {
+  position:absolute; z-index:1;
+  background:#fff6c8; border:1px solid #f3e08a; border-radius:6px;
+  padding:12px 14px; font-size:12.5px; color:#6b5b00; max-width:230px;
+  box-shadow: var(--n8n-shadow);
+}
+.n8n-sticky b { display:block; margin-bottom:4px; }
+
+/* Mini-Map / Zoom-Controls unten links */
+.n8n-zoom {
+  position:absolute; bottom:12px; left:12px; z-index:6;
+  display:flex; gap:1px; background:#fff; border:1px solid var(--n8n-border);
+  border-radius:7px; overflow:hidden; box-shadow:var(--n8n-shadow);
+}
+.n8n-zoom b { width:30px; height:28px; display:grid; place-items:center;
+  font-size:14px; color:var(--n8n-text-light); border-right:1px solid var(--n8n-border); }
+.n8n-zoom b:last-child{ border-right:none; }
+
+/* --------------------------------------------------------------------------
+   Node-Auswahl-Panel (öffnet sich rechts beim Klick auf "+")
+   -------------------------------------------------------------------------- */
+.nodes-panel {
+  width: 320px; background:#fff; border:1px solid var(--n8n-border);
+  border-radius: 10px; overflow:hidden; box-shadow: var(--n8n-shadow-lg);
+  font-family: var(--n8n-font); font-size:13px;
+}
+.nodes-panel__head { padding:12px 14px 4px; }
+.nodes-panel__head h5 { margin:0 0 8px; font-size:13px; font-weight:600; }
+.nodes-panel__search {
+  display:flex; align-items:center; gap:8px;
+  border:1px solid var(--n8n-border-strong); border-radius:7px;
+  padding:8px 11px; color:var(--n8n-text-light); margin:0 14px 8px;
+}
+.nodes-panel__search .cursor { width:1px; height:15px; background:var(--n8n-text); animation: n8n-blink 1s steps(1) infinite; }
+@keyframes n8n-blink { 50% { opacity:0; } }
+.nodes-panel__list { max-height: 360px; overflow:auto; }
+.nodes-panel__item {
+  display:flex; align-items:center; gap:11px;
+  padding:10px 14px; border-top:1px solid #f0f1f4;
+}
+.nodes-panel__item:hover, .nodes-panel__item.is-active { background: var(--n8n-primary-tint); }
+.nodes-panel__ic {
+  width:30px; height:30px; border-radius:6px; flex:none;
+  display:grid; place-items:center; font-size:17px; background:#f1f2f6;
+}
+.nodes-panel__txt b { display:block; font-weight:600; font-size:13px; }
+.nodes-panel__txt small { color:var(--n8n-text-light); font-size:11.5px; }
+.nodes-panel__item .chev { margin-left:auto; color:var(--n8n-text-faint); }
+
+/* --------------------------------------------------------------------------
+   NDV — Node Detail View (öffnet sich bei Doppelklick auf einen Node)
+   3 Spalten: Input | Parameter | Output
+   -------------------------------------------------------------------------- */
+.ndv {
+  background:#fff; border:1px solid var(--n8n-border); border-radius:12px;
+  overflow:hidden; box-shadow: var(--n8n-shadow-lg); font-family: var(--n8n-font);
+}
+.ndv__bar {
+  display:flex; align-items:center; gap:10px; padding:11px 14px;
+  border-bottom:1px solid var(--n8n-border); background:var(--n8n-surface-2);
+}
+.ndv__bar .ndvic {
+  width:26px; height:26px; border-radius:6px; background:#f1f2f6;
+  display:grid; place-items:center; font-size:16px;
+}
+.ndv__bar b { font-size:14px; font-weight:600; }
+.ndv__bar .ndv-x { margin-left:auto; color:var(--n8n-text-faint); font-size:16px; }
+.ndv__bar .ndv-docs { color:var(--n8n-text-light); font-size:12px; }
+
+.ndv__cols { display:grid; grid-template-columns: 1fr 1.25fr 1fr; min-height: 300px; }
+.ndv-panel { border-right:1px solid var(--n8n-border); display:flex; flex-direction:column; }
+.ndv-panel:last-child { border-right:none; }
+.ndv-panel__head {
+  display:flex; align-items:center; gap:8px; padding:9px 13px;
+  font-size:12px; color:var(--n8n-text-light); border-bottom:1px solid var(--n8n-border);
+  background:var(--n8n-surface-2);
+}
+.ndv-panel__head .count { margin-left:auto; font-size:11px; color:var(--n8n-text-faint); }
+.ndv-panel__body { padding:13px; overflow:auto; flex:1; }
+
+/* leere Input/Output-Hinweise */
+.ndv-empty { color:var(--n8n-text-faint); font-size:12.5px; text-align:center; padding:26px 14px; }
+.ndv-exec {
+  display:inline-flex; align-items:center; gap:7px; margin:8px auto 0;
+  padding:8px 14px; border-radius:6px; background:var(--n8n-primary); color:#fff;
+  font-size:12.5px; font-weight:600;
+}
+
+/* Parameter-Spalte: Formularfelder */
+.ndv-params .row { margin-bottom:14px; }
+.ndv-params label {
+  display:flex; align-items:center; gap:6px;
+  font-size:12px; font-weight:600; color:var(--n8n-text); margin-bottom:5px;
+}
+.ndv-params label .req { color:var(--n8n-danger); }
+.ndv-params .hint { font-size:11px; color:var(--n8n-text-faint); font-weight:400; }
+.n8n-input, .n8n-select {
+  width:100%; padding:8px 11px; border:1px solid var(--n8n-border-strong);
+  border-radius:6px; font-size:12.5px; font-family:var(--n8n-font);
+  color:var(--n8n-text); background:#fff;
+}
+.n8n-input.is-expr {
+  font-family:var(--n8n-mono); background:#f6f7ff; border-color:#c7c9ee; color:#3b3f8f;
+}
+.n8n-select { display:flex; align-items:center; justify-content:space-between; }
+.n8n-select .chev { color:var(--n8n-text-faint); }
+/* Tab-Umschalter "Fixed | Expression" über einem Feld */
+.ndv-fxtab { display:inline-flex; border:1px solid var(--n8n-border); border-radius:5px; overflow:hidden; margin-bottom:6px; }
+.ndv-fxtab b { font-size:10.5px; padding:3px 9px; color:var(--n8n-text-light); }
+.ndv-fxtab b.is-active { background:#eef0f4; color:var(--n8n-text); font-weight:600; }
+
+/* kleiner Ausführen-Button im NDV-Header rechts */
+.ndv__exec-step {
+  margin-left:auto; display:inline-flex; align-items:center; gap:6px;
+  background:var(--n8n-primary); color:#fff; font-size:12px; font-weight:600;
+  padding:6px 12px; border-radius:6px;
+}
+
+/* Datentabelle / JSON-Ausgabe im Output-Panel */
+.ndv-viewtabs { display:flex; gap:14px; font-size:11.5px; padding:7px 13px 0; }
+.ndv-viewtabs b { color:var(--n8n-text-light); padding-bottom:5px; border-bottom:2px solid transparent; }
+.ndv-viewtabs b.is-active { color:var(--n8n-text); border-bottom-color:var(--n8n-primary); font-weight:600; }
+
+.n8n-table { width:100%; border-collapse:collapse; font-size:11.5px; }
+.n8n-table th, .n8n-table td {
+  border:1px solid var(--n8n-border); padding:6px 9px; text-align:left;
+  font-family:var(--n8n-mono); color:var(--n8n-text);
+}
+.n8n-table th { background:var(--n8n-surface-2); font-family:var(--n8n-font); font-weight:600; color:var(--n8n-text-light); }
+
+/* JSON-Ansicht */
+.n8n-json {
+  font-family:var(--n8n-mono); font-size:11.5px; line-height:1.7;
+  background:#fbfbfd; border-radius:6px; padding:10px 12px; overflow:auto;
+  color:var(--n8n-text); white-space:pre;
+}
+.n8n-json .k { color:#9b3d8a; }   /* key */
+.n8n-json .s { color:#2f8f4e; }   /* string */
+.n8n-json .n { color:#2b6cb0; }   /* number */
+.n8n-json .b { color:#b5651d; }   /* boolean */
+
+/* Schema-Ansicht (Baum mit Datentypen) – im Input-Panel beliebt */
+.n8n-schema { font-family:var(--n8n-mono); font-size:12px; }
+.n8n-schema .field { display:flex; align-items:center; gap:8px; padding:4px 0; }
+.n8n-schema .dot { width:7px;height:7px;border-radius:2px;background:#9aa0ad; }
+.n8n-schema .type { color:var(--n8n-text-faint); font-size:10.5px; margin-left:auto; }
+
+/* responsiv: NDV-Spalten auf schmalen Screens stapeln */
+@media (max-width: 720px) {
+  .ndv__cols { grid-template-columns: 1fr; }
+  .ndv-panel { border-right:none; border-bottom:1px solid var(--n8n-border); }
+  .nodes-panel { width:100%; }
+}

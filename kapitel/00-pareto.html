@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Das 80/20 von n8n — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="00-pareto" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">0.1</span> Orientierung</div>
+      <h1 class="chap-title">Das 80/20 von n8n — die wichtigen 35 %</h1>
+      <p class="chap-lede">n8n hat über 400 Integrationen und unzählige Optionen. Die gute Nachricht:
+        Ein erstaunlich kleiner Kern erklärt fast alles, was du je bauen wirst. Dieses Kapitel ist die Landkarte
+        dieses Kerns — der Rest des Buchs füllt sie aus.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 12 Minuten</span>
+        <span>🎯 Niveau: Einstieg</span>
+        <span>⚡ Das Fundament für alles Weitere</span>
+      </div>
+
+      <p>Bevor wir irgendetwas installieren oder klicken, lohnt sich eine mentale Landkarte. Wenn du die folgenden
+        sieben Bausteine verstehst, kannst du dir fast jeden Workflow der Welt selbst herleiten — auch solche,
+        die in diesem Buch gar nicht vorkommen. Alles andere sind Varianten und Spezialfälle.</p>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die Kernidee in einem Satz</b>
+        Ein n8n-Workflow ist eine <strong>Kette von Bausteinen (Nodes)</strong>, durch die <strong>Daten (Items)</strong>
+        von links nach rechts fließen; jeder Node bekommt Daten herein, tut <em>eine</em> Sache und gibt Daten weiter.
+      </div>
+
+      <h2>Die 7 Bausteine, die fast alles erklären</h2>
+
+      <h3>1. Der Auslöser (Trigger) — „Wann soll es losgehen?“</h3>
+      <p>Jeder Workflow beginnt mit genau einem Auslöser. Er beantwortet die Frage <em>wann</em> der Workflow startet.
+        In der Praxis brauchst du fast immer nur drei:</p>
+      <ul>
+        <li><strong>Manuell</strong> – du klickst auf „Test“. Zum Bauen und Ausprobieren.</li>
+        <li><strong>Zeitplan (Schedule)</strong> – „jeden Tag um 8 Uhr“. Für Reports, Backups, Erinnerungen.</li>
+        <li><strong>Webhook</strong> – „immer wenn jemand dieses Formular abschickt / dieses System mir Daten schickt“.
+          Das Tor zu praktisch jeder anderen Software.</li>
+      </ul>
+      <div class="callout callout--pareto"><b class="t">⚡ Merke</b>Schedule + Webhook decken geschätzt 80 % aller realen Startpunkte ab.</div>
+
+      <h3>2. Daten holen — der HTTP-Request-Node</h3>
+      <p>n8n hat fertige Nodes für Google Sheets, Slack, Telegram, Notion und hunderte mehr. Aber der wichtigste
+        einzelne Node ist der <strong>HTTP Request</strong>: Damit sprichst du <em>jede</em> Internet-Schnittstelle (API) an —
+        auch solche, für die es keinen fertigen Node gibt. Wer den HTTP-Node beherrscht, ist von keiner Integration abhängig.</p>
+
+      <h3>3. Daten umformen — Set / Edit Fields & der Code-Node</h3>
+      <p>Zwischen „Daten rein“ und „Daten raus“ liegt fast immer ein bisschen Umbau: Felder umbenennen, zusammenfügen,
+        ausrechnen, filtern. Dafür reichen meist zwei Werkzeuge: der <strong>Edit-Fields-Node (Set)</strong> für einfache Fälle
+        und der <strong>Code-Node</strong> für alles, was Logik braucht.</p>
+
+      <h3>4. Entscheiden — IF & Switch</h3>
+      <p>„Wenn der Betrag über 1000 € liegt, schicke es an den Chef, sonst direkt verbuchen.“ Solche Verzweigungen
+        baust du mit dem <strong>IF-Node</strong> (zwei Wege) oder dem <strong>Switch-Node</strong> (viele Wege).</p>
+
+      <h3>5. Etwas auslösen — Aktions-Nodes</h3>
+      <p>Am Ende soll etwas <em>passieren</em>: eine E-Mail raus, eine Zeile in Google Sheets, eine Slack-Nachricht,
+        ein Eintrag im CRM. Das sind Aktions-Nodes. Sie funktionieren alle nach demselben Muster, das du einmal lernst.</p>
+
+      <h3>6. Der rote Faden — Items & Expressions</h3>
+      <p>Daten reisen als <strong>Items</strong> (kleine Datenpakete im JSON-Format) durch den Workflow. Um in einem späteren
+        Node auf einen Wert aus einem früheren zuzugreifen, nutzt du <strong>Expressions</strong> — kleine Platzhalter wie
+        <code>{{ $json.email }}</code>. Das ist der mit Abstand wichtigste „Trick“, um Nodes miteinander zu verdrahten.</p>
+
+      <h3>7. Verlässlichkeit — Fehlerbehandlung</h3>
+      <p>Sobald ein Workflow echte Arbeit macht, wird auch mal etwas schiefgehen (API down, falsche Daten).
+        Wer früh lernt, wie man Fehler abfängt, baut Automatisierungen, denen man vertrauen kann.</p>
+
+      <h2>Die Landkarte als Bild</h2>
+      <p>So greifen diese Bausteine ineinander. Genau dieses Muster wirst du in fast jedem Projekt wiedererkennen:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 900 440" preserveAspectRatio="none">
+                <path d="M 150 200 C 210 200, 220 200, 270 200"></path>
+                <path d="M 362 200 C 420 200, 430 200, 480 200"></path>
+                <path d="M 572 200 C 620 200, 625 130, 680 130"></path>
+                <path d="M 572 200 C 620 200, 625 280, 680 280"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:32px; top:154px;">
+                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__label">1 · Trigger</span>
+                <span class="n8n-node__sublabel">wann?</span>
+              </div>
+              <div class="n8n-node" style="left:270px; top:154px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">2 · Daten holen</span>
+                <span class="n8n-node__sublabel">HTTP Request</span>
+              </div>
+              <div class="n8n-node n8n-node--code" style="left:480px; top:154px;">
+                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">3 · Umformen</span>
+                <span class="n8n-node__sublabel">Set / Code</span>
+              </div>
+              <div class="n8n-node" style="left:680px; top:84px;">
+                <span class="n8n-node__icon">✉️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">5 · Aktion A</span>
+              </div>
+              <div class="n8n-node" style="left:680px; top:234px;">
+                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">5 · Aktion B</span>
+              </div>
+              <div class="n8n-sticky" style="left:475px; top:300px; max-width:210px;">
+                <b>4 · Entscheiden (IF/Switch)</b>
+                Hier teilt sich der Weg: je nach Daten geht es zu Aktion A oder B.
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 0.1</span>Das universelle Grundmuster: <b>Trigger → Holen → Umformen → Entscheiden → Aktion</b>. Punkt 6 (Items/Expressions) und 7 (Fehler) sind unsichtbar, aber überall dabei.</figcaption>
+      </figure>
+
+      <h2>Was du dafür können musst — ehrlich gesagt</h2>
+      <p>Viele schrecken vor Automatisierung zurück, weil sie „programmieren können“ glauben zu müssen. Hier die ehrliche Aufteilung:</p>
+
+      <table class="btable">
+        <thead><tr><th>Fähigkeit</th><th>Wie wichtig?</th><th>Wo im Buch</th></tr></thead>
+        <tbody>
+          <tr><td>Logisch in „erst dies, dann das“ denken</td><td>⚡ Essenziell</td><td>überall</td></tr>
+          <tr><td>JSON lesen (geschweifte Klammern, Felder)</td><td>⚡ Sehr wichtig</td><td>Kapitel 5</td></tr>
+          <tr><td>Einfache Expressions schreiben (<code>{{ $json.x }}</code>)</td><td>⚡ Sehr wichtig</td><td>Kapitel 5 & 6</td></tr>
+          <tr><td>Verstehen, was eine API / ein Webhook ist</td><td>Wichtig</td><td>Kapitel 8</td></tr>
+          <tr><td>Ein paar Zeilen JavaScript im Code-Node</td><td>Nice-to-have</td><td>Kapitel 9</td></tr>
+          <tr><td>Server/Docker administrieren</td><td>Nur für Self-Hosting</td><td>Kapitel 2 & 24</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--tip">
+        <b class="t">Die beruhigende Wahrheit</b>
+        Die ersten drei Zeilen sind die wichtigen 35 %. „Logisch denken“ kannst du längst. JSON und einfache
+        Expressions lernst du in zwei Kapiteln. Damit baust du bereits die Mehrheit aller Workflows in diesem Buch.
+      </div>
+
+      <h2>Wie der Rest des Buchs darauf aufbaut</h2>
+      <ul>
+        <li><strong>Teil 1 (Kap. 1–6)</strong> macht aus dieser Landkarte echtes Können: Oberfläche, erster Workflow, Datenmodell, Expressions.</li>
+        <li><strong>Teil 2 (Kap. 7–12)</strong> nimmt jeden der 7 Bausteine einzeln auseinander.</li>
+        <li><strong>Teil 3 (Kap. 13–19)</strong> kombiniert sie in sechs wachsenden Projekten — vom kleinen Report bis zur großen Pipeline.</li>
+        <li><strong>Teil 4 & 5</strong> erweitern das Muster um KI-Agenten und um Betrieb/Skalierung.</li>
+      </ul>
+
+      <p>Du hast jetzt die mentale Landkarte. Im nächsten Kapitel klären wir kurz, <em>was n8n eigentlich genau ist</em>
+        und wann es das richtige Werkzeug ist — danach installieren wir es und legen los.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

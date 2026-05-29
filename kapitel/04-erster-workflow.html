@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dein erster Workflow — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="04-erster-workflow" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">4</span> Grundlagen</div>
+      <h1 class="chap-title">Dein erster Workflow — Schritt für Schritt</h1>
+      <p class="chap-lede">Jetzt bauen wir gemeinsam etwas Echtes: Ein Workflow, der das aktuelle Wetter abruft,
+        es lesbar aufbereitet und dir das Ergebnis zeigt. Jeder Klick ist einzeln beschrieben — bau einfach mit.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 25 Minuten</span>
+        <span>🎯 Niveau: Einstieg</span>
+        <span>🧩 Voraussetzung: Kapitel 3</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>n8n läuft und du bist im Editor (Kapitel 2).</li>
+          <li><strong>Kein</strong> Konto, <strong>kein</strong> API-Schlüssel — wir nutzen eine offene, kostenlose Wetter-API (Open-Meteo).</li>
+          <li>Optional am Ende: ein Telegram-Bot, falls du das Ergebnis aufs Handy schicken willst (zeige ich als Kür).</li>
+        </ul>
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Am Ende dieses Kapitels hast du diesen Workflow gebaut und erfolgreich ausgeführt:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 820 320" preserveAspectRatio="none">
+                <path class="is-active" d="M 158 150 C 230 150, 245 150, 310 150"></path>
+                <path class="is-active" d="M 402 150 C 470 150, 485 150, 545 150"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:42px; top:104px;">
+                <span class="n8n-node__icon">🖐️</span><span class="ep out"></span>
+                <span class="n8n-node__label">Manueller Test</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node" style="left:310px; top:104px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span><span class="badge badge--ok">✓</span><span class="items">1 Item</span></div>
+              <div class="n8n-node n8n-node--code" style="left:545px; top:104px;">
+                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Nachricht bauen</span><span class="badge badge--ok">✓</span><span class="items">1 Item</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 4.0</span>Dein Ziel: Trigger → Wetter per HTTP holen → Text aufbereiten. Drei Nodes, ein funktionierender Workflow.</figcaption>
+      </figure>
+
+      <hr>
+
+      <h2>Schritt 1 — Neuen Workflow anlegen & benennen</h2>
+      <ol class="steps">
+        <li><h4>Neuen Workflow öffnen</h4>
+          <p>Klicke in der Übersicht oben rechts auf <strong>„+ Neuer Workflow“</strong> (engl. <em>Create Workflow</em>).
+            Du landest auf einem leeren Canvas mit dem großen <span class="kbd">+</span> in der Mitte.</p>
+        </li>
+        <li><h4>Sofort benennen</h4>
+          <p>Klicke oben links auf <strong>„Mein Workflow“</strong> und tippe <code>Wetter-Report</code>. Mit
+            <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span> speichern.</p>
+        </li>
+      </ol>
+
+      <h2>Schritt 2 — Den Trigger hinzufügen</h2>
+      <p>Jeder Workflow braucht einen Startpunkt. Zum Bauen nehmen wir den einfachsten: den manuellen Test-Trigger.</p>
+
+      <ol class="steps">
+        <li><h4>Auf das große + klicken</h4>
+          <p>Klicke auf das <span class="kbd">+</span> in der Canvas-Mitte. Es öffnet sich das Auswahl-Panel mit der Frage
+            „Wie soll der Workflow starten?“.</p>
+        </li>
+        <li><h4>„Manuell“ wählen</h4>
+          <p>Wähle <strong>„Trigger manually“</strong> (Manuell auslösen). Dieser Trigger feuert, wenn du auf den Test-Knopf drückst —
+            ideal zum Entwickeln.</p>
+        </li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame" style="display:flex; justify-content:center; padding:24px; background:#eef0f4; border-radius:12px;">
+          <div class="nodes-panel">
+            <div class="nodes-panel__head"><h5>Wie soll der Workflow starten?</h5></div>
+            <div class="nodes-panel__search"><span>🔎</span><span>Trigger durchsuchen…</span><span class="cursor"></span></div>
+            <div class="nodes-panel__list">
+              <div class="nodes-panel__item is-active">
+                <div class="nodes-panel__ic">🖐️</div>
+                <div class="nodes-panel__txt"><b>Trigger manually</b><small>Startet, wenn du auf „Test“ klickst</small></div><span class="chev">›</span></div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">⏰</div>
+                <div class="nodes-panel__txt"><b>On a schedule</b><small>Startet nach Zeitplan (z. B. täglich)</small></div><span class="chev">›</span></div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">🔗</div>
+                <div class="nodes-panel__txt"><b>On webhook call</b><small>Startet bei einer eingehenden Anfrage</small></div><span class="chev">›</span></div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">💬</div>
+                <div class="nodes-panel__txt"><b>On chat message</b><small>Startet bei einer Chat-Nachricht (KI)</small></div><span class="chev">›</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 4.1</span>Die Trigger-Auswahl. Wir nehmen den ersten Eintrag.</figcaption>
+      </figure>
+
+      <p>Nach der Auswahl liegt ein Trigger-Node (abgerundete linke Seite) auf dem Canvas. Der Canvas ist nicht mehr leer.</p>
+
+      <h2>Schritt 3 — Den HTTP-Request-Node anhängen</h2>
+      <p>Jetzt holen wir echte Daten. Wir hängen einen Node an, der eine Wetter-API aufruft.</p>
+
+      <ol class="steps">
+        <li><h4>Verbindung ins Leere ziehen</h4>
+          <p>Fahre mit der Maus an den <strong>Ausgangspunkt</strong> (kleiner Kreis rechts) des Trigger-Nodes. Klicke und
+            ziehe eine Linie nach rechts ins Leere, dann loslassen. Das Auswahl-Panel öffnet sich automatisch.</p>
+        </li>
+        <li><h4>HTTP Request suchen</h4>
+          <p>Tippe <code>HTTP</code> und wähle <strong>„HTTP Request“</strong>. Der Node erscheint und ist bereits mit dem Trigger verbunden.</p>
+        </li>
+        <li><h4>Node öffnen</h4>
+          <p>Doppelklicke den neuen Node, um die Detailansicht (NDV) zu öffnen.</p>
+        </li>
+        <li><h4>URL eintragen</h4>
+          <p>Lass die Methode auf <strong>GET</strong>. Trage bei <strong>URL</strong> die folgende Adresse ein
+            (Wetter für Berlin, Open-Meteo, ohne Anmeldung):</p>
+        </li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; URL für das Feld „URL“</div>
+<pre>https://api.open-meteo.com/v1/forecast?latitude=52.52&amp;longitude=13.41&amp;current=temperature_2m,wind_speed_10m</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar">
+              <span class="ndvic">🌐</span><b>HTTP Request</b>
+              <span class="ndv-docs">Doku ↗</span>
+              <span class="ndv__exec-step">▶ Schritt ausführen</span>
+            </div>
+            <div class="ndv__cols">
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="ndv-empty">Trigger liefert ein leeres Start-Item.<br>Das ist normal.</div></div>
+              </div>
+              <div class="ndv-panel ndv-params">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Methode</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                  <div class="row">
+                    <label>URL <span class="req">*</span></label>
+                    <div class="ndv-fxtab"><b class="is-active">Fest</b><b>Expression</b></div>
+                    <input class="n8n-input" value="https://api.open-meteo.com/v1/forecast?latitude=52.52…">
+                  </div>
+                  <div class="row"><label>Authentifizierung</label><div class="n8n-select">Keine <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">Ausgang ➡ <span class="count">noch leer</span></div>
+                <div class="ndv-panel__body"><div class="ndv-empty">Noch nichts ausgeführt.<div class="ndv-exec">▶ Schritt ausführen</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 4.2</span>Der HTTP-Node, fertig konfiguriert. Methode <b>GET</b>, URL eingetragen, Authentifizierung <b>Keine</b>.</figcaption>
+      </figure>
+
+      <ol class="steps" start="5" style="counter-reset: st 4;">
+        <li><h4>Diesen Schritt ausführen</h4>
+          <p>Klicke oben rechts im NDV auf <strong>▶ Schritt ausführen</strong>. n8n ruft die URL auf. Rechts erscheint
+            das Ergebnis als JSON. Du solltest unter <code>current</code> Werte wie <code>temperature_2m</code> sehen.</p>
+        </li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="ndv-empty">leeres Start-Item</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body"><div class="row"><label>Methode</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                <div class="row"><label>URL <span class="req">*</span></label><input class="n8n-input" value="https://api.open-meteo.com/v1/forecast?…"></div></div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-viewtabs"><b>Tabelle</b><b class="is-active">JSON</b><b>Schema</b></div>
+                  <div class="n8n-json" style="margin-top:10px;">{
+  <span class="k">"latitude"</span>: <span class="n">52.52</span>,
+  <span class="k">"longitude"</span>: <span class="n">13.41</span>,
+  <span class="k">"current"</span>: {
+    <span class="k">"time"</span>: <span class="s">"2026-05-29T10:00"</span>,
+    <span class="k">"temperature_2m"</span>: <span class="n">17.4</span>,
+    <span class="k">"wind_speed_10m"</span>: <span class="n">12.3</span>
+  }
+}</div>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 4.3</span>Echte Daten! Rechts siehst du die Antwort der API. Merke dir den Pfad
+          <code>current.temperature_2m</code> — den brauchen wir gleich.</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">⚡ Erster Erfolg, erstes Muster</b>
+        Du hast gerade das Grundmuster aus Kapitel 0.1 in Aktion erlebt: <em>einen Node bauen, ausführen, das Ergebnis
+        anschauen.</em> Genau so geht es jetzt mit jedem weiteren Node weiter.
+      </div>
+
+      <h2>Schritt 4 — Die Daten in einen Satz verwandeln</h2>
+      <p>Rohes JSON ist nichts, was man verschicken will. Mit dem <strong>Edit-Fields-Node</strong> (heißt im Panel
+        „Edit Fields (Set)“) bauen wir daraus einen lesbaren Satz. Dabei lernst du zum ersten Mal eine <strong>Expression</strong> kennen.</p>
+
+      <ol class="steps">
+        <li><h4>Node anhängen</h4>
+          <p>Schließe das NDV (Klick aufs <strong>×</strong> oben rechts oder <span class="kbd">Esc</span>). Ziehe vom
+            Ausgang des HTTP-Nodes eine Linie ins Leere und wähle <strong>„Edit Fields (Set)“</strong>.</p>
+        </li>
+        <li><h4>Ein neues Feld anlegen</h4>
+          <p>Öffne den Node. Klicke auf <strong>„Add Field“</strong> / <strong>„Feld hinzufügen“</strong>. Gib dem Feld den Namen
+            <code>nachricht</code>.</p>
+        </li>
+        <li><h4>Auf „Expression“ umschalten</h4>
+          <p>Über dem Wert-Feld klickst du auf den Reiter <strong>Expression</strong>. Das Feld wird leicht bläulich —
+            jetzt akzeptiert es Platzhalter in doppelten geschweiften Klammern.</p>
+        </li>
+        <li><h4>Die Expression eintippen</h4>
+          <p>Trage exakt das hier ein. Die <code>{{ … }}</code> holen den Temperaturwert aus dem vorherigen Node:</p>
+        </li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Wert des Feldes „nachricht“ (Modus: Expression)</div>
+<pre>🌤️ In Berlin sind es gerade {{ $json.current.temperature_2m }} °C bei {{ $json.current.wind_speed_10m }} km/h Wind.</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">✏️</span><b>Edit Fields (Set)</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-schema">
+                    <div class="field"><span class="dot"></span>latitude <span class="type">number</span></div>
+                    <div class="field"><span class="dot"></span>current.temperature_2m <span class="type">number</span></div>
+                    <div class="field"><span class="dot"></span>current.wind_speed_10m <span class="type">number</span></div>
+                  </div>
+                </div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Modus</label><div class="n8n-select">Felder manuell setzen <span class="chev">▾</span></div></div>
+                  <div class="row">
+                    <label>Feldname</label>
+                    <input class="n8n-input" value="nachricht">
+                  </div>
+                  <div class="row">
+                    <label>Wert</label>
+                    <div class="ndv-fxtab"><b>Fest</b><b class="is-active">Expression</b></div>
+                    <input class="n8n-input is-expr" value="🌤️ In Berlin sind es {{ $json.current.temperature_2m }} °C …">
+                  </div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-viewtabs"><b>Tabelle</b><b class="is-active">JSON</b><b>Schema</b></div>
+                  <div class="n8n-json" style="margin-top:10px;">{
+  <span class="k">"nachricht"</span>: <span class="s">"🌤️ In Berlin sind es 17.4 °C bei 12.3 km/h Wind."</span>
+}</div>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 4.4</span>Die Expression wird live ausgewertet: Rechts steht bereits der fertige Satz mit den echten Werten.</figcaption>
+      </figure>
+
+      <div class="callout callout--info">
+        <b class="t">Was bedeutet <code>$json</code>?</b>
+        <code>$json</code> ist immer „die Daten des Items, das gerade hereinkommt“ — also die Ausgabe des vorherigen Nodes.
+        Mit dem Punkt hangelst du dich durch die Struktur: <code>$json.current.temperature_2m</code> heißt
+        „nimm <em>current</em>, darin <em>temperature_2m</em>“. Genau das vertiefen wir im nächsten Kapitel.
+      </div>
+
+      <h2>Schritt 5 — Den ganzen Workflow ausführen</h2>
+      <ol class="steps">
+        <li><h4>NDV schließen</h4><p>Drücke <span class="kbd">Esc</span>, du siehst wieder den ganzen Canvas mit drei Nodes.</p></li>
+        <li><h4>Speichern</h4><p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Test ausführen</h4>
+          <p>Klicke unten/oben auf den großen Knopf <strong>„Test workflow“</strong> (bzw. <span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span>).
+            n8n läuft von links nach rechts durch. Jeder Node bekommt ein grünes <strong>✓</strong> und die Verbindungslinien
+            färben sich kurz ein — die Daten „fließen“ sichtbar durch.</p>
+        </li>
+      </ol>
+
+      <div class="callout callout--tip">
+        <b class="t">Geschafft!</b>
+        Du hast einen vollständigen Workflow gebaut, der echte Daten aus dem Internet holt, sie transformiert und ein
+        sauberes Ergebnis erzeugt. Das ist das Skelett von 80 % aller Automatisierungen.
+      </div>
+
+      <h2>Kür — das Ergebnis aufs Handy (optional)</h2>
+      <p>Wenn du magst, hängen wir einen letzten Node an, der den Satz per Telegram verschickt. Das braucht einen
+        kostenlosen Telegram-Bot. <strong>Wenn dir das jetzt zu viel ist: überspring es</strong> — wir bauen so etwas in
+        Kapitel 13 in Ruhe.</p>
+
+      <ol class="steps">
+        <li><h4>Bot anlegen</h4><p>Schreibe in Telegram dem <strong>@BotFather</strong>, sende <code>/newbot</code>, folge den Fragen.
+          Am Ende bekommst du ein <strong>Token</strong> (eine lange Zeichenkette). Schreibe deinem neuen Bot einmal „Hallo“,
+          damit er dir antworten darf.</p></li>
+        <li><h4>Telegram-Node anhängen</h4><p>Ziehe vom Edit-Fields-Node eine Linie und wähle <strong>„Telegram“</strong> → Aktion
+          <strong>„Send a text message“</strong>.</p></li>
+        <li><h4>Credential anlegen</h4><p>Bei „Credential to connect with“ → <strong>„Create new“</strong>. Füge dein Bot-Token ein und speichere.
+          (Mehr zu Credentials in Kapitel 12.)</p></li>
+        <li><h4>Empfänger & Text</h4><p>Bei <strong>Chat ID</strong> trägst du deine Telegram-ID ein (vom Bot <em>@userinfobot</em> bekommst du sie).
+          Bei <strong>Text</strong> schaltest du auf <em>Expression</em> und nutzt <code>{{ $json.nachricht }}</code>.</p></li>
+        <li><h4>Ausführen</h4><p>Test starten — kurz darauf ploppt die Wetter-Nachricht in deinem Telegram auf. 🎉</p></li>
+      </ol>
+
+      <h2>Was du in diesem Kapitel gelernt hast</h2>
+      <ul>
+        <li>Einen Workflow anlegen, benennen und speichern.</li>
+        <li>Einen <strong>Trigger</strong> setzen und Nodes durch Ziehen verbinden.</li>
+        <li>Mit dem <strong>HTTP-Request-Node</strong> echte Daten aus einer API holen.</li>
+        <li>Mit <strong>Edit Fields</strong> Daten umformen und die erste <strong>Expression</strong> (<code>{{ $json… }}</code>) schreiben.</li>
+        <li>Einzelne Schritte und den ganzen Workflow <strong>ausführen</strong> und das Ergebnis prüfen.</li>
+      </ul>
+
+      <p>Diese Expression hat sich wie Magie angefühlt? Ist sie nicht — sie ist das Herz von n8n. Das nächste Kapitel
+        macht aus dem Bauchgefühl echtes Verständnis: <strong>Items, JSON und der Datenfluss</strong>.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

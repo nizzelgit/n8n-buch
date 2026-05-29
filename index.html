@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Das n8n-Werkbuch — Workflows bauen vom ersten Klick bis zum KI-Agenten</title>
+<meta name="description" content="Ein praktisches Lehrbuch, um n8n-Workflows Schritt für Schritt nachzubauen — mit detailgetreuen Nachbauten der n8n-Oberfläche.">
+<link rel="stylesheet" href="assets/css/book.css">
+<link rel="stylesheet" href="assets/css/n8n-ui.css">
+<style>
+  .cover { background: radial-gradient(1200px 600px at 75% -10%, #2a2440, #16161f 60%); color:#fff; }
+  .cover-inner { max-width: 1040px; margin:0 auto; padding: 70px 30px 60px; }
+  .cover .logo { width:56px;height:56px;border-radius:14px;background:var(--book-accent);display:grid;place-items:center;font-weight:800;font-size:26px;letter-spacing:-2px;margin-bottom:26px; }
+  .cover h1 { font-family:var(--serif); font-size: clamp(34px,6vw,62px); line-height:1.05; margin:0 0 18px; font-weight:600; letter-spacing:-.02em; }
+  .cover h1 b { color: var(--book-accent); }
+  .cover .sub { font-size: clamp(16px,2.4vw,21px); color:#c9ccd8; max-width:660px; line-height:1.55; margin:0 0 30px; }
+  .cover .cta { display:flex; gap:12px; flex-wrap:wrap; }
+  .btn-main { background:var(--book-accent); color:#fff; padding:13px 24px; border-radius:10px; font-weight:700; text-decoration:none; font-size:15px; }
+  .btn-ghost { border:1px solid #3a3d4d; color:#dfe1ea; padding:13px 24px; border-radius:10px; font-weight:600; text-decoration:none; font-size:15px; }
+  .cover .stats { display:flex; gap:30px; flex-wrap:wrap; margin-top:42px; color:#aeb1c0; font-size:13.5px; }
+  .cover .stats b { color:#fff; font-size:21px; display:block; font-family:var(--mono); }
+
+  .hero-demo { max-width:1040px; margin:-34px auto 0; padding:0 30px; position:relative; z-index:3; }
+  .wrap { max-width:1040px; margin:0 auto; padding: 0 30px; }
+  section.block { padding: 56px 0 10px; }
+  section.block > h2 { font-family:var(--serif); font-size:30px; font-weight:600; margin:0 0 8px; }
+  section.block > p.intro { font-size:17px; color:var(--book-ink-soft); max-width:720px; margin:0 0 26px; line-height:1.6; }
+
+  .path { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; }
+  .path .step { background:#fff; border:1px solid var(--book-line); border-radius:14px; padding:20px; position:relative; }
+  .path .step .badge { width:30px;height:30px;border-radius:8px;background:#f3eefe;color:var(--book-accent-2);display:grid;place-items:center;font-weight:800;font-family:var(--mono);margin-bottom:12px; }
+  .path .step b { display:block; font-size:16px; margin-bottom:6px; }
+  .path .step p { font-size:13.5px; color:var(--book-ink-soft); margin:0; line-height:1.55; }
+
+  .toc { display:grid; gap:28px; }
+  .toc-part h3 { font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--book-accent); margin:0 0 12px; }
+  .toc-list { display:grid; gap:8px; }
+  .toc-row { display:flex; align-items:center; gap:14px; background:#fff; border:1px solid var(--book-line); border-radius:11px; padding:13px 16px; text-decoration:none; color:var(--book-ink); }
+  .toc-row:hover { border-color:var(--book-accent); transform: translateX(2px); transition:.12s; }
+  .toc-row.soon { opacity:.62; }
+  .toc-row .n { font-family:var(--mono); font-size:13px; color:var(--book-accent); min-width:30px; font-weight:600; }
+  .toc-row .ti { flex:1; font-weight:600; font-size:15px; }
+  .toc-row .mins { font-size:12px; color:var(--book-faint); }
+  .toc-row .pill { font-size:10px; background:#eef0f4; color:var(--book-faint); padding:2px 9px; border-radius:20px; letter-spacing:.03em; }
+  .toc-row.soon .pill { background:#fff3e8; color:#c47f17; }
+  footer.foot { text-align:center; color:var(--book-faint); font-size:13px; padding:50px 20px; }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-inner">
+    <div class="logo">n8</div>
+    <h1>Das <b>n8n</b>-Werkbuch</h1>
+    <p class="sub">Lerne, automatisierte Workflows zu bauen — vom allerersten Klick bis zum KI-Agenten.
+      Jeder Schritt ist so beschrieben und bebildert, dass du ihn <em>parallel am Bildschirm nachbauen</em> kannst.</p>
+    <div class="cta">
+      <a class="btn-main" href="kapitel/00-vorwort.html">Buch öffnen →</a>
+      <a class="btn-ghost" href="#inhalt">Inhaltsverzeichnis</a>
+    </div>
+    <div class="stats">
+      <div><b>25+</b>Kapitel & Projekte</div>
+      <div><b>6</b>vollständige Praxis-Projekte</div>
+      <div><b>0→KI</b>vom Nullpunkt zum Agenten</div>
+      <div><b>1:1</b>Oberfläche nachgebaut</div>
+    </div>
+  </div>
+</header>
+
+<!-- Live-Demo der nachgebauten Oberfläche direkt auf der Startseite -->
+<div class="hero-demo">
+  <div class="n8n">
+    <div class="n8n__chrome"><i></i><i></i><i></i><span>app.n8n.cloud/workflow/neu</span></div>
+    <div class="n8n-topbar">
+      <div class="n8n-logo">n8</div>
+      <div class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><span class="n8n-wfname">Mein erster Workflow</span></div>
+      <span class="n8n-tag">demo</span>
+      <div class="n8n-topbar__right">
+        <span class="n8n-saved">Gespeichert</span>
+        <div class="n8n-toggle"><span>Inaktiv</span><span class="n8n-switch"></span></div>
+        <button class="n8n-btn n8n-btn--sm">Teilen</button>
+      </div>
+    </div>
+    <div class="n8n-tabs"><span class="n8n-tab is-active">Editor</span><span class="n8n-tab">Ausführungen</span></div>
+    <div class="n8n-canvas n8n-canvas--tall">
+      <svg class="n8n-conns" viewBox="0 0 900 420" preserveAspectRatio="none">
+        <path d="M 178 150 C 250 150, 270 150, 330 150"></path>
+        <path d="M 422 150 C 500 150, 510 120, 560 120"></path>
+        <path d="M 422 150 C 500 150, 510 250, 560 250"></path>
+      </svg>
+      <div class="n8n-node n8n-node--trigger n8n-node--selected" style="left:60px; top:104px;">
+        <span class="n8n-node__icon">⏰</span>
+        <span class="ep out"></span>
+        <span class="n8n-node__label">Zeitplan</span>
+        <span class="badge badge--ok">✓</span>
+      </div>
+      <div class="n8n-node" style="left:330px; top:104px;">
+        <span class="n8n-node__icon">🌐</span>
+        <span class="ep in"></span><span class="ep out"></span>
+        <span class="n8n-node__label">HTTP Request</span>
+        <span class="items">1 Item</span>
+      </div>
+      <div class="n8n-node" style="left:560px; top:74px;">
+        <span class="n8n-node__icon">✉️</span>
+        <span class="ep in"></span><span class="ep out"></span>
+        <span class="n8n-node__label">E-Mail senden</span>
+      </div>
+      <div class="n8n-node n8n-node--code" style="left:560px; top:204px;">
+        <span class="n8n-node__icon">💬</span>
+        <span class="ep in"></span><span class="ep out"></span>
+        <span class="n8n-node__label">Telegram</span>
+      </div>
+      <div class="n8n-sticky" style="right:22px; top:18px;">
+        <b>👋 So sieht n8n aus</b>
+        Genau diese Oberfläche bauen wir im Buch Schritt für Schritt nach — als echte, scharfe HTML-Nachbildung.
+      </div>
+      <div class="n8n-zoom"><b>+</b><b>−</b><b>⊡</b></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="block">
+    <h2>Der Lernpfad</h2>
+    <p class="intro">Vier Stufen führen dich vom Verständnis der Grundbegriffe bis zu produktionsreifen,
+      KI-gestützten Automatisierungen. Du musst <strong>nicht programmieren können</strong> — die wenigen Stellen,
+      an denen etwas Code hilft, erkläre ich von Grund auf.</p>
+    <div class="path">
+      <div class="step"><div class="badge">1</div><b>Verstehen</b><p>Was ist n8n, wann lohnt es sich, und wie ist die Oberfläche aufgebaut?</p></div>
+      <div class="step"><div class="badge">2</div><b>Bauen</b><p>Dein erster Workflow, Kernkonzepte, Daten & Expressions — die wichtigen 35 %.</p></div>
+      <div class="step"><div class="badge">3</div><b>Anwenden</b><p>Sechs vollständige Projekte, vom Wetter-Report bis zum CRM-Lead-Routing.</p></div>
+      <div class="step"><div class="badge">4</div><b>Skalieren</b><p>KI-Agenten, Sub-Workflows, Deployment und Betrieb im Team.</p></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="callout callout--pareto">
+      <b class="t">⚡ Das Versprechen dieses Buchs</b>
+      Es gibt in n8n hunderte Nodes und tausende Optionen — aber du brauchst nur einen kleinen Kern davon
+      für 80 % aller realen Automatisierungen. Dieses Buch macht genau diesen Kern zur Priorität und
+      kennzeichnet ihn überall mit dem <b style="color:var(--book-accent)">⚡-Symbol</b>. Lerne zuerst das, dann den Rest bei Bedarf.
+    </div>
+  </section>
+
+  <section class="block" id="inhalt">
+    <h2>Inhaltsverzeichnis</h2>
+    <p class="intro">Kapitel mit dem Hinweis <span class="pill" style="background:#fff3e8;color:#c47f17">bald</span>
+      werden in den nächsten Ausbaustufen ergänzt. Die Grundlagen-Kapitel sind vollständig und sofort lesbar.</p>
+    <div class="toc" id="toc"></div>
+  </section>
+
+</div>
+
+<footer class="foot">
+  Das n8n-Werkbuch · ein unabhängiges Lernprojekt · „n8n“ ist eine Marke der n8n GmbH.<br>
+  Erstellt als didaktischer Nachbau — kein offizielles Produkt von n8n.
+</footer>
+
+<script src="assets/js/chapters.js"></script>
+<script>
+  // Inhaltsverzeichnis aus dem Manifest rendern
+  (function () {
+    var root = document.getElementById("toc");
+    var html = "";
+    window.BOOK.parts.forEach(function (p) {
+      html += '<div class="toc-part"><h3>' + p.part + '</h3><div class="toc-list">';
+      p.chapters.forEach(function (c) {
+        var ready = c.status === "ready";
+        var url = ready ? "kapitel/" + c.slug + ".html" : "javascript:void(0)";
+        html += '<a class="toc-row' + (ready ? "" : " soon") + '" href="' + url + '">' +
+                '<span class="n">' + c.num + '</span>' +
+                '<span class="ti">' + c.title + '</span>' +
+                '<span class="mins">⏱ ' + c.mins + ' Min</span>' +
+                '<span class="pill">' + (ready ? "lesen" : "bald") + '</span></a>';
+      });
+      html += "</div></div>";
+    });
+    root.innerHTML = html;
+  })();
+</script>
+</body>
+</html>
