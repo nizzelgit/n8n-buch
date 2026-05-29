@@ -1,0 +1,2464 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Das n8n-Werkbuch — Workflows bauen — vom ersten Klick bis zum KI-Agenten</title>
+<style>
+/* ==========================================================================
+   book.css — Layout, Typografie & didaktische Elemente des Lehrbuchs
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap");
+
+:root {
+  --book-bg:        #f4f5f8;
+  --book-surface:   #ffffff;
+  --book-ink:       #23252f;
+  --book-ink-soft:  #4d505c;
+  --book-faint:     #80828d;
+  --book-line:      #e3e5ea;
+  --book-accent:    #ea4b71;
+  --book-accent-2:  #6a4bff;
+  --book-sidebar:   #1d1f29;
+  --book-sidebar-2: #262936;
+  --serif:  "Lora", Georgia, "Times New Roman", serif;
+  --sans:   "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono:   "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --maxw:   820px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--book-bg); color: var(--book-ink);
+  font-family: var(--sans); -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- App-Grid: Sidebar | Inhalt --------------------------------- */
+#app { display: grid; grid-template-columns: 300px 1fr; min-height: 100vh; }
+
+/* ---------- Sidebar (Inhaltsnavigation) -------------------------------- */
+#sidebar {
+  background: var(--book-sidebar); color: #cfd2dc;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  padding: 0 0 40px; font-size: 13.5px;
+}
+.sb-brand {
+  display:flex; align-items:center; gap:11px;
+  padding: 18px 20px; position: sticky; top:0; z-index:2;
+  background: var(--book-sidebar); border-bottom: 1px solid #34384a;
+}
+.sb-brand .logo {
+  width: 34px; height: 34px; border-radius: 8px; background: var(--book-accent);
+  display: grid; place-items: center; font-weight: 800; color: #fff; flex:none;
+  font-size: 15px; letter-spacing: -1px;
+}
+.sb-brand b { display:block; font-size: 14px; color:#fff; }
+.sb-brand small { color:#8e92a3; font-size: 11.5px; }
+
+.sb-search {
+  margin: 14px 16px; display:flex; align-items:center; gap:8px;
+  background: var(--book-sidebar-2); border:1px solid #363a4c; border-radius:8px;
+  padding: 8px 11px;
+}
+.sb-search input {
+  background: transparent; border:0; outline:0; color:#e6e8ef; width:100%;
+  font-family: var(--sans); font-size: 13px;
+}
+.sb-search input::placeholder { color:#7a7e90; }
+
+.sb-part {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .09em;
+  color:#717589; font-weight:700;
+  padding: 16px 20px 6px;
+}
+.sb-link {
+  display:flex; align-items:flex-start; gap:9px;
+  padding: 7px 20px 7px 20px; color:#c3c6d2; text-decoration:none;
+  border-left: 3px solid transparent; line-height:1.35;
+}
+.sb-link:hover { background: var(--book-sidebar-2); color:#fff; }
+.sb-link.is-current { background: var(--book-sidebar-2); color:#fff; border-left-color: var(--book-accent); }
+.sb-link .num {
+  font-family: var(--mono); font-size: 11px; color:#7e8294;
+  min-width: 20px; flex:none; padding-top:1px;
+}
+.sb-link.is-current .num { color: var(--book-accent); }
+.sb-link.is-soon { opacity:.5; }
+.sb-link .soon {
+  font-size: 9px; background:#3a3e52; color:#9ea2b5; padding:1px 6px;
+  border-radius:20px; margin-left:auto; align-self:center; letter-spacing:.04em;
+}
+.sb-foot { padding: 18px 20px; color:#6c7081; font-size: 11.5px; border-top:1px solid #34384a; margin-top: 10px; }
+
+/* Hamburger nur mobil */
+.sb-toggle { display:none; }
+
+/* ---------- Inhaltsbereich --------------------------------------------- */
+#content { min-width:0; }
+#bookbar {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(244,245,248,.86); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--book-line);
+  display:flex; align-items:center; gap:12px; padding: 11px 30px; font-size: 13px;
+}
+#bookbar .crumb { color: var(--book-faint); }
+#bookbar .crumb b { color: var(--book-ink); }
+#bookbar .right { margin-left:auto; display:flex; gap:8px; align-items:center; }
+.barbtn {
+  border:1px solid var(--book-line); background:#fff; border-radius:7px;
+  padding:6px 11px; font-size:12.5px; color:var(--book-ink-soft); cursor:pointer;
+  font-family:var(--sans); text-decoration:none; display:inline-flex; gap:6px; align-items:center;
+}
+.barbtn:hover { border-color: var(--book-accent); color: var(--book-accent); }
+
+article {
+  max-width: var(--maxw); margin: 0 auto; padding: 40px 30px 80px;
+}
+
+/* ---------- Kapitel-Kopf ----------------------------------------------- */
+.chap-eyebrow {
+  display:inline-flex; align-items:center; gap:8px;
+  font-size: 12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color: var(--book-accent); margin-bottom: 14px;
+}
+.chap-eyebrow .knum {
+  background: var(--book-accent); color:#fff; border-radius:6px;
+  padding:2px 9px; font-family:var(--mono);
+}
+h1.chap-title {
+  font-family: var(--serif); font-size: 40px; line-height:1.12; font-weight:600;
+  margin: 0 0 16px; letter-spacing:-.01em;
+}
+.chap-lede {
+  font-size: 18px; line-height:1.6; color: var(--book-ink-soft);
+  border-left: 3px solid var(--book-accent); padding-left:18px; margin: 0 0 14px;
+}
+.chap-meta {
+  display:flex; gap:18px; flex-wrap:wrap; font-size:12.5px; color:var(--book-faint);
+  padding: 14px 0 0; margin-bottom: 30px; border-bottom: 1px solid var(--book-line); padding-bottom:22px;
+}
+.chap-meta span { display:inline-flex; gap:6px; align-items:center; }
+
+/* ---------- Fließtext --------------------------------------------------- */
+article p { font-size: 16.5px; line-height: 1.72; margin: 0 0 18px; }
+article h2 {
+  font-family: var(--serif); font-size: 27px; font-weight:600; margin: 44px 0 14px;
+  padding-top: 10px; letter-spacing:-.01em; scroll-margin-top: 70px;
+}
+article h3 { font-size: 20px; font-weight: 700; margin: 30px 0 10px; scroll-margin-top: 70px; }
+article h4 { font-size: 16px; font-weight: 700; margin: 22px 0 8px; color: var(--book-ink-soft); }
+article ul, article ol { font-size: 16.5px; line-height: 1.7; padding-left: 24px; margin: 0 0 18px; }
+article li { margin-bottom: 7px; }
+article a { color: var(--book-accent); text-decoration: none; border-bottom: 1px solid #f3c3d0; }
+article a:hover { border-bottom-color: var(--book-accent); }
+article strong { font-weight: 700; }
+article hr { border:0; border-top:1px solid var(--book-line); margin: 38px 0; }
+article code {
+  font-family: var(--mono); font-size: .86em; background: #eef0f4;
+  padding: 2px 6px; border-radius: 5px; color: #b03060;
+}
+blockquote {
+  margin: 22px 0; padding: 4px 0 4px 20px; border-left:3px solid var(--book-line);
+  color: var(--book-ink-soft); font-style: italic;
+}
+
+/* Tastenkürzel-Darstellung */
+.kbd {
+  font-family: var(--sans); font-size: 12px; font-weight:600;
+  background: #fff; border:1px solid var(--book-line); border-bottom-width:2px;
+  border-radius:5px; padding: 2px 7px; color: var(--book-ink-soft);
+  box-shadow: 0 1px 0 rgba(0,0,0,.04); white-space:nowrap;
+}
+
+/* ---------- Codeblock (für JSON, Expressions, Code-Node) --------------- */
+.code {
+  background: #1d1f29; color: #e6e8ef; border-radius: 10px;
+  font-family: var(--mono); font-size: 13.5px; line-height: 1.65;
+  margin: 0 0 22px; overflow: hidden;
+}
+.code__bar {
+  display:flex; align-items:center; gap:8px; padding:9px 14px;
+  background:#15171f; border-bottom:1px solid #2c2f3c; font-size:11.5px; color:#8b8fa3;
+}
+.code__bar .dot { width:9px;height:9px;border-radius:50%;background:#3a3e4d; }
+.code pre { margin:0; padding: 14px 16px; overflow-x:auto; white-space:pre; }
+.code .cm { color:#6b7089; }   /* comment */
+.code .st { color:#9ece6a; }   /* string */
+.code .ky { color:#bb9af7; }   /* keyword */
+.code .nm { color:#7dcfff; }   /* number */
+.code .pr { color:#e0af68; }   /* property */
+
+/* ---------- Abbildungen (UI-Nachbauten) -------------------------------- */
+.figure { margin: 26px 0 30px; }
+.figure .frame { position: relative; }
+.figure figcaption {
+  font-size: 13px; color: var(--book-faint); margin-top: 11px; text-align:center;
+  line-height:1.5;
+}
+.figure figcaption b { color: var(--book-ink-soft); }
+.fig-tag {
+  display:inline-block; font-family:var(--mono); font-size:11px; color:#fff;
+  background: var(--book-accent-2); border-radius:5px; padding:1px 7px; margin-right:7px;
+}
+
+/* ---------- Callouts / didaktische Boxen ------------------------------- */
+.callout {
+  border-radius: 12px; padding: 16px 18px 16px 52px; margin: 22px 0;
+  font-size: 15px; line-height: 1.62; position: relative; border:1px solid;
+}
+.callout::before {
+  position:absolute; left:16px; top:15px; font-size:20px; line-height:1;
+}
+.callout p:last-child { margin-bottom:0; }
+.callout b.t { display:block; font-weight:700; margin-bottom:4px; font-size:14px; }
+
+.callout--tip   { background:#eef9f1; border-color:#bce6c9; }
+.callout--tip::before   { content:"💡"; }
+.callout--warn  { background:#fff5e8; border-color:#f6d9a8; }
+.callout--warn::before  { content:"⚠️"; }
+.callout--info  { background:#eef3ff; border-color:#c6d6f7; }
+.callout--info::before  { content:"ℹ️"; }
+.callout--danger{ background:#fdeded; border-color:#f4c0c0; }
+.callout--danger::before{ content:"⛔"; }
+
+/* Pareto-Box (die wichtigen 80/20) */
+.callout--pareto {
+  background: linear-gradient(135deg,#fff1f5,#f3eeff);
+  border-color:#f0c8d8; padding-left:18px;
+}
+.callout--pareto::before { content:""; }
+.callout--pareto .t { color: var(--book-accent); display:flex; align-items:center; gap:8px; font-size:13px; text-transform:uppercase; letter-spacing:.06em; }
+
+/* Klick-Pfad (Schritt-für-Schritt Bedienung) */
+.clickpath {
+  display:flex; flex-wrap:wrap; align-items:center; gap:7px;
+  background:#fff; border:1px solid var(--book-line); border-radius:10px;
+  padding: 12px 14px; margin: 18px 0; font-size:13.5px;
+}
+.clickpath .step {
+  display:inline-flex; align-items:center; gap:7px;
+  background:#f5f6f9; border:1px solid var(--book-line); border-radius:7px; padding:5px 10px;
+}
+.clickpath .step .n { background:var(--book-accent); color:#fff; width:18px;height:18px;border-radius:50%; display:grid;place-items:center; font-size:11px; font-weight:700; }
+.clickpath .arrow { color: var(--book-faint); }
+
+/* Nummerierte Anleitung mit großen Schritt-Markern */
+ol.steps { list-style:none; counter-reset: st; padding:0; margin: 22px 0; }
+ol.steps > li {
+  counter-increment: st; position:relative; padding: 0 0 22px 50px; margin:0;
+  border-left: 2px solid var(--book-line); margin-left: 16px;
+}
+ol.steps > li:last-child { border-left-color: transparent; padding-bottom:0; }
+ol.steps > li::before {
+  content: counter(st); position:absolute; left:-17px; top:-3px;
+  width:33px; height:33px; border-radius:50%; background:var(--book-accent); color:#fff;
+  display:grid; place-items:center; font-weight:700; font-size:14px;
+  font-family:var(--mono); box-shadow: 0 0 0 4px var(--book-bg);
+}
+ol.steps > li h4 { margin: 4px 0 6px; font-size: 16.5px; color: var(--book-ink); }
+ol.steps > li p { font-size: 15.5px; }
+
+/* "Was du können musst"-Voraussetzungs-Box */
+.prereq {
+  background:#fff; border:1px solid var(--book-line); border-radius:12px;
+  padding: 18px 20px; margin: 24px 0;
+}
+.prereq h4 { margin:0 0 12px; display:flex; align-items:center; gap:8px; font-size:14px; }
+.prereq ul { margin:0; padding-left:20px; font-size:14.5px; }
+
+/* Karten-Raster (z. B. Use-Case-Übersicht) */
+.cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:14px; margin: 22px 0; }
+.card {
+  background:#fff; border:1px solid var(--book-line); border-radius:12px; padding:16px 18px;
+}
+.card .ic { font-size: 24px; }
+.card b { display:block; margin:8px 0 5px; font-size:15px; }
+.card p { font-size:13.5px; color:var(--book-ink-soft); margin:0; line-height:1.55; }
+
+/* Vergleichstabelle */
+.btable { width:100%; border-collapse:collapse; margin:22px 0; font-size:14.5px; background:#fff; border-radius:10px; overflow:hidden; border:1px solid var(--book-line); }
+.btable th, .btable td { padding:11px 14px; text-align:left; border-bottom:1px solid var(--book-line); }
+.btable th { background:#f6f7f9; font-weight:700; font-size:13px; }
+.btable tr:last-child td { border-bottom:0; }
+.btable td:first-child { font-weight:600; }
+
+/* ---------- Vor/Zurück-Navigation -------------------------------------- */
+#prevnext { max-width: var(--maxw); margin: 0 auto; padding: 0 30px 70px; display:flex; gap:14px; }
+.pn {
+  flex:1; display:flex; flex-direction:column; gap:3px; text-decoration:none;
+  border:1px solid var(--book-line); border-radius:12px; padding:14px 18px; background:#fff;
+}
+.pn:hover { border-color: var(--book-accent); }
+.pn small { color: var(--book-faint); font-size:12px; }
+.pn b { color: var(--book-ink); font-size:15px; }
+.pn--next { text-align:right; }
+.pn--disabled { opacity:.4; pointer-events:none; }
+
+/* ---------- "in Arbeit"-Hinweis für kommende Kapitel ------------------- */
+.soon-banner {
+  background:#fff; border:1px dashed var(--book-border,#d7d9e0); border-radius:14px;
+  padding: 30px; text-align:center; color: var(--book-ink-soft); margin-top:20px;
+}
+.soon-banner .em { font-size:40px; }
+
+/* ---------- Responsiv --------------------------------------------------- */
+@media (max-width: 1000px) {
+  #app { grid-template-columns: 1fr; }
+  #sidebar {
+    position: fixed; left:0; top:0; width: 290px; z-index:50;
+    transform: translateX(-100%); transition: transform .22s ease;
+    box-shadow: 0 0 40px rgba(0,0,0,.3);
+  }
+  #app.nav-open #sidebar { transform: translateX(0); }
+  .sb-toggle {
+    display:inline-grid; place-items:center; width:38px; height:34px;
+    border:1px solid var(--book-line); background:#fff; border-radius:8px; cursor:pointer;
+  }
+  #scrim { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:40; }
+  #app.nav-open #scrim { display:block; }
+}
+@media (max-width: 560px) {
+  article { padding: 26px 18px 60px; }
+  h1.chap-title { font-size: 31px; }
+  #prevnext { flex-direction:column; padding: 0 18px 50px; }
+  .ndv__cols { grid-template-columns: 1fr; }
+}
+
+/* Druck / PDF-Export */
+@media print {
+  #sidebar, #bookbar, #prevnext, .sb-toggle { display:none !important; }
+  #app { display:block; }
+  article { max-width:none; }
+  .n8n, .figure { break-inside: avoid; }
+}
+
+/* ==========================================================================
+   n8n-ui.css  —  High-Fidelity-Nachbau der n8n-Editor-Oberfläche
+   --------------------------------------------------------------------------
+   Diese Datei stellt wiederverwendbare Komponenten bereit, die der echten
+   n8n-Oberfläche (Stand 2025, Canvas v2 / Vue-Flow) nachempfunden sind.
+   Sie wird in den Lehrbuch-Kapiteln genutzt, um "Screenshots" pixelnah
+   und scharf skalierbar direkt im Browser zu erzeugen.
+   ========================================================================== */
+
+:root {
+  /* n8n Markenfarben & Design-Tokens (nachgebildet) */
+  --n8n-primary:        #ea4b71;   /* n8n Pink/Coral – Buttons, Akzente */
+  --n8n-primary-dark:   #cf4063;
+  --n8n-primary-tint:   #fde8ee;
+  --n8n-secondary:      #6a4bff;
+
+  --n8n-canvas-bg:      #f7f7fb;   /* heller Canvas-Hintergrund */
+  --n8n-dot:            #d9dbe3;   /* Punkte des Canvas-Rasters */
+  --n8n-surface:        #ffffff;
+  --n8n-surface-2:      #fbfbfc;
+  --n8n-border:         #dbdfe7;
+  --n8n-border-strong:  #c4c9d4;
+  --n8n-text:           #2d2e3a;
+  --n8n-text-light:     #6e7079;
+  --n8n-text-faint:     #909399;
+
+  --n8n-success:        #2bbf6c;
+  --n8n-warning:        #f6a609;
+  --n8n-danger:         #e03e52;
+
+  --n8n-radius:         8px;
+  --n8n-shadow:         0 2px 6px rgba(34, 36, 56, .08), 0 1px 2px rgba(34,36,56,.06);
+  --n8n-shadow-lg:      0 12px 36px rgba(34, 36, 56, .18);
+
+  --n8n-font:           "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         Roboto, Helvetica, Arial, sans-serif;
+  --n8n-mono:           "JetBrains Mono", "SF Mono", "Fira Code", ui-monospace,
+                         Menlo, Consolas, monospace;
+}
+
+/* --------------------------------------------------------------------------
+   Rahmen: jeder UI-Nachbau steht in einem .n8n-Frame (wie ein Browserfenster)
+   -------------------------------------------------------------------------- */
+.n8n {
+  font-family: var(--n8n-font);
+  color: var(--n8n-text);
+  border: 1px solid var(--n8n-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--n8n-surface);
+  box-shadow: var(--n8n-shadow);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  line-height: 1.4;
+}
+.n8n * { box-sizing: border-box; }
+
+/* Optional: simulierte Fenster-Titelleiste (Ampel-Punkte) */
+.n8n__chrome {
+  display: flex; align-items: center; gap: 7px;
+  padding: 9px 12px;
+  background: #edeef2;
+  border-bottom: 1px solid var(--n8n-border);
+}
+.n8n__chrome i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+.n8n__chrome i:nth-child(1){ background:#ff5f57; }
+.n8n__chrome i:nth-child(2){ background:#febc2e; }
+.n8n__chrome i:nth-child(3){ background:#28c840; }
+.n8n__chrome span {
+  margin-left: 10px; font-size: 12px; color: var(--n8n-text-light);
+  font-family: var(--n8n-mono);
+}
+
+/* --------------------------------------------------------------------------
+   Top-Toolbar des Editors
+   -------------------------------------------------------------------------- */
+.n8n-topbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 14px;
+  background: var(--n8n-surface);
+  border-bottom: 1px solid var(--n8n-border);
+  font-size: 13px;
+  min-height: 50px;
+}
+.n8n-logo {
+  width: 26px; height: 26px; border-radius: 6px;
+  background: #2d2e3a; color:#fff;
+  display: grid; place-items: center;
+  font-weight: 800; font-size: 13px; letter-spacing: -1px;
+  flex: none;
+}
+.n8n-breadcrumb { display:flex; align-items:center; gap:7px; color: var(--n8n-text-light); }
+.n8n-breadcrumb b { color: var(--n8n-text); font-weight: 600; }
+.n8n-breadcrumb .sep { color: var(--n8n-text-faint); }
+.n8n-wfname {
+  font-weight: 600; color: var(--n8n-text);
+  border: 1px solid transparent; border-radius: 6px; padding: 3px 7px;
+}
+.n8n-wfname:hover { border-color: var(--n8n-border); background: var(--n8n-surface-2); }
+.n8n-tag {
+  font-size: 11px; color: var(--n8n-text-light);
+  background: #eef0f4; border-radius: 20px; padding: 3px 9px;
+}
+.n8n-topbar__right { margin-left:auto; display:flex; align-items:center; gap:10px; }
+.n8n-saved { font-size: 12px; color: var(--n8n-text-faint); }
+
+/* Aktiv/Inaktiv-Schalter */
+.n8n-toggle { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--n8n-text-light); }
+.n8n-switch {
+  width: 34px; height: 18px; border-radius: 20px; background: #c8ccd6;
+  position: relative; flex:none; transition: background .15s;
+}
+.n8n-switch::after {
+  content:""; position:absolute; top:2px; left:2px;
+  width:14px; height:14px; border-radius:50%; background:#fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: left .15s;
+}
+.n8n-switch.is-on { background: var(--n8n-success); }
+.n8n-switch.is-on::after { left: 18px; }
+
+/* Editor-Tabs (Editor / Executions) */
+.n8n-tabs {
+  display:flex; gap: 4px; padding: 0 14px;
+  background: var(--n8n-surface); border-bottom: 1px solid var(--n8n-border);
+  font-size: 13px;
+}
+.n8n-tab {
+  padding: 9px 4px; margin-right: 18px; color: var(--n8n-text-light);
+  border-bottom: 2px solid transparent; cursor: default;
+}
+.n8n-tab.is-active { color: var(--n8n-text); border-bottom-color: var(--n8n-primary); font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+.n8n-btn {
+  font-family: var(--n8n-font); font-size: 13px; font-weight: 600;
+  padding: 7px 14px; border-radius: 6px; border: 1px solid var(--n8n-border-strong);
+  background: var(--n8n-surface); color: var(--n8n-text); cursor: default;
+  display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+}
+.n8n-btn--primary { background: var(--n8n-primary); border-color: var(--n8n-primary); color:#fff; }
+.n8n-btn--ghost   { background: transparent; border-color: transparent; color: var(--n8n-text-light); }
+.n8n-btn--sm      { padding: 5px 10px; font-size: 12px; }
+.n8n-btn .ic { font-size: 14px; line-height: 1; }
+
+/* --------------------------------------------------------------------------
+   Canvas mit Punkt-Raster
+   -------------------------------------------------------------------------- */
+.n8n-canvas {
+  position: relative;
+  background-color: var(--n8n-canvas-bg);
+  background-image: radial-gradient(var(--n8n-dot) 1.4px, transparent 1.4px);
+  background-size: 22px 22px;
+  background-position: -11px -11px;
+  min-height: 340px;
+  overflow: hidden;
+}
+.n8n-canvas--tall { min-height: 460px; }
+
+/* Verbindungslinien (SVG liegt unter den Nodes) */
+.n8n-canvas > svg.n8n-conns {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 1;
+}
+.n8n-conns path { fill: none; stroke: #b3b9c7; stroke-width: 2.2; }
+.n8n-conns path.is-active { stroke: var(--n8n-primary); }
+.n8n-conns .plus {
+  fill:#fff; stroke:#b3b9c7; stroke-width: 1.4;
+}
+.n8n-conns .plus-sign { stroke:#7d8190; stroke-width:1.6; }
+
+/* --------------------------------------------------------------------------
+   Node (Standard) – quadratische Kachel mit Icon + Label darunter
+   -------------------------------------------------------------------------- */
+.n8n-node {
+  position: absolute; z-index: 2;
+  width: 92px; height: 92px;
+  background: var(--n8n-surface);
+  border: 1.5px solid var(--n8n-border-strong);
+  border-radius: 12px;
+  display: grid; place-items: center;
+  box-shadow: var(--n8n-shadow);
+}
+.n8n-node__icon { font-size: 34px; line-height: 1; }
+.n8n-node__label {
+  position: absolute; top: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%);
+  font-size: 12.5px; font-weight: 600; color: var(--n8n-text);
+  white-space: nowrap; text-align: center;
+}
+.n8n-node__sublabel {
+  position:absolute; top: calc(100% + 26px); left:50%; transform:translateX(-50%);
+  font-size: 11px; color: var(--n8n-text-faint); white-space: nowrap;
+}
+/* Trigger: linke Seite stark abgerundet (charakteristische n8n-Form) */
+.n8n-node--trigger { border-radius: 46px 12px 12px 46px; }
+/* Auswahl */
+.n8n-node--selected { border-color: var(--n8n-primary); box-shadow: 0 0 0 2px var(--n8n-primary-tint), var(--n8n-shadow); }
+/* Farbakzent oben (integration color bar wie bei manchen Nodes) */
+.n8n-node--ai     { border-color:#b398cf; }
+.n8n-node--code   { border-color:#7c84ff; }
+
+/* Ein-/Ausgangspunkte (Connector-Handles) */
+.n8n-node .ep {
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:11px; height:11px; border-radius:50%;
+  background:#fff; border:2px solid #b3b9c7;
+}
+.n8n-node .ep.in  { left:-7px; }
+.n8n-node .ep.out { right:-7px; }
+.n8n-node--trigger .ep.in { display:none; }
+
+/* Status-Häkchen (nach erfolgreicher Ausführung) */
+.n8n-node .badge {
+  position:absolute; top:-9px; right:-9px;
+  width:20px; height:20px; border-radius:50%;
+  display:grid; place-items:center; font-size:11px; color:#fff;
+  border:2px solid #fff;
+}
+.n8n-node .badge--ok { background: var(--n8n-success); }
+.n8n-node .badge--err{ background: var(--n8n-danger); }
+/* kleine Items-Zahl unter dem Output-Punkt */
+.n8n-node .items {
+  position:absolute; right:-6px; top:-22px; transform:translateX(50%);
+  font-size:10.5px; color: var(--n8n-text-faint); white-space:nowrap;
+}
+
+/* Toolbar, die über einem ausgewählten Node erscheint */
+.n8n-node__tools {
+  position:absolute; bottom: calc(100% + 8px); left:50%; transform:translateX(-50%);
+  display:flex; gap:2px; background:#fff; border:1px solid var(--n8n-border);
+  border-radius:7px; padding:3px; box-shadow: var(--n8n-shadow); z-index:5;
+}
+.n8n-node__tools b {
+  width:24px; height:22px; display:grid; place-items:center;
+  font-size:12px; color:var(--n8n-text-light); border-radius:5px;
+}
+
+/* Großes Plus zum ersten Trigger hinzufügen (leerer Canvas) */
+.n8n-addfirst {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width: 110px; height: 110px; border-radius: 16px;
+  border: 2px dashed var(--n8n-border-strong); background: #fff;
+  display:grid; place-items:center; color: var(--n8n-text-faint);
+  z-index:2; text-align:center;
+}
+.n8n-addfirst .big { font-size:38px; line-height:1; color:var(--n8n-primary); }
+.n8n-addfirst small { display:block; margin-top:6px; font-size:11px; max-width:90px; }
+
+/* Sticky Note */
+.n8n-sticky {
+  position:absolute; z-index:1;
+  background:#fff6c8; border:1px solid #f3e08a; border-radius:6px;
+  padding:12px 14px; font-size:12.5px; color:#6b5b00; max-width:230px;
+  box-shadow: var(--n8n-shadow);
+}
+.n8n-sticky b { display:block; margin-bottom:4px; }
+
+/* Mini-Map / Zoom-Controls unten links */
+.n8n-zoom {
+  position:absolute; bottom:12px; left:12px; z-index:6;
+  display:flex; gap:1px; background:#fff; border:1px solid var(--n8n-border);
+  border-radius:7px; overflow:hidden; box-shadow:var(--n8n-shadow);
+}
+.n8n-zoom b { width:30px; height:28px; display:grid; place-items:center;
+  font-size:14px; color:var(--n8n-text-light); border-right:1px solid var(--n8n-border); }
+.n8n-zoom b:last-child{ border-right:none; }
+
+/* --------------------------------------------------------------------------
+   Node-Auswahl-Panel (öffnet sich rechts beim Klick auf "+")
+   -------------------------------------------------------------------------- */
+.nodes-panel {
+  width: 320px; background:#fff; border:1px solid var(--n8n-border);
+  border-radius: 10px; overflow:hidden; box-shadow: var(--n8n-shadow-lg);
+  font-family: var(--n8n-font); font-size:13px;
+}
+.nodes-panel__head { padding:12px 14px 4px; }
+.nodes-panel__head h5 { margin:0 0 8px; font-size:13px; font-weight:600; }
+.nodes-panel__search {
+  display:flex; align-items:center; gap:8px;
+  border:1px solid var(--n8n-border-strong); border-radius:7px;
+  padding:8px 11px; color:var(--n8n-text-light); margin:0 14px 8px;
+}
+.nodes-panel__search .cursor { width:1px; height:15px; background:var(--n8n-text); animation: n8n-blink 1s steps(1) infinite; }
+@keyframes n8n-blink { 50% { opacity:0; } }
+.nodes-panel__list { max-height: 360px; overflow:auto; }
+.nodes-panel__item {
+  display:flex; align-items:center; gap:11px;
+  padding:10px 14px; border-top:1px solid #f0f1f4;
+}
+.nodes-panel__item:hover, .nodes-panel__item.is-active { background: var(--n8n-primary-tint); }
+.nodes-panel__ic {
+  width:30px; height:30px; border-radius:6px; flex:none;
+  display:grid; place-items:center; font-size:17px; background:#f1f2f6;
+}
+.nodes-panel__txt b { display:block; font-weight:600; font-size:13px; }
+.nodes-panel__txt small { color:var(--n8n-text-light); font-size:11.5px; }
+.nodes-panel__item .chev { margin-left:auto; color:var(--n8n-text-faint); }
+
+/* --------------------------------------------------------------------------
+   NDV — Node Detail View (öffnet sich bei Doppelklick auf einen Node)
+   3 Spalten: Input | Parameter | Output
+   -------------------------------------------------------------------------- */
+.ndv {
+  background:#fff; border:1px solid var(--n8n-border); border-radius:12px;
+  overflow:hidden; box-shadow: var(--n8n-shadow-lg); font-family: var(--n8n-font);
+}
+.ndv__bar {
+  display:flex; align-items:center; gap:10px; padding:11px 14px;
+  border-bottom:1px solid var(--n8n-border); background:var(--n8n-surface-2);
+}
+.ndv__bar .ndvic {
+  width:26px; height:26px; border-radius:6px; background:#f1f2f6;
+  display:grid; place-items:center; font-size:16px;
+}
+.ndv__bar b { font-size:14px; font-weight:600; }
+.ndv__bar .ndv-x { margin-left:auto; color:var(--n8n-text-faint); font-size:16px; }
+.ndv__bar .ndv-docs { color:var(--n8n-text-light); font-size:12px; }
+
+.ndv__cols { display:grid; grid-template-columns: 1fr 1.25fr 1fr; min-height: 300px; }
+.ndv-panel { border-right:1px solid var(--n8n-border); display:flex; flex-direction:column; }
+.ndv-panel:last-child { border-right:none; }
+.ndv-panel__head {
+  display:flex; align-items:center; gap:8px; padding:9px 13px;
+  font-size:12px; color:var(--n8n-text-light); border-bottom:1px solid var(--n8n-border);
+  background:var(--n8n-surface-2);
+}
+.ndv-panel__head .count { margin-left:auto; font-size:11px; color:var(--n8n-text-faint); }
+.ndv-panel__body { padding:13px; overflow:auto; flex:1; }
+
+/* leere Input/Output-Hinweise */
+.ndv-empty { color:var(--n8n-text-faint); font-size:12.5px; text-align:center; padding:26px 14px; }
+.ndv-exec {
+  display:inline-flex; align-items:center; gap:7px; margin:8px auto 0;
+  padding:8px 14px; border-radius:6px; background:var(--n8n-primary); color:#fff;
+  font-size:12.5px; font-weight:600;
+}
+
+/* Parameter-Spalte: Formularfelder */
+.ndv-params .row { margin-bottom:14px; }
+.ndv-params label {
+  display:flex; align-items:center; gap:6px;
+  font-size:12px; font-weight:600; color:var(--n8n-text); margin-bottom:5px;
+}
+.ndv-params label .req { color:var(--n8n-danger); }
+.ndv-params .hint { font-size:11px; color:var(--n8n-text-faint); font-weight:400; }
+.n8n-input, .n8n-select {
+  width:100%; padding:8px 11px; border:1px solid var(--n8n-border-strong);
+  border-radius:6px; font-size:12.5px; font-family:var(--n8n-font);
+  color:var(--n8n-text); background:#fff;
+}
+.n8n-input.is-expr {
+  font-family:var(--n8n-mono); background:#f6f7ff; border-color:#c7c9ee; color:#3b3f8f;
+}
+.n8n-select { display:flex; align-items:center; justify-content:space-between; }
+.n8n-select .chev { color:var(--n8n-text-faint); }
+/* Tab-Umschalter "Fixed | Expression" über einem Feld */
+.ndv-fxtab { display:inline-flex; border:1px solid var(--n8n-border); border-radius:5px; overflow:hidden; margin-bottom:6px; }
+.ndv-fxtab b { font-size:10.5px; padding:3px 9px; color:var(--n8n-text-light); }
+.ndv-fxtab b.is-active { background:#eef0f4; color:var(--n8n-text); font-weight:600; }
+
+/* kleiner Ausführen-Button im NDV-Header rechts */
+.ndv__exec-step {
+  margin-left:auto; display:inline-flex; align-items:center; gap:6px;
+  background:var(--n8n-primary); color:#fff; font-size:12px; font-weight:600;
+  padding:6px 12px; border-radius:6px;
+}
+
+/* Datentabelle / JSON-Ausgabe im Output-Panel */
+.ndv-viewtabs { display:flex; gap:14px; font-size:11.5px; padding:7px 13px 0; }
+.ndv-viewtabs b { color:var(--n8n-text-light); padding-bottom:5px; border-bottom:2px solid transparent; }
+.ndv-viewtabs b.is-active { color:var(--n8n-text); border-bottom-color:var(--n8n-primary); font-weight:600; }
+
+.n8n-table { width:100%; border-collapse:collapse; font-size:11.5px; }
+.n8n-table th, .n8n-table td {
+  border:1px solid var(--n8n-border); padding:6px 9px; text-align:left;
+  font-family:var(--n8n-mono); color:var(--n8n-text);
+}
+.n8n-table th { background:var(--n8n-surface-2); font-family:var(--n8n-font); font-weight:600; color:var(--n8n-text-light); }
+
+/* JSON-Ansicht */
+.n8n-json {
+  font-family:var(--n8n-mono); font-size:11.5px; line-height:1.7;
+  background:#fbfbfd; border-radius:6px; padding:10px 12px; overflow:auto;
+  color:var(--n8n-text); white-space:pre;
+}
+.n8n-json .k { color:#9b3d8a; }   /* key */
+.n8n-json .s { color:#2f8f4e; }   /* string */
+.n8n-json .n { color:#2b6cb0; }   /* number */
+.n8n-json .b { color:#b5651d; }   /* boolean */
+
+/* Schema-Ansicht (Baum mit Datentypen) – im Input-Panel beliebt */
+.n8n-schema { font-family:var(--n8n-mono); font-size:12px; }
+.n8n-schema .field { display:flex; align-items:center; gap:8px; padding:4px 0; }
+.n8n-schema .dot { width:7px;height:7px;border-radius:2px;background:#9aa0ad; }
+.n8n-schema .type { color:var(--n8n-text-faint); font-size:10.5px; margin-left:auto; }
+
+/* responsiv: NDV-Spalten auf schmalen Screens stapeln */
+@media (max-width: 720px) {
+  .ndv__cols { grid-template-columns: 1fr; }
+  .ndv-panel { border-right:none; border-bottom:1px solid var(--n8n-border); }
+  .nodes-panel { width:100%; }
+}
+
+/* ---- Ergänzungen nur für die Einzeldatei-Version ---- */
+.page { animation: fade .2s ease; }
+@keyframes fade { from { opacity:0; transform:translateY(4px);} to {opacity:1;transform:none;} }
+.cover-hero { background: radial-gradient(900px 500px at 80% -10%, #2a2440, #16161f 60%); color:#fff;
+  padding: 70px 40px 60px; border-radius:0; }
+.cover-hero .logo-big { width:56px;height:56px;border-radius:14px;background:var(--book-accent);
+  display:grid;place-items:center;font-weight:800;font-size:26px;letter-spacing:-2px;margin-bottom:24px; }
+.cover-hero h1 { font-family:var(--serif); font-size:clamp(32px,5vw,54px); margin:0 0 14px; font-weight:600; }
+.cover-hero h1 b { color:var(--book-accent); }
+.cover-hero .sub { font-size:18px; color:#c9ccd8; max-width:620px; line-height:1.55; margin:0 0 26px; }
+.cover-hero .cta { background:var(--book-accent); color:#fff; padding:13px 24px; border-radius:10px;
+  font-weight:700; text-decoration:none; display:inline-block; }
+.cover-toc { max-width:820px; margin:0 auto; padding:46px 30px 80px; }
+.cover-toc > h2 { font-family:var(--serif); font-size:28px; margin:0 0 22px; }
+.toc-part { margin-bottom:26px; }
+.toc-part h3 { font-size:12.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--book-accent); margin:0 0 11px; }
+.toc-list { display:grid; gap:8px; }
+.toc-row { display:flex; align-items:center; gap:14px; background:#fff; border:1px solid var(--book-line);
+  border-radius:11px; padding:12px 15px; text-decoration:none; color:var(--book-ink); }
+.toc-row:hover { border-color:var(--book-accent); }
+.toc-row.soon { opacity:.6; }
+.toc-row .n { font-family:var(--mono); font-size:13px; color:var(--book-accent); min-width:30px; font-weight:600; }
+.toc-row .ti { flex:1; font-weight:600; font-size:15px; }
+.toc-row .mins { font-size:12px; color:var(--book-faint); }
+.toc-row .pill { font-size:10px; background:#eef0f4; color:var(--book-faint); padding:2px 9px; border-radius:20px; }
+.toc-row.soon .pill { background:#fff3e8; color:#c47f17; }
+#home article { all:unset; }
+.pn-wrap { max-width: var(--maxw); margin:0 auto; padding: 0 30px 70px; display:flex; gap:14px; }
+</style>
+</head>
+<body data-base=".">
+<div id="app">
+  <aside id="sidebar"><a class="sb-brand" href="#home"><span class="logo">n8</span>
+  <span><b>Das n8n-Werkbuch</b><small>Workflows bauen — vom ersten Klick bis zum KI-Agenten</small></span></a>
+  <div class="sb-search"><span>🔎</span><input id="sbq" type="text" placeholder="Im Buch suchen…" autocomplete="off"></div><div class="sb-part">Teil 0 · Orientierung</div><a class="sb-link" data-title="vorwort & wie du dieses buch nutzt"
+      href="#00-vorwort" data-slug="00-vorwort">
+      <span class="num">00</span><span>Vorwort & wie du dieses Buch nutzt</span>
+      </a><a class="sb-link" data-title="das 80/20 von n8n — die wichtigen 35 %"
+      href="#00-pareto" data-slug="00-pareto">
+      <span class="num">0.1</span><span>Das 80/20 von n8n — die wichtigen 35 %</span>
+      </a><div class="sb-part">Teil 1 · Grundlagen</div><a class="sb-link" data-title="was ist n8n? konzept & einsatzgebiete"
+      href="#01-was-ist-n8n" data-slug="01-was-ist-n8n">
+      <span class="num">1</span><span>Was ist n8n? Konzept & Einsatzgebiete</span>
+      </a><a class="sb-link" data-title="installation & setup (cloud, npx, docker)"
+      href="#02-installation" data-slug="02-installation">
+      <span class="num">2</span><span>Installation & Setup (Cloud, npx, Docker)</span>
+      </a><a class="sb-link" data-title="die oberfläche im detail"
+      href="#03-oberflaeche" data-slug="03-oberflaeche">
+      <span class="num">3</span><span>Die Oberfläche im Detail</span>
+      </a><a class="sb-link" data-title="dein erster workflow — schritt für schritt"
+      href="#04-erster-workflow" data-slug="04-erster-workflow">
+      <span class="num">4</span><span>Dein erster Workflow — Schritt für Schritt</span>
+      </a><a class="sb-link" data-title="kernkonzepte: nodes, items & datenfluss"
+      href="#05-kernkonzepte" data-slug="05-kernkonzepte">
+      <span class="num">5</span><span>Kernkonzepte: Nodes, Items & Datenfluss</span>
+      </a><a class="sb-link is-soon" data-title="expressions & der ausdruckseditor"
+      href="javascript:void(0)" data-slug="06-expressions">
+      <span class="num">6</span><span>Expressions & der Ausdruckseditor</span>
+      <span class="soon">bald</span></a><div class="sb-part">Teil 2 · Bausteine im Detail</div><a class="sb-link is-soon" data-title="trigger-nodes (manual, schedule, webhook)"
+      href="javascript:void(0)" data-slug="07-trigger">
+      <span class="num">7</span><span>Trigger-Nodes (Manual, Schedule, Webhook)</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="der http-request-node: jede api ansprechen"
+      href="javascript:void(0)" data-slug="08-http">
+      <span class="num">8</span><span>Der HTTP-Request-Node: jede API ansprechen</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="daten transformieren (set, code, filter)"
+      href="javascript:void(0)" data-slug="09-transform">
+      <span class="num">9</span><span>Daten transformieren (Set, Code, Filter)</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="flow-logik: if, switch, merge, loops"
+      href="javascript:void(0)" data-slug="10-flow">
+      <span class="num">10</span><span>Flow-Logik: IF, Switch, Merge, Loops</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="fehlerbehandlung & error-workflows"
+      href="javascript:void(0)" data-slug="11-fehler">
+      <span class="num">11</span><span>Fehlerbehandlung & Error-Workflows</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="credentials & authentifizierung"
+      href="javascript:void(0)" data-slug="12-credentials">
+      <span class="num">12</span><span>Credentials & Authentifizierung</span>
+      <span class="soon">bald</span></a><div class="sb-part">Teil 3 · Projekte (klein → groß)</div><a class="sb-link is-soon" data-title="projekt 1: täglicher report per telegram"
+      href="javascript:void(0)" data-slug="13-projekt-wetter">
+      <span class="num">13</span><span>Projekt 1: Täglicher Report per Telegram</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="projekt 2: formular → sheets → slack"
+      href="javascript:void(0)" data-slug="14-projekt-form">
+      <span class="num">14</span><span>Projekt 2: Formular → Sheets → Slack</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="projekt 3: news-aggregator mit filter"
+      href="javascript:void(0)" data-slug="15-projekt-news">
+      <span class="num">15</span><span>Projekt 3: News-Aggregator mit Filter</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="projekt 4: lead-routing vom webhook ins crm"
+      href="javascript:void(0)" data-slug="16-projekt-leads">
+      <span class="num">16</span><span>Projekt 4: Lead-Routing vom Webhook ins CRM</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="projekt 5: ki-e-mail-assistent (ai agent)"
+      href="javascript:void(0)" data-slug="17-projekt-ai">
+      <span class="num">17</span><span>Projekt 5: KI-E-Mail-Assistent (AI Agent)</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="projekt 6: pdf-/rechnungs-extraktion"
+      href="javascript:void(0)" data-slug="18-projekt-pdf">
+      <span class="num">18</span><span>Projekt 6: PDF-/Rechnungs-Extraktion</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="großprojekt: content-pipeline end-to-end"
+      href="javascript:void(0)" data-slug="19-grossprojekt">
+      <span class="num">19</span><span>Großprojekt: Content-Pipeline end-to-end</span>
+      <span class="soon">bald</span></a><div class="sb-part">Teil 4 · KI & Agenten</div><a class="sb-link is-soon" data-title="ai-agent, chat-trigger, memory & tools"
+      href="javascript:void(0)" data-slug="20-ai-agent">
+      <span class="num">20</span><span>AI-Agent, Chat-Trigger, Memory & Tools</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="rag: vektorstores & q&a über eigene daten"
+      href="javascript:void(0)" data-slug="21-rag">
+      <span class="num">21</span><span>RAG: Vektorstores & Q&A über eigene Daten</span>
+      <span class="soon">bald</span></a><div class="sb-part">Teil 5 · Profi & Betrieb</div><a class="sb-link is-soon" data-title="sub-workflows & modularisierung"
+      href="javascript:void(0)" data-slug="22-subworkflows">
+      <span class="num">22</span><span>Sub-Workflows & Modularisierung</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="performance, batching & rate-limits"
+      href="javascript:void(0)" data-slug="23-performance">
+      <span class="num">23</span><span>Performance, Batching & Rate-Limits</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="deployment, env-variablen & git"
+      href="javascript:void(0)" data-slug="24-deployment">
+      <span class="num">24</span><span>Deployment, Env-Variablen & Git</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="sicherheit, queue-mode & skalierung"
+      href="javascript:void(0)" data-slug="25-skalierung">
+      <span class="num">25</span><span>Sicherheit, Queue-Mode & Skalierung</span>
+      <span class="soon">bald</span></a><div class="sb-part">Anhang</div><a class="sb-link is-soon" data-title="tastenkürzel-referenz"
+      href="javascript:void(0)" data-slug="A-shortcuts">
+      <span class="num">A</span><span>Tastenkürzel-Referenz</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="spickzettel: die wichtigsten nodes"
+      href="javascript:void(0)" data-slug="B-nodes">
+      <span class="num">B</span><span>Spickzettel: die wichtigsten Nodes</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="expression-cheatsheet"
+      href="javascript:void(0)" data-slug="C-expressions">
+      <span class="num">C</span><span>Expression-Cheatsheet</span>
+      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="glossar"
+      href="javascript:void(0)" data-slug="D-glossar">
+      <span class="num">D</span><span>Glossar</span>
+      <span class="soon">bald</span></a><div class="sb-foot">© 2026 · Lehrbuch-Entwurf · „n8n“ ist eine Marke der n8n GmbH. Unabhängiges Lernprojekt.</div></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <section class="page" id="home" hidden>
+  <div class="cover-hero">
+    <div class="logo-big">n8</div>
+    <h1>Das <b>n8n</b>-Werkbuch</h1>
+    <p class="sub">Workflows bauen — vom ersten Klick bis zum KI-Agenten. Jeder Schritt so beschrieben und
+      bebildert, dass du ihn parallel am Bildschirm nachbauen kannst.</p>
+    <a class="cta" href="#00-vorwort">Buch öffnen →</a>
+  </div>
+  <div class="cover-toc"><h2>Inhaltsverzeichnis</h2><div class="toc-part"><h3>Teil 0 · Orientierung</h3><div class="toc-list"><a class="toc-row" href="#00-vorwort">
+      <span class="n">00</span><span class="ti">Vorwort & wie du dieses Buch nutzt</span>
+      <span class="mins">⏱ 8 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row" href="#00-pareto">
+      <span class="n">0.1</span><span class="ti">Das 80/20 von n8n — die wichtigen 35 %</span>
+      <span class="mins">⏱ 12 Min</span>
+      <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Teil 1 · Grundlagen</h3><div class="toc-list"><a class="toc-row" href="#01-was-ist-n8n">
+      <span class="n">1</span><span class="ti">Was ist n8n? Konzept & Einsatzgebiete</span>
+      <span class="mins">⏱ 14 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row" href="#02-installation">
+      <span class="n">2</span><span class="ti">Installation & Setup (Cloud, npx, Docker)</span>
+      <span class="mins">⏱ 16 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row" href="#03-oberflaeche">
+      <span class="n">3</span><span class="ti">Die Oberfläche im Detail</span>
+      <span class="mins">⏱ 22 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row" href="#04-erster-workflow">
+      <span class="n">4</span><span class="ti">Dein erster Workflow — Schritt für Schritt</span>
+      <span class="mins">⏱ 25 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row" href="#05-kernkonzepte">
+      <span class="n">5</span><span class="ti">Kernkonzepte: Nodes, Items & Datenfluss</span>
+      <span class="mins">⏱ 24 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">6</span><span class="ti">Expressions & der Ausdruckseditor</span>
+      <span class="mins">⏱ 20 Min</span>
+      <span class="pill">bald</span></a></div></div><div class="toc-part"><h3>Teil 2 · Bausteine im Detail</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">7</span><span class="ti">Trigger-Nodes (Manual, Schedule, Webhook)</span>
+      <span class="mins">⏱ 18 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">8</span><span class="ti">Der HTTP-Request-Node: jede API ansprechen</span>
+      <span class="mins">⏱ 22 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">9</span><span class="ti">Daten transformieren (Set, Code, Filter)</span>
+      <span class="mins">⏱ 20 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">10</span><span class="ti">Flow-Logik: IF, Switch, Merge, Loops</span>
+      <span class="mins">⏱ 22 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">11</span><span class="ti">Fehlerbehandlung & Error-Workflows</span>
+      <span class="mins">⏱ 16 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">12</span><span class="ti">Credentials & Authentifizierung</span>
+      <span class="mins">⏱ 15 Min</span>
+      <span class="pill">bald</span></a></div></div><div class="toc-part"><h3>Teil 3 · Projekte (klein → groß)</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">13</span><span class="ti">Projekt 1: Täglicher Report per Telegram</span>
+      <span class="mins">⏱ 30 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">14</span><span class="ti">Projekt 2: Formular → Sheets → Slack</span>
+      <span class="mins">⏱ 35 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">15</span><span class="ti">Projekt 3: News-Aggregator mit Filter</span>
+      <span class="mins">⏱ 35 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">16</span><span class="ti">Projekt 4: Lead-Routing vom Webhook ins CRM</span>
+      <span class="mins">⏱ 40 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">17</span><span class="ti">Projekt 5: KI-E-Mail-Assistent (AI Agent)</span>
+      <span class="mins">⏱ 45 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">18</span><span class="ti">Projekt 6: PDF-/Rechnungs-Extraktion</span>
+      <span class="mins">⏱ 45 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">19</span><span class="ti">Großprojekt: Content-Pipeline end-to-end</span>
+      <span class="mins">⏱ 70 Min</span>
+      <span class="pill">bald</span></a></div></div><div class="toc-part"><h3>Teil 4 · KI & Agenten</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">20</span><span class="ti">AI-Agent, Chat-Trigger, Memory & Tools</span>
+      <span class="mins">⏱ 28 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">21</span><span class="ti">RAG: Vektorstores & Q&A über eigene Daten</span>
+      <span class="mins">⏱ 30 Min</span>
+      <span class="pill">bald</span></a></div></div><div class="toc-part"><h3>Teil 5 · Profi & Betrieb</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">22</span><span class="ti">Sub-Workflows & Modularisierung</span>
+      <span class="mins">⏱ 18 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">23</span><span class="ti">Performance, Batching & Rate-Limits</span>
+      <span class="mins">⏱ 18 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">24</span><span class="ti">Deployment, Env-Variablen & Git</span>
+      <span class="mins">⏱ 20 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">25</span><span class="ti">Sicherheit, Queue-Mode & Skalierung</span>
+      <span class="mins">⏱ 20 Min</span>
+      <span class="pill">bald</span></a></div></div><div class="toc-part"><h3>Anhang</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">A</span><span class="ti">Tastenkürzel-Referenz</span>
+      <span class="mins">⏱ 5 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">B</span><span class="ti">Spickzettel: die wichtigsten Nodes</span>
+      <span class="mins">⏱ 6 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">C</span><span class="ti">Expression-Cheatsheet</span>
+      <span class="mins">⏱ 6 Min</span>
+      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="n">D</span><span class="ti">Glossar</span>
+      <span class="mins">⏱ 4 Min</span>
+      <span class="pill">bald</span></a></div></div></div>
+</section>
+    <section class="page" id="00-vorwort" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">00</span> Orientierung</div>
+      <h1 class="chap-title">Vorwort & wie du dieses Buch nutzt</h1>
+      <p class="chap-lede">Dieses Buch hat ein einziges, sehr konkretes Ziel: Nach dem Lesen kannst du
+        jeden gezeigten Workflow selbst nachbauen — nicht „so ungefähr“, sondern Klick für Klick,
+        Feld für Feld.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 8 Minuten</span>
+        <span>🎯 Niveau: alle</span>
+        <span>🧩 keine Vorkenntnisse nötig</span>
+      </div>
+
+      <h2>Für wen ist dieses Buch?</h2>
+      <p>Für alle, die wiederkehrende Aufgaben automatisieren wollen, ohne ein Software-Team zu sein:
+        Solo-Selbstständige, Marketing- und Ops-Leute, Entwickler:innen, die schneller prototypen wollen,
+        und Neugierige, die KI sinnvoll in echte Abläufe einbauen möchten. Du brauchst
+        <strong>keine Programmierkenntnisse</strong>. An den wenigen Stellen, an denen ein bisschen Code oder
+        JSON hilft, fangen wir bei null an.</p>
+
+      <h2>Die drei Prinzipien dieses Buchs</h2>
+      <div class="cards">
+        <div class="card"><div class="ic">👆</div><b>Nachbaubar</b>
+          <p>Jede Aktion steht als exakter Klick-Pfad da. Du sollst das Buch links und n8n rechts offen haben.</p></div>
+        <div class="card"><div class="ic">🖼️</div><b>Bebildert</b>
+          <p>Die Oberfläche ist als scharfe 1:1-Nachbildung eingebettet — du erkennst jeden Button wieder.</p></div>
+        <div class="card"><div class="ic">⚡</div><b>80/20-fokussiert</b>
+          <p>Wir lernen zuerst den kleinen Kern, der die meisten Ergebnisse bringt — und vertiefen erst danach.</p></div>
+      </div>
+
+      <h2>So sind die Kapitel aufgebaut</h2>
+      <p>Damit du dich schnell zurechtfindest, wiederholen sich dieselben Bausteine. Hier sind sie alle einmal,
+        damit du sie ab Kapitel 1 sofort einordnen kannst.</p>
+
+      <div class="prereq">
+        <h4>📋 Voraussetzungs-Box</h4>
+        <p style="margin:0 0 8px;font-size:14.5px">Steht am Anfang jedes Praxis-Kapitels und sagt dir <em>genau</em>, was du können und vorbereitet haben musst:</p>
+        <ul>
+          <li>Welche Konten/Zugänge du brauchst (z. B. ein Telegram-Bot-Token)</li>
+          <li>Welche Konzepte aus früheren Kapiteln vorausgesetzt werden</li>
+          <li>Geschätzte Bauzeit</li>
+        </ul>
+      </div>
+
+      <p>Ein <strong>Klick-Pfad</strong> zeigt eine Bedienabfolge kompakt an. Lies ihn von links nach rechts:</p>
+      <div class="clickpath">
+        <span class="step"><span class="n">1</span> Canvas öffnen</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">2</span> auf <span class="kbd">+</span> klicken</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">3</span> „Schedule“ tippen</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">4</span> <kbd class="kbd">Enter</kbd></span>
+      </div>
+
+      <p>Wichtige Hinweise erscheinen als farbige Boxen:</p>
+      <div class="callout callout--tip"><b class="t">Tipp</b>Eine Abkürzung oder Best Practice, die dir Zeit spart.</div>
+      <div class="callout callout--warn"><b class="t">Achtung</b>Eine häufige Stolperfalle — hier lohnt genaues Hinsehen.</div>
+      <div class="callout callout--info"><b class="t">Hintergrund</b>Vertiefung für alle, die verstehen wollen, <em>warum</em> etwas so ist.</div>
+      <div class="callout callout--pareto"><b class="t">⚡ 80/20</b>Markiert das Wissen aus dem entscheidenden Kern — wenn du wenig Zeit hast, lies zuerst diese Stellen.</div>
+
+      <h2>Was du an deinem Rechner brauchst</h2>
+      <p>Mehr nicht als das hier — die konkrete Einrichtung machen wir gemeinsam in Kapitel 2:</p>
+      <ul>
+        <li>Einen <strong>aktuellen Browser</strong> (Chrome, Firefox, Edge oder Safari).</li>
+        <li>Entweder einen <strong>kostenlosen n8n-Cloud-Account</strong> <em>oder</em> die Bereitschaft,
+          n8n lokal zu starten (ein einziger Befehl). Beide Wege zeige ich.</li>
+        <li>Etwas Zeit und Lust zum Ausprobieren. Kaputtmachen kannst du nichts.</li>
+      </ul>
+
+      <div class="callout callout--info">
+        <b class="t">Zur Oberfläche in diesem Buch</b>
+        Die abgebildeten „Screenshots“ sind detailgetreue Nachbildungen der n8n-Oberfläche (Stand 2025).
+        n8n entwickelt sich schnell weiter — Farben oder Beschriftungen können minimal abweichen, die
+        <em>Struktur</em> und der <em>Bedienablauf</em> bleiben aber stabil. Wo n8n etwas umbenannt hat,
+        nenne ich beide Begriffe.
+      </div>
+
+      <h2>Wie du am meisten mitnimmst</h2>
+      <ol class="steps">
+        <li><h4>Bau mit, nicht nur lesen</h4><p>Öffne n8n in einem zweiten Fenster und tippe jeden Schritt selbst.
+          Verstehen entsteht in den Fingern, nicht im Überfliegen.</p></li>
+        <li><h4>Brich Beispiele absichtlich</h4><p>Ändere einen Wert, lass es fehlschlagen, schau dir die Fehlermeldung an.
+          Du lernst n8n am schnellsten, indem du beobachtest, wie es reagiert.</p></li>
+        <li><h4>Folge erst dem ⚡-Pfad</h4><p>Wenn die Zeit knapp ist: Kapitel 0.1 (das 80/20) und Kapitel 3–5 geben dir
+          das Fundament für fast alles Weitere.</p></li>
+      </ol>
+
+      <p>Genug Vorrede. Schauen wir uns zuerst an, welche <strong>35 % von n8n</strong> dir die meisten Ergebnisse bringen —
+        und dann bauen wir.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="00-vorwort"></nav></section>
+<section class="page" id="00-pareto" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">0.1</span> Orientierung</div>
+      <h1 class="chap-title">Das 80/20 von n8n — die wichtigen 35 %</h1>
+      <p class="chap-lede">n8n hat über 400 Integrationen und unzählige Optionen. Die gute Nachricht:
+        Ein erstaunlich kleiner Kern erklärt fast alles, was du je bauen wirst. Dieses Kapitel ist die Landkarte
+        dieses Kerns — der Rest des Buchs füllt sie aus.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 12 Minuten</span>
+        <span>🎯 Niveau: Einstieg</span>
+        <span>⚡ Das Fundament für alles Weitere</span>
+      </div>
+
+      <p>Bevor wir irgendetwas installieren oder klicken, lohnt sich eine mentale Landkarte. Wenn du die folgenden
+        sieben Bausteine verstehst, kannst du dir fast jeden Workflow der Welt selbst herleiten — auch solche,
+        die in diesem Buch gar nicht vorkommen. Alles andere sind Varianten und Spezialfälle.</p>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die Kernidee in einem Satz</b>
+        Ein n8n-Workflow ist eine <strong>Kette von Bausteinen (Nodes)</strong>, durch die <strong>Daten (Items)</strong>
+        von links nach rechts fließen; jeder Node bekommt Daten herein, tut <em>eine</em> Sache und gibt Daten weiter.
+      </div>
+
+      <h2>Die 7 Bausteine, die fast alles erklären</h2>
+
+      <h3>1. Der Auslöser (Trigger) — „Wann soll es losgehen?“</h3>
+      <p>Jeder Workflow beginnt mit genau einem Auslöser. Er beantwortet die Frage <em>wann</em> der Workflow startet.
+        In der Praxis brauchst du fast immer nur drei:</p>
+      <ul>
+        <li><strong>Manuell</strong> – du klickst auf „Test“. Zum Bauen und Ausprobieren.</li>
+        <li><strong>Zeitplan (Schedule)</strong> – „jeden Tag um 8 Uhr“. Für Reports, Backups, Erinnerungen.</li>
+        <li><strong>Webhook</strong> – „immer wenn jemand dieses Formular abschickt / dieses System mir Daten schickt“.
+          Das Tor zu praktisch jeder anderen Software.</li>
+      </ul>
+      <div class="callout callout--pareto"><b class="t">⚡ Merke</b>Schedule + Webhook decken geschätzt 80 % aller realen Startpunkte ab.</div>
+
+      <h3>2. Daten holen — der HTTP-Request-Node</h3>
+      <p>n8n hat fertige Nodes für Google Sheets, Slack, Telegram, Notion und hunderte mehr. Aber der wichtigste
+        einzelne Node ist der <strong>HTTP Request</strong>: Damit sprichst du <em>jede</em> Internet-Schnittstelle (API) an —
+        auch solche, für die es keinen fertigen Node gibt. Wer den HTTP-Node beherrscht, ist von keiner Integration abhängig.</p>
+
+      <h3>3. Daten umformen — Set / Edit Fields & der Code-Node</h3>
+      <p>Zwischen „Daten rein“ und „Daten raus“ liegt fast immer ein bisschen Umbau: Felder umbenennen, zusammenfügen,
+        ausrechnen, filtern. Dafür reichen meist zwei Werkzeuge: der <strong>Edit-Fields-Node (Set)</strong> für einfache Fälle
+        und der <strong>Code-Node</strong> für alles, was Logik braucht.</p>
+
+      <h3>4. Entscheiden — IF & Switch</h3>
+      <p>„Wenn der Betrag über 1000 € liegt, schicke es an den Chef, sonst direkt verbuchen.“ Solche Verzweigungen
+        baust du mit dem <strong>IF-Node</strong> (zwei Wege) oder dem <strong>Switch-Node</strong> (viele Wege).</p>
+
+      <h3>5. Etwas auslösen — Aktions-Nodes</h3>
+      <p>Am Ende soll etwas <em>passieren</em>: eine E-Mail raus, eine Zeile in Google Sheets, eine Slack-Nachricht,
+        ein Eintrag im CRM. Das sind Aktions-Nodes. Sie funktionieren alle nach demselben Muster, das du einmal lernst.</p>
+
+      <h3>6. Der rote Faden — Items & Expressions</h3>
+      <p>Daten reisen als <strong>Items</strong> (kleine Datenpakete im JSON-Format) durch den Workflow. Um in einem späteren
+        Node auf einen Wert aus einem früheren zuzugreifen, nutzt du <strong>Expressions</strong> — kleine Platzhalter wie
+        <code>{{ $json.email }}</code>. Das ist der mit Abstand wichtigste „Trick“, um Nodes miteinander zu verdrahten.</p>
+
+      <h3>7. Verlässlichkeit — Fehlerbehandlung</h3>
+      <p>Sobald ein Workflow echte Arbeit macht, wird auch mal etwas schiefgehen (API down, falsche Daten).
+        Wer früh lernt, wie man Fehler abfängt, baut Automatisierungen, denen man vertrauen kann.</p>
+
+      <h2>Die Landkarte als Bild</h2>
+      <p>So greifen diese Bausteine ineinander. Genau dieses Muster wirst du in fast jedem Projekt wiedererkennen:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 900 440" preserveAspectRatio="none">
+                <path d="M 150 200 C 210 200, 220 200, 270 200"></path>
+                <path d="M 362 200 C 420 200, 430 200, 480 200"></path>
+                <path d="M 572 200 C 620 200, 625 130, 680 130"></path>
+                <path d="M 572 200 C 620 200, 625 280, 680 280"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:32px; top:154px;">
+                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__label">1 · Trigger</span>
+                <span class="n8n-node__sublabel">wann?</span>
+              </div>
+              <div class="n8n-node" style="left:270px; top:154px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">2 · Daten holen</span>
+                <span class="n8n-node__sublabel">HTTP Request</span>
+              </div>
+              <div class="n8n-node n8n-node--code" style="left:480px; top:154px;">
+                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">3 · Umformen</span>
+                <span class="n8n-node__sublabel">Set / Code</span>
+              </div>
+              <div class="n8n-node" style="left:680px; top:84px;">
+                <span class="n8n-node__icon">✉️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">5 · Aktion A</span>
+              </div>
+              <div class="n8n-node" style="left:680px; top:234px;">
+                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">5 · Aktion B</span>
+              </div>
+              <div class="n8n-sticky" style="left:475px; top:300px; max-width:210px;">
+                <b>4 · Entscheiden (IF/Switch)</b>
+                Hier teilt sich der Weg: je nach Daten geht es zu Aktion A oder B.
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 0.1</span>Das universelle Grundmuster: <b>Trigger → Holen → Umformen → Entscheiden → Aktion</b>. Punkt 6 (Items/Expressions) und 7 (Fehler) sind unsichtbar, aber überall dabei.</figcaption>
+      </figure>
+
+      <h2>Was du dafür können musst — ehrlich gesagt</h2>
+      <p>Viele schrecken vor Automatisierung zurück, weil sie „programmieren können“ glauben zu müssen. Hier die ehrliche Aufteilung:</p>
+
+      <table class="btable">
+        <thead><tr><th>Fähigkeit</th><th>Wie wichtig?</th><th>Wo im Buch</th></tr></thead>
+        <tbody>
+          <tr><td>Logisch in „erst dies, dann das“ denken</td><td>⚡ Essenziell</td><td>überall</td></tr>
+          <tr><td>JSON lesen (geschweifte Klammern, Felder)</td><td>⚡ Sehr wichtig</td><td>Kapitel 5</td></tr>
+          <tr><td>Einfache Expressions schreiben (<code>{{ $json.x }}</code>)</td><td>⚡ Sehr wichtig</td><td>Kapitel 5 & 6</td></tr>
+          <tr><td>Verstehen, was eine API / ein Webhook ist</td><td>Wichtig</td><td>Kapitel 8</td></tr>
+          <tr><td>Ein paar Zeilen JavaScript im Code-Node</td><td>Nice-to-have</td><td>Kapitel 9</td></tr>
+          <tr><td>Server/Docker administrieren</td><td>Nur für Self-Hosting</td><td>Kapitel 2 & 24</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--tip">
+        <b class="t">Die beruhigende Wahrheit</b>
+        Die ersten drei Zeilen sind die wichtigen 35 %. „Logisch denken“ kannst du längst. JSON und einfache
+        Expressions lernst du in zwei Kapiteln. Damit baust du bereits die Mehrheit aller Workflows in diesem Buch.
+      </div>
+
+      <h2>Wie der Rest des Buchs darauf aufbaut</h2>
+      <ul>
+        <li><strong>Teil 1 (Kap. 1–6)</strong> macht aus dieser Landkarte echtes Können: Oberfläche, erster Workflow, Datenmodell, Expressions.</li>
+        <li><strong>Teil 2 (Kap. 7–12)</strong> nimmt jeden der 7 Bausteine einzeln auseinander.</li>
+        <li><strong>Teil 3 (Kap. 13–19)</strong> kombiniert sie in sechs wachsenden Projekten — vom kleinen Report bis zur großen Pipeline.</li>
+        <li><strong>Teil 4 & 5</strong> erweitern das Muster um KI-Agenten und um Betrieb/Skalierung.</li>
+      </ul>
+
+      <p>Du hast jetzt die mentale Landkarte. Im nächsten Kapitel klären wir kurz, <em>was n8n eigentlich genau ist</em>
+        und wann es das richtige Werkzeug ist — danach installieren wir es und legen los.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="00-pareto"></nav></section>
+<section class="page" id="01-was-ist-n8n" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">1</span> Grundlagen</div>
+      <h1 class="chap-title">Was ist n8n? Konzept & Einsatzgebiete</h1>
+      <p class="chap-lede">n8n (gesprochen „n-eight-n“, kurz für <em>nodemation</em>) ist ein Werkzeug, mit dem du
+        Software-Bausteine per Drag-and-drop zu automatischen Abläufen verbindest — ohne (oder mit nur wenig) Code.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 14 Minuten</span>
+        <span>🎯 Niveau: Einstieg</span>
+        <span>🧩 Voraussetzung: Kapitel 0.1</span>
+      </div>
+
+      <h2>Die Idee in einem Bild</h2>
+      <p>Stell dir vor, du hättest einen sehr zuverlässigen, sehr schnellen Assistenten, dem du eine Abfolge von
+        Anweisungen gibst: „Hol jeden Morgen den Wechselkurs, rechne ihn um, und wenn er unter X fällt, schick mir
+        eine Nachricht.“ In n8n malst du genau diese Anweisungskette als Diagramm auf — und n8n führt sie aus,
+        so oft du willst, völlig automatisch.</p>
+
+      <p>Jeder Kasten in diesem Diagramm heißt <strong>Node</strong> und macht genau eine Sache. Die Linien dazwischen
+        sind der Weg, den die Daten nehmen. Diese Kombination aus Nodes und Verbindungen ist ein <strong>Workflow</strong>.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n__chrome"><i></i><i></i><i></i><span>Ein Workflow = Nodes + Verbindungen</span></div>
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 820 340" preserveAspectRatio="none">
+                <path d="M 158 160 C 230 160, 250 160, 320 160"></path>
+                <path d="M 412 160 C 490 160, 500 160, 560 160"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:42px; top:114px;">
+                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__label">Jeden Morgen 8 Uhr</span>
+              </div>
+              <div class="n8n-node" style="left:320px; top:114px;">
+                <span class="n8n-node__icon">💱</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Wechselkurs holen</span>
+              </div>
+              <div class="n8n-node" style="left:560px; top:114px;">
+                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Nachricht senden</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 1.1</span>Ein winziger, aber vollständiger Workflow. Genau so „liest“ sich n8n: von links nach rechts.</figcaption>
+      </figure>
+
+      <h2>Was bedeutet „Workflow-Automatisierung“ konkret?</h2>
+      <p>Automatisieren heißt: eine Aufgabe, die du sonst <em>manuell und wiederholt</em> machst, einmal als Ablauf
+        beschreiben und dann die Maschine machen lassen. Typische Kandidaten erkennst du an drei Merkmalen:</p>
+      <ul>
+        <li>Es passiert <strong>regelmäßig</strong> oder <strong>als Reaktion</strong> auf ein Ereignis.</li>
+        <li>Es folgt <strong>festen Regeln</strong> („wenn X, dann Y“).</li>
+        <li>Es verbindet <strong>mehrere Werkzeuge</strong> (E-Mail, Tabelle, Chat, Datenbank …).</li>
+      </ul>
+
+      <h2>Wann lohnt sich n8n — und wann nicht?</h2>
+      <div class="cards">
+        <div class="card"><div class="ic">✅</div><b>Ideal für</b>
+          <p>Daten zwischen Apps schaufeln, Benachrichtigungen, Reports, Lead-Verarbeitung, KI-Aufgaben, API-Integrationen, Prototypen.</p></div>
+        <div class="card"><div class="ic">🤔</div><b>Geht auch, aber überleg</b>
+          <p>Sehr rechenintensive Datenverarbeitung großer Mengen, harte Echtzeit-Anforderungen im Millisekunden-Bereich.</p></div>
+        <div class="card"><div class="ic">🚫</div><b>Eher nicht</b>
+          <p>Komplette Endnutzer-Apps mit Oberfläche, sicherheitskritische Systeme ohne Aufsicht, Dinge mit nur einem einzigen Schritt.</p></div>
+      </div>
+
+      <h2>n8n im Vergleich zu Zapier & Make</h2>
+      <p>Wahrscheinlich hast du von <strong>Zapier</strong> oder <strong>Make</strong> (früher Integromat) gehört. Alle drei lösen
+        dasselbe Grundproblem. Die Unterschiede, die in der Praxis wirklich zählen:</p>
+
+      <table class="btable">
+        <thead><tr><th>Aspekt</th><th>n8n</th><th>Zapier</th><th>Make</th></tr></thead>
+        <tbody>
+          <tr><td>Selbst hosten</td><td>✅ Ja (Open Source, fair-code)</td><td>❌ Nein</td><td>❌ Nein</td></tr>
+          <tr><td>Eigener Code möglich</td><td>✅ JS & Python im Code-Node</td><td>eingeschränkt</td><td>eingeschränkt</td></tr>
+          <tr><td>Beliebige API (HTTP)</td><td>✅ voll & komfortabel</td><td>möglich</td><td>möglich</td></tr>
+          <tr><td>Verzweigungen/Loops</td><td>✅ frei verdrahtbar</td><td>begrenzt</td><td>✅ gut</td></tr>
+          <tr><td>KI-/Agenten-Bausteine</td><td>✅ stark integriert</td><td>vorhanden</td><td>vorhanden</td></tr>
+          <tr><td>Preismodell</td><td>pro Ausführung günstig / self-host kostenlos</td><td>pro Task</td><td>pro Operation</td></tr>
+          <tr><td>Einstiegshürde</td><td>etwas steiler, dafür mächtiger</td><td>sehr einfach</td><td>mittel</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die Entscheidung in einem Satz</b>
+        Willst du maximale Flexibilität, Kontrolle über deine Daten und niedrige Kosten bei viel Volumen — und scheust
+        eine etwas steilere Lernkurve nicht — ist n8n die richtige Wahl. Genau dafür ist dieses Buch da.
+      </div>
+
+      <h2>„Fair-Code“, Open Source & Cloud — was heißt das für dich?</h2>
+      <p>n8n ist <strong>quelloffen</strong> unter einer „fair-code“-Lizenz. Praktisch heißt das:</p>
+      <ul>
+        <li>Du darfst n8n <strong>kostenlos selbst betreiben</strong> (lokal oder auf deinem Server) und intern frei nutzen.</li>
+        <li>Du kannst den Quellcode einsehen und anpassen.</li>
+        <li>Es gibt zusätzlich eine bezahlte <strong>Cloud-Variante</strong>, bei der n8n den Betrieb für dich übernimmt —
+          ideal zum Starten, weil du dich um nichts kümmern musst.</li>
+      </ul>
+      <p>Für dieses Buch ist beides gleichwertig: Die Oberfläche und die Workflows sind identisch. Im nächsten Kapitel
+        wählst du einfach den Weg, der dir lieber ist.</p>
+
+      <h2>Ein paar Begriffe, die ab jetzt ständig vorkommen</h2>
+      <table class="btable">
+        <tbody>
+          <tr><td>Node</td><td>Ein einzelner Baustein, der eine Aufgabe erledigt (z. B. „E-Mail senden“).</td></tr>
+          <tr><td>Workflow</td><td>Mehrere verbundene Nodes, die zusammen einen Ablauf bilden.</td></tr>
+          <tr><td>Trigger</td><td>Der erste Node — er bestimmt, wann der Workflow startet.</td></tr>
+          <tr><td>Execution</td><td>Ein einzelner Durchlauf des Workflows („Ausführung“).</td></tr>
+          <tr><td>Item</td><td>Ein einzelnes Datenpaket, das durch den Workflow fließt.</td></tr>
+          <tr><td>Credential</td><td>Ein gespeicherter, sicher abgelegter Zugang (Passwort/API-Schlüssel) zu einem Dienst.</td></tr>
+          <tr><td>Canvas</td><td>Die Arbeitsfläche, auf der du Nodes anordnest und verbindest.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Keine Sorge, wenn noch nicht alles sitzt</b>
+        Diese Begriffe werden in den nächsten Kapiteln lebendig, sobald du sie anklickst. Du musst hier nichts auswendig lernen —
+        das Glossar im Anhang bleibt als Nachschlagewerk.
+      </div>
+
+      <p>Du weißt jetzt, <em>was</em> n8n ist und <em>wofür</em> es taugt. Im nächsten Kapitel bringen wir es bei dir zum Laufen —
+        wahlweise in der Cloud (Null Installation) oder lokal (ein Befehl).</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="01-was-ist-n8n"></nav></section>
+<section class="page" id="02-installation" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">2</span> Grundlagen</div>
+      <h1 class="chap-title">Installation & Setup</h1>
+      <p class="chap-lede">Drei Wege führen zu n8n. Wähle einen — du kannst später jederzeit wechseln, deine
+        Workflows lassen sich exportieren und importieren.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 16 Minuten</span>
+        <span>🎯 Niveau: Einstieg</span>
+        <span>🧩 Du brauchst: Browser, optional Node.js oder Docker</span>
+      </div>
+
+      <h2>Welcher Weg ist der richtige für dich?</h2>
+      <table class="btable">
+        <thead><tr><th>Weg</th><th>Aufwand</th><th>Für wen?</th></tr></thead>
+        <tbody>
+          <tr><td>① n8n Cloud</td><td>Null Installation, 14 Tage Test</td><td>⚡ Empfohlen zum Starten & für dieses Buch</td></tr>
+          <tr><td>② Lokal mit <code>npx</code></td><td>Ein Befehl, läuft auf deinem Rechner</td><td>Wer Node.js hat und nichts in der Cloud will</td></tr>
+          <tr><td>③ Docker</td><td>Ein Befehl, dauerhaft & sauber isoliert</td><td>Wer es ernsthaft selbst hosten will</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Empfehlung fürs Buch</b>
+        Wenn du nur loslegen willst: Nimm <strong>① Cloud</strong>. Du sparst dir jegliche Technik und siehst exakt die
+        Oberfläche aus diesem Buch. Self-Hosting (② / ③) zeige ich für später — du kannst es überspringen und
+        gleich zu Kapitel 3 gehen.
+      </div>
+
+      <h2>Weg ① — n8n Cloud (empfohlen)</h2>
+      <ol class="steps">
+        <li><h4>Registrierungsseite öffnen</h4>
+          <p>Gehe im Browser auf <code>n8n.io</code> und klicke auf <strong>„Get started“</strong> / <strong>„Start free“</strong>.
+            Du landest auf einer Anmeldemaske.</p>
+        </li>
+        <li><h4>Konto anlegen</h4>
+          <p>Gib E-Mail und ein Passwort ein (oder melde dich mit Google/GitHub an). Bestätige ggf. deine E-Mail-Adresse.</p>
+        </li>
+        <li><h4>Workspace-Name & Region wählen</h4>
+          <p>n8n richtet dir eine eigene Instanz unter einer Adresse wie <code>dein-name.app.n8n.cloud</code> ein.
+            Das dauert nur Sekunden.</p>
+        </li>
+        <li><h4>Du landest im leeren Editor</h4>
+          <p>Glückwunsch — genau diese Oberfläche begleitet dich durch das ganze Buch:</p>
+        </li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n__chrome"><i></i><i></i><i></i><span>dein-name.app.n8n.cloud</span></div>
+            <div class="n8n-topbar">
+              <div class="n8n-logo">n8</div>
+              <div class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><span class="n8n-wfname">Mein Workflow</span></div>
+              <div class="n8n-topbar__right">
+                <span class="n8n-saved">Noch nicht gespeichert</span>
+                <div class="n8n-toggle"><span>Inaktiv</span><span class="n8n-switch"></span></div>
+                <button class="n8n-btn n8n-btn--sm">Teilen</button>
+                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Speichern</button>
+              </div>
+            </div>
+            <div class="n8n-tabs"><span class="n8n-tab is-active">Editor</span><span class="n8n-tab">Ausführungen</span></div>
+            <div class="n8n-canvas n8n-canvas--tall">
+              <div class="n8n-addfirst">
+                <span class="big">+</span>
+                <small>Ersten Schritt hinzufügen</small>
+              </div>
+              <div class="n8n-zoom"><b>+</b><b>−</b><b>⊡</b></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 2.1</span>Der leere Editor nach der Anmeldung. Das große <b>+</b> in der Mitte ist dein Startpunkt — mehr dazu in Kapitel 4.</figcaption>
+      </figure>
+
+      <h2>Weg ② — Lokal mit npx</h2>
+      <p>Wenn auf deinem Rechner <strong>Node.js</strong> (Version 18 oder neuer) installiert ist, startest du n8n mit einem
+        einzigen Befehl. Öffne ein Terminal und tippe:</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Terminal</div>
+        <pre><span class="cm"># startet n8n und lädt es beim ersten Mal automatisch herunter</span>
+npx n8n</pre>
+      </div>
+
+      <p>Beim ersten Start lädt n8n sich herunter (das kann ein, zwei Minuten dauern). Danach erscheint im Terminal
+        eine Zeile wie diese:</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Terminal-Ausgabe</div>
+<pre><span class="cm">Editor is now accessible via:</span>
+<span class="st">http://localhost:5678</span>
+
+<span class="cm">Press "o" to open in Browser.</span></pre>
+      </div>
+
+      <div class="clickpath">
+        <span class="step"><span class="n">1</span> Browser öffnen</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">2</span> <code>localhost:5678</code> eingeben</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">3</span> Owner-Konto anlegen</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">4</span> fertig</span>
+      </div>
+
+      <p>Beim ersten Aufruf legst du ein <strong>Owner-Konto</strong> an (Name, E-Mail, Passwort). Das ist nur lokal und
+        schützt deinen Editor — keine Daten verlassen deinen Rechner.</p>
+
+      <div class="callout callout--warn">
+        <b class="t">Achtung: Daten weg beim Schließen?</b>
+        Mit <code>npx n8n</code> liegen deine Workflows in einem versteckten Ordner <code>~/.n8n</code>. Solange du den nicht
+        löschst, bleiben sie erhalten — auch nach einem Neustart. Schließt du nur das Terminal, ist n8n bloß gestoppt,
+        nicht gelöscht. Mit <code>npx n8n</code> startest du es wieder.
+      </div>
+
+      <h2>Weg ③ — Docker (für dauerhaftes Self-Hosting)</h2>
+      <p>Docker ist die sauberste Variante für den Dauerbetrieb. Du brauchst eine installierte Docker-Umgebung.
+        Der folgende Befehl startet n8n und legt die Daten in einem benannten Volume ab, damit nichts verloren geht:</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Terminal</div>
+<pre><span class="cm"># 1) ein Volume für persistente Daten anlegen</span>
+docker volume create n8n_data
+
+<span class="cm"># 2) n8n starten, Port 5678 nach außen geben</span>
+docker run -it --rm <span class="ky">\</span>
+  --name n8n <span class="ky">\</span>
+  -p <span class="nm">5678</span>:<span class="nm">5678</span> <span class="ky">\</span>
+  -v n8n_data:/home/node/.n8n <span class="ky">\</span>
+  docker.n8n.io/n8nio/n8n</pre>
+      </div>
+
+      <p>Auch hier öffnest du danach <code>http://localhost:5678</code>. Für einen echten Server kommen später noch
+        eine feste Domain, HTTPS und Umgebungsvariablen dazu — das vertiefen wir in <strong>Kapitel 24 (Deployment)</strong>.</p>
+
+      <div class="callout callout--info">
+        <b class="t">Cloud vs. Self-Hosting — der eine echte Unterschied</b>
+        In der Cloud funktionieren <strong>Webhooks</strong> sofort (du bekommst eine öffentlich erreichbare Adresse).
+        Lokal ist dein <code>localhost</code> von außen nicht erreichbar — für Webhook-Tests brauchst du dann ein
+        kleines Hilfsmittel (Tunnel), das wir in Kapitel 7 zeigen. Für die ersten Kapitel spielt das keine Rolle.
+      </div>
+
+      <h2>Der erste Login — was du siehst</h2>
+      <p>Egal welcher Weg: Nach dem allerersten Start fragt n8n ein paar Dinge ab (Owner-Konto, optional eine kurze
+        Umfrage „Wofür nutzt du n8n?“). Danach bist du im Editor. Vielleicht begrüßt dich ein leerer Canvas mit dem
+        großen <strong>+</strong> wie in Abb. 2.1 — manchmal auch eine kurze Tour. Beides kannst du gefahrlos wegklicken.</p>
+
+      <div class="prereq">
+        <h4>✅ Checkliste: Bereit für Kapitel 3?</h4>
+        <ul>
+          <li>n8n läuft (Cloud-URL oder <code>localhost:5678</code> öffnet sich).</li>
+          <li>Du siehst den Editor mit dem leeren Canvas.</li>
+          <li>Oben rechts erkennst du den <em>Speichern</em>-Button und den <em>Aktiv/Inaktiv</em>-Schalter.</li>
+        </ul>
+      </div>
+
+      <p>Steht das? Perfekt. Im nächsten Kapitel nehmen wir diese Oberfläche systematisch auseinander — jeden Bereich,
+        jeden wichtigen Button — damit du dich nie wieder verloren fühlst.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="02-installation"></nav></section>
+<section class="page" id="03-oberflaeche" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">3</span> Grundlagen</div>
+      <h1 class="chap-title">Die Oberfläche im Detail</h1>
+      <p class="chap-lede">Dieses Kapitel ist deine Landkarte des n8n-Editors. Danach erkennst du jeden Bereich,
+        jeden wichtigen Knopf und jedes Bedienelement sofort wieder — die Grundlage, um in Kapitel 4 zügig zu bauen.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 22 Minuten</span>
+        <span>🎯 Niveau: Einstieg</span>
+        <span>🧩 Voraussetzung: n8n läuft (Kapitel 2)</span>
+      </div>
+
+      <h2>Die fünf Bereiche im Überblick</h2>
+      <p>Der Editor besteht aus fünf Bereichen. Präge sie dir an dieser einen Abbildung ein — danach gehen wir jeden
+        einzeln durch.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n__chrome"><i></i><i></i><i></i><span>Editor — Gesamtüberblick</span></div>
+            <div class="n8n-topbar">
+              <div class="n8n-logo">n8</div>
+              <div class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><span class="n8n-wfname">Newsletter-Versand</span></div>
+              <span class="n8n-tag">marketing</span>
+              <div class="n8n-topbar__right">
+                <span class="n8n-saved">Gespeichert</span>
+                <div class="n8n-toggle"><span>Aktiv</span><span class="n8n-switch is-on"></span></div>
+                <button class="n8n-btn n8n-btn--sm">Teilen</button>
+                <button class="n8n-btn n8n-btn--sm">⋯</button>
+              </div>
+            </div>
+            <div class="n8n-tabs"><span class="n8n-tab is-active">Editor</span><span class="n8n-tab">Ausführungen</span></div>
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 860 420" preserveAspectRatio="none">
+                <path d="M 168 170 C 240 170, 250 170, 320 170"></path>
+                <path d="M 412 170 C 480 170, 490 170, 540 170"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:52px; top:124px;">
+                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__label">Zeitplan</span></div>
+              <div class="n8n-node" style="left:320px; top:124px;">
+                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Sheets lesen</span></div>
+              <div class="n8n-node" style="left:540px; top:124px;">
+                <span class="n8n-node__icon">✉️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">E-Mail senden</span></div>
+              <div class="n8n-sticky" style="right:18px; bottom:54px; max-width:170px;">
+                <b>A</b> Top-Toolbar · <b>B</b> Tabs · <b>C</b> Canvas · <b>D</b> Nodes · <b>E</b> Zoom
+              </div>
+              <div class="n8n-zoom"><b>+</b><b>−</b><b>⊡</b></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 3.1</span>
+          <b>A</b> Top-Toolbar (oben) · <b>B</b> Editor/Ausführungen-Tabs · <b>C</b> Canvas (Arbeitsfläche) ·
+          <b>D</b> Nodes auf dem Canvas · <b>E</b> Zoom-Steuerung unten links.</figcaption>
+      </figure>
+
+      <hr>
+
+      <h2>A — Die Top-Toolbar</h2>
+      <p>Die Leiste ganz oben steuert den Workflow als Ganzes. Von links nach rechts:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-topbar">
+              <div class="n8n-logo">n8</div>
+              <div class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><span class="n8n-wfname">Newsletter-Versand</span></div>
+              <span class="n8n-tag">marketing</span>
+              <div class="n8n-topbar__right">
+                <span class="n8n-saved">Gespeichert</span>
+                <div class="n8n-toggle"><span>Aktiv</span><span class="n8n-switch is-on"></span></div>
+                <button class="n8n-btn n8n-btn--sm">Teilen</button>
+                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Speichern</button>
+                <button class="n8n-btn n8n-btn--sm">⋯</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 3.2</span>Die Top-Toolbar im Detail.</figcaption>
+      </figure>
+
+      <table class="btable">
+        <tbody>
+          <tr><td>n8-Logo</td><td>Zurück zur Übersicht aller Workflows.</td></tr>
+          <tr><td>Persönlich / Projekt</td><td>In welchem Bereich (Projekt) der Workflow liegt. Allein arbeitest du in „Persönlich“.</td></tr>
+          <tr><td>Workflow-Name</td><td>Klick darauf, um umzubenennen. <strong>Tipp: Benenne früh sinnvoll</strong> — „Unbenannt“ × 20 ist die Hölle.</td></tr>
+          <tr><td>Tags</td><td>Frei vergebbare Etiketten zum Sortieren vieler Workflows.</td></tr>
+          <tr><td>Speichern-Status</td><td>„Gespeichert“ / „Nicht gespeichert“. ⚡ <strong>n8n speichert nicht automatisch.</strong></td></tr>
+          <tr><td>Aktiv-Schalter</td><td>Schaltet den Workflow scharf, sodass Trigger automatisch feuern (siehe unten).</td></tr>
+          <tr><td>Teilen / ⋯-Menü</td><td>Workflow teilen, exportieren, importieren, duplizieren, löschen.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">⚡ Der wichtigste Schalter überhaupt: Aktiv vs. Inaktiv</b>
+        <p style="margin:0 0 8px"><strong>Inaktiv (grau):</strong> Der Workflow läuft nur, wenn du ihn von Hand testest. Zum Bauen genau richtig.</p>
+        <p style="margin:0"><strong>Aktiv (grün):</strong> Trigger feuern automatisch — der Zeitplan läuft wirklich, der Webhook nimmt
+        echte Anfragen an. Erst <em>einschalten</em>, wenn der Workflow fertig getestet ist.</p>
+      </div>
+
+      <h2>Speichern: <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></h2>
+      <p>Weil n8n nicht automatisch speichert, wird diese Tastenkombi dein bester Freund. Eine ungespeicherte
+        Änderung erkennst du am Status „Nicht gespeichert“ oben rechts.</p>
+
+      <hr>
+
+      <h2>B — Die Tabs: Editor & Ausführungen</h2>
+      <p>Direkt unter der Toolbar wechselst du zwischen zwei Ansichten desselben Workflows:</p>
+      <ul>
+        <li><strong>Editor</strong> – die Arbeitsfläche zum Bauen (hier verbringst du 95 % der Zeit).</li>
+        <li><strong>Ausführungen (Executions)</strong> – die Historie: jeder vergangene Durchlauf mit Ergebnis,
+          Zeitstempel und — bei Fehlern — der genauen Stelle, an der es hakte. Dein wichtigstes Debugging-Werkzeug.</li>
+      </ul>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-tabs"><span class="n8n-tab">Editor</span><span class="n8n-tab is-active">Ausführungen</span></div>
+            <div style="background:#fff; padding:0;">
+              <table class="n8n-table" style="border:0;">
+                <thead><tr><th>Status</th><th>Gestartet</th><th>Dauer</th><th>Modus</th></tr></thead>
+                <tbody>
+                  <tr><td style="color:#2bbf6c">● Erfolg</td><td>29.05. 08:00:03</td><td>1,2 s</td><td>Zeitplan</td></tr>
+                  <tr><td style="color:#2bbf6c">● Erfolg</td><td>28.05. 08:00:02</td><td>1,1 s</td><td>Zeitplan</td></tr>
+                  <tr><td style="color:#e03e52">● Fehler</td><td>27.05. 08:00:04</td><td>0,7 s</td><td>Zeitplan</td></tr>
+                  <tr><td style="color:#2bbf6c">● Erfolg</td><td>26.05. 14:22:10</td><td>1,0 s</td><td>Manuell</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 3.3</span>Die Ausführungen-Ansicht. Ein Klick auf eine Zeile öffnet den
+          Workflow mit den Daten <em>genau dieses Laufs</em> — Gold wert bei der Fehlersuche.</figcaption>
+      </figure>
+
+      <hr>
+
+      <h2>C — Der Canvas</h2>
+      <p>Die große, gepunktete Fläche ist deine Werkbank. Hier ordnest, verbindest und testest du Nodes. Die wichtigsten
+        Gesten — sie sitzen schnell:</p>
+
+      <table class="btable">
+        <thead><tr><th>Aktion</th><th>So geht's</th></tr></thead>
+        <tbody>
+          <tr><td>Verschieben (pan)</td><td>Leerfläche packen und ziehen, oder mit Leertaste + Ziehen</td></tr>
+          <tr><td>Zoomen</td><td><span class="kbd">Strg/⌘</span> + Mausrad, oder die <b>+ / −</b>-Knöpfe unten links</td></tr>
+          <tr><td>Alles einpassen</td><td>Das <b>⊡</b>-Symbol unten links (zoom to fit)</td></tr>
+          <tr><td>Node auswählen</td><td>Einmal klicken (Rahmen wird pink)</td></tr>
+          <tr><td>Node öffnen</td><td><strong>Doppelklick</strong> → öffnet die Detailansicht (NDV)</td></tr>
+          <tr><td>Node verschieben</td><td>Anfassen und ziehen</td></tr>
+          <tr><td>Node löschen</td><td>Auswählen, dann <span class="kbd">Entf</span> / <span class="kbd">Backspace</span></td></tr>
+        </tbody>
+      </table>
+
+      <h2>D — Anatomie eines Nodes</h2>
+      <p>Jeder Node sieht nach demselben Schema aus. Wenn du diese Teile kennst, kennst du <em>alle</em> Nodes:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <div class="n8n-node n8n-node--selected" style="left:330px; top:96px;">
+                <span class="n8n-node__icon">🌐</span>
+                <span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">HTTP Request</span>
+                <span class="items">1 Item</span>
+                <span class="badge badge--ok">✓</span>
+                <div class="n8n-node__tools"><b>▶</b><b>⏻</b><b>⧉</b><b>🗑</b></div>
+              </div>
+              <div class="n8n-sticky" style="left:40px; top:40px; max-width:230px;">
+                <b>So liest du einen Node</b>
+                Links der <b>Eingang</b>, rechts der <b>Ausgang</b>, oben die Mini-Werkzeugleiste, oben rechts
+                das Status-Häkchen nach erfolgreichem Lauf, darunter die Zahl der erzeugten Items.
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 3.4</span>Ein ausgewählter Node (pinker Rahmen) mit eingeblendeter Werkzeugleiste.</figcaption>
+      </figure>
+
+      <table class="btable">
+        <tbody>
+          <tr><td>Icon & Name</td><td>Zeigt, welche Integration/Funktion der Node erfüllt.</td></tr>
+          <tr><td>Eingang (links) ●</td><td>Hier kommen Daten vom vorherigen Node an. Trigger haben keinen Eingang.</td></tr>
+          <tr><td>Ausgang (rechts) ●</td><td>Hier verlassen die Daten den Node Richtung nächstem Node. Von hier ziehst du eine Verbindung.</td></tr>
+          <tr><td>▶ Ausführen</td><td>Führt nur diesen Node (und das Nötige davor) aus — perfekt zum schrittweisen Testen.</td></tr>
+          <tr><td>⏻ Deaktivieren</td><td>Schaltet den Node stumm, ohne ihn zu löschen (Daten fließen durch ihn hindurch).</td></tr>
+          <tr><td>⧉ Duplizieren · 🗑 Löschen</td><td>Kopie anlegen bzw. entfernen.</td></tr>
+          <tr><td>✓ / ✕ Badge</td><td>Ergebnis des letzten Laufs: grün = ok, rot = Fehler.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--tip">
+        <b class="t">⚡ Trigger erkennst du an der Form</b>
+        Trigger-Nodes haben eine charakteristisch <strong>abgerundete linke Seite</strong> (wie in Abb. 3.1 der „Zeitplan“-Node)
+        und besitzen keinen Eingangspunkt. So unterscheidest du auf einen Blick, wo ein Workflow beginnt.
+      </div>
+
+      <hr>
+
+      <h2>Nodes hinzufügen — das Auswahl-Panel</h2>
+      <p>Es gibt drei Wege, einen Node hinzuzufügen. Alle öffnen dasselbe Such-Panel:</p>
+      <div class="clickpath">
+        <span class="step"><span class="n">1</span> <span class="kbd">Tab</span> drücken</span>
+        <span class="arrow">oder</span>
+        <span class="step"><span class="n">2</span> den <span class="kbd">+</span>-Knopf oben rechts</span>
+        <span class="arrow">oder</span>
+        <span class="step"><span class="n">3</span> vom Ausgang eines Nodes eine Linie ins Leere ziehen</span>
+      </div>
+
+      <figure class="figure">
+        <div class="frame" style="display:flex; justify-content:center; padding:24px; background:#eef0f4; border-radius:12px;">
+          <div class="nodes-panel">
+            <div class="nodes-panel__head"><h5>Was soll als Nächstes passieren?</h5></div>
+            <div class="nodes-panel__search"><span>🔎</span><span>Nodes durchsuchen…</span><span class="cursor"></span></div>
+            <div class="nodes-panel__list">
+              <div class="nodes-panel__item is-active">
+                <div class="nodes-panel__ic">🌐</div>
+                <div class="nodes-panel__txt"><b>HTTP Request</b><small>Beliebige API/URL aufrufen</small></div>
+                <span class="chev">›</span>
+              </div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">✏️</div>
+                <div class="nodes-panel__txt"><b>Edit Fields (Set)</b><small>Felder setzen, umbenennen, bereinigen</small></div>
+                <span class="chev">›</span>
+              </div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">🔀</div>
+                <div class="nodes-panel__txt"><b>IF</b><small>Verzweigung nach einer Bedingung</small></div>
+                <span class="chev">›</span>
+              </div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">🤖</div>
+                <div class="nodes-panel__txt"><b>AI Agent</b><small>KI-Agent mit Werkzeugen & Gedächtnis</small></div>
+                <span class="chev">›</span>
+              </div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">💬</div>
+                <div class="nodes-panel__txt"><b>Telegram</b><small>Nachrichten senden/empfangen</small></div>
+                <span class="chev">›</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 3.5</span>Das Node-Auswahl-Panel. Tippe einfach los — die Liste filtert sofort.
+          Mit <span class="kbd">↑</span><span class="kbd">↓</span> und <span class="kbd">Enter</span> wählst du ohne Maus.</figcaption>
+      </figure>
+
+      <hr>
+
+      <h2>Die Node-Detailansicht (NDV)</h2>
+      <p>Doppelklickst du einen Node, öffnet sich die <strong>Node Detail View</strong> — der Ort, an dem du den Node
+        konfigurierst und sein Ergebnis siehst. Sie ist in drei Spalten aufgeteilt und nach diesem Prinzip immer gleich:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar">
+              <span class="ndvic">🌐</span><b>HTTP Request</b>
+              <span class="ndv-docs">Doku ↗</span>
+              <span class="ndv__exec-step">▶ Schritt ausführen</span>
+            </div>
+            <div class="ndv__cols">
+              <!-- INPUT -->
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-viewtabs"><b>Tabelle</b><b class="is-active">JSON</b><b>Schema</b></div>
+                  <div class="n8n-schema" style="margin-top:10px;">
+                    <div class="field"><span class="dot"></span>stadt <span class="type">string</span></div>
+                    <div class="field"><span class="dot"></span>land <span class="type">string</span></div>
+                  </div>
+                </div>
+              </div>
+              <!-- PARAMETER -->
+              <div class="ndv-panel ndv-params">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row">
+                    <label>Methode</label>
+                    <div class="n8n-select">GET <span class="chev">▾</span></div>
+                  </div>
+                  <div class="row">
+                    <label>URL <span class="req">*</span></label>
+                    <div class="ndv-fxtab"><b class="is-active">Fest</b><b>Expression</b></div>
+                    <input class="n8n-input" value="https://api.open-meteo.com/v1/forecast">
+                  </div>
+                  <div class="row">
+                    <label>Query-Parameter senden <span class="hint">(optional)</span></label>
+                    <div class="n8n-select">Eingeschaltet <span class="chev">▾</span></div>
+                  </div>
+                </div>
+              </div>
+              <!-- OUTPUT -->
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-viewtabs"><b>Tabelle</b><b class="is-active">JSON</b><b>Schema</b></div>
+                  <div class="n8n-json" style="margin-top:10px;">{
+  <span class="k">"temperatur"</span>: <span class="n">17.4</span>,
+  <span class="k">"einheit"</span>: <span class="s">"°C"</span>,
+  <span class="k">"wind"</span>: <span class="n">12</span>
+}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 3.6</span>Die NDV: <b>links</b> die Daten, die hereinkommen ·
+          <b>Mitte</b> die Einstellungen des Nodes · <b>rechts</b> das Ergebnis nach dem Ausführen.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Das wichtigste Arbeitsmuster in n8n</b>
+        Du baust einen Node, klickst <strong>▶ Schritt ausführen</strong>, siehst rechts das Ergebnis, korrigierst, führst
+        erneut aus — Node für Node. Dieses „bauen → ausführen → schauen“ ist der Rhythmus, in dem fast jeder Workflow entsteht.
+      </div>
+
+      <h4>Fest vs. Expression — der kleine Umschalter über jedem Feld</h4>
+      <p>Über vielen Feldern siehst du zwei Reiter: <strong>Fest</strong> (du tippst einen festen Wert) und
+        <strong>Expression</strong> (der Wert wird aus den Daten berechnet, z. B. <code>{{ $json.stadt }}</code>).
+        Das ist der Mechanismus, mit dem Nodes Daten voneinander übernehmen — Kapitel 5 und 6 widmen sich ihm ausführlich.</p>
+
+      <hr>
+
+      <h2>Die wichtigsten Tastenkürzel</h2>
+      <p>Drei, vier Kürzel beschleunigen dich enorm. Den Rest findest du im <a href="../index.html">Anhang A</a>.</p>
+      <table class="btable">
+        <thead><tr><th>Kürzel</th><th>Wirkung</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Tab</span></td><td>Node-Auswahl-Panel öffnen</td></tr>
+          <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></td><td>Workflow speichern</td></tr>
+          <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span> oder Klick auf „Test“</td><td>Ganzen Workflow ausführen</td></tr>
+          <tr><td><span class="kbd">Entf</span></td><td>Ausgewählten Node löschen</td></tr>
+          <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">A</span></td><td>Alle Nodes auswählen</td></tr>
+          <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">C</span> / <span class="kbd">V</span></td><td>Nodes kopieren/einfügen (auch zwischen Workflows!)</td></tr>
+          <tr><td><span class="kbd">1</span></td><td>Auf 100 % zoomen · <span class="kbd">2</span> auf Auswahl · <span class="kbd">0</span> alles einpassen</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Bevor du weiterblätterst</h4>
+        <ul>
+          <li>Du kannst die fünf Bereiche (Toolbar, Tabs, Canvas, Nodes, Zoom) benennen.</li>
+          <li>Du weißt, was „Aktiv“ bedeutet und warum du es beim Bauen <em>aus</em> lässt.</li>
+          <li>Du kannst das Node-Panel mit <span class="kbd">Tab</span> öffnen und eine NDV per Doppelklick.</li>
+        </ul>
+      </div>
+
+      <p>Du kennst jetzt das Cockpit. Zeit, es zu fliegen: Im nächsten Kapitel bauen wir gemeinsam deinen ersten,
+        vollständigen Workflow — jeder Klick einzeln.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="03-oberflaeche"></nav></section>
+<section class="page" id="04-erster-workflow" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">4</span> Grundlagen</div>
+      <h1 class="chap-title">Dein erster Workflow — Schritt für Schritt</h1>
+      <p class="chap-lede">Jetzt bauen wir gemeinsam etwas Echtes: Ein Workflow, der das aktuelle Wetter abruft,
+        es lesbar aufbereitet und dir das Ergebnis zeigt. Jeder Klick ist einzeln beschrieben — bau einfach mit.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 25 Minuten</span>
+        <span>🎯 Niveau: Einstieg</span>
+        <span>🧩 Voraussetzung: Kapitel 3</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>n8n läuft und du bist im Editor (Kapitel 2).</li>
+          <li><strong>Kein</strong> Konto, <strong>kein</strong> API-Schlüssel — wir nutzen eine offene, kostenlose Wetter-API (Open-Meteo).</li>
+          <li>Optional am Ende: ein Telegram-Bot, falls du das Ergebnis aufs Handy schicken willst (zeige ich als Kür).</li>
+        </ul>
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Am Ende dieses Kapitels hast du diesen Workflow gebaut und erfolgreich ausgeführt:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 820 320" preserveAspectRatio="none">
+                <path class="is-active" d="M 158 150 C 230 150, 245 150, 310 150"></path>
+                <path class="is-active" d="M 402 150 C 470 150, 485 150, 545 150"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:42px; top:104px;">
+                <span class="n8n-node__icon">🖐️</span><span class="ep out"></span>
+                <span class="n8n-node__label">Manueller Test</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node" style="left:310px; top:104px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span><span class="badge badge--ok">✓</span><span class="items">1 Item</span></div>
+              <div class="n8n-node n8n-node--code" style="left:545px; top:104px;">
+                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Nachricht bauen</span><span class="badge badge--ok">✓</span><span class="items">1 Item</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 4.0</span>Dein Ziel: Trigger → Wetter per HTTP holen → Text aufbereiten. Drei Nodes, ein funktionierender Workflow.</figcaption>
+      </figure>
+
+      <hr>
+
+      <h2>Schritt 1 — Neuen Workflow anlegen & benennen</h2>
+      <ol class="steps">
+        <li><h4>Neuen Workflow öffnen</h4>
+          <p>Klicke in der Übersicht oben rechts auf <strong>„+ Neuer Workflow“</strong> (engl. <em>Create Workflow</em>).
+            Du landest auf einem leeren Canvas mit dem großen <span class="kbd">+</span> in der Mitte.</p>
+        </li>
+        <li><h4>Sofort benennen</h4>
+          <p>Klicke oben links auf <strong>„Mein Workflow“</strong> und tippe <code>Wetter-Report</code>. Mit
+            <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span> speichern.</p>
+        </li>
+      </ol>
+
+      <h2>Schritt 2 — Den Trigger hinzufügen</h2>
+      <p>Jeder Workflow braucht einen Startpunkt. Zum Bauen nehmen wir den einfachsten: den manuellen Test-Trigger.</p>
+
+      <ol class="steps">
+        <li><h4>Auf das große + klicken</h4>
+          <p>Klicke auf das <span class="kbd">+</span> in der Canvas-Mitte. Es öffnet sich das Auswahl-Panel mit der Frage
+            „Wie soll der Workflow starten?“.</p>
+        </li>
+        <li><h4>„Manuell“ wählen</h4>
+          <p>Wähle <strong>„Trigger manually“</strong> (Manuell auslösen). Dieser Trigger feuert, wenn du auf den Test-Knopf drückst —
+            ideal zum Entwickeln.</p>
+        </li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame" style="display:flex; justify-content:center; padding:24px; background:#eef0f4; border-radius:12px;">
+          <div class="nodes-panel">
+            <div class="nodes-panel__head"><h5>Wie soll der Workflow starten?</h5></div>
+            <div class="nodes-panel__search"><span>🔎</span><span>Trigger durchsuchen…</span><span class="cursor"></span></div>
+            <div class="nodes-panel__list">
+              <div class="nodes-panel__item is-active">
+                <div class="nodes-panel__ic">🖐️</div>
+                <div class="nodes-panel__txt"><b>Trigger manually</b><small>Startet, wenn du auf „Test“ klickst</small></div><span class="chev">›</span></div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">⏰</div>
+                <div class="nodes-panel__txt"><b>On a schedule</b><small>Startet nach Zeitplan (z. B. täglich)</small></div><span class="chev">›</span></div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">🔗</div>
+                <div class="nodes-panel__txt"><b>On webhook call</b><small>Startet bei einer eingehenden Anfrage</small></div><span class="chev">›</span></div>
+              <div class="nodes-panel__item">
+                <div class="nodes-panel__ic">💬</div>
+                <div class="nodes-panel__txt"><b>On chat message</b><small>Startet bei einer Chat-Nachricht (KI)</small></div><span class="chev">›</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 4.1</span>Die Trigger-Auswahl. Wir nehmen den ersten Eintrag.</figcaption>
+      </figure>
+
+      <p>Nach der Auswahl liegt ein Trigger-Node (abgerundete linke Seite) auf dem Canvas. Der Canvas ist nicht mehr leer.</p>
+
+      <h2>Schritt 3 — Den HTTP-Request-Node anhängen</h2>
+      <p>Jetzt holen wir echte Daten. Wir hängen einen Node an, der eine Wetter-API aufruft.</p>
+
+      <ol class="steps">
+        <li><h4>Verbindung ins Leere ziehen</h4>
+          <p>Fahre mit der Maus an den <strong>Ausgangspunkt</strong> (kleiner Kreis rechts) des Trigger-Nodes. Klicke und
+            ziehe eine Linie nach rechts ins Leere, dann loslassen. Das Auswahl-Panel öffnet sich automatisch.</p>
+        </li>
+        <li><h4>HTTP Request suchen</h4>
+          <p>Tippe <code>HTTP</code> und wähle <strong>„HTTP Request“</strong>. Der Node erscheint und ist bereits mit dem Trigger verbunden.</p>
+        </li>
+        <li><h4>Node öffnen</h4>
+          <p>Doppelklicke den neuen Node, um die Detailansicht (NDV) zu öffnen.</p>
+        </li>
+        <li><h4>URL eintragen</h4>
+          <p>Lass die Methode auf <strong>GET</strong>. Trage bei <strong>URL</strong> die folgende Adresse ein
+            (Wetter für Berlin, Open-Meteo, ohne Anmeldung):</p>
+        </li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; URL für das Feld „URL“</div>
+<pre>https://api.open-meteo.com/v1/forecast?latitude=52.52&amp;longitude=13.41&amp;current=temperature_2m,wind_speed_10m</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar">
+              <span class="ndvic">🌐</span><b>HTTP Request</b>
+              <span class="ndv-docs">Doku ↗</span>
+              <span class="ndv__exec-step">▶ Schritt ausführen</span>
+            </div>
+            <div class="ndv__cols">
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="ndv-empty">Trigger liefert ein leeres Start-Item.<br>Das ist normal.</div></div>
+              </div>
+              <div class="ndv-panel ndv-params">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Methode</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                  <div class="row">
+                    <label>URL <span class="req">*</span></label>
+                    <div class="ndv-fxtab"><b class="is-active">Fest</b><b>Expression</b></div>
+                    <input class="n8n-input" value="https://api.open-meteo.com/v1/forecast?latitude=52.52…">
+                  </div>
+                  <div class="row"><label>Authentifizierung</label><div class="n8n-select">Keine <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">Ausgang ➡ <span class="count">noch leer</span></div>
+                <div class="ndv-panel__body"><div class="ndv-empty">Noch nichts ausgeführt.<div class="ndv-exec">▶ Schritt ausführen</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 4.2</span>Der HTTP-Node, fertig konfiguriert. Methode <b>GET</b>, URL eingetragen, Authentifizierung <b>Keine</b>.</figcaption>
+      </figure>
+
+      <ol class="steps" start="5" style="counter-reset: st 4;">
+        <li><h4>Diesen Schritt ausführen</h4>
+          <p>Klicke oben rechts im NDV auf <strong>▶ Schritt ausführen</strong>. n8n ruft die URL auf. Rechts erscheint
+            das Ergebnis als JSON. Du solltest unter <code>current</code> Werte wie <code>temperature_2m</code> sehen.</p>
+        </li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="ndv-empty">leeres Start-Item</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body"><div class="row"><label>Methode</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                <div class="row"><label>URL <span class="req">*</span></label><input class="n8n-input" value="https://api.open-meteo.com/v1/forecast?…"></div></div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-viewtabs"><b>Tabelle</b><b class="is-active">JSON</b><b>Schema</b></div>
+                  <div class="n8n-json" style="margin-top:10px;">{
+  <span class="k">"latitude"</span>: <span class="n">52.52</span>,
+  <span class="k">"longitude"</span>: <span class="n">13.41</span>,
+  <span class="k">"current"</span>: {
+    <span class="k">"time"</span>: <span class="s">"2026-05-29T10:00"</span>,
+    <span class="k">"temperature_2m"</span>: <span class="n">17.4</span>,
+    <span class="k">"wind_speed_10m"</span>: <span class="n">12.3</span>
+  }
+}</div>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 4.3</span>Echte Daten! Rechts siehst du die Antwort der API. Merke dir den Pfad
+          <code>current.temperature_2m</code> — den brauchen wir gleich.</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">⚡ Erster Erfolg, erstes Muster</b>
+        Du hast gerade das Grundmuster aus Kapitel 0.1 in Aktion erlebt: <em>einen Node bauen, ausführen, das Ergebnis
+        anschauen.</em> Genau so geht es jetzt mit jedem weiteren Node weiter.
+      </div>
+
+      <h2>Schritt 4 — Die Daten in einen Satz verwandeln</h2>
+      <p>Rohes JSON ist nichts, was man verschicken will. Mit dem <strong>Edit-Fields-Node</strong> (heißt im Panel
+        „Edit Fields (Set)“) bauen wir daraus einen lesbaren Satz. Dabei lernst du zum ersten Mal eine <strong>Expression</strong> kennen.</p>
+
+      <ol class="steps">
+        <li><h4>Node anhängen</h4>
+          <p>Schließe das NDV (Klick aufs <strong>×</strong> oben rechts oder <span class="kbd">Esc</span>). Ziehe vom
+            Ausgang des HTTP-Nodes eine Linie ins Leere und wähle <strong>„Edit Fields (Set)“</strong>.</p>
+        </li>
+        <li><h4>Ein neues Feld anlegen</h4>
+          <p>Öffne den Node. Klicke auf <strong>„Add Field“</strong> / <strong>„Feld hinzufügen“</strong>. Gib dem Feld den Namen
+            <code>nachricht</code>.</p>
+        </li>
+        <li><h4>Auf „Expression“ umschalten</h4>
+          <p>Über dem Wert-Feld klickst du auf den Reiter <strong>Expression</strong>. Das Feld wird leicht bläulich —
+            jetzt akzeptiert es Platzhalter in doppelten geschweiften Klammern.</p>
+        </li>
+        <li><h4>Die Expression eintippen</h4>
+          <p>Trage exakt das hier ein. Die <code>{{ … }}</code> holen den Temperaturwert aus dem vorherigen Node:</p>
+        </li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Wert des Feldes „nachricht“ (Modus: Expression)</div>
+<pre>🌤️ In Berlin sind es gerade {{ $json.current.temperature_2m }} °C bei {{ $json.current.wind_speed_10m }} km/h Wind.</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">✏️</span><b>Edit Fields (Set)</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-schema">
+                    <div class="field"><span class="dot"></span>latitude <span class="type">number</span></div>
+                    <div class="field"><span class="dot"></span>current.temperature_2m <span class="type">number</span></div>
+                    <div class="field"><span class="dot"></span>current.wind_speed_10m <span class="type">number</span></div>
+                  </div>
+                </div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Modus</label><div class="n8n-select">Felder manuell setzen <span class="chev">▾</span></div></div>
+                  <div class="row">
+                    <label>Feldname</label>
+                    <input class="n8n-input" value="nachricht">
+                  </div>
+                  <div class="row">
+                    <label>Wert</label>
+                    <div class="ndv-fxtab"><b>Fest</b><b class="is-active">Expression</b></div>
+                    <input class="n8n-input is-expr" value="🌤️ In Berlin sind es {{ $json.current.temperature_2m }} °C …">
+                  </div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-viewtabs"><b>Tabelle</b><b class="is-active">JSON</b><b>Schema</b></div>
+                  <div class="n8n-json" style="margin-top:10px;">{
+  <span class="k">"nachricht"</span>: <span class="s">"🌤️ In Berlin sind es 17.4 °C bei 12.3 km/h Wind."</span>
+}</div>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 4.4</span>Die Expression wird live ausgewertet: Rechts steht bereits der fertige Satz mit den echten Werten.</figcaption>
+      </figure>
+
+      <div class="callout callout--info">
+        <b class="t">Was bedeutet <code>$json</code>?</b>
+        <code>$json</code> ist immer „die Daten des Items, das gerade hereinkommt“ — also die Ausgabe des vorherigen Nodes.
+        Mit dem Punkt hangelst du dich durch die Struktur: <code>$json.current.temperature_2m</code> heißt
+        „nimm <em>current</em>, darin <em>temperature_2m</em>“. Genau das vertiefen wir im nächsten Kapitel.
+      </div>
+
+      <h2>Schritt 5 — Den ganzen Workflow ausführen</h2>
+      <ol class="steps">
+        <li><h4>NDV schließen</h4><p>Drücke <span class="kbd">Esc</span>, du siehst wieder den ganzen Canvas mit drei Nodes.</p></li>
+        <li><h4>Speichern</h4><p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Test ausführen</h4>
+          <p>Klicke unten/oben auf den großen Knopf <strong>„Test workflow“</strong> (bzw. <span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span>).
+            n8n läuft von links nach rechts durch. Jeder Node bekommt ein grünes <strong>✓</strong> und die Verbindungslinien
+            färben sich kurz ein — die Daten „fließen“ sichtbar durch.</p>
+        </li>
+      </ol>
+
+      <div class="callout callout--tip">
+        <b class="t">Geschafft!</b>
+        Du hast einen vollständigen Workflow gebaut, der echte Daten aus dem Internet holt, sie transformiert und ein
+        sauberes Ergebnis erzeugt. Das ist das Skelett von 80 % aller Automatisierungen.
+      </div>
+
+      <h2>Kür — das Ergebnis aufs Handy (optional)</h2>
+      <p>Wenn du magst, hängen wir einen letzten Node an, der den Satz per Telegram verschickt. Das braucht einen
+        kostenlosen Telegram-Bot. <strong>Wenn dir das jetzt zu viel ist: überspring es</strong> — wir bauen so etwas in
+        Kapitel 13 in Ruhe.</p>
+
+      <ol class="steps">
+        <li><h4>Bot anlegen</h4><p>Schreibe in Telegram dem <strong>@BotFather</strong>, sende <code>/newbot</code>, folge den Fragen.
+          Am Ende bekommst du ein <strong>Token</strong> (eine lange Zeichenkette). Schreibe deinem neuen Bot einmal „Hallo“,
+          damit er dir antworten darf.</p></li>
+        <li><h4>Telegram-Node anhängen</h4><p>Ziehe vom Edit-Fields-Node eine Linie und wähle <strong>„Telegram“</strong> → Aktion
+          <strong>„Send a text message“</strong>.</p></li>
+        <li><h4>Credential anlegen</h4><p>Bei „Credential to connect with“ → <strong>„Create new“</strong>. Füge dein Bot-Token ein und speichere.
+          (Mehr zu Credentials in Kapitel 12.)</p></li>
+        <li><h4>Empfänger & Text</h4><p>Bei <strong>Chat ID</strong> trägst du deine Telegram-ID ein (vom Bot <em>@userinfobot</em> bekommst du sie).
+          Bei <strong>Text</strong> schaltest du auf <em>Expression</em> und nutzt <code>{{ $json.nachricht }}</code>.</p></li>
+        <li><h4>Ausführen</h4><p>Test starten — kurz darauf ploppt die Wetter-Nachricht in deinem Telegram auf. 🎉</p></li>
+      </ol>
+
+      <h2>Was du in diesem Kapitel gelernt hast</h2>
+      <ul>
+        <li>Einen Workflow anlegen, benennen und speichern.</li>
+        <li>Einen <strong>Trigger</strong> setzen und Nodes durch Ziehen verbinden.</li>
+        <li>Mit dem <strong>HTTP-Request-Node</strong> echte Daten aus einer API holen.</li>
+        <li>Mit <strong>Edit Fields</strong> Daten umformen und die erste <strong>Expression</strong> (<code>{{ $json… }}</code>) schreiben.</li>
+        <li>Einzelne Schritte und den ganzen Workflow <strong>ausführen</strong> und das Ergebnis prüfen.</li>
+      </ul>
+
+      <p>Diese Expression hat sich wie Magie angefühlt? Ist sie nicht — sie ist das Herz von n8n. Das nächste Kapitel
+        macht aus dem Bauchgefühl echtes Verständnis: <strong>Items, JSON und der Datenfluss</strong>.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="04-erster-workflow"></nav></section>
+<section class="page" id="05-kernkonzepte" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">5</span> Grundlagen</div>
+      <h1 class="chap-title">Kernkonzepte: Nodes, Items & Datenfluss</h1>
+      <p class="chap-lede">Wenn ein einziges Kapitel dieses Buchs darüber entscheidet, ob du n8n wirklich verstehst,
+        dann dieses. Hier klären wir, <em>was genau</em> zwischen den Nodes hin- und herfließt — und wie du darauf zugreifst.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 24 Minuten</span>
+        <span>🎯 Niveau: Einstieg → Mittel</span>
+        <span>⚡ Das Herzstück des Buchs</span>
+      </div>
+
+      <h2>Die eine Sache, die alles erklärt: das Item</h2>
+      <p>Zwischen zwei Nodes fließen keine „Texte“ oder „Zahlen“, sondern <strong>Items</strong>. Ein Item ist ein kleines
+        Datenpaket. Und ganz wichtig:</p>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die goldene Regel</b>
+        Ein Node bekommt immer eine <strong>Liste von Items</strong> herein und gibt eine <strong>Liste von Items</strong> heraus.
+        Auch wenn es nur ein einziges Item ist, ist es technisch eine Liste mit einem Eintrag. Verinnerliche das, und
+        n8n wird durchschaubar.
+      </div>
+
+      <p>Jedes Item hat zwei Fächer:</p>
+      <ul>
+        <li><strong>json</strong> – die eigentlichen Daten als JSON-Objekt (Felder mit Werten). 95 % der Zeit arbeitest du hiermit.</li>
+        <li><strong>binary</strong> – optionale Dateianhänge (Bild, PDF, …). Brauchst du erst bei Datei-Workflows.</li>
+      </ul>
+
+      <h2>Wie Items in der Oberfläche aussehen</h2>
+      <p>n8n zeigt dieselben Items in drei Ansichten an — du wählst sie über die Reiter <strong>Tabelle / JSON / Schema</strong>
+        im Eingangs- und Ausgangspanel. Es ist immer dasselbe darunter, nur anders dargestellt:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">📊</span><b>Dieselben 3 Items, drei Ansichten</b></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">Tabelle <span class="count">3 Items</span></div>
+                <div class="ndv-panel__body">
+                  <table class="n8n-table">
+                    <thead><tr><th>name</th><th>stadt</th><th>alter</th></tr></thead>
+                    <tbody>
+                      <tr><td>Anna</td><td>Berlin</td><td>29</td></tr>
+                      <tr><td>Ben</td><td>Köln</td><td>34</td></tr>
+                      <tr><td>Cem</td><td>Wien</td><td>41</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">JSON <span class="count">3 Items</span></div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-json">[
+  { <span class="k">"name"</span>:<span class="s">"Anna"</span>, <span class="k">"stadt"</span>:<span class="s">"Berlin"</span>, <span class="k">"alter"</span>:<span class="n">29</span> },
+  { <span class="k">"name"</span>:<span class="s">"Ben"</span>,  <span class="k">"stadt"</span>:<span class="s">"Köln"</span>,   <span class="k">"alter"</span>:<span class="n">34</span> },
+  { <span class="k">"name"</span>:<span class="s">"Cem"</span>,  <span class="k">"stadt"</span>:<span class="s">"Wien"</span>,   <span class="k">"alter"</span>:<span class="n">41</span> }
+]</div>
+                </div>
+              </div>
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">Schema</div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-schema">
+                    <div class="field"><span class="dot"></span>name <span class="type">string</span></div>
+                    <div class="field"><span class="dot"></span>stadt <span class="type">string</span></div>
+                    <div class="field"><span class="dot"></span>alter <span class="type">number</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 5.1</span><b>Tabelle:</b> eine Zeile = ein Item. <b>JSON:</b> die Rohdaten.
+          <b>Schema:</b> nur die Feldnamen und ihre Typen. Lerne, flink zwischen ihnen zu wechseln.</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">⚡ Tabelle zum Überblicken, JSON zum Verstehen, Schema zum Verdrahten</b>
+        Die <strong>Schema</strong>-Ansicht ist beim Bauen am wertvollsten: Du siehst alle verfügbaren Feldnamen — und kannst
+        sie per Drag-and-drop direkt in ein Expression-Feld ziehen, statt sie abzutippen.
+      </div>
+
+      <h2>JSON in 3 Minuten (für alle, die unsicher sind)</h2>
+      <p>JSON ist nur eine Schreibweise für strukturierte Daten. Du musst es nicht <em>schreiben</em> können, aber
+        <em>lesen</em> schon. Es gibt genau diese Bausteine:</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Die JSON-Bausteine</div>
+<pre>{
+  <span class="pr">"text"</span>:    <span class="st">"in Anführungszeichen"</span>,   <span class="cm">// String (Text)</span>
+  <span class="pr">"zahl"</span>:    <span class="nm">42</span>,                  <span class="cm">// Number</span>
+  <span class="pr">"wahr"</span>:    <span class="ky">true</span>,                <span class="cm">// Boolean (true/false)</span>
+  <span class="pr">"leer"</span>:    <span class="ky">null</span>,                <span class="cm">// nichts</span>
+  <span class="pr">"liste"</span>:   [<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>],           <span class="cm">// Array (geordnete Liste)</span>
+  <span class="pr">"objekt"</span>:  {                       <span class="cm">// verschachteltes Objekt</span>
+    <span class="pr">"stadt"</span>: <span class="st">"Berlin"</span>
+  }
+}</pre>
+      </div>
+
+      <p>Das Wichtigste ist <strong>Verschachtelung</strong>: Objekte können in Objekten stecken. Um an
+        <code>Berlin</code> heranzukommen, schreibst du den Pfad mit Punkten: <code>objekt.stadt</code>. Genau das machst
+        du in Expressions ständig.</p>
+
+      <h2>Der Zugriff: Expressions & <code>$json</code></h2>
+      <p>Eine <strong>Expression</strong> ist ein kleines Stück Code in doppelten geschweiften Klammern, das n8n beim
+        Ausführen durch den echten Wert ersetzt. Die wichtigste Variable darin ist <code>$json</code>:</p>
+
+      <table class="btable">
+        <thead><tr><th>Expression</th><th>Bedeutung / Ergebnis</th></tr></thead>
+        <tbody>
+          <tr><td><code>{{ $json.name }}</code></td><td>Das Feld <code>name</code> des aktuellen Items → „Anna“</td></tr>
+          <tr><td><code>{{ $json.current.temperature_2m }}</code></td><td>Verschachtelt: in <code>current</code> das Feld <code>temperature_2m</code></td></tr>
+          <tr><td><code>{{ $json.liste[0] }}</code></td><td>Das erste Element einer Liste (Zählung beginnt bei 0!)</td></tr>
+          <tr><td><code>{{ $json.alter + 1 }}</code></td><td>Rechnen geht auch → 30</td></tr>
+          <tr><td><code>{{ $json.name.toUpperCase() }}</code></td><td>Funktionen anwenden → „ANNA“</td></tr>
+          <tr><td><code>{{ $now }}</code></td><td>Aktuelles Datum/Uhrzeit</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Woher weiß ich die Feldnamen?</b>
+        Aus dem <strong>Eingangspanel</strong> des Nodes (Schema-Ansicht). n8n zeigt dir dort genau die Felder, die gerade
+        ankommen. Du musst nichts raten — und kannst Felder per Drag-and-drop ins Feld ziehen.
+      </div>
+
+      <h2>Auf <em>andere</em> Nodes zugreifen: <code>$('Node-Name')</code></h2>
+      <p><code>$json</code> bezieht sich immer auf den <strong>direkt vorherigen</strong> Node. Manchmal brauchst du aber einen
+        Wert aus einem weiter zurückliegenden Node — etwa die ursprüngliche E-Mail aus dem Trigger, nachdem schon drei
+        Nodes dazwischenliegen. Dafür gibt es:</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Zugriff auf einen benannten Node</div>
+<pre><span class="cm">// Hol das Feld "email" aus dem Node namens "Webhook"</span>
+{{ $(<span class="st">'Webhook'</span>).item.json.email }}</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die zwei Zugriffe, die du wirklich brauchst</b>
+        <p style="margin:0 0 6px"><code>$json.feld</code> → Wert aus dem <strong>vorherigen</strong> Node.</p>
+        <p style="margin:0"><code>$('Name').item.json.feld</code> → Wert aus einem <strong>beliebigen früheren</strong> Node.</p>
+        Mit diesen beiden verdrahtest du gefühlt jeden Workflow.
+      </div>
+
+      <h2>Ein Item oder viele? Das „läuft pro Item“-Prinzip</h2>
+      <p>Hier passiert der häufigste Aha-Moment. Bekommt ein Node <strong>mehrere</strong> Items, führt er seine Aktion
+        <strong>für jedes Item einzeln</strong> aus. Drei Items rein → Aktion läuft dreimal → drei Items raus.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 820 300" preserveAspectRatio="none">
+                <path d="M 178 140 C 250 140, 270 140, 340 140"></path>
+                <path d="M 432 140 C 510 140, 520 140, 580 140"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:94px;">
+                <span class="n8n-node__icon">📊</span><span class="ep out"></span>
+                <span class="n8n-node__label">3 Kontakte lesen</span><span class="items">3 Items</span></div>
+              <div class="n8n-node" style="left:340px; top:94px;">
+                <span class="n8n-node__icon">✉️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">E-Mail senden</span><span class="items">läuft 3×</span></div>
+              <div class="n8n-node n8n-node--code" style="left:580px; top:94px;">
+                <span class="n8n-node__icon">📝</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Log</span><span class="items">3 Items</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 5.2</span>Drei Kontakte kommen aus dem ersten Node. Der E-Mail-Node verschickt
+          automatisch <b>drei</b> E-Mails — eine pro Item. Du baust den Node nur <em>einmal</em>.</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">⚡ Warum das so genial ist</b>
+        Du musst keine Schleife programmieren. Willst du „für jede Zeile in der Tabelle eine Nachricht“, sorgst du
+        einfach dafür, dass jede Zeile ein Item ist — den Rest erledigt n8n automatisch durch Wiederholung pro Item.
+      </div>
+
+      <h2>Daten „festpinnen“ zum Testen (Pinning)</h2>
+      <p>Beim Entwickeln willst du nicht bei jedem Test echte E-Mails verschicken oder eine API hundertmal aufrufen.
+        Lösung: <strong>Pin Data</strong>. Du führst einen Node einmal aus und „pinnst“ sein Ergebnis fest — bei den nächsten
+        Tests benutzt n8n diese gespeicherten Daten, statt neu abzurufen. Ein angepinnter Node bekommt ein 📌-Symbol.</p>
+      <div class="clickpath">
+        <span class="step"><span class="n">1</span> Node ausführen</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">2</span> im Ausgangspanel auf 📌 „Pin“ klicken</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">3</span> ab jetzt fixe Testdaten</span>
+      </div>
+
+      <h2>Wie das alles zusammenspielt — ein Durchlauf</h2>
+      <p>Fügen wir das Wissen zusammen. So „denkt“ n8n, wenn du auf Test klickst:</p>
+      <ol class="steps">
+        <li><h4>Trigger erzeugt das/die Start-Item(s)</h4><p>Beim manuellen Trigger ist das ein leeres Item, bei „Sheets lesen“ z. B. eine Zeile pro Item.</p></li>
+        <li><h4>Items wandern in den nächsten Node</h4><p>Der nimmt sie als <em>Eingang</em> (linkes Panel).</p></li>
+        <li><h4>Der Node arbeitet — pro Item</h4><p>Er wendet seine Einstellungen an; Expressions werden jetzt zu echten Werten ausgewertet.</p></li>
+        <li><h4>Er gibt neue Items aus</h4><p>Diese erscheinen im <em>Ausgang</em> (rechtes Panel) und sind der Eingang des nächsten Nodes.</p></li>
+        <li><h4>… und so weiter bis zum Ende</h4><p>Bis kein Node mehr folgt. Jeder Schritt ist in den Ausführungen nachvollziehbar.</p></li>
+      </ol>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest — verstehst du den Kern?</h4>
+        <ul>
+          <li>Was ist der Unterschied zwischen <code>$json</code> und <code>$('Trigger').item.json</code>?</li>
+          <li>Du hast 5 Items im Eingang eines „Slack senden“-Nodes. Wie viele Nachrichten gehen raus?</li>
+          <li>Welche Ansicht (Tabelle/JSON/Schema) nutzt du, um schnell alle Feldnamen zu sehen?</li>
+          <li>Wozu pinnst du Daten?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) <code>$json</code> = vorheriger Node, <code>$('Trigger')…</code> = ein bestimmter, beliebiger Node. ·
+        2) Fünf — der Node läuft pro Item. · 3) Schema. · 4) Um beim Testen keine echten Aktionen auszulösen und APIs zu schonen.
+      </div>
+
+      <p>Damit hast du das mentale Modell, auf dem alles andere aufbaut. Im nächsten Kapitel machen wir Expressions zur
+        echten Stärke: Datumsrechnen, Texte bauen, Bedingungen, kleine Tricks — der Werkzeugkasten, mit dem du Daten
+        in jede gewünschte Form bringst.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="05-kernkonzepte"></nav></section>
+
+  </div>
+</div>
+<script>
+var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte"];
+var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"soon"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
+
+function show(slug) {
+  if (!slug || READY.indexOf(slug) === -1 && slug !== "home") slug = "home";
+  document.querySelectorAll(".page").forEach(function (s) { s.hidden = s.id !== slug; });
+  document.querySelectorAll(".sb-link").forEach(function (a) {
+    a.classList.toggle("is-current", a.getAttribute("data-slug") === slug);
+  });
+  buildBar(slug);
+  buildPN(slug);
+  document.getElementById("app").classList.remove("nav-open");
+  window.scrollTo(0, 0);
+}
+function buildBar(slug) {
+  var me = FLAT.filter(function (c) { return c.slug === slug; })[0];
+  var crumb = me ? '<span class="crumb">' + me.part + ' › <b>' + me.title + '</b></span>'
+                 : '<span class="crumb"><b>Das n8n-Werkbuch</b></span>';
+  document.getElementById("bookbar").innerHTML =
+    '<button class="sb-toggle" id="navToggle">☰</button>' + crumb +
+    '<span class="right"><a class="barbtn" href="#home">📚 Übersicht</a>' +
+    '<button class="barbtn" onclick="window.print()">🖨️ Drucken</button></span>';
+  var t = document.getElementById("navToggle");
+  if (t) t.onclick = function () { document.getElementById("app").classList.toggle("nav-open"); };
+}
+function buildPN(slug) {
+  var wrap = document.querySelector('#' + CSS.escape(slug) + ' .pn-wrap');
+  if (!wrap) return;
+  var i = READY.indexOf(slug);
+  var prev = READY[i - 1], next = READY[i + 1];
+  function info(s) { return FLAT.filter(function (c) { return c.slug === s; })[0]; }
+  var h = "";
+  h += prev ? '<a class="pn" href="#' + prev + '"><small>← Zurück</small><b>' + info(prev).title + '</b></a>'
+            : "<span style='flex:1'></span>";
+  h += next ? '<a class="pn pn--next" href="#' + next + '"><small>Weiter →</small><b>' + info(next).title + '</b></a>'
+            : "<span style='flex:1'></span>";
+  wrap.innerHTML = h;
+}
+window.addEventListener("hashchange", function () { show(location.hash.slice(1)); });
+
+// Suche in der Sidebar
+document.getElementById("sbq").addEventListener("input", function () {
+  var v = this.value.trim().toLowerCase();
+  document.querySelectorAll(".sb-link").forEach(function (a) {
+    var t = a.getAttribute("data-title") || "";
+    a.style.display = (!v || t.indexOf(v) > -1) ? "" : "none";
+  });
+});
+
+// Scrim für mobile Navigation
+var scrim = document.createElement("div"); scrim.id = "scrim";
+scrim.onclick = function () { document.getElementById("app").classList.remove("nav-open"); };
+document.getElementById("app").appendChild(scrim);
+
+show(location.hash.slice(1) || "home");
+</script>
+</body>
+</html>
