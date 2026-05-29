@@ -43,7 +43,7 @@ window.BOOK = {
       chapters: [
         { num: "13", slug: "13-projekt-wetter", title: "Projekt 1: Täglicher Report per Telegram", status: "ready", mins: 36 },
         { num: "14", slug: "14-projekt-form",   title: "Projekt 2: Formular → Sheets → Slack", status: "ready", mins: 42 },
-        { num: "15", slug: "15-projekt-news",   title: "Projekt 3: News-Aggregator mit Filter", status: "soon", mins: 35 },
+        { num: "15", slug: "15-projekt-news",   title: "Projekt 3: News-Aggregator mit Filter", status: "ready", mins: 40 },
         { num: "16", slug: "16-projekt-leads",  title: "Projekt 4: Lead-Routing vom Webhook ins CRM", status: "soon", mins: 40 },
         { num: "17", slug: "17-projekt-ai",     title: "Projekt 5: KI-E-Mail-Assistent (AI Agent)", status: "soon", mins: 45 },
         { num: "18", slug: "18-projekt-pdf",    title: "Projekt 6: PDF-/Rechnungs-Extraktion", status: "soon", mins: 45 },

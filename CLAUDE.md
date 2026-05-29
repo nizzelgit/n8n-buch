@@ -52,7 +52,8 @@ n8n-buch/
 │   ├── 11-fehler.html
 │   ├── 12-credentials.html
 │   ├── 13-projekt-wetter.html
-│   └── 14-projekt-form.html
+│   ├── 14-projekt-form.html
+│   └── 15-projekt-news.html
 ├── assets/
 │   ├── css/
 │   │   ├── book.css            # Layout, Typografie, didaktische Bausteine, Responsiv
@@ -223,12 +224,13 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `12-credentials` — Credentials sicher anlegen, vordefiniert vs. generisch (Header Auth), OAuth, Sicherheits-Gewohnheiten
 - `13-projekt-wetter` — Projekt 1: täglicher Wetter-Report per Telegram (Schedule → HTTP → Set → Telegram)
 - `14-projekt-form` — Projekt 2: Formular → Google Sheets → Slack (Form Trigger, Normalisierung, Credentials)
+- `15-projekt-news` — Projekt 3: News-Aggregator mit Filter (Schedule → RSS → Filter → Limit → Digest → Slack)
 
-> **Teil 0, 1 und 2 sind vollständig (Kap. 00–12). Teil 3 ist gestartet (Kap. 13–14).**
+> **Teil 0, 1 und 2 sind vollständig (Kap. 00–12). Teil 3 ist gestartet (Kap. 13–15).**
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `15-projekt-news` — News-Aggregator mit Filter
-2. weitere Projekte `16`–`19` (steigende Komplexität)
+1. `16-projekt-leads` — Lead-Routing vom Webhook ins CRM
+2. weitere Projekte `17`–`19` (steigende Komplexität)
 3. danach KI 20–21, Betrieb 22–25, Anhänge A–D
 
 **Hinweis zu Projekt-Kapiteln (Teil 3):** Sie sind länger/umfangreicher als die Bausteine. Sie sollten die in
@@ -241,6 +243,14 @@ deren Grundlagen zu wiederholen (stattdessen verlinken/verweisen).
 ---
 
 ## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 — Projekt 3 News-Aggregator ergänzt
+- **Kapitel 15 „News-Aggregator mit Filter"** (`ready`): Schedule-Trigger, RSS-Read-Node mit
+  `https://hnrss.org/frontpage`, Keyword-Filter, Limit-Node, Code-Node im Modus „Run Once for All Items"
+  für einen kompakten Digest, Slack-Versand, Aktivierung, Erweiterungen und Selbsttest.
+- `assets/js/chapters.js` auf `ready` gesetzt; README aktualisiert.
+- `node build.js` → **17 Kapitel** im Bundle.
+- Nächster offener Schritt: `16-projekt-leads` (Lead-Routing vom Webhook ins CRM).
 
 ### 2026-05-29 — Projekt 2 Formular-Pipeline ergänzt
 - **Kapitel 14 „Formular → Sheets → Slack"** (`ready`): n8n-Formular-Trigger, Google-Sheets-Tabelle,
