@@ -135,6 +135,14 @@ Beim Erstellen neuer Abbildungen diese Bausteine nutzen (keine neuen Ad-hoc-Styl
   (`.ndv-params` für Mitte), Felder: `.n8n-field`/`.n8n-input`(`.is-expr`)/`.n8n-select`,
   Reiter `.ndv-fxtab` (Fest/Expression), Ausgabe: `.ndv-viewtabs` + `.n8n-table`/`.n8n-json`/`.n8n-schema`.
 - **Node-Auswahl-Panel:** `.nodes-panel` mit `.nodes-panel__search` und `.nodes-panel__item`.
+- **Ausdruckseditor (Expression-Editor):** `.expr-editor` → `.expr-editor__head` (Titel + optional
+  `.ndv-docs`), `.expr-editor__code` (der Ausdruck; Spans `.br` Klammern, `.var` Variablen, `.fn`
+  Funktionen, `.str` Strings, `.num` Zahlen) und `.expr-editor__result` mit `.lbl` + `.val`
+  (Modifier `.is-err` für rotes Fehler-Ergebnis). Das ist die zweigeteilte Werkbank: oben Ausdruck,
+  unten Live-Ergebnis.
+- **Autovervollständigung:** `.expr-suggest` → `.expr-suggest__cur` (getippter Anfang inkl. `.car`
+  Cursor) + mehrere `.expr-suggest__item` (`b` Name, `.ds` Vorschau/Beschreibung, `.ty` Typ;
+  `.is-active` für die markierte Zeile).
 
 ### Pfeilspitzen-Marker (wichtig!)
 Die SVG-Marker `#n8n-arrow` (grau) und `#n8n-arrow-active` (pink) müssen im Dokument existieren:
@@ -169,15 +177,20 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 
 ## 9. Git-Konventionen
 
-- Entwickelt wird auf `claude/n-acht-n-workflows-guide-EWQxg`.
-- **`main` und der Feature-Branch werden synchron gehalten** (beide enthalten denselben Stand),
-  damit eine frisch gestartete Session den kompletten Stand vorfindet — egal welcher Branch als
-  Default ausgecheckt wird. Nach dem Commit also **beide** Branches pushen:
+- **Der Feature-Branch wird pro Session von der Harness vorgegeben** und kann wechseln
+  (bisher `claude/n-acht-n-workflows-guide-EWQxg`, in der Session vom 2026-05-29 (2):
+  `claude/awesome-brown-r45is`). Immer auf dem **zugewiesenen** Branch entwickeln und pushen;
+  **niemals** ohne ausdrückliche Erlaubnis auf einen anderen Branch (inkl. `main`) pushen.
+- **`main` und der Feature-Branch synchron halten** (beide derselbe Stand), damit eine frische
+  Session den kompletten Stand vorfindet — **aber nur**, wenn das Pushen von `main` erlaubt ist und
+  `main` auf dem Remote existiert. Falls die Harness Pushes nur auf den Feature-Branch zulässt
+  (wie am 2026-05-29 (2)), entfällt der `main`-Push:
   ```bash
   node build.js
   git add -A && git commit -m "…"
-  git push origin claude/n-acht-n-workflows-guide-EWQxg
-  git branch -f main HEAD && git push origin main
+  git push -u origin <zugewiesener-branch>
+  # nur falls erlaubt & main vorhanden:
+  # git branch -f main HEAD && git push origin main
   ```
 - Commit-Messages auf Deutsch, beschreibend, im Imperativ/Sachstil.
 - `node build.js` (Bundle aktualisieren) **vor** dem Commit, wenn sich Inhalt/CSS/JS geändert hat
@@ -197,11 +210,15 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `03-oberflaeche` — Oberflächen-Tour (visuell dicht)
 - `04-erster-workflow` — **Referenzkapitel für den Detailgrad** (47 Einzelschritte)
 - `05-kernkonzepte` — Items, JSON, Datenfluss, Expressions-Einstieg
+- `06-expressions` — Expressions vertieft: Ausdruckseditor, Variablen, Text/Datum/Zahlen,
+  Bedingungen & Fallbacks, Listen, Stolpersteine, Mini-Spickzettel
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `06-expressions` — Expressions vertieft (logischer nächster Schritt nach Kap. 5)
-2. `13-projekt-wetter` — erstes vollständiges Projekt (großer Praxis-Sprung)
-3. danach Bausteine 07–12, weitere Projekte 14–19, KI 20–21, Betrieb 22–25, Anhänge A–D
+1. `13-projekt-wetter` — erstes vollständiges Projekt (großer Praxis-Sprung), ODER
+   `07-trigger` (folgt der Manifest-Reihenfolge, Teil 2 „Bausteine“).
+2. danach Bausteine 07–12, weitere Projekte 14–19, KI 20–21, Betrieb 22–25, Anhänge A–D
+3. Anhang C (`C-expressions`) baut direkt auf Kap. 6 auf — dort die `.expr-editor`-Komponente
+   und das Cheatsheet wiederverwenden.
 
 **Beim Ausbau zwingend:** Detailgrad + Didaktik-Bausteine aus Abschnitt 5 einhalten, danach
 `node build.js`, dann **diese Datei (Abschnitt 10 + 11) aktualisieren**, dann committen/pushen.
@@ -209,6 +226,22 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 ---
 
 ## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 (2) — Kapitel 6 (Expressions) geschrieben + Expression-Editor-Komponente
+- **`06-expressions` komplett geschrieben** (`status: "ready"`): Was eine Expression ist
+  (Code in `{{ }}`, Text außerhalb), Fest/Expression-Umschalter, der **Ausdruckseditor** mit
+  Live-Ergebnis, Autovervollständigung, wichtigste `$`-Variablen, Text-/Datum-(Luxon)-/Zahlen-Funktionen,
+  Bedingungen (`? :`, `$if`) & Fallbacks (`??`, `?.`), Listen, Stolperstein-Tabelle, Mini-Spickzettel,
+  Selbsttest. Didaktik-Bausteine erfüllt: 2× `ol.steps`, 3× „Wenn etwas schiefgeht", 4× ⚡-Pareto,
+  Voraussetzungs-Box, 3 Abbildungen (6.1–6.3).
+- **Neue, wiederverwendbare UI-Komponenten in `n8n-ui.css`:** `.expr-editor` (zweigeteilter
+  Ausdruckseditor: Ausdruck oben, Live-Ergebnis unten, `.is-err` für Fehler) und `.expr-suggest`
+  (Autovervollständigungs-Dropdown). In Abschnitt 6 dokumentiert. Anhang C kann beides wiederverwenden.
+- `node build.js` → 8 Kapitel im Bundle (186 KB). `node --check` für beide JS-Dateien grün.
+- **Branch-Hinweis:** Diese Session lief auf dem Harness-Branch `claude/awesome-brown-r45is`
+  (nicht dem alten `claude/n-acht-n-workflows-guide-EWQxg`). Push nur auf diesen Branch; `main`
+  wurde **nicht** gesynct (Harness-Restriktion). Abschnitt 9 entsprechend präzisiert.
+- Offen / als Nächstes: `13-projekt-wetter` oder `07-trigger`; perspektivisch Anhang C auf Kap. 6 aufbauen.
 
 ### 2026-05-29 — main-Branch angelegt, Branches synchron, Pages-Trigger erweitert
 - Ursache „keine Commits“ in frischer Session: es gab nur den Feature-Branch, **kein `main`**.

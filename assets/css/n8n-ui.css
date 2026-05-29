@@ -396,9 +396,70 @@
 .n8n-schema .dot { width:7px;height:7px;border-radius:2px;background:#9aa0ad; }
 .n8n-schema .type { color:var(--n8n-text-faint); font-size:10.5px; margin-left:auto; }
 
+/* --------------------------------------------------------------------------
+   Expression-Editor — das ausgeklappte {{ }}-Feld mit Live-Ergebnis
+   Erscheint, sobald ein Feld auf "Expression" steht und fokussiert wird:
+   oben der Ausdruck (Code, bläulich getönt), darunter das live ausgewertete
+   Ergebnis. Grün = Wert, Rot (.is-err) = Fehler.
+   -------------------------------------------------------------------------- */
+.expr-editor {
+  border:1px solid #c7c9ee; border-radius:8px; overflow:hidden;
+  background:#fff; font-family:var(--n8n-font);
+}
+.expr-editor__head {
+  display:flex; align-items:center; gap:8px; padding:6px 12px;
+  background:#eef0ff; border-bottom:1px solid #dcdef5;
+  font-size:11px; font-weight:700; color:#4b4fb0;
+  text-transform:uppercase; letter-spacing:.05em;
+}
+.expr-editor__head .ndv-docs { margin-left:auto; text-transform:none; letter-spacing:0; font-weight:500; }
+.expr-editor__code {
+  font-family:var(--n8n-mono); font-size:13px; line-height:1.75;
+  padding:12px 14px; background:#f8f9ff; color:var(--n8n-text);
+  white-space:pre-wrap; word-break:break-word;
+}
+.expr-editor__code .br  { color:#b5179e; font-weight:600; }   /* die {{ }}-Klammern   */
+.expr-editor__code .var { color:#2b6cb0; }                    /* $json, $now, $(…)    */
+.expr-editor__code .fn  { color:#9b3d8a; }                    /* .toFormat(), .map()  */
+.expr-editor__code .str { color:#2f8f4e; }                    /* 'Zeichenketten'      */
+.expr-editor__code .num { color:#b5651d; }                    /* Zahlen               */
+.expr-editor__result {
+  border-top:1px solid #e6e7f3; background:#fff; padding:9px 14px; font-size:12.5px;
+}
+.expr-editor__result .lbl {
+  display:block; margin-bottom:3px; font-size:10px;
+  text-transform:uppercase; letter-spacing:.06em; color:var(--n8n-text-faint);
+}
+.expr-editor__result .val { font-family:var(--n8n-mono); color:var(--n8n-success); white-space:pre-wrap; }
+.expr-editor__result.is-err .val { color:var(--n8n-danger); }
+
+/* Autocomplete-Dropdown: erscheint beim Tippen von $json. / $now. usw. */
+.expr-suggest {
+  width:300px; background:#fff; border:1px solid var(--n8n-border);
+  border-radius:8px; overflow:hidden; box-shadow:var(--n8n-shadow-lg);
+  font-family:var(--n8n-font); font-size:12.5px;
+}
+.expr-suggest__cur {
+  font-family:var(--n8n-mono); font-size:12px; color:#3b3f8f;
+  background:#f6f7ff; padding:8px 12px; border-bottom:1px solid #e2e3f5;
+}
+.expr-suggest__cur .car {
+  display:inline-block; width:1px; height:14px; background:#3b3f8f;
+  vertical-align:-2px; animation:n8n-blink 1s steps(1) infinite;
+}
+.expr-suggest__item {
+  display:flex; align-items:center; gap:10px; padding:8px 12px; border-top:1px solid #f0f1f4;
+}
+.expr-suggest__item:first-child { border-top:none; }
+.expr-suggest__item.is-active { background:var(--n8n-primary-tint); }
+.expr-suggest__item b { font-family:var(--n8n-mono); font-weight:500; color:var(--n8n-text); }
+.expr-suggest__item .ds { color:var(--n8n-text-light); font-size:11px; }
+.expr-suggest__item .ty { margin-left:auto; font-size:10.5px; color:var(--n8n-text-faint); }
+
 /* responsiv: NDV-Spalten auf schmalen Screens stapeln */
 @media (max-width: 720px) {
   .ndv__cols { grid-template-columns: 1fr; }
   .ndv-panel { border-right:none; border-bottom:1px solid var(--n8n-border); }
   .nodes-panel { width:100%; }
+  .expr-suggest { width:100%; }
 }
