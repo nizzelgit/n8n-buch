@@ -208,10 +208,12 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `06-expressions` — Ausdruckseditor, Variablen-Werkzeugkasten, Text/Zahlen/Datum, Bedingungen, Fehlertabelle
 - `07-trigger` — Trigger-Nodes: Manual/Schedule/Webhook, Aktiv-Schalter, Test- vs. Production-URL
 - `08-http` — HTTP-Request-Node: Methoden, Query/Headers/Body, Import cURL, Fehlercodes, POST-Übung
+- `09-transform` — Set (Edit Fields), Filter, Code (2 Modi), weitere Transform-Nodes, Mini-Übung
+- `10-flow` — IF (2 Ausgänge), Switch, Merge (Append/Combine), Loops (selten nötig!), Verzweigungs-Übung
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `09-transform` — Daten transformieren (Set, Code, Filter); Outro von Kap. 8 leitet dorthin über
-2. `10-flow` → `11-fehler` → `12-credentials` (Rest von Teil 2 „Bausteine")
+1. `11-fehler` — Fehlerbehandlung & Error-Workflows; Outro von Kap. 10 leitet dorthin über
+2. `12-credentials` — Credentials & Authentifizierung (schließt Teil 2 „Bausteine" ab)
 3. danach Projekte 13–19, KI 20–21, Betrieb 22–25, Anhänge A–D
 
 **Beim Ausbau zwingend:** Detailgrad + Didaktik-Bausteine aus Abschnitt 5 einhalten, danach
@@ -220,6 +222,18 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 ---
 
 ## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 — Kapitel 9 (Transform) & 10 (Flow-Logik)
+- **Kapitel 9 „Daten transformieren: Set, Code & Filter"** (`ready`): Rangfolge (erst no-code, dann Code),
+  Edit Fields/Set (Felder, „Include Other Input Fields"), Filter (Conditions, ein Ausgang), Code (2 Modi:
+  All Items vs. Each Item, return-Form), weitere Transform-Nodes (Sort/Limit/Remove Duplicates/Aggregate/
+  Split Out), Mini-Übung (Wetter eindampfen), Selbsttest.
+- **Kapitel 10 „Flow-Logik: IF, Switch, Merge & Loops"** (`ready`): IF (2 Ausgänge true/false, Canvas-Abb.
+  mit zwei `.ep.out`), Switch (Rules/Expression), Merge (Append/Combine, Canvas mit zwei `.ep.in`), Loops
+  (Loop Over Items mit Rücklinie — Betonung: dank „pro Item" meist unnötig), IF-Verzweigungs-Übung, Selbsttest.
+- Mehrfach-Endpunkte an Nodes per Inline-`style="top:…"` auf `.ep.out`/`.ep.in` gelöst (zwei/mehr Punkte).
+- `node build.js` → **12 Kapitel** im Bundle. Tag-Balance, `&gt;`/`&lt;`-Escaping geprüft.
+- **Teil 2 fast komplett** — es fehlen nur noch `11-fehler` und `12-credentials`.
 
 ### 2026-05-29 — Teil 2 gestartet: Kapitel 7 (Trigger) & 8 (HTTP)
 - **Kapitel 7 „Trigger-Nodes: Manual, Schedule, Webhook"** (`ready`): Trigger-Form, Manual als Bau-Werkzeug,

@@ -32,8 +32,8 @@ window.BOOK = {
       chapters: [
         { num: "7",  slug: "07-trigger",        title: "Trigger-Nodes (Manual, Schedule, Webhook)", status: "ready", mins: 18 },
         { num: "8",  slug: "08-http",           title: "Der HTTP-Request-Node: jede API ansprechen", status: "ready", mins: 22 },
-        { num: "9",  slug: "09-transform",      title: "Daten transformieren (Set, Code, Filter)", status: "soon", mins: 20 },
-        { num: "10", slug: "10-flow",           title: "Flow-Logik: IF, Switch, Merge, Loops", status: "soon", mins: 22 },
+        { num: "9",  slug: "09-transform",      title: "Daten transformieren (Set, Code, Filter)", status: "ready", mins: 20 },
+        { num: "10", slug: "10-flow",           title: "Flow-Logik: IF, Switch, Merge, Loops", status: "ready", mins: 22 },
         { num: "11", slug: "11-fehler",         title: "Fehlerbehandlung & Error-Workflows", status: "soon", mins: 16 },
         { num: "12", slug: "12-credentials",    title: "Credentials & Authentifizierung", status: "soon", mins: 15 }
       ]

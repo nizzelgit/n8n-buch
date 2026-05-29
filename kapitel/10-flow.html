@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flow-Logik: IF, Switch, Merge, Loops — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="10-flow" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">10</span> Bausteine im Detail</div>
+      <h1 class="chap-title">Flow-Logik: IF, Switch, Merge & Loops</h1>
+      <p class="chap-lede">Bisher liefen unsere Workflows schnurgerade von links nach rechts. Jetzt bringen wir
+        <strong>Entscheidungen</strong> hinein: verschiedene Wege je nach Daten, getrennte Zweige wieder zusammenführen — und die
+        Frage klären, wann du wirklich eine Schleife brauchst.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 22 Minuten</span>
+        <span>🎯 Niveau: Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 5, 6 &amp; 9</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du mitbringen solltest</h4>
+        <ul>
+          <li>Das „läuft pro Item"-Prinzip (Kapitel 5) — es erklärt, warum du Schleifen <em>selten</em> brauchst.</li>
+          <li>Bedingungen aus Kapitel 6 (<code>&gt;</code>, <code>||</code>, …) und dem Filter (Kapitel 9).</li>
+        </ul>
+      </div>
+
+      <h2>IF: die Weiche mit zwei Ausgängen</h2>
+      <p>Der <strong>IF</strong>-Node prüft eine Bedingung und schickt jedes Item in <strong>einen von zwei Ausgängen</strong>:
+        <strong>true</strong> (Bedingung erfüllt) oder <strong>false</strong> (nicht erfüllt). Anders als der Filter wirft er nichts
+        weg — beide Gruppen laufen in <em>getrennten Zweigen</em> weiter.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 820 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 152 180 C 230 180, 250 180, 320 180"></path>
+                <path class="is-active" d="M 422 160 C 510 160, 520 110, 592 110"></path>
+                <path d="M 422 205 C 510 205, 520 290, 592 290"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:134px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span></div>
+              <div class="n8n-node" style="left:330px; top:134px;">
+                <span class="n8n-node__icon">⑂</span><span class="ep in"></span>
+                <span class="ep out" style="top:26px;"></span><span class="ep out" style="top:66px;"></span>
+                <span class="n8n-node__label">IF: tempC &gt; 20</span></div>
+              <div class="n8n-node n8n-node--code" style="left:600px; top:64px;">
+                <span class="n8n-node__icon">🏖️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">dann: „warm"</span></div>
+              <div class="n8n-node n8n-node--code" style="left:600px; top:244px;">
+                <span class="n8n-node__icon">🧥</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">sonst: „kühl"</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 10.1</span>Der IF-Node hat zwei Ausgänge: oben <b>true</b> (pinke, aktive Linie),
+          unten <b>false</b>. Jedes Item geht genau einen Weg — beide Zweige existieren weiter.</figcaption>
+      </figure>
+
+      <ol class="steps">
+        <li><h4>IF anlegen &amp; öffnen</h4>
+          <p>„IF" anhängen, öffnen. Der Bereich <strong>Conditions</strong> sieht aus wie beim Filter (Kapitel 9).</p></li>
+        <li><h4>Bedingung setzen</h4>
+          <p>Wert <code>{{ $json.tempC }}</code>, Operator <em>is greater than</em>, Vergleich <code>20</code>.</p></li>
+        <li><h4>Die zwei Ausgänge verbinden</h4>
+          <p>Vom <strong>oberen</strong> Ausgang (true) ziehst du zum „warm"-Zweig, vom <strong>unteren</strong> (false) zum
+            „kühl"-Zweig. Fertig ist die Verzweigung.</p></li>
+      </ol>
+
+      <h2>Switch: die Weiche mit vielen Ausgängen</h2>
+      <p>Brauchst du mehr als zwei Wege, nimm den <strong>Switch</strong>. Du legst mehrere <strong>Routing Rules</strong> an — jede
+        bekommt einen eigenen Ausgang. So sortierst du z. B. nach Kategorie, Status oder Sprache.</p>
+
+      <table class="btable">
+        <thead><tr><th>Switch-Modus</th><th>Sortiert nach …</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Rules</strong></td><td>frei definierten Bedingungen — ein Ausgang pro Regel (wie mehrere IFs)</td></tr>
+          <tr><td><strong>Expression</strong></td><td>einem Wert/Index, den du per Expression berechnest (für Fortgeschrittene)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Switch = IF mit mehr Türen</b>
+        Denk an Switch als IF mit beliebig vielen Ausgängen. Zwei Wege → IF. Drei oder mehr → Switch. Optional gibt es einen
+        <strong>Fallback</strong>-Ausgang für alles, was zu keiner Regel passt.
+      </div>
+
+      <h2>Merge: getrennte Zweige zusammenführen</h2>
+      <p>Hast du verzweigt, willst du oft später wieder <strong>zusammenführen</strong>. Das macht der <strong>Merge</strong>-Node:
+        Er hat <strong>zwei Eingänge</strong> und einen Ausgang.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 820 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 152 110 C 250 110, 300 165, 372 165"></path>
+                <path class="is-active" d="M 152 290 C 250 290, 300 215, 372 215"></path>
+                <path class="is-active" d="M 474 190 C 540 190, 560 190, 620 190"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:64px;">
+                <span class="n8n-node__icon">🟦</span><span class="ep out"></span>
+                <span class="n8n-node__label">Quelle A</span></div>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:244px;">
+                <span class="n8n-node__icon">🟧</span><span class="ep out"></span>
+                <span class="n8n-node__label">Quelle B</span></div>
+              <div class="n8n-node" style="left:380px; top:144px;">
+                <span class="n8n-node__icon">⥒</span>
+                <span class="ep in" style="top:26px;"></span><span class="ep in" style="top:66px;"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Merge</span></div>
+              <div class="n8n-node n8n-node--code" style="left:628px; top:144px;">
+                <span class="n8n-node__icon">📦</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">weiter</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 10.2</span>Merge bringt zwei Eingänge (oben Input 1, unten Input 2) zu einem
+          Ausgang zusammen.</figcaption>
+      </figure>
+
+      <table class="btable">
+        <thead><tr><th>Merge-Modus</th><th>Macht</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Append</strong></td><td>hängt einfach beide Listen hintereinander (erst A, dann B)</td></tr>
+          <tr><td><strong>Combine</strong> (by Matching Fields)</td><td>verbindet Items, die in einem Feld übereinstimmen (z. B. gleiche <code>id</code>)</td></tr>
+          <tr><td><strong>Combine</strong> (by Position)</td><td>verbindet das 1. mit dem 1., das 2. mit dem 2. Item usw.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ IF + Merge sind die Arbeitspferde</b>
+        Verzweigen mit <strong>IF</strong>, später mit <strong>Merge</strong> wieder zusammen — dieses Paar deckt fast alle
+        „mal so, mal so"-Abläufe ab. Switch nur, wenn es wirklich mehr als zwei Wege sind.
+      </div>
+
+      <h2>Loops: meistens brauchst du sie nicht</h2>
+      <p>Der häufigste Anfänger-Reflex: „Ich habe eine Liste, ich brauche eine Schleife." Fast nie! Erinnere dich an Kapitel 5:
+        <strong>Ein Node läuft automatisch pro Item.</strong> Hast du 100 Items, läuft der nächste Node 100-mal — ganz ohne
+        Schleife.</p>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die Regel zuerst</b>
+        Willst du „für jede Zeile etwas tun", sorg einfach dafür, dass jede Zeile ein <strong>Item</strong> ist (z. B. „Split Out"
+        aus Kapitel 9). Den Rest macht n8n durch Wiederholung pro Item von selbst.
+      </div>
+
+      <p>Eine echte Schleife — den <strong>„Loop Over Items (Split in Batches)"</strong>-Node — brauchst du nur in Sonderfällen:</p>
+      <ul>
+        <li><strong>Batching:</strong> eine API erlaubt nur 10 Einträge pro Aufruf — du arbeitest sie in Häppchen ab.</li>
+        <li><strong>Rate-Limits / Pausen:</strong> du willst zwischen den Durchläufen warten (Kapitel 23).</li>
+        <li><strong>Zustand über Runden:</strong> jeder Durchlauf baut auf dem vorherigen auf.</li>
+      </ul>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 820 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 152 200 C 220 200, 240 200, 312 200"></path>
+                <path class="is-active" d="M 414 178 C 470 150, 500 120, 560 120"></path>
+                <path d="M 560 150 C 480 200, 440 235, 414 222"></path>
+                <path class="is-active" d="M 414 222 C 470 280, 520 330, 600 330"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:154px;">
+                <span class="n8n-node__icon">📋</span><span class="ep out"></span>
+                <span class="n8n-node__label">viele Items</span></div>
+              <div class="n8n-node" style="left:322px; top:154px;">
+                <span class="n8n-node__icon">🔁</span><span class="ep in"></span>
+                <span class="ep out" style="top:26px;"></span><span class="ep out" style="top:66px;"></span>
+                <span class="n8n-node__label">Loop Over Items</span></div>
+              <div class="n8n-node n8n-node--code" style="left:560px; top:74px;">
+                <span class="n8n-node__icon">⚙️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">pro Batch</span></div>
+              <div class="n8n-node n8n-node--code" style="left:600px; top:284px;">
+                <span class="n8n-node__icon">✅</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">done</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 10.3</span>„Loop Over Items" hat zwei Ausgänge: <b>loop</b> (oben, führt nach der
+          Verarbeitung zurück) und <b>done</b> (unten, wenn alle Batches durch sind). Die zurücklaufende Linie ist die Schleife.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>Endlosschleife?</strong> Der verarbeitende Zweig muss <em>zurück</em> zum
+          Loop-Node führen, sonst wird nicht weitergezählt. Prüfe, dass die Rücklinie wirklich am Loop-Node endet.</p>
+        <p style="margin:0">• <strong>Schleife, die gar nicht nötig war?</strong> Wenn jeder Node ohnehin pro Item läuft, lös den
+          Loop wieder auf — er macht den Workflow nur komplizierter.</p>
+      </div>
+
+      <hr>
+
+      <h2>Mini-Übung: zwei Antworten je nach Temperatur</h2>
+      <p>Wir verzweigen den Wetter-Workflow: bei über 20 °C eine fröhliche, sonst eine kühle Nachricht.</p>
+      <ol class="steps">
+        <li><h4>IF anhängen</h4>
+          <p>Hinter den Set-Node (mit Feld <code>tempC</code> aus Kapitel 9) einen <strong>IF</strong> setzen.</p></li>
+        <li><h4>Bedingung</h4>
+          <p>Wert <code>{{ $json.tempC }}</code> · Operator <em>is greater than</em> · <code>20</code>.</p></li>
+        <li><h4>true-Zweig</h4>
+          <p>Vom <strong>oberen</strong> Ausgang einen Set-Node: Feld <code>text</code> =
+            <code>🏖️ Heute warm: {{ $json.tempC }} °C!</code></p></li>
+        <li><h4>false-Zweig</h4>
+          <p>Vom <strong>unteren</strong> Ausgang einen Set-Node: Feld <code>text</code> =
+            <code>🧥 Eher kühl: {{ $json.tempC }} °C.</code></p></li>
+        <li><h4>Testen</h4>
+          <p>„Test workflow" — beobachte, welcher Zweig sich pink einfärbt. Das ist der Weg, den dein Item genommen hat.</p></li>
+      </ol>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Später wieder zusammenführen</b>
+        Wenn beide Zweige am Ende dasselbe tun (z. B. die Nachricht verschicken), häng einen <strong>Merge</strong> dahinter und
+        führe sie zusammen — dann brauchst du den Versand-Node nur <em>einmal</em>.
+      </div>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Was ist der Unterschied zwischen IF und Filter?</li>
+          <li>Ab wie vielen Wegen lohnt sich ein Switch statt mehrerer IFs?</li>
+          <li>Welcher Merge-Modus hängt zwei Listen einfach hintereinander?</li>
+          <li>Du willst „für jedes der 50 Items eine E-Mail" — brauchst du dafür einen Loop?</li>
+          <li>Woran erkennst du im Test, welchen Zweig ein Item genommen hat?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) IF hat zwei Ausgänge (true/false) und behält beide Gruppen; Filter wirft Nicht-Treffer weg. ·
+        2) Ab drei. ·
+        3) <strong>Append</strong>. ·
+        4) Nein — der E-Mail-Node läuft automatisch pro Item. ·
+        5) An der pink eingefärbten (aktiven) Verbindungslinie.
+      </div>
+
+      <p>Dein Werkzeugkasten für den Datenfluss ist jetzt komplett. Doch was, wenn unterwegs etwas <em>schiefgeht</em> — eine API
+        antwortet nicht, ein Feld fehlt? Im nächsten Kapitel bauen wir Workflows, die Fehler <strong>abfangen</strong> und sauber
+        darauf reagieren.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

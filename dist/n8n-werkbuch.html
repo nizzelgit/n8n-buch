@@ -936,13 +936,13 @@ ol.steps > li p { font-size: 15.5px; }
       </a><a class="sb-link" data-title="der http-request-node: jede api ansprechen"
       href="#08-http" data-slug="08-http">
       <span class="num">8</span><span>Der HTTP-Request-Node: jede API ansprechen</span>
-      </a><a class="sb-link is-soon" data-title="daten transformieren (set, code, filter)"
-      href="javascript:void(0)" data-slug="09-transform">
+      </a><a class="sb-link" data-title="daten transformieren (set, code, filter)"
+      href="#09-transform" data-slug="09-transform">
       <span class="num">9</span><span>Daten transformieren (Set, Code, Filter)</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="flow-logik: if, switch, merge, loops"
-      href="javascript:void(0)" data-slug="10-flow">
+      </a><a class="sb-link" data-title="flow-logik: if, switch, merge, loops"
+      href="#10-flow" data-slug="10-flow">
       <span class="num">10</span><span>Flow-Logik: IF, Switch, Merge, Loops</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="fehlerbehandlung & error-workflows"
+      </a><a class="sb-link is-soon" data-title="fehlerbehandlung & error-workflows"
       href="javascript:void(0)" data-slug="11-fehler">
       <span class="num">11</span><span>Fehlerbehandlung & Error-Workflows</span>
       <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="credentials & authentifizierung"
@@ -1040,13 +1040,13 @@ ol.steps > li p { font-size: 15.5px; }
       <span class="pill">lesen</span></a><a class="toc-row" href="#08-http">
       <span class="n">8</span><span class="ti">Der HTTP-Request-Node: jede API ansprechen</span>
       <span class="mins">⏱ 22 Min</span>
-      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#09-transform">
       <span class="n">9</span><span class="ti">Daten transformieren (Set, Code, Filter)</span>
       <span class="mins">⏱ 20 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#10-flow">
       <span class="n">10</span><span class="ti">Flow-Logik: IF, Switch, Merge, Loops</span>
       <span class="mins">⏱ 22 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
       <span class="n">11</span><span class="ti">Fehlerbehandlung & Error-Workflows</span>
       <span class="mins">⏱ 16 Min</span>
       <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
@@ -3634,12 +3634,478 @@ Wind: 12 km/h.</span></div>
 
     </article>
       <nav class="pn-wrap" data-slug="08-http"></nav></section>
+<section class="page" id="09-transform" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">9</span> Bausteine im Detail</div>
+      <h1 class="chap-title">Daten transformieren: Set, Code & Filter</h1>
+      <p class="chap-lede">Daten kommen selten genau in der Form, die du brauchst. Mal sind Felder zu viel, mal fehlt eins,
+        mal soll etwas berechnet oder aussortiert werden. Dafür gibt es drei Werkzeuge — und in 90 % der Fälle reicht schon
+        das erste.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 20 Minuten</span>
+        <span>🎯 Niveau: Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 5 &amp; 6</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du mitbringen solltest</h4>
+        <ul>
+          <li><strong>Items</strong> und das „läuft pro Item"-Prinzip (Kapitel 5).</li>
+          <li><strong>Expressions</strong> (Kapitel 6) — sie sind in Set und Filter überall im Einsatz.</li>
+          <li>Den <strong>Edit-Fields-Node</strong> hast du in Kapitel 4 schon kurz benutzt.</li>
+        </ul>
+      </div>
+
+      <h2>Drei Werkzeuge, eine klare Rangfolge</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Wofür</th><th>Wann</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Edit Fields (Set)</strong></td><td>Felder setzen, umbenennen, ein sauberes Ausgabe-Objekt bauen</td><td>fast immer — dein Alltagswerkzeug</td></tr>
+          <tr><td><strong>Filter</strong></td><td>Items aussortieren, die eine Bedingung nicht erfüllen</td><td>wenn du eine Liste eindampfen willst</td></tr>
+          <tr><td><strong>Code</strong></td><td>alles, was Set/Filter nicht können (echte Logik, Schleifen)</td><td>nur als letzter Ausweg</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Erst no-code, dann Code</b>
+        Greif zum <strong>Code</strong>-Node erst, wenn es mit Set, Filter &amp; Co. wirklich nicht geht. Visuelle Nodes sind
+        leichter zu lesen, zu testen und für andere nachvollziehbar. Sehr vieles, was nach „da brauche ich Code" aussieht, löst
+        eine Expression in einem Set-Node.
+      </div>
+
+      <h2>Edit Fields (Set): das Arbeitspferd</h2>
+      <p>Der Set-Node baut ein <strong>neues, sauberes Objekt</strong> aus dem, was hereinkommt. Du legst Felder an, gibst jedem
+        einen Wert (fest oder Expression) — und entscheidest, ob die übrigen Eingangsfelder mitlaufen oder wegfallen.</p>
+
+      <ol class="steps">
+        <li><h4>Node anlegen &amp; öffnen</h4>
+          <p>Häng „Edit Fields (Set)" an und öffne ihn. <strong>Mode</strong> steht auf <em>Manual Mapping</em>.</p></li>
+        <li><h4>Felder hinzufügen</h4>
+          <p>Klick <strong>„Add Field"</strong>. Wähle links den <strong>Typ</strong> (String, Number, Boolean …), tippe den
+            <strong>Namen</strong> und setze rechts den <strong>Wert</strong> — per Reiter „Fest" oder „Expression".</p></li>
+        <li><h4>Nur gesetzte Felder behalten</h4>
+          <p>Ganz unten gibt es <strong>„Include Other Input Fields"</strong>. Lässt du es <strong>aus</strong>, enthält die
+            Ausgabe <em>nur</em> deine neuen Felder — perfekt, um Ballast loszuwerden.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:600px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">✏️</span><b>Edit Fields (Set)</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Mode</label><div class="n8n-select">Manual Mapping <span class="chev">▾</span></div></div>
+                  <div class="row"><label>String · stadt</label><input class="n8n-input" value="Berlin"></div>
+                  <div class="row"><label>Number · tempC</label><input class="n8n-input is-expr" value="{{ Math.round($json.current.temperature_2m) }}"></div>
+                  <div class="row"><label>Number · windKmh</label><input class="n8n-input is-expr" value="{{ Math.round($json.current.wind_speed_10m) }}"></div>
+                  <div class="row"><label>Include Other Input Fields</label><div class="n8n-select">⦿ aus <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 9.1</span>Aus dem großen Wetter-JSON wird ein schlankes Objekt mit genau drei
+          Feldern. „Include Other Input Fields" ist aus — alles andere fällt weg.</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Sauberes Objekt = ruhiger Workflow</b>
+        Reduziere früh auf die Felder, die du wirklich weitergibst. Das macht spätere Nodes übersichtlicher und Fehler seltener —
+        du siehst auf einen Blick, womit du arbeitest.
+      </div>
+
+      <h2>Filter: Items aussortieren</h2>
+      <p>Der <strong>Filter</strong>-Node lässt nur die Items durch, die eine Bedingung erfüllen — der Rest wird verworfen. Bekommt
+        er fünf Items und drei erfüllen die Regel, kommen drei heraus.</p>
+
+      <ol class="steps">
+        <li><h4>Node anlegen &amp; öffnen</h4>
+          <p>„Filter" anhängen und öffnen. Du siehst einen Bereich <strong>„Conditions"</strong>.</p></li>
+        <li><h4>Eine Bedingung bauen</h4>
+          <p>Links der <strong>Wert</strong> (per Expression, z. B. <code>{{ $json.tempC }}</code>), in der Mitte der
+            <strong>Operator</strong> (z. B. <em>is greater than</em>), rechts der <strong>Vergleichswert</strong> (z. B. <code>20</code>).</p></li>
+        <li><h4>Mehrere Bedingungen kombinieren</h4>
+          <p>Mit <strong>AND</strong>/<strong>OR</strong> verknüpfst du Bedingungen, z. B. „tempC &gt; 20 <em>UND</em> windKmh &lt; 15".</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 820 240" preserveAspectRatio="none">
+                <path class="is-active" d="M 178 120 C 250 120, 270 120, 340 120"></path>
+                <path class="is-active" d="M 432 120 C 510 120, 520 120, 580 120"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:74px;">
+                <span class="n8n-node__icon">📋</span><span class="ep out"></span>
+                <span class="n8n-node__label">5 Städte</span><span class="items">5 Items</span></div>
+              <div class="n8n-node" style="left:340px; top:74px;">
+                <span class="n8n-node__icon">🔎</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Filter: tempC &gt; 20</span></div>
+              <div class="n8n-node" style="left:580px; top:74px;">
+                <span class="n8n-node__icon">✅</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">weiter</span><span class="items">2 Items</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 9.2</span>Fünf Städte rein, der Filter behält nur die warmen (tempC &gt; 20) —
+          zwei Items laufen weiter. Die anderen drei werden still verworfen.</figcaption>
+      </figure>
+
+      <div class="callout callout--info">
+        <b class="t">Filter vs. IF</b>
+        <strong>Filter</strong> wirft Nicht-Treffer einfach weg (ein Ausgang). Brauchst du <em>beide</em> Gruppen — Treffer
+        <em>und</em> Nicht-Treffer in getrennten Zweigen — nimm den <strong>IF</strong>-Node (nächstes Kapitel).
+      </div>
+
+      <h2>Code: der letzte Ausweg (mit Bedacht)</h2>
+      <p>Wenn wirklich kein no-code-Node reicht, schreibst du im <strong>Code</strong>-Node ein paar Zeilen JavaScript (oder Python).
+        Wichtig ist der <strong>Modus</strong> oben:</p>
+      <ul>
+        <li><strong>Run Once for All Items:</strong> Dein Code läuft <em>einmal</em> und bekommt <em>alle</em> Items über
+          <code>$input.all()</code>. Du gibst eine <strong>Liste</strong> von Items zurück.</li>
+        <li><strong>Run Once for Each Item:</strong> Dein Code läuft <em>pro Item</em>; du arbeitest mit <code>$json</code> und gibst
+          <strong>ein</strong> Objekt zurück.</li>
+      </ul>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Modus „Run Once for Each Item"</div>
+<pre><span class="cm">// Vor- und Nachname zu einem Anzeigenamen zusammenbauen</span>
+<span class="ky">return</span> {
+  name: $json.vorname + <span class="st">' '</span> + $json.nachname,
+  initialen: ($json.vorname[<span class="nm">0</span>] + $json.nachname[<span class="nm">0</span>]).toUpperCase()
+};</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:560px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">📝</span><b>Code</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Language</label><div class="n8n-select">JavaScript <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Mode</label><div class="n8n-select">Run Once for Each Item <span class="chev">▾</span></div></div>
+                  <div class="row"><label>JavaScript</label><input class="n8n-input is-expr" value="return { name: $json.vorname + ' ' + $json.nachname };"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 9.3</span>Der Code-Node im Modus „pro Item". Beachte das <code>return</code> — es
+          bestimmt, was als neues Item herauskommt.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>„Code doesn't return items properly"?</strong> Im Modus „All Items" musst du eine
+          <em>Liste</em> zurückgeben (<code>return [...]</code>), nicht ein einzelnes Objekt.</p>
+        <p style="margin:0">• <strong>Falscher Modus.</strong> Greifst du auf <code>$json</code> zu, brauchst du „Run Once for Each
+          Item". Willst du alle Items auf einmal sehen, nimm „All Items" mit <code>$input.all()</code>.</p>
+      </div>
+
+      <h2>Noch mehr Transform-Nodes (zum Merken)</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Macht</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Sort</strong></td><td>Items nach einem Feld sortieren</td></tr>
+          <tr><td><strong>Limit</strong></td><td>nur die ersten N Items behalten</td></tr>
+          <tr><td><strong>Remove Duplicates</strong></td><td>doppelte Items entfernen</td></tr>
+          <tr><td><strong>Aggregate</strong></td><td>viele Items zu einem zusammenfassen (z. B. alle Namen in eine Liste)</td></tr>
+          <tr><td><strong>Split Out</strong></td><td>ein Feld, das eine Liste ist, in einzelne Items aufspalten</td></tr>
+        </tbody>
+      </table>
+
+      <hr>
+
+      <h2>Mini-Übung: Wetterdaten auf das Wesentliche eindampfen</h2>
+      <p>Wir nehmen wieder den Wetter-Workflow und hängen hinter „Wetter holen" einen Set-Node, der ein sauberes Objekt baut.</p>
+      <ol class="steps">
+        <li><h4>Set-Node anhängen</h4><p>Vom HTTP-Node eine Linie ziehen, „Edit Fields (Set)" wählen, öffnen.</p></li>
+        <li><h4>Drei Felder anlegen</h4>
+          <p><em>String</em> <code>stadt</code> = <code>Berlin</code> · <em>Number</em> <code>tempC</code> =
+            <code>{{ Math.round($json.current.temperature_2m) }}</code> · <em>Number</em> <code>windKmh</code> =
+            <code>{{ Math.round($json.current.wind_speed_10m) }}</code>.</p></li>
+        <li><h4>„Include Other Input Fields" ausschalten</h4>
+          <p>Damit nur deine drei Felder übrig bleiben.</p></li>
+        <li><h4>Ausführen &amp; prüfen</h4>
+          <p>„▶ Schritt ausführen": Im Ausgang steht jetzt ein knappes Objekt <code>{ stadt, tempC, windKmh }</code> — viel
+            angenehmer als das große Roh-JSON.</p></li>
+      </ol>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Welches der drei Werkzeuge nimmst du zuerst — und warum?</li>
+          <li>Wie sorgst du dafür, dass ein Set-Node <em>nur</em> deine neuen Felder ausgibt?</li>
+          <li>Du hast 8 Items, der Filter lässt 3 durch — was passiert mit den anderen 5?</li>
+          <li>Welcher Code-Modus gibt eine <em>Liste</em> zurück, welcher ein einzelnes Objekt?</li>
+          <li>Du brauchst Treffer <em>und</em> Nicht-Treffer getrennt — Filter oder IF?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Edit Fields (Set) — visuell, leicht zu testen, deckt das meiste ab. ·
+        2) „Include Other Input Fields" ausschalten. ·
+        3) Sie werden verworfen (Filter hat nur einen Ausgang). ·
+        4) „Run Once for All Items" → Liste; „Run Once for Each Item" → ein Objekt. ·
+        5) IF (zwei Ausgänge).
+      </div>
+
+      <p>Du kannst Daten jetzt holen, senden und umformen. Als Nächstes bringen wir <strong>Logik</strong> in den Ablauf:
+        verzweigen mit <strong>IF</strong> und <strong>Switch</strong>, Zweige wieder zusammenführen mit <strong>Merge</strong> —
+        und klären, wann du wirklich eine <strong>Schleife</strong> brauchst (Spoiler: seltener, als du denkst).</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="09-transform"></nav></section>
+<section class="page" id="10-flow" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">10</span> Bausteine im Detail</div>
+      <h1 class="chap-title">Flow-Logik: IF, Switch, Merge & Loops</h1>
+      <p class="chap-lede">Bisher liefen unsere Workflows schnurgerade von links nach rechts. Jetzt bringen wir
+        <strong>Entscheidungen</strong> hinein: verschiedene Wege je nach Daten, getrennte Zweige wieder zusammenführen — und die
+        Frage klären, wann du wirklich eine Schleife brauchst.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 22 Minuten</span>
+        <span>🎯 Niveau: Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 5, 6 &amp; 9</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du mitbringen solltest</h4>
+        <ul>
+          <li>Das „läuft pro Item"-Prinzip (Kapitel 5) — es erklärt, warum du Schleifen <em>selten</em> brauchst.</li>
+          <li>Bedingungen aus Kapitel 6 (<code>&gt;</code>, <code>||</code>, …) und dem Filter (Kapitel 9).</li>
+        </ul>
+      </div>
+
+      <h2>IF: die Weiche mit zwei Ausgängen</h2>
+      <p>Der <strong>IF</strong>-Node prüft eine Bedingung und schickt jedes Item in <strong>einen von zwei Ausgängen</strong>:
+        <strong>true</strong> (Bedingung erfüllt) oder <strong>false</strong> (nicht erfüllt). Anders als der Filter wirft er nichts
+        weg — beide Gruppen laufen in <em>getrennten Zweigen</em> weiter.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 820 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 152 180 C 230 180, 250 180, 320 180"></path>
+                <path class="is-active" d="M 422 160 C 510 160, 520 110, 592 110"></path>
+                <path d="M 422 205 C 510 205, 520 290, 592 290"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:134px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span></div>
+              <div class="n8n-node" style="left:330px; top:134px;">
+                <span class="n8n-node__icon">⑂</span><span class="ep in"></span>
+                <span class="ep out" style="top:26px;"></span><span class="ep out" style="top:66px;"></span>
+                <span class="n8n-node__label">IF: tempC &gt; 20</span></div>
+              <div class="n8n-node n8n-node--code" style="left:600px; top:64px;">
+                <span class="n8n-node__icon">🏖️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">dann: „warm"</span></div>
+              <div class="n8n-node n8n-node--code" style="left:600px; top:244px;">
+                <span class="n8n-node__icon">🧥</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">sonst: „kühl"</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 10.1</span>Der IF-Node hat zwei Ausgänge: oben <b>true</b> (pinke, aktive Linie),
+          unten <b>false</b>. Jedes Item geht genau einen Weg — beide Zweige existieren weiter.</figcaption>
+      </figure>
+
+      <ol class="steps">
+        <li><h4>IF anlegen &amp; öffnen</h4>
+          <p>„IF" anhängen, öffnen. Der Bereich <strong>Conditions</strong> sieht aus wie beim Filter (Kapitel 9).</p></li>
+        <li><h4>Bedingung setzen</h4>
+          <p>Wert <code>{{ $json.tempC }}</code>, Operator <em>is greater than</em>, Vergleich <code>20</code>.</p></li>
+        <li><h4>Die zwei Ausgänge verbinden</h4>
+          <p>Vom <strong>oberen</strong> Ausgang (true) ziehst du zum „warm"-Zweig, vom <strong>unteren</strong> (false) zum
+            „kühl"-Zweig. Fertig ist die Verzweigung.</p></li>
+      </ol>
+
+      <h2>Switch: die Weiche mit vielen Ausgängen</h2>
+      <p>Brauchst du mehr als zwei Wege, nimm den <strong>Switch</strong>. Du legst mehrere <strong>Routing Rules</strong> an — jede
+        bekommt einen eigenen Ausgang. So sortierst du z. B. nach Kategorie, Status oder Sprache.</p>
+
+      <table class="btable">
+        <thead><tr><th>Switch-Modus</th><th>Sortiert nach …</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Rules</strong></td><td>frei definierten Bedingungen — ein Ausgang pro Regel (wie mehrere IFs)</td></tr>
+          <tr><td><strong>Expression</strong></td><td>einem Wert/Index, den du per Expression berechnest (für Fortgeschrittene)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Switch = IF mit mehr Türen</b>
+        Denk an Switch als IF mit beliebig vielen Ausgängen. Zwei Wege → IF. Drei oder mehr → Switch. Optional gibt es einen
+        <strong>Fallback</strong>-Ausgang für alles, was zu keiner Regel passt.
+      </div>
+
+      <h2>Merge: getrennte Zweige zusammenführen</h2>
+      <p>Hast du verzweigt, willst du oft später wieder <strong>zusammenführen</strong>. Das macht der <strong>Merge</strong>-Node:
+        Er hat <strong>zwei Eingänge</strong> und einen Ausgang.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 820 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 152 110 C 250 110, 300 165, 372 165"></path>
+                <path class="is-active" d="M 152 290 C 250 290, 300 215, 372 215"></path>
+                <path class="is-active" d="M 474 190 C 540 190, 560 190, 620 190"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:64px;">
+                <span class="n8n-node__icon">🟦</span><span class="ep out"></span>
+                <span class="n8n-node__label">Quelle A</span></div>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:244px;">
+                <span class="n8n-node__icon">🟧</span><span class="ep out"></span>
+                <span class="n8n-node__label">Quelle B</span></div>
+              <div class="n8n-node" style="left:380px; top:144px;">
+                <span class="n8n-node__icon">⥒</span>
+                <span class="ep in" style="top:26px;"></span><span class="ep in" style="top:66px;"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Merge</span></div>
+              <div class="n8n-node n8n-node--code" style="left:628px; top:144px;">
+                <span class="n8n-node__icon">📦</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">weiter</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 10.2</span>Merge bringt zwei Eingänge (oben Input 1, unten Input 2) zu einem
+          Ausgang zusammen.</figcaption>
+      </figure>
+
+      <table class="btable">
+        <thead><tr><th>Merge-Modus</th><th>Macht</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Append</strong></td><td>hängt einfach beide Listen hintereinander (erst A, dann B)</td></tr>
+          <tr><td><strong>Combine</strong> (by Matching Fields)</td><td>verbindet Items, die in einem Feld übereinstimmen (z. B. gleiche <code>id</code>)</td></tr>
+          <tr><td><strong>Combine</strong> (by Position)</td><td>verbindet das 1. mit dem 1., das 2. mit dem 2. Item usw.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ IF + Merge sind die Arbeitspferde</b>
+        Verzweigen mit <strong>IF</strong>, später mit <strong>Merge</strong> wieder zusammen — dieses Paar deckt fast alle
+        „mal so, mal so"-Abläufe ab. Switch nur, wenn es wirklich mehr als zwei Wege sind.
+      </div>
+
+      <h2>Loops: meistens brauchst du sie nicht</h2>
+      <p>Der häufigste Anfänger-Reflex: „Ich habe eine Liste, ich brauche eine Schleife." Fast nie! Erinnere dich an Kapitel 5:
+        <strong>Ein Node läuft automatisch pro Item.</strong> Hast du 100 Items, läuft der nächste Node 100-mal — ganz ohne
+        Schleife.</p>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die Regel zuerst</b>
+        Willst du „für jede Zeile etwas tun", sorg einfach dafür, dass jede Zeile ein <strong>Item</strong> ist (z. B. „Split Out"
+        aus Kapitel 9). Den Rest macht n8n durch Wiederholung pro Item von selbst.
+      </div>
+
+      <p>Eine echte Schleife — den <strong>„Loop Over Items (Split in Batches)"</strong>-Node — brauchst du nur in Sonderfällen:</p>
+      <ul>
+        <li><strong>Batching:</strong> eine API erlaubt nur 10 Einträge pro Aufruf — du arbeitest sie in Häppchen ab.</li>
+        <li><strong>Rate-Limits / Pausen:</strong> du willst zwischen den Durchläufen warten (Kapitel 23).</li>
+        <li><strong>Zustand über Runden:</strong> jeder Durchlauf baut auf dem vorherigen auf.</li>
+      </ul>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 820 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 152 200 C 220 200, 240 200, 312 200"></path>
+                <path class="is-active" d="M 414 178 C 470 150, 500 120, 560 120"></path>
+                <path d="M 560 150 C 480 200, 440 235, 414 222"></path>
+                <path class="is-active" d="M 414 222 C 470 280, 520 330, 600 330"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:154px;">
+                <span class="n8n-node__icon">📋</span><span class="ep out"></span>
+                <span class="n8n-node__label">viele Items</span></div>
+              <div class="n8n-node" style="left:322px; top:154px;">
+                <span class="n8n-node__icon">🔁</span><span class="ep in"></span>
+                <span class="ep out" style="top:26px;"></span><span class="ep out" style="top:66px;"></span>
+                <span class="n8n-node__label">Loop Over Items</span></div>
+              <div class="n8n-node n8n-node--code" style="left:560px; top:74px;">
+                <span class="n8n-node__icon">⚙️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">pro Batch</span></div>
+              <div class="n8n-node n8n-node--code" style="left:600px; top:284px;">
+                <span class="n8n-node__icon">✅</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">done</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 10.3</span>„Loop Over Items" hat zwei Ausgänge: <b>loop</b> (oben, führt nach der
+          Verarbeitung zurück) und <b>done</b> (unten, wenn alle Batches durch sind). Die zurücklaufende Linie ist die Schleife.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>Endlosschleife?</strong> Der verarbeitende Zweig muss <em>zurück</em> zum
+          Loop-Node führen, sonst wird nicht weitergezählt. Prüfe, dass die Rücklinie wirklich am Loop-Node endet.</p>
+        <p style="margin:0">• <strong>Schleife, die gar nicht nötig war?</strong> Wenn jeder Node ohnehin pro Item läuft, lös den
+          Loop wieder auf — er macht den Workflow nur komplizierter.</p>
+      </div>
+
+      <hr>
+
+      <h2>Mini-Übung: zwei Antworten je nach Temperatur</h2>
+      <p>Wir verzweigen den Wetter-Workflow: bei über 20 °C eine fröhliche, sonst eine kühle Nachricht.</p>
+      <ol class="steps">
+        <li><h4>IF anhängen</h4>
+          <p>Hinter den Set-Node (mit Feld <code>tempC</code> aus Kapitel 9) einen <strong>IF</strong> setzen.</p></li>
+        <li><h4>Bedingung</h4>
+          <p>Wert <code>{{ $json.tempC }}</code> · Operator <em>is greater than</em> · <code>20</code>.</p></li>
+        <li><h4>true-Zweig</h4>
+          <p>Vom <strong>oberen</strong> Ausgang einen Set-Node: Feld <code>text</code> =
+            <code>🏖️ Heute warm: {{ $json.tempC }} °C!</code></p></li>
+        <li><h4>false-Zweig</h4>
+          <p>Vom <strong>unteren</strong> Ausgang einen Set-Node: Feld <code>text</code> =
+            <code>🧥 Eher kühl: {{ $json.tempC }} °C.</code></p></li>
+        <li><h4>Testen</h4>
+          <p>„Test workflow" — beobachte, welcher Zweig sich pink einfärbt. Das ist der Weg, den dein Item genommen hat.</p></li>
+      </ol>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Später wieder zusammenführen</b>
+        Wenn beide Zweige am Ende dasselbe tun (z. B. die Nachricht verschicken), häng einen <strong>Merge</strong> dahinter und
+        führe sie zusammen — dann brauchst du den Versand-Node nur <em>einmal</em>.
+      </div>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Was ist der Unterschied zwischen IF und Filter?</li>
+          <li>Ab wie vielen Wegen lohnt sich ein Switch statt mehrerer IFs?</li>
+          <li>Welcher Merge-Modus hängt zwei Listen einfach hintereinander?</li>
+          <li>Du willst „für jedes der 50 Items eine E-Mail" — brauchst du dafür einen Loop?</li>
+          <li>Woran erkennst du im Test, welchen Zweig ein Item genommen hat?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) IF hat zwei Ausgänge (true/false) und behält beide Gruppen; Filter wirft Nicht-Treffer weg. ·
+        2) Ab drei. ·
+        3) <strong>Append</strong>. ·
+        4) Nein — der E-Mail-Node läuft automatisch pro Item. ·
+        5) An der pink eingefärbten (aktiven) Verbindungslinie.
+      </div>
+
+      <p>Dein Werkzeugkasten für den Datenfluss ist jetzt komplett. Doch was, wenn unterwegs etwas <em>schiefgeht</em> — eine API
+        antwortet nicht, ein Feld fehlt? Im nächsten Kapitel bauen wir Workflows, die Fehler <strong>abfangen</strong> und sauber
+        darauf reagieren.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="10-flow"></nav></section>
 
   </div>
 </div>
 <script>
-var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http"];
-var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
+var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow"];
+var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
 
 function show(slug) {
   if (!slug || READY.indexOf(slug) === -1 && slug !== "home") slug = "home";
