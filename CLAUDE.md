@@ -4,6 +4,16 @@ Diese Datei richtet sich an Claude (und andere Mitwirkende). Sie beschreibt, **w
 Projekt ist, **wie** es aufgebaut ist und **welche Konventionen** verbindlich gelten. Bitte
 vor jeder Änderung lesen.
 
+> ## ⚠️ WICHTIGSTE REGEL: Diese Datei aktuell halten
+> **Nach JEDER Änderung — insbesondere nach jedem hinzugefügten oder überarbeiteten Kapitel —
+> wird diese `CLAUDE.md` aktualisiert**, bevor committet/gepusht wird. Konkret zu pflegen:
+> - **Abschnitt 10 → „Status“**: welche Kapitel `ready` sind, was als Nächstes drankommt.
+> - **Abschnitt 11 → „Logbuch“**: ein neuer datierter Eintrag, was in dieser Sitzung passiert ist.
+> - Falls sich Konventionen/Technik geändert haben: den jeweiligen Abschnitt anpassen.
+>
+> Grund: `CLAUDE.md` wird bei einem Session-Neustart automatisch in den Kontext geladen. So kann
+> mit frischem Kontext **exakt dort weitergemacht werden, wo wir aufgehört haben.**
+
 ---
 
 ## 1. Worum geht es?
@@ -167,13 +177,45 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 
 ---
 
-## 10. Aktueller Stand & nächste Schritte
+## 10. Status (immer aktuell halten!)
 
-**Fertig:** Vorwort, 80/20, Was ist n8n, Installation, Oberfläche, erster Workflow (Referenz für
-Detailgrad), Kernkonzepte.
+**✅ Fertig (`status: "ready"` im Manifest):**
+- `00-vorwort` — Vorwort & Lesehinweise
+- `00-pareto` — Das 80/20 von n8n (die wichtigen 35 %)
+- `01-was-ist-n8n` — Konzept, Begriffe, Vergleich Zapier/Make
+- `02-installation` — Cloud / npx / Docker
+- `03-oberflaeche` — Oberflächen-Tour (visuell dicht)
+- `04-erster-workflow` — **Referenzkapitel für den Detailgrad** (47 Einzelschritte)
+- `05-kernkonzepte` — Items, JSON, Datenfluss, Expressions-Einstieg
 
-**Als Nächstes geplant** (im Manifest `status: "soon"`): Expressions vertieft (Kap. 6), alle
-Bausteine im Detail (7–12), sechs wachsende Projekte (13–19), KI-Agenten & RAG (20–21),
-Betrieb/Skalierung (22–25), Anhänge (A–D).
+**🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
+1. `06-expressions` — Expressions vertieft (logischer nächster Schritt nach Kap. 5)
+2. `13-projekt-wetter` — erstes vollständiges Projekt (großer Praxis-Sprung)
+3. danach Bausteine 07–12, weitere Projekte 14–19, KI 20–21, Betrieb 22–25, Anhänge A–D
 
-Beim Ausbau jeweils den Detailgrad und die Didaktik-Bausteine aus Abschnitt 5 einhalten.
+**Beim Ausbau zwingend:** Detailgrad + Didaktik-Bausteine aus Abschnitt 5 einhalten, danach
+`node build.js`, dann **diese Datei (Abschnitt 10 + 11) aktualisieren**, dann committen/pushen.
+
+---
+
+## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 — Mobile-Fidelity, Pfeile, Kapitel 4, Doku
+- Verbindungs-**Pfeilspitzen** (n8n-getreu) eingebaut: SVG-Marker `#n8n-arrow`/`#n8n-arrow-active`,
+  per CSS `marker-end` + `vector-effect: non-scaling-stroke`. Marker werden injiziert (book.js) bzw.
+  liegen statisch in `index.html` und im `build.js`-Template.
+- **Kapitel 4 komplett neu** geschrieben, von ~15 auf 47 Einzelschritte (neuer Detailgrad-Standard).
+- **Mobile-Performance** gefixt: kein `backdrop-filter`, kein globales `scroll-behavior:smooth`;
+  ≤1000px flacher Canvas-Hintergrund + Schatten aus; ≤840px Canvas-Diagramme horizontal scrollbar.
+- `CLAUDE.md` angelegt und um Logbuch + „immer aktuell halten“-Regel erweitert.
+- Hinweis: Ruckeln zuvor lag nur am In-App-Viewer; in echtem Chrome flüssig.
+
+### 2026-05-29 — Projektstart
+- Buch-Gerüst (HTML-Website), `n8n-ui.css`-Komponentenbibliothek, Manifest (`chapters.js`),
+  Navigation (`book.js`), Einzeldatei-Bundle (`build.js` → `dist/`).
+- Erste 7 Kapitel (Teil 0 + Grundlagen) geschrieben.
+
+> **Vorlage für neuen Logbuch-Eintrag:**
+> `### JJJJ-MM-TT — Kurztitel`
+> `- Was geändert/hinzugefügt wurde (Kapitel-Slugs nennen).`
+> `- Offene Punkte / wo als Nächstes weitermachen.`
