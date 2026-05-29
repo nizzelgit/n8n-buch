@@ -206,11 +206,13 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `04-erster-workflow` — **Referenzkapitel für den Detailgrad** (47 Einzelschritte)
 - `05-kernkonzepte` — Items, JSON, Datenfluss, Expressions-Einstieg
 - `06-expressions` — Ausdruckseditor, Variablen-Werkzeugkasten, Text/Zahlen/Datum, Bedingungen, Fehlertabelle
+- `07-trigger` — Trigger-Nodes: Manual/Schedule/Webhook, Aktiv-Schalter, Test- vs. Production-URL
+- `08-http` — HTTP-Request-Node: Methoden, Query/Headers/Body, Import cURL, Fehlercodes, POST-Übung
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `07-trigger` — Trigger-Nodes (Manual/Schedule/Webhook); das Outro von Kap. 6 leitet bereits dorthin über
-2. `13-projekt-wetter` — alternativ als erster großer Praxis-Sprung (vollständiges Projekt)
-3. danach restliche Bausteine 08–12, weitere Projekte 14–19, KI 20–21, Betrieb 22–25, Anhänge A–D
+1. `09-transform` — Daten transformieren (Set, Code, Filter); Outro von Kap. 8 leitet dorthin über
+2. `10-flow` → `11-fehler` → `12-credentials` (Rest von Teil 2 „Bausteine")
+3. danach Projekte 13–19, KI 20–21, Betrieb 22–25, Anhänge A–D
 
 **Beim Ausbau zwingend:** Detailgrad + Didaktik-Bausteine aus Abschnitt 5 einhalten, danach
 `node build.js`, dann **diese Datei (Abschnitt 10 + 11) aktualisieren**, dann committen/pushen.
@@ -218,6 +220,20 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 ---
 
 ## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 — Teil 2 gestartet: Kapitel 7 (Trigger) & 8 (HTTP)
+- **Kapitel 7 „Trigger-Nodes: Manual, Schedule, Webhook"** (`ready`): Trigger-Form, Manual als Bau-Werkzeug,
+  Schedule (Intervalle/Cron, Zeitzone), Webhook (Test- vs. Production-URL, „Listen for test event",
+  `$json.query`/`.body`/`.headers`), der **Aktiv**-Schalter (Topbar-Toggle), Überblickstabelle, Mini-Übung
+  (Wetter-Workflow von Manual auf täglich-8-Uhr umstellen + aktivieren), Selbsttest.
+- **Kapitel 8 „Der HTTP-Request-Node"** (`ready`): Aufbau eines Requests, Methoden GET/POST/PUT/DELETE,
+  Query-Parameter als Name/Wert-Liste, Body (JSON) mit Expressions, Zahl-vs-Text-Falle, Response-Optionen
+  (Autodetect, Split Into Items), Auth-Anriss (Verweis Kap. 12), Fehlercode-Tabelle (401/404/429/400/500),
+  Import-cURL-Tipp, Mini-Übung (POST an postman-echo.com), Selbsttest.
+- `node build.js` → **10 Kapitel** im Bundle. Tag-Balance & `&gt;`-Escaping für beide geprüft.
+- Beide Kapitel halten den Referenz-Detailgrad (Kap. 4/6) ein. Weiter: `09-transform` (Outro von Kap. 8 dorthin).
+- Pages-Hinweis: Live-Deploy via `github.io` hängt noch an der Repo-Einstellung *Settings → Pages → Source:
+  „GitHub Actions"* (vom Nutzer zu setzen). Vorschau zwischenzeitlich über raw.githack.com möglich.
 
 ### 2026-05-29 — Kapitel 6 (Expressions) + neue Ausdruckseditor-Komponente
 - **Kapitel 6 „Expressions & der Ausdruckseditor"** geschrieben (status `ready`): Fest/Expression-Schalter,
