@@ -185,6 +185,23 @@ blockquote {
 /* ---------- Abbildungen (UI-Nachbauten) -------------------------------- */
 .figure { margin: 26px 0 30px; }
 .figure .frame { position: relative; }
+.figure .frame.has-canvas-scroll,
+.figure .frame:has(.n8n-canvas) {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  scrollbar-width: thin;
+}
+.figure .frame.has-canvas-scroll > .n8n,
+.figure .frame:has(.n8n-canvas) > .n8n { max-width: none; }
+.figure .frame.has-canvas-scroll::-webkit-scrollbar,
+.figure .frame:has(.n8n-canvas)::-webkit-scrollbar { height: 6px; }
+.figure .frame.has-canvas-scroll::-webkit-scrollbar-thumb,
+.figure .frame:has(.n8n-canvas)::-webkit-scrollbar-thumb {
+  background: #c4c9d4;
+  border-radius: 6px;
+}
 .figure figcaption {
   font-size: 13px; color: var(--book-faint); margin-top: 11px; text-align:center;
   line-height:1.5;
@@ -361,22 +378,11 @@ ol.steps > li p { font-size: 15.5px; }
 }
 
 /* ---------- Canvas-Diagramme auf kleinen Screens ------------------------
-   Nodes sind in festen Pixeln positioniert. Statt sie zu stauchen oder
-   abzuschneiden, lassen wir Diagramm-Flächen (nur die mit echtem Canvas)
-   auf schmalen Screens in Originalgröße horizontal scrollen. So bleiben
-   Proportionen, Bézier-Kurven und Pfeilspitzen exakt n8n-getreu.
-   (NDV-/Panel-Abbildungen sind separat responsiv und bleiben gestapelt.) */
+   Die Scrolllogik gilt bereits allgemein. Mobil bleibt hier nur die native
+   Trägheit erhalten; die exakten Canvas-Maße setzt book.js aus der SVG-ViewBox. */
 @media (max-width: 840px) {
-  .figure .frame:has(.n8n-canvas) {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border-radius: 12px;
-    scrollbar-width: thin;
-  }
-  .figure .frame:has(.n8n-canvas) > .n8n { min-width: 840px; }
-  /* dezenter Hinweis, dass man wischen kann */
-  .figure .frame:has(.n8n-canvas)::-webkit-scrollbar { height: 6px; }
-  .figure .frame:has(.n8n-canvas)::-webkit-scrollbar-thumb { background: #c4c9d4; border-radius: 6px; }
+  .figure .frame.has-canvas-scroll,
+  .figure .frame:has(.n8n-canvas) { -webkit-overflow-scrolling: touch; }
 }
 
 /* Druck / PDF-Export */

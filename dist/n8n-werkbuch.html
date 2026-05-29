@@ -192,6 +192,23 @@ blockquote {
 /* ---------- Abbildungen (UI-Nachbauten) -------------------------------- */
 .figure { margin: 26px 0 30px; }
 .figure .frame { position: relative; }
+.figure .frame.has-canvas-scroll,
+.figure .frame:has(.n8n-canvas) {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  scrollbar-width: thin;
+}
+.figure .frame.has-canvas-scroll > .n8n,
+.figure .frame:has(.n8n-canvas) > .n8n { max-width: none; }
+.figure .frame.has-canvas-scroll::-webkit-scrollbar,
+.figure .frame:has(.n8n-canvas)::-webkit-scrollbar { height: 6px; }
+.figure .frame.has-canvas-scroll::-webkit-scrollbar-thumb,
+.figure .frame:has(.n8n-canvas)::-webkit-scrollbar-thumb {
+  background: #c4c9d4;
+  border-radius: 6px;
+}
 .figure figcaption {
   font-size: 13px; color: var(--book-faint); margin-top: 11px; text-align:center;
   line-height:1.5;
@@ -368,22 +385,11 @@ ol.steps > li p { font-size: 15.5px; }
 }
 
 /* ---------- Canvas-Diagramme auf kleinen Screens ------------------------
-   Nodes sind in festen Pixeln positioniert. Statt sie zu stauchen oder
-   abzuschneiden, lassen wir Diagramm-Flächen (nur die mit echtem Canvas)
-   auf schmalen Screens in Originalgröße horizontal scrollen. So bleiben
-   Proportionen, Bézier-Kurven und Pfeilspitzen exakt n8n-getreu.
-   (NDV-/Panel-Abbildungen sind separat responsiv und bleiben gestapelt.) */
+   Die Scrolllogik gilt bereits allgemein. Mobil bleibt hier nur die native
+   Trägheit erhalten; die exakten Canvas-Maße setzt book.js aus der SVG-ViewBox. */
 @media (max-width: 840px) {
-  .figure .frame:has(.n8n-canvas) {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border-radius: 12px;
-    scrollbar-width: thin;
-  }
-  .figure .frame:has(.n8n-canvas) > .n8n { min-width: 840px; }
-  /* dezenter Hinweis, dass man wischen kann */
-  .figure .frame:has(.n8n-canvas)::-webkit-scrollbar { height: 6px; }
-  .figure .frame:has(.n8n-canvas)::-webkit-scrollbar-thumb { background: #c4c9d4; border-radius: 6px; }
+  .figure .frame.has-canvas-scroll,
+  .figure .frame:has(.n8n-canvas) { -webkit-overflow-scrolling: touch; }
 }
 
 /* Druck / PDF-Export */
@@ -561,6 +567,7 @@ ol.steps > li p { font-size: 15.5px; }
 }
 .n8n-conns path { fill: none; stroke: #b3b9c7; stroke-width: 2.2; vector-effect: non-scaling-stroke; marker-end: url(#n8n-arrow); }
 .n8n-conns path.is-active { stroke: var(--n8n-primary); marker-end: url(#n8n-arrow-active); }
+.n8n-conns path.no-arrow { marker-end: none; stroke-dasharray: 5 5; }
 .n8n-conns .plus {
   fill:#fff; stroke:#b3b9c7; stroke-width: 1.4;
 }
@@ -4024,7 +4031,7 @@ Wind: 12 km/h.</span></div>
               <svg class="n8n-conns" viewBox="0 0 820 400" preserveAspectRatio="none">
                 <path class="is-active" d="M 152 200 C 220 200, 240 200, 312 200"></path>
                 <path class="is-active" d="M 414 178 C 470 150, 500 120, 560 120"></path>
-                <path d="M 560 150 C 480 200, 440 235, 414 222"></path>
+                <path d="M 650.5 120 C 720 120, 720 250, 320.5 200"></path>
                 <path class="is-active" d="M 414 222 C 470 280, 520 330, 600 330"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:60px; top:154px;">
@@ -6789,7 +6796,7 @@ Zusammenfassung:
                 <path class="is-active" d="M 620 190 C 680 190, 690 190, 748 190"></path>
                 <path class="is-active" d="M 840 190 C 900 190, 910 105, 968 105"></path>
                 <path class="is-active" d="M 840 190 C 900 190, 910 275, 968 275"></path>
-                <path class="is-active" d="M 1060 275 C 1088 275, 1092 178, 1078 125"></path>
+                <path class="is-active" d="M 1058.5 275 C 1098 275, 1098 105, 966.5 105"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:40px; top:144px;">
                 <span class="n8n-node__icon">✉️</span><span class="ep out"></span>
@@ -7455,7 +7462,7 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
                 <path class="is-active" d="M 370 120 C 430 120, 450 120, 508 120"></path>
                 <path class="is-active" d="M 600 120 C 660 120, 680 120, 738 120"></path>
                 <path class="is-active" d="M 830 120 C 890 120, 910 120, 968 120"></path>
-                <path d="M 1015 166 C 1015 215, 145 215, 145 300"></path>
+                <path class="no-arrow" d="M 1015 166 C 1015 215, 145 215, 145 300"></path>
                 <path class="is-active" d="M 145 300 C 205 300, 220 300, 278 300"></path>
                 <path class="is-active" d="M 370 300 C 430 300, 450 300, 508 300"></path>
                 <path class="is-active" d="M 600 300 C 660 300, 680 300, 738 300"></path>
@@ -8782,6 +8789,7 @@ function show(slug) {
   });
   buildBar(slug);
   buildPN(slug);
+  fitCanvasDiagrams(document.getElementById(slug));
   document.getElementById("app").classList.remove("nav-open");
   window.scrollTo(0, 0);
 }
@@ -8808,6 +8816,96 @@ function buildPN(slug) {
   h += next ? '<a class="pn pn--next" href="#' + next + '"><small>Weiter →</small><b>' + info(next).title + '</b></a>'
             : "<span style='flex:1'></span>";
   wrap.innerHTML = h;
+}
+function fitCanvasDiagrams(root) {
+  (root || document).querySelectorAll(".n8n-canvas > svg.n8n-conns[viewBox]").forEach(function (svg) {
+    var vb = svg.viewBox && svg.viewBox.baseVal;
+    if (!vb || !vb.width || !vb.height) return;
+
+    var canvas = svg.closest(".n8n-canvas");
+    var shell = svg.closest(".n8n");
+    var frame = svg.closest(".figure .frame");
+    if (!frame) {
+      snapConnectorPaths(canvas, svg);
+      return;
+    }
+    var canvasWidth = vb.width;
+    var canvasHeight = vb.height;
+
+    canvas.querySelectorAll(".n8n-node").forEach(function (node) {
+      var left = parseFloat(node.style.left) || node.offsetLeft || 0;
+      var top = parseFloat(node.style.top) || node.offsetTop || 0;
+      canvasWidth = Math.max(canvasWidth, left + node.offsetWidth + 28);
+      canvasHeight = Math.max(canvasHeight, top + node.offsetHeight + 48);
+    });
+
+    var w = Math.ceil(canvasWidth) + "px";
+    var h = Math.ceil(canvasHeight) + "px";
+    svg.style.width = vb.width + "px";
+    svg.style.height = vb.height + "px";
+    canvas.style.width = w;
+    canvas.style.minWidth = w;
+    canvas.style.height = h;
+    canvas.style.minHeight = h;
+
+    if (shell) {
+      shell.style.width = w;
+      shell.style.maxWidth = "none";
+    }
+    frame.classList.add("has-canvas-scroll");
+
+    snapConnectorPaths(canvas, svg);
+  });
+}
+function snapConnectorPaths(canvas, svg) {
+  function point(el) {
+    var er = el.getBoundingClientRect();
+    var cr = canvas.getBoundingClientRect();
+    return { x: er.left + er.width / 2 - cr.left, y: er.top + er.height / 2 - cr.top };
+  }
+  function dist(a, b) {
+    return Math.hypot(a.x - b.x, a.y - b.y);
+  }
+  function nearest(p, points) {
+    return points.reduce(function (best, candidate) {
+      var d = dist(p, candidate);
+      return !best || d < best.d ? { d: d, p: candidate } : best;
+    }, null);
+  }
+  function clean(n) {
+    return String(Math.round(n * 10) / 10).replace(/\.0$/, "");
+  }
+
+  var outs = Array.prototype.map.call(canvas.querySelectorAll(".ep.out"), point);
+  var ins = Array.prototype.map.call(canvas.querySelectorAll(".ep.in"), point);
+  svg.querySelectorAll("path:not(.no-arrow)").forEach(function (path) {
+    var nums = (path.getAttribute("d") || "").match(/-?\d+(?:\.\d+)?/g);
+    if (!nums || nums.length !== 8) return;
+    nums = nums.map(Number);
+
+    var start = { x: nums[0], y: nums[1] };
+    var end = { x: nums[6], y: nums[7] };
+    var out = nearest(start, outs);
+    var input = nearest(end, ins);
+    var changed = false;
+
+    if (out && out.d <= 34) {
+      nums[0] = out.p.x;
+      nums[1] = out.p.y;
+      changed = true;
+    }
+    if (input && input.d <= 34) {
+      nums[6] = input.p.x;
+      nums[7] = input.p.y;
+      changed = true;
+    }
+    if (changed) {
+      path.setAttribute("d", "M " + clean(nums[0]) + " " + clean(nums[1]) +
+        " C " + clean(nums[2]) + " " + clean(nums[3]) +
+        ", " + clean(nums[4]) + " " + clean(nums[5]) +
+        ", " + clean(nums[6]) + " " + clean(nums[7]));
+    }
+  });
 }
 window.addEventListener("hashchange", function () { show(location.hash.slice(1)); });
 

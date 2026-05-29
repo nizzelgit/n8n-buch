@@ -154,6 +154,7 @@ function show(slug) {
   });
   buildBar(slug);
   buildPN(slug);
+  fitCanvasDiagrams(document.getElementById(slug));
   document.getElementById("app").classList.remove("nav-open");
   window.scrollTo(0, 0);
 }
@@ -180,6 +181,96 @@ function buildPN(slug) {
   h += next ? '<a class="pn pn--next" href="#' + next + '"><small>Weiter →</small><b>' + info(next).title + '</b></a>'
             : "<span style='flex:1'></span>";
   wrap.innerHTML = h;
+}
+function fitCanvasDiagrams(root) {
+  (root || document).querySelectorAll(".n8n-canvas > svg.n8n-conns[viewBox]").forEach(function (svg) {
+    var vb = svg.viewBox && svg.viewBox.baseVal;
+    if (!vb || !vb.width || !vb.height) return;
+
+    var canvas = svg.closest(".n8n-canvas");
+    var shell = svg.closest(".n8n");
+    var frame = svg.closest(".figure .frame");
+    if (!frame) {
+      snapConnectorPaths(canvas, svg);
+      return;
+    }
+    var canvasWidth = vb.width;
+    var canvasHeight = vb.height;
+
+    canvas.querySelectorAll(".n8n-node").forEach(function (node) {
+      var left = parseFloat(node.style.left) || node.offsetLeft || 0;
+      var top = parseFloat(node.style.top) || node.offsetTop || 0;
+      canvasWidth = Math.max(canvasWidth, left + node.offsetWidth + 28);
+      canvasHeight = Math.max(canvasHeight, top + node.offsetHeight + 48);
+    });
+
+    var w = Math.ceil(canvasWidth) + "px";
+    var h = Math.ceil(canvasHeight) + "px";
+    svg.style.width = vb.width + "px";
+    svg.style.height = vb.height + "px";
+    canvas.style.width = w;
+    canvas.style.minWidth = w;
+    canvas.style.height = h;
+    canvas.style.minHeight = h;
+
+    if (shell) {
+      shell.style.width = w;
+      shell.style.maxWidth = "none";
+    }
+    frame.classList.add("has-canvas-scroll");
+
+    snapConnectorPaths(canvas, svg);
+  });
+}
+function snapConnectorPaths(canvas, svg) {
+  function point(el) {
+    var er = el.getBoundingClientRect();
+    var cr = canvas.getBoundingClientRect();
+    return { x: er.left + er.width / 2 - cr.left, y: er.top + er.height / 2 - cr.top };
+  }
+  function dist(a, b) {
+    return Math.hypot(a.x - b.x, a.y - b.y);
+  }
+  function nearest(p, points) {
+    return points.reduce(function (best, candidate) {
+      var d = dist(p, candidate);
+      return !best || d < best.d ? { d: d, p: candidate } : best;
+    }, null);
+  }
+  function clean(n) {
+    return String(Math.round(n * 10) / 10).replace(/\\.0$/, "");
+  }
+
+  var outs = Array.prototype.map.call(canvas.querySelectorAll(".ep.out"), point);
+  var ins = Array.prototype.map.call(canvas.querySelectorAll(".ep.in"), point);
+  svg.querySelectorAll("path:not(.no-arrow)").forEach(function (path) {
+    var nums = (path.getAttribute("d") || "").match(/-?\\d+(?:\\.\\d+)?/g);
+    if (!nums || nums.length !== 8) return;
+    nums = nums.map(Number);
+
+    var start = { x: nums[0], y: nums[1] };
+    var end = { x: nums[6], y: nums[7] };
+    var out = nearest(start, outs);
+    var input = nearest(end, ins);
+    var changed = false;
+
+    if (out && out.d <= 34) {
+      nums[0] = out.p.x;
+      nums[1] = out.p.y;
+      changed = true;
+    }
+    if (input && input.d <= 34) {
+      nums[6] = input.p.x;
+      nums[7] = input.p.y;
+      changed = true;
+    }
+    if (changed) {
+      path.setAttribute("d", "M " + clean(nums[0]) + " " + clean(nums[1]) +
+        " C " + clean(nums[2]) + " " + clean(nums[3]) +
+        ", " + clean(nums[4]) + " " + clean(nums[5]) +
+        ", " + clean(nums[6]) + " " + clean(nums[7]));
+    }
+  });
 }
 window.addEventListener("hashchange", function () { show(location.hash.slice(1)); });
 

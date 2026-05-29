@@ -253,6 +253,15 @@ deren Grundlagen zu wiederholen (stattdessen verlinken/verweisen).
 
 ## 11. Logbuch (neuester Eintrag oben)
 
+### 2026-05-30 — Canvas-Diagramme und Arbeitsstand bereinigt
+- Canvas-Abbildungen stabilisiert: Kapitel-Diagramme erhalten feste ViewBox-Maße mit horizontaler Scrollfläche,
+  Verbindungen werden an echte Node-Endpunkte geschnappt, und Rück-/Hinweislinien können per `no-arrow` ohne
+  Pfeilspitze dargestellt werden.
+- Korrigierte Diagramme in `10-flow`, `18-projekt-pdf` und `19-grossprojekt`; Startseite lädt `book.js` nicht mehr,
+  damit die Demo-Canvas mobil keinen Seitenüberlauf erzeugt.
+- `.gitignore` ergänzt (`output/`), `dist/n8n-werkbuch.html` neu gebaut und Desktop-/Mobilprüfung per Browserlauf
+  durchgeführt. Nächster offener Schritt bleibt `21-rag`.
+
 ### 2026-05-29 — Kapitel 20 AI-Agent ergänzt
 - **Kapitel 20 „AI-Agent, Chat-Trigger, Memory & Tools"** (`ready`): Chat-Trigger-Workflow mit AI Agent,
   Chat Model, Simple Memory, Open-Meteo-HTTP-Tools, `$fromAI()`-Parametern, Tool-Reihenfolge, Memory-Test,
