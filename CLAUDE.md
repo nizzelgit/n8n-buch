@@ -174,16 +174,19 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 
 ## 9. Git-Konventionen
 
-- Entwickelt wird auf `claude/n-acht-n-workflows-guide-EWQxg`.
+- Entwickelt wird auf dem vom Harness zugewiesenen Feature-Branch. **Aktuell:**
+  `claude/optimistic-shannon-TJ1d8`. (Der Name kann je Session wechseln — dann hier **und** in
+  `.github/workflows/pages.yml` anpassen.)
 - **`main` und der Feature-Branch werden synchron gehalten** (beide enthalten denselben Stand),
   damit eine frisch gestartete Session den kompletten Stand vorfindet — egal welcher Branch als
   Default ausgecheckt wird. Nach dem Commit also **beide** Branches pushen:
   ```bash
   node build.js
   git add -A && git commit -m "…"
-  git push origin claude/n-acht-n-workflows-guide-EWQxg
+  git push origin claude/optimistic-shannon-TJ1d8
   git branch -f main HEAD && git push origin main
   ```
+  Hinweis: In Web-Sessions ist ein Push auf `main` ggf. erst nach ausdrücklicher Freigabe erlaubt.
 - Commit-Messages auf Deutsch, beschreibend, im Imperativ/Sachstil.
 - `node build.js` (Bundle aktualisieren) **vor** dem Commit, wenn sich Inhalt/CSS/JS geändert hat
   (reine `CLAUDE.md`-Änderungen brauchen keinen Rebuild).
@@ -225,9 +228,9 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
   `.n8n-expr-result` (Live-Ergebnis), `.n8n-expr` (`__head`/`__code`/`__result`), `.expr-tok`/`.expr-var`
   (Resolvable-Hervorhebung), `.n8n-autocomplete` (Vorschlagsliste).
 - `node build.js` → **8 Kapitel** im Bundle. Tag-Balance (div/figure/table/ol/ul) & `&gt;`-Escaping geprüft.
-- **Branch-Hinweis:** Diese Session läuft auf dem vom Harness vorgegebenen Branch
-  `claude/optimistic-shannon-TJ1d8` (weicht vom in §9 genannten Namen ab). Push erfolgte **nur** dorthin;
-  der `main`-Sync aus §9 wurde **nicht** ausgeführt (bedarf in Web-Sessions ausdrücklicher Freigabe).
+- **Branch umgestellt:** Diese Session läuft auf `claude/optimistic-shannon-TJ1d8`. §9 und der
+  Pages-Trigger in `.github/workflows/pages.yml` wurden auf diesen Namen umgestellt (vorher
+  `claude/n-acht-n-workflows-guide-EWQxg`). `main` wurde nach Freigabe wieder synchronisiert.
 - Weiter: `07-trigger` — das Outro von Kap. 6 führt bereits dorthin.
 
 ### 2026-05-29 — main-Branch angelegt, Branches synchron, Pages-Trigger erweitert
