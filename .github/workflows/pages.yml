@@ -1,0 +1,42 @@
+name: Deploy n8n-Werkbuch to GitHub Pages
+
+# Veröffentlicht die statische Buch-Website bei jedem Push auf den Feature-Branch.
+on:
+  push:
+    branches: ["claude/n-acht-n-workflows-guide-EWQxg"]
+  workflow_dispatch: {}
+
+# Rechte, die der Pages-Deploy benötigt
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Immer nur ein Deploy gleichzeitig; laufende nicht abbrechen
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      # Das gesamte Repo-Root ist bereits eine fertige statische Seite
+      # (index.html, assets/, kapitel/). Wir laden es als Pages-Artefakt hoch.
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
