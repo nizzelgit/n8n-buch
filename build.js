@@ -124,6 +124,16 @@ ${uiCss}
 </style>
 </head>
 <body data-base=".">
+<svg id="n8n-arrow-defs" width="0" height="0" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none">
+  <defs>
+    <marker id="n8n-arrow" markerWidth="8" markerHeight="8" refX="6.2" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M0,0.6 L7,4 L0,7.4 Z" fill="#b3b9c7"></path>
+    </marker>
+    <marker id="n8n-arrow-active" markerWidth="8" markerHeight="8" refX="6.2" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M0,0.6 L7,4 L0,7.4 Z" fill="#ea4b71"></path>
+    </marker>
+  </defs>
+</svg>
 <div id="app">
   <aside id="sidebar">${sidebar}</aside>
   <div id="content">

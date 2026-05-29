@@ -14,6 +14,29 @@
   var slug = body.getAttribute("data-slug") || "";
   var kdir = base + "/kapitel/";
 
+  /* ---------- Pfeilspitzen für Node-Verbindungen (SVG-Marker) ----------
+     n8n zeichnet am Ziel jeder Verbindung eine kleine Pfeilspitze. Wir
+     definieren die Marker einmal global; alle .n8n-conns-Pfade verweisen
+     per CSS (marker-end) darauf. Zwei Farben: grau (ruhend) & pink (aktiv). */
+  function injectArrowDefs() {
+    if (document.getElementById("n8n-arrow-defs")) return;
+    var ns = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(ns, "svg");
+    svg.setAttribute("id", "n8n-arrow-defs");
+    svg.setAttribute("width", "0");
+    svg.setAttribute("height", "0");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.cssText = "position:absolute;width:0;height:0;overflow:hidden;pointer-events:none";
+    svg.innerHTML =
+      '<defs>' +
+      '<marker id="n8n-arrow" markerWidth="8" markerHeight="8" refX="6.2" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse">' +
+        '<path d="M0,0.6 L7,4 L0,7.4 Z" fill="#b3b9c7"></path></marker>' +
+      '<marker id="n8n-arrow-active" markerWidth="8" markerHeight="8" refX="6.2" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse">' +
+        '<path d="M0,0.6 L7,4 L0,7.4 Z" fill="#ea4b71"></path></marker>' +
+      '</defs>';
+    document.body.appendChild(svg);
+  }
+
   // flache Liste aller Kapitel (für prev/next & Suche)
   var flat = [];
   BOOK.parts.forEach(function (p) {
@@ -114,6 +137,7 @@
     app.appendChild(s);
   }
 
+  injectArrowDefs();
   buildSidebar();
   buildBar();
   buildPrevNext();

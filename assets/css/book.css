@@ -354,6 +354,25 @@ ol.steps > li p { font-size: 15.5px; }
   #app.nav-open #sidebar { box-shadow: 2px 0 0 rgba(0,0,0,.15); }
 }
 
+/* ---------- Canvas-Diagramme auf kleinen Screens ------------------------
+   Nodes sind in festen Pixeln positioniert. Statt sie zu stauchen oder
+   abzuschneiden, lassen wir Diagramm-Flächen (nur die mit echtem Canvas)
+   auf schmalen Screens in Originalgröße horizontal scrollen. So bleiben
+   Proportionen, Bézier-Kurven und Pfeilspitzen exakt n8n-getreu.
+   (NDV-/Panel-Abbildungen sind separat responsiv und bleiben gestapelt.) */
+@media (max-width: 840px) {
+  .figure .frame:has(.n8n-canvas) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    scrollbar-width: thin;
+  }
+  .figure .frame:has(.n8n-canvas) > .n8n { min-width: 840px; }
+  /* dezenter Hinweis, dass man wischen kann */
+  .figure .frame:has(.n8n-canvas)::-webkit-scrollbar { height: 6px; }
+  .figure .frame:has(.n8n-canvas)::-webkit-scrollbar-thumb { background: #c4c9d4; border-radius: 6px; }
+}
+
 /* Druck / PDF-Export */
 @media print {
   #sidebar, #bookbar, #prevnext, .sb-toggle { display:none !important; }
