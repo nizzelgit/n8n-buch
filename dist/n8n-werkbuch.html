@@ -858,10 +858,10 @@ ol.steps > li p { font-size: 15.5px; }
       </a><a class="sb-link" data-title="kernkonzepte: nodes, items & datenfluss"
       href="#05-kernkonzepte" data-slug="05-kernkonzepte">
       <span class="num">5</span><span>Kernkonzepte: Nodes, Items & Datenfluss</span>
-      </a><a class="sb-link is-soon" data-title="expressions & der ausdruckseditor"
-      href="javascript:void(0)" data-slug="06-expressions">
+      </a><a class="sb-link" data-title="expressions & der ausdruckseditor"
+      href="#06-expressions" data-slug="06-expressions">
       <span class="num">6</span><span>Expressions & der Ausdruckseditor</span>
-      <span class="soon">bald</span></a><div class="sb-part">Teil 2 · Bausteine im Detail</div><a class="sb-link is-soon" data-title="trigger-nodes (manual, schedule, webhook)"
+      </a><div class="sb-part">Teil 2 · Bausteine im Detail</div><a class="sb-link is-soon" data-title="trigger-nodes (manual, schedule, webhook)"
       href="javascript:void(0)" data-slug="07-trigger">
       <span class="num">7</span><span>Trigger-Nodes (Manual, Schedule, Webhook)</span>
       <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="der http-request-node: jede api ansprechen"
@@ -962,10 +962,10 @@ ol.steps > li p { font-size: 15.5px; }
       <span class="pill">lesen</span></a><a class="toc-row" href="#05-kernkonzepte">
       <span class="n">5</span><span class="ti">Kernkonzepte: Nodes, Items & Datenfluss</span>
       <span class="mins">⏱ 24 Min</span>
-      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#06-expressions">
       <span class="n">6</span><span class="ti">Expressions & der Ausdruckseditor</span>
-      <span class="mins">⏱ 20 Min</span>
-      <span class="pill">bald</span></a></div></div><div class="toc-part"><h3>Teil 2 · Bausteine im Detail</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="mins">⏱ 26 Min</span>
+      <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Teil 2 · Bausteine im Detail</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
       <span class="n">7</span><span class="ti">Trigger-Nodes (Manual, Schedule, Webhook)</span>
       <span class="mins">⏱ 18 Min</span>
       <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
@@ -2643,12 +2643,386 @@ docker run -it --rm <span class="ky">\</span>
 
     </article>
       <nav class="pn-wrap" data-slug="05-kernkonzepte"></nav></section>
+<section class="page" id="06-expressions" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">6</span> Grundlagen</div>
+      <h1 class="chap-title">Expressions & der Ausdruckseditor</h1>
+      <p class="chap-lede">Expressions sind die Brücke zwischen „ich habe Daten“ und „ich brauche genau diesen Wert
+        in genau dieser Form“. In diesem Kapitel lernst du die wenigen Muster, die du ständig brauchst:
+        Felder lesen, Texte bauen, rechnen, Datum formatieren, Bedingungen schreiben und Fehler erkennen.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 26 Minuten</span>
+        <span>🎯 Niveau: Einstieg → Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 5 (Items & JSON)</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>Du weißt, was ein Item ist und wie JSON-Felder verschachtelt sind.</li>
+          <li>Du hast den Wetter-Workflow aus Kapitel 4 oder einen ähnlichen Test-Workflow offen.</li>
+          <li>Du brauchst keine JavaScript-Vorkenntnisse. Wir verwenden nur kleine, wiederholbare Bausteine.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die 80/20-Regel für Expressions</b>
+        Lerne zuerst diese fünf Formen: <code>{{ $json.feld }}</code>,
+        <code>{{ $json.objekt.feld }}</code>, <code>{{ $('Node').item.json.feld }}</code>,
+        <code>{{ $json.zahl + 1 }}</code> und <code>{{ bedingung ? "ja" : "nein" }}</code>.
+        Damit löst du den Großteil realer n8n-Probleme.
+      </div>
+
+      <h2>Was eine Expression wirklich ist</h2>
+      <p>Eine Expression ist ein kurzer Ausdruck, den n8n erst zur Laufzeit auswertet. Du schreibst also nicht den
+        fertigen Wert hinein, sondern eine Anweisung, wie n8n den Wert aus den aktuellen Daten berechnen soll.</p>
+
+      <table class="btable">
+        <thead><tr><th>Du schreibst</th><th>n8n setzt beim Ausführen ein</th></tr></thead>
+        <tbody>
+          <tr><td><code>Hallo {{ $json.name }}</code></td><td><code>Hallo Anna</code></td></tr>
+          <tr><td><code>{{ $json.preis * 1.19 }}</code></td><td>Preis inklusive 19 % Steuer</td></tr>
+          <tr><td><code>{{ $json.temperatur > 25 ? "warm" : "normal" }}</code></td><td><code>warm</code> oder <code>normal</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Fest vs. Expression</b>
+        Ein Feld im Modus <strong>Fest</strong> nimmt deinen Text wörtlich. Ein Feld im Modus
+        <strong>Expression</strong> wertet <code>{{ ... }}</code> aus. Wenn im Ergebnis die Klammern sichtbar bleiben,
+        ist fast immer der falsche Modus aktiv.
+      </div>
+
+      <h2>Den Ausdruckseditor öffnen</h2>
+      <p>Wir üben im <strong>Edit Fields (Set)</strong>-Node, weil dort das Prinzip am saubersten sichtbar ist:
+        links kommen Daten hinein, in der Mitte formulierst du den Ausdruck, rechts siehst du sofort das Ergebnis.</p>
+
+      <ol class="steps">
+        <li><h4>Workflow mit Testdaten öffnen</h4>
+          <p>Öffne den Wetter-Workflow aus Kapitel 4. Falls du ihn nicht hast, reicht jeder Workflow, bei dem ein Node
+            im Eingang mindestens ein JSON-Feld liefert.</p></li>
+        <li><h4>Edit-Fields-Node öffnen</h4>
+          <p>Doppelklicke den Node, in dem du ein Feld setzt oder umbenennst. Die große Detailansicht öffnet sich.</p></li>
+        <li><h4>Ein Wert-Feld auf Expression stellen</h4>
+          <p>Klicke über dem Wert-Feld auf <strong>Expression</strong>. Das Feld wird leicht hervorgehoben; n8n zeigt
+            meist zusätzlich eine Vorschau des ausgewerteten Ergebnisses.</p></li>
+        <li><h4>Schema links sichtbar machen</h4>
+          <p>Wechsle in der linken Spalte auf <strong>Schema</strong>. Dort stehen die Feldnamen, die du verwenden kannst.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">✏️</span><b>Edit Fields (Set)</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-viewtabs"><b>Tabelle</b><b>JSON</b><b class="is-active">Schema</b></div>
+                  <div class="n8n-schema" style="margin-top:10px;">
+                    <div class="field"><span class="dot"></span>city <span class="type">string</span></div>
+                    <div class="field"><span class="dot"></span>current.temperature_2m <span class="type">number</span></div>
+                    <div class="field"><span class="dot"></span>current.wind_speed_10m <span class="type">number</span></div>
+                    <div class="field"><span class="dot"></span>current.time <span class="type">string</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="ndv-panel ndv-params">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Feldname</label><input class="n8n-input" value="bericht"></div>
+                  <div class="row">
+                    <label>Wert</label>
+                    <div class="ndv-fxtab"><b>Fest</b><b class="is-active">Expression</b></div>
+                    <input class="n8n-input is-expr" value="{{ $json.city }}: {{ $json.current.temperature_2m }} °C">
+                  </div>
+                </div>
+              </div>
+              <div class="ndv-panel">
+                <div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-json">{
+  <span class="k">"bericht"</span>: <span class="s">"Berlin: 17.4 °C"</span>
+}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 6.1</span>Links siehst du die verfügbaren Felder, in der Mitte steht die
+          Expression, rechts das berechnete Ergebnis. Dieses Dreieck ist dein Arbeitsmodus.</figcaption>
+      </figure>
+
+      <h2>Muster 1 — Felder sicher lesen</h2>
+      <p>Der häufigste Ausdruck ist ein Pfad durch JSON. Lies ihn immer von links nach rechts:
+        <code>$json</code> ist das aktuelle Item, danach folgt der Feldpfad.</p>
+
+      <table class="btable">
+        <thead><tr><th>Datenstruktur</th><th>Expression</th><th>Ergebnis</th></tr></thead>
+        <tbody>
+          <tr><td><code>{ "name": "Anna" }</code></td><td><code>{{ $json.name }}</code></td><td><code>Anna</code></td></tr>
+          <tr><td><code>{ "adresse": { "stadt": "Köln" } }</code></td><td><code>{{ $json.adresse.stadt }}</code></td><td><code>Köln</code></td></tr>
+          <tr><td><code>{ "tags": ["neu", "wichtig"] }</code></td><td><code>{{ $json.tags[0] }}</code></td><td><code>neu</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>Ergebnis ist leer oder <code>undefined</code>?</strong> Der Pfad stimmt nicht oder das Feld fehlt in diesem Item.</p>
+        <p style="margin:0">• <strong>Liste liefert den falschen Wert?</strong> Arrays zählen ab 0. Das erste Element ist <code>[0]</code>, nicht <code>[1]</code>.</p>
+      </div>
+
+      <h2>Muster 2 — Felder mit Sonderzeichen lesen</h2>
+      <p>Manche APIs liefern Feldnamen mit Leerzeichen, Bindestrichen oder Punkten im Namen. Dann funktioniert die
+        Punkt-Schreibweise nicht zuverlässig. Nimm eckige Klammern:</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Robuste Schreibweise für schwierige Feldnamen</div>
+<pre>{{ $json["customer-name"] }}
+{{ $json["E-Mail Adresse"] }}
+{{ $json["preis.brutto"] }}</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Skeptische Faustregel</b>
+        Wenn ein Feldname nicht wie ein sauberer Variablenname aussieht, verwende
+        <code>$json["feldname"]</code>. Das ist etwas länger, aber eindeutig.
+      </div>
+
+      <h2>Muster 3 — Texte bauen</h2>
+      <p>In vielen Workflows erzeugst du Nachrichten: E-Mail-Betreff, Slack-Text, Dateiname, Log-Zeile. Dafür darfst du
+        normalen Text und Expressions mischen.</p>
+
+      <ol class="steps">
+        <li><h4>Neues Feld anlegen</h4>
+          <p>Lege im Edit-Fields-Node ein Feld <code>meldung</code> an.</p></li>
+        <li><h4>Wert auf Expression stellen</h4>
+          <p>Schalte das Wert-Feld auf <strong>Expression</strong>.</p></li>
+        <li><h4>Text mit Platzhaltern schreiben</h4>
+          <p>Trage diesen Ausdruck ein:</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Text mit dynamischen Werten</div>
+<pre>Hallo {{ $json.name }}, dein Termin ist am {{ $json.datum }} um {{ $json.uhrzeit }} Uhr.</pre>
+      </div>
+
+      <p>Wenn du lieber alles in einer einzigen JavaScript-Zeichenkette formulierst, geht das auch. Für Einsteiger:innen
+        ist die gemischte Schreibweise oben meist lesbarer.</p>
+
+      <h2>Muster 4 — Zahlen rechnen und runden</h2>
+      <p>Expressions können rechnen. Das ist praktisch für Preise, Prozentwerte, Temperaturen, Mengen oder Scores.</p>
+
+      <table class="btable">
+        <thead><tr><th>Ziel</th><th>Expression</th></tr></thead>
+        <tbody>
+          <tr><td>19 % Mehrwertsteuer addieren</td><td><code>{{ $json.netto * 1.19 }}</code></td></tr>
+          <tr><td>Auf zwei Nachkommastellen runden</td><td><code>{{ ($json.netto * 1.19).toFixed(2) }}</code></td></tr>
+          <tr><td>Temperatur ohne Nachkommastelle</td><td><code>{{ Math.round($json.current.temperature_2m) }}</code></td></tr>
+          <tr><td>Prozentwert berechnen</td><td><code>{{ Math.round(($json.teil / $json.gesamt) * 100) }}</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn Zahlen plötzlich Texte sind</b>
+        <code>toFixed(2)</code> gibt Text zurück, nicht eine echte Zahl. Für E-Mails ist das perfekt. Für weitere
+        Berechnungen ist es besser, erst ganz am Ende zu formatieren.
+      </div>
+
+      <h2>Muster 5 — Einfache Bedingungen</h2>
+      <p>Die Kurzform für „wenn, dann, sonst“ heißt ternärer Operator. Sie sieht am Anfang sperrig aus, ist aber
+        extrem nützlich:</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Bedingung: Frage ? Wert-wenn-ja : Wert-wenn-nein</div>
+<pre>{{ $json.current.temperature_2m > 25 ? "warm" : "normal" }}</pre>
+      </div>
+
+      <table class="btable">
+        <thead><tr><th>Frage</th><th>Expression</th></tr></thead>
+        <tbody>
+          <tr><td>Ist die Bestellung teuer?</td><td><code>{{ $json.total > 500 ? "prüfen" : "normal" }}</code></td></tr>
+          <tr><td>Ist eine E-Mail vorhanden?</td><td><code>{{ $json.email ? $json.email : "keine E-Mail" }}</code></td></tr>
+          <tr><td>Ist Wind stark?</td><td><code>{{ $json.current.wind_speed_10m >= 40 ? "Warnung" : "OK" }}</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Nicht alles in Expressions pressen</b>
+        Eine kleine Bedingung im Textfeld ist gut. Sobald die Logik mehrere Fälle hat, nimm lieber einen
+        <strong>IF</strong>- oder <strong>Switch</strong>-Node. Das ist sichtbarer, testbarer und für spätere Leser:innen
+        leichter zu prüfen.
+      </div>
+
+      <h2>Muster 6 — Fehlende Werte abfangen</h2>
+      <p>APIs sind unordentlich: Manche Felder fehlen, manche sind leer. Dafür ist der Nullish-Coalescing-Operator
+        <code>??</code> nützlich: „Nimm diesen Wert; falls er fehlt, nimm den Ersatz.“</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Ersatzwerte</div>
+<pre>{{ $json.name ?? "unbekannt" }}
+{{ $json.adresse?.stadt ?? "keine Stadt angegeben" }}
+{{ $json.current?.temperature_2m ?? "keine Temperatur" }}</pre>
+      </div>
+
+      <p>Das Fragezeichen in <code>adresse?.stadt</code> verhindert einen Fehler, wenn <code>adresse</code> gar nicht existiert.
+        n8n versucht dann nicht blind, in einem fehlenden Objekt weiterzusuchen.</p>
+
+      <h2>Muster 7 — Datum und Uhrzeit</h2>
+      <p>n8n stellt Datumswerte bereit, unter anderem <code>$now</code> für den aktuellen Zeitpunkt. Für viele Workflows
+        reicht es, Datum als lesbaren Text zu erzeugen oder einen Dateinamen daraus zu bauen.</p>
+
+      <table class="btable">
+        <thead><tr><th>Ziel</th><th>Expression</th></tr></thead>
+        <tbody>
+          <tr><td>Aktueller Zeitpunkt</td><td><code>{{ $now }}</code></td></tr>
+          <tr><td>ISO-Datum für Dateinamen</td><td><code>{{ $now.toFormat("yyyy-LL-dd") }}</code></td></tr>
+          <tr><td>Deutsches Datum</td><td><code>{{ $now.toFormat("dd.LL.yyyy") }}</code></td></tr>
+          <tr><td>Morgen</td><td><code>{{ $now.plus({ days: 1 }).toFormat("dd.LL.yyyy") }}</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Zeitzonen nüchtern behandeln</b>
+        Datumswerte sind fehleranfällig, weil Server, APIs und Nutzer:innen unterschiedliche Zeitzonen haben können.
+        Wenn ein Workflow zeitkritisch ist, teste ausdrücklich mit echten Randfällen: kurz vor Mitternacht, Monatsende,
+        Sommerzeitwechsel.
+      </div>
+
+      <h2>Auf einen früheren Node zugreifen</h2>
+      <p><code>$json</code> ist bequem, aber kurzsichtig: Es meint das aktuelle Item aus dem direkten Eingang. Wenn du
+        einen Wert aus einem benannten früheren Node brauchst, verwende <code>$('Node-Name')</code>.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 820 300" preserveAspectRatio="none">
+                <path d="M 178 140 C 245 140, 260 140, 318 140"></path>
+                <path d="M 410 140 C 480 140, 492 140, 550 140"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:94px;">
+                <span class="n8n-node__icon">🔗</span><span class="ep out"></span>
+                <span class="n8n-node__label">Webhook</span><span class="items">1 Item</span></div>
+              <div class="n8n-node" style="left:318px; top:94px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Kundendaten holen</span><span class="items">1 Item</span></div>
+              <div class="n8n-node n8n-node--code" style="left:550px; top:94px;">
+                <span class="n8n-node__icon">✉️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Nachricht bauen</span><span class="items">1 Item</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 6.2</span>Im letzten Node ist <code>$json</code> die Ausgabe von
+          <b>Kundendaten holen</b>. Für Daten aus <b>Webhook</b> brauchst du den Node-Namen.</figcaption>
+      </figure>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Zugriff auf frühere Nodes</div>
+<pre>{{ $('Webhook').item.json.email }}
+{{ $('Kundendaten holen').item.json.company.name }}</pre>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der Node-Name geändert wurde</b>
+        Expressions mit <code>$('Alter Name')</code> hängen am Namen. Benenne wichtige Nodes früh sinnvoll und ändere
+        die Namen später nur bewusst. Sonst brechen Zugriffe leise oder sichtbar.
+      </div>
+
+      <h2>Mini-Übung — Wettertext robuster machen</h2>
+      <p>Jetzt bauen wir aus den Mustern eine kleine, echte Verbesserung. Der Wettertext soll gerundet werden und bei
+        starkem Wind eine Warnung enthalten.</p>
+
+      <ol class="steps">
+        <li><h4>Edit-Fields-Node öffnen</h4>
+          <p>Öffne im Wetter-Workflow den Node, der das Feld <code>nachricht</code> erzeugt.</p></li>
+        <li><h4>Wert-Feld auf Expression stellen</h4>
+          <p>Falls der Reiter noch auf <strong>Fest</strong> steht, schalte auf <strong>Expression</strong>.</p></li>
+        <li><h4>Alten Text ersetzen</h4>
+          <p>Ersetze den bisherigen Wert vollständig durch diesen Ausdruck:</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Robustere Wetter-Nachricht</div>
+<pre>In Berlin sind es gerade {{ Math.round($json.current.temperature_2m) }} °C. {{
+  $json.current.wind_speed_10m >= 40
+    ? "Achtung: starker Wind."
+    : "Der Wind ist unauffällig."
+}}</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 3;">
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke auf <strong>▶ Schritt ausführen</strong>. Rechts sollte ein gut lesbarer Satz erscheinen.</p></li>
+        <li><h4>Ergebnis prüfen</h4>
+          <p>Kontrolliere, ob die Temperatur gerundet ist und ob die Wind-Bedingung zum Wert im Eingang passt.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum prüfen?</b>
+        Expressions sind klein, aber nicht harmlos. Eine falsche Bedingung kann später E-Mails falsch routen,
+        Warnungen unterdrücken oder Daten überschreiben. Teste die Logik mit mindestens einem Normalfall und einem
+        Grenzfall.
+      </div>
+
+      <h2>Fehler lesen: die vier typischen Ursachen</h2>
+      <p>Wenn eine Expression nicht funktioniert, ist selten „n8n kaputt“. Meist ist es einer dieser Fälle:</p>
+
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Prüfung</th></tr></thead>
+        <tbody>
+          <tr><td><code>undefined</code></td><td>Feldpfad falsch oder Feld fehlt</td><td>Schema-Ansicht links öffnen</td></tr>
+          <tr><td><code>{{ ... }}</code> bleibt sichtbar</td><td>Feld steht auf Fest</td><td>Reiter auf Expression stellen</td></tr>
+          <tr><td>Syntaxfehler</td><td>Klammer, Anführungszeichen oder <code>?</code>/<code>:</code> fehlt</td><td>Ausdruck stark vereinfachen</td></tr>
+          <tr><td>Falscher Wert aus altem Node</td><td>Node-Name oder Item-Bezug falsch</td><td><code>$json</code> vs. <code>$('Node')</code> prüfen</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Debugging-Methode</b>
+        Reduziere die Expression auf den kleinsten prüfbaren Teil. Erst <code>{{ $json.current }}</code>,
+        dann <code>{{ $json.current.temperature_2m }}</code>, dann erst Rundung, Text und Bedingungen.
+        So findest du den Fehler ohne Raten.
+      </div>
+
+      <h2>Was du in diesem Kapitel gelernt hast</h2>
+      <ul>
+        <li>Den Unterschied zwischen <strong>Fest</strong> und <strong>Expression</strong> sicher zu erkennen.</li>
+        <li>Felder über <code>$json</code>, verschachtelte Pfade und eckige Klammern zu lesen.</li>
+        <li>Texte, Zahlen, Rundungen, Ersatzwerte und einfache Bedingungen zu formulieren.</li>
+        <li>Mit <code>$('Node-Name').item.json...</code> auf frühere Nodes zuzugreifen.</li>
+        <li>Expression-Fehler systematisch zu verkleinern statt blind herumzuprobieren.</li>
+      </ul>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Was ist der Unterschied zwischen <code>{{ $json.email }}</code> und <code>{{ $('Webhook').item.json.email }}</code>?</li>
+          <li>Wie liest du ein Feld namens <code>customer-name</code>?</li>
+          <li>Warum ist <code>{{ $json.tags[0] }}</code> das erste Element?</li>
+          <li>Wann würdest du statt einer Expression lieber einen IF-Node verwenden?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) <code>$json</code> liest aus dem direkten Eingang, <code>$('Webhook')</code> aus einem benannten Node.
+        2) <code>{{ $json["customer-name"] }}</code>. 3) Arrays zählen ab 0. 4) Sobald die Logik sichtbar verzweigen,
+        mehrere Fälle unterscheiden oder später leicht geprüft werden soll.
+      </div>
+
+      <p>Damit ist der Grundlagenblock geschlossen: Du kannst Daten holen, lesen, umformen und dynamisch einsetzen.
+        Ab dem nächsten Teil schauen wir die wichtigsten Bausteine einzeln an — zuerst Trigger, weil sie entscheiden,
+        <em>wann</em> ein Workflow überhaupt startet.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="06-expressions"></nav></section>
 
   </div>
 </div>
 <script>
-var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte"];
-var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"soon"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
+var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions"];
+var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
 
 function show(slug) {
   if (!slug || READY.indexOf(slug) === -1 && slug !== "home") slug = "home";

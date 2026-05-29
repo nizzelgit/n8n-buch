@@ -24,7 +24,7 @@ window.BOOK = {
         { num: "3", slug: "03-oberflaeche",     title: "Die Oberfläche im Detail", status: "ready", mins: 22 },
         { num: "4", slug: "04-erster-workflow", title: "Dein erster Workflow — Schritt für Schritt", status: "ready", mins: 25 },
         { num: "5", slug: "05-kernkonzepte",    title: "Kernkonzepte: Nodes, Items & Datenfluss", status: "ready", mins: 24 },
-        { num: "6", slug: "06-expressions",     title: "Expressions & der Ausdruckseditor", status: "soon", mins: 20 }
+        { num: "6", slug: "06-expressions",     title: "Expressions & der Ausdruckseditor", status: "ready", mins: 26 }
       ]
     },
     {

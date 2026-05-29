@@ -35,7 +35,8 @@ n8n-buch/
 │   ├── 02-installation.html
 │   ├── 03-oberflaeche.html     # Oberflächen-Tour (visuell sehr dicht)
 │   ├── 04-erster-workflow.html # erstes Projekt, klick-für-klick
-│   └── 05-kernkonzepte.html    # Items, JSON, Datenfluss, Expressions
+│   ├── 05-kernkonzepte.html    # Items, JSON, Datenfluss, Expressions
+│   └── 06-expressions.html     # Expressions & Ausdruckseditor
 └── assets/
     ├── css/
     │   ├── book.css            # Layout, Typografie, didaktische Elemente
@@ -51,9 +52,9 @@ Das vollständige Inhaltsverzeichnis (25+ Kapitel über 6 Teile) lebt in
 `assets/js/chapters.js`. Aktueller Ausbaustand:
 
 - **Fertig (Teil 0 & Grundlagen):** Vorwort, das 80/20-Kapitel, Was ist n8n,
-  Installation, Oberfläche im Detail, erster Workflow, Kernkonzepte.
-- **Geplant (markiert „bald“):** Expressions vertieft, alle Bausteine im Detail,
-  sechs wachsende Praxis-Projekte, KI-Agenten & RAG, Betrieb/Skalierung sowie Anhänge.
+  Installation, Oberfläche im Detail, erster Workflow, Kernkonzepte, Expressions vertieft.
+- **Geplant (markiert „bald“):** alle Bausteine im Detail, sechs wachsende Praxis-Projekte,
+  KI-Agenten & RAG, Betrieb/Skalierung sowie Anhänge.
 
 ## Neue Kapitel hinzufügen
 

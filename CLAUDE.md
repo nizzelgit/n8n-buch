@@ -43,7 +43,8 @@ n8n-buch/
 │   ├── 02-installation.html
 │   ├── 03-oberflaeche.html
 │   ├── 04-erster-workflow.html
-│   └── 05-kernkonzepte.html
+│   ├── 05-kernkonzepte.html
+│   └── 06-expressions.html
 ├── assets/
 │   ├── css/
 │   │   ├── book.css            # Layout, Typografie, didaktische Bausteine, Responsiv
@@ -197,11 +198,12 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `03-oberflaeche` — Oberflächen-Tour (visuell dicht)
 - `04-erster-workflow` — **Referenzkapitel für den Detailgrad** (47 Einzelschritte)
 - `05-kernkonzepte` — Items, JSON, Datenfluss, Expressions-Einstieg
+- `06-expressions` — Expressions vertieft: Pfade, Texte, Zahlen, Bedingungen, Datum, Debugging
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `06-expressions` — Expressions vertieft (logischer nächster Schritt nach Kap. 5)
+1. `07-trigger` — Trigger-Nodes (Manual, Schedule, Webhook)
 2. `13-projekt-wetter` — erstes vollständiges Projekt (großer Praxis-Sprung)
-3. danach Bausteine 07–12, weitere Projekte 14–19, KI 20–21, Betrieb 22–25, Anhänge A–D
+3. danach Bausteine 08–12, weitere Projekte 14–19, KI 20–21, Betrieb 22–25, Anhänge A–D
 
 **Beim Ausbau zwingend:** Detailgrad + Didaktik-Bausteine aus Abschnitt 5 einhalten, danach
 `node build.js`, dann **diese Datei (Abschnitt 10 + 11) aktualisieren**, dann committen/pushen.
@@ -209,6 +211,13 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 ---
 
 ## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 — Kapitel 6 Expressions ergänzt
+- `06-expressions` angelegt und im Manifest auf `ready` gesetzt.
+- Inhalte: Ausdruckseditor, `Fest` vs. `Expression`, `$json`-Pfade, Sonderfeldnamen, Textbau,
+  Zahlen/Rundung, Bedingungen, Ersatzwerte, Datum, Zugriff auf frühere Nodes und Debugging-Methode.
+- Als Nächstes sinnvoll: `07-trigger` als Baustein-Kapitel; alternativ `13-projekt-wetter`, wenn der
+  Fokus stärker auf Praxisprojekten liegen soll.
 
 ### 2026-05-29 — main-Branch angelegt, Branches synchron, Pages-Trigger erweitert
 - Ursache „keine Commits“ in frischer Session: es gab nur den Feature-Branch, **kein `main`**.
