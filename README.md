@@ -45,7 +45,8 @@ n8n-buch/
 │   ├── 12-credentials.html     # Credentials & Authentifizierung
 │   ├── 13-projekt-wetter.html  # Projekt: Wetter-Report per Telegram
 │   ├── 14-projekt-form.html    # Projekt: Formular → Sheets → Slack
-│   └── 15-projekt-news.html    # Projekt: News-Aggregator mit Filter
+│   ├── 15-projekt-news.html    # Projekt: News-Aggregator mit Filter
+│   └── 16-projekt-leads.html   # Projekt: Lead-Routing ins CRM
 └── assets/
     ├── css/
     │   ├── book.css            # Layout, Typografie, didaktische Elemente
@@ -60,7 +61,7 @@ n8n-buch/
 Das vollständige Inhaltsverzeichnis (25+ Kapitel über 6 Teile) lebt in
 `assets/js/chapters.js`. Aktueller Ausbaustand:
 
-- **Fertig:** Teil 0, Teil 1, Teil 2 sowie Projekt 1–3.
+- **Fertig:** Teil 0, Teil 1, Teil 2 sowie Projekt 1–4.
 - **Geplant (markiert „bald“):** weitere Praxis-Projekte, KI-Agenten & RAG,
   Betrieb/Skalierung sowie Anhänge.
 

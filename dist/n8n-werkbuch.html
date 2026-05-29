@@ -957,10 +957,10 @@ ol.steps > li p { font-size: 15.5px; }
       </a><a class="sb-link" data-title="projekt 3: news-aggregator mit filter"
       href="#15-projekt-news" data-slug="15-projekt-news">
       <span class="num">15</span><span>Projekt 3: News-Aggregator mit Filter</span>
-      </a><a class="sb-link is-soon" data-title="projekt 4: lead-routing vom webhook ins crm"
-      href="javascript:void(0)" data-slug="16-projekt-leads">
+      </a><a class="sb-link" data-title="projekt 4: lead-routing vom webhook ins crm"
+      href="#16-projekt-leads" data-slug="16-projekt-leads">
       <span class="num">16</span><span>Projekt 4: Lead-Routing vom Webhook ins CRM</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="projekt 5: ki-e-mail-assistent (ai agent)"
+      </a><a class="sb-link is-soon" data-title="projekt 5: ki-e-mail-assistent (ai agent)"
       href="javascript:void(0)" data-slug="17-projekt-ai">
       <span class="num">17</span><span>Projekt 5: KI-E-Mail-Assistent (AI Agent)</span>
       <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="projekt 6: pdf-/rechnungs-extraktion"
@@ -1061,10 +1061,10 @@ ol.steps > li p { font-size: 15.5px; }
       <span class="pill">lesen</span></a><a class="toc-row" href="#15-projekt-news">
       <span class="n">15</span><span class="ti">Projekt 3: News-Aggregator mit Filter</span>
       <span class="mins">⏱ 40 Min</span>
-      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#16-projekt-leads">
       <span class="n">16</span><span class="ti">Projekt 4: Lead-Routing vom Webhook ins CRM</span>
-      <span class="mins">⏱ 40 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="mins">⏱ 45 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
       <span class="n">17</span><span class="ti">Projekt 5: KI-E-Mail-Assistent (AI Agent)</span>
       <span class="mins">⏱ 45 Min</span>
       <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
@@ -5752,12 +5752,461 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
 
     </article>
       <nav class="pn-wrap" data-slug="15-projekt-news"></nav></section>
+<section class="page" id="16-projekt-leads" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">16</span> Projekt 4</div>
+      <h1 class="chap-title">Lead-Routing vom Webhook ins CRM</h1>
+      <p class="chap-lede">In diesem Projekt nimmt n8n neue Leads per Webhook entgegen, bereinigt die Daten, entscheidet
+        anhand einfacher Regeln über die Zuständigkeit und legt den Kontakt im CRM an. Danach bekommt das passende Team
+        eine Nachricht. Das ist der erste Workflow in diesem Buch, der wie ein kleiner Geschäftsprozess funktioniert.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 45 Minuten</span>
+        <span>🎯 Niveau: Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 7–12, 14</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>n8n ist von außen erreichbar, damit ein Webhook aufgerufen werden kann.</li>
+          <li>Ein CRM-Testbereich, z. B. HubSpot, Pipedrive oder ein eigenes Test-CRM. Alternativ nutzt du Google Sheets als Fallback.</li>
+          <li>Eine Slack-Credential oder eine andere Team-Benachrichtigung.</li>
+          <li>Nur Testdaten. Keine echten Leads, bevor der Workflow geprüft ist.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">CRM-Workflows sind nicht harmlos</b>
+        Ein falscher Workflow kann Kontakte doppelt anlegen, falschen Teams zuweisen oder sensible Daten breit verteilen.
+        Teste zuerst mit Testdaten und in einem Testkanal. Produktive Credentials kommen erst nach einem vollständigen Testlauf.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Ein Formular, eine Website oder ein anderes System ruft deinen Webhook auf. n8n macht daraus ein sauberes Lead-Objekt,
+        routet nach Budget und Thema, legt den Lead im CRM an und benachrichtigt das zuständige Team.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 980 380" preserveAspectRatio="none">
+                <path class="is-active" d="M 158 170 C 220 170, 240 170, 298 170"></path>
+                <path class="is-active" d="M 390 170 C 455 170, 470 170, 528 170"></path>
+                <path class="is-active" d="M 620 170 C 680 170, 700 95, 760 95"></path>
+                <path class="is-active" d="M 620 170 C 680 170, 700 245, 760 245"></path>
+                <path class="is-active" d="M 852 95 C 900 95, 910 135, 930 155"></path>
+                <path class="is-active" d="M 852 245 C 900 245, 910 205, 930 185"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:40px; top:124px;">
+                <span class="n8n-node__icon">🔗</span><span class="ep out"></span>
+                <span class="n8n-node__label">Webhook Lead</span><span class="items">1 Item</span></div>
+              <div class="n8n-node n8n-node--code" style="left:298px; top:124px;">
+                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Lead vorbereiten</span></div>
+              <div class="n8n-node" style="left:528px; top:124px;">
+                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="ep out" style="top:28px;"></span><span class="ep out" style="top:64px;"></span>
+                <span class="n8n-node__label">Routing</span></div>
+              <div class="n8n-node" style="left:760px; top:49px;">
+                <span class="n8n-node__icon">🏢</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">CRM Sales</span></div>
+              <div class="n8n-node" style="left:760px; top:199px;">
+                <span class="n8n-node__icon">🛟</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">CRM Support</span></div>
+              <div class="n8n-node" style="left:930px; top:139px;">
+                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Team melden</span><span class="badge badge--ok">✓</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 16.1</span>Vom Webhook ins CRM: Der Switch-Node verzweigt nach Regeln,
+          danach wird der zuständige Kanal informiert.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Das Muster</b>
+        Lead-Routing besteht aus vier Dingen: <strong>validieren</strong>, <strong>normalisieren</strong>,
+        <strong>entscheiden</strong>, <strong>anlegen &amp; melden</strong>. Wenn du diese Trennung sauber hältst, bleibt der
+        Workflow auch bei neuen Regeln verständlich.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 1 — Testdaten festlegen</h2>
+      <p>Bevor du Nodes baust, legst du fest, welche Daten der Webhook erwartet. Wir verwenden ein kleines JSON-Objekt:</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Test-Lead</div>
+<pre>{
+  <span class="pr">"name"</span>: <span class="st">"Mira Beispiel"</span>,
+  <span class="pr">"email"</span>: <span class="st">"mira@example.com"</span>,
+  <span class="pr">"company"</span>: <span class="st">"Beispiel GmbH"</span>,
+  <span class="pr">"topic"</span>: <span class="st">"sales"</span>,
+  <span class="pr">"budget"</span>: <span class="nm">12000</span>,
+  <span class="pr">"message"</span>: <span class="st">"Wir suchen eine Automatisierung für Angebotsprozesse."</span>
+}</pre>
+      </div>
+
+      <table class="btable">
+        <thead><tr><th>Feld</th><th>Bedeutung</th><th>Regel</th></tr></thead>
+        <tbody>
+          <tr><td><code>email</code></td><td>Kontaktadresse</td><td>muss vorhanden sein</td></tr>
+          <tr><td><code>topic</code></td><td>Anliegen</td><td><code>sales</code>, <code>support</code> oder <code>partner</code></td></tr>
+          <tr><td><code>budget</code></td><td>Budget in Euro</td><td>ab 10000 = hoher Sales-Lead</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Warum zuerst das Datenmodell?</b>
+        Ohne klares Eingangsformat baust du ins Blaue. Ein Webhook ist nur eine Tür. Entscheidend ist, welche Daten durch
+        diese Tür kommen dürfen.
+      </div>
+
+      <h2>Schritt 2 — Workflow und Webhook anlegen</h2>
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen neuen Workflow und nenne ihn <code>Lead-Routing ins CRM</code>.</p></li>
+        <li><h4>Webhook-Trigger hinzufügen</h4>
+          <p>Klicke auf das große <span class="kbd">+</span>, suche <code>webhook</code> und wähle <strong>Webhook</strong>.</p></li>
+        <li><h4>Methode setzen</h4>
+          <p>Setze <strong>HTTP Method</strong> auf <strong>POST</strong>. Leads werden mit Inhalt gesendet, deshalb POST.</p></li>
+        <li><h4>Pfad setzen</h4>
+          <p>Setze <strong>Path</strong> auf <code>lead-routing</code>.</p></li>
+        <li><h4>Antwort einstellen</h4>
+          <p>Stelle <strong>Respond</strong> auf <strong>Immediately</strong>. Für den Anfang reicht eine schnelle Standardantwort.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:620px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🔗</span><b>Webhook Lead</b><span class="ndv__exec-step">⦿ Listen for test event</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>HTTP Method</label><div class="n8n-select">POST <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Path</label><input class="n8n-input" value="lead-routing"></div>
+                  <div class="row"><label>Test URL</label><input class="n8n-input" value="https://dein-n8n/webhook-test/lead-routing"></div>
+                  <div class="row"><label>Production URL</label><input class="n8n-input" value="https://dein-n8n/webhook/lead-routing"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 16.2</span>POST-Webhook mit Test- und Production-URL. Zum Bauen verwendest du
+          ausschließlich die Test-URL.</figcaption>
+      </figure>
+
+      <h2>Schritt 3 — Webhook testen</h2>
+      <p>Ein POST-Webhook lässt sich nicht bequem durch bloßes Öffnen im Browser testen. Nutze ein Tool wie Postman,
+        Insomnia, curl oder den HTTP-Request-Node in einem separaten Test-Workflow.</p>
+
+      <ol class="steps">
+        <li><h4>Auf Test-Ereignis warten</h4>
+          <p>Klicke im Webhook-Node auf <strong>Listen for test event</strong>.</p></li>
+        <li><h4>Test-URL kopieren</h4>
+          <p>Kopiere die <strong>Test URL</strong>. Achte auf <code>/webhook-test/</code>.</p></li>
+        <li><h4>POST senden</h4>
+          <p>Sende das JSON aus Schritt 1 an diese URL. Header: <code>Content-Type: application/json</code>.</p></li>
+        <li><h4>Ausgang prüfen</h4>
+          <p>Im Ausgang des Webhook-Nodes sollte ein Item erscheinen. Die Daten liegen in der Regel unter <code>$json.body</code>.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der Webhook nichts empfängt</b>
+        Prüfe Methode und URL. Ein POST an die GET-URL oder ein Aufruf der Production-URL bei inaktivem Workflow führt
+        typischerweise zu 404 oder keinem Test-Item.
+      </div>
+
+      <h2>Schritt 4 — Lead normalisieren</h2>
+      <p>Wir bauen ein sauberes Lead-Objekt. Dabei prüfen wir Pflichtfelder grob, vereinheitlichen Schreibweisen und berechnen
+        eine Priorität.</p>
+
+      <ol class="steps">
+        <li><h4>Edit-Fields-Node anhängen</h4>
+          <p>Ziehe vom Webhook eine Linie ins Leere, suche <code>edit fields</code> und wähle <strong>Edit Fields (Set)</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne den Node <code>Lead vorbereiten</code>.</p></li>
+        <li><h4>Andere Eingangsfelder ausschalten</h4>
+          <p>Schalte <strong>Include Other Input Fields</strong> aus.</p></li>
+        <li><h4>Felder anlegen</h4>
+          <p>Lege folgende Felder an. Verwende <strong>Expression</strong>, wo eine Expression steht.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>Feld</th><th>Wert</th></tr></thead>
+        <tbody>
+          <tr><td><code>name</code></td><td><code>{{ $json.body.name ?? "Unbekannt" }}</code></td></tr>
+          <tr><td><code>email</code></td><td><code>{{ ($json.body.email ?? "").toLowerCase().trim() }}</code></td></tr>
+          <tr><td><code>company</code></td><td><code>{{ $json.body.company ?? "" }}</code></td></tr>
+          <tr><td><code>topic</code></td><td><code>{{ ($json.body.topic ?? "sales").toLowerCase() }}</code></td></tr>
+          <tr><td><code>budget</code></td><td><code>{{ Number($json.body.budget ?? 0) }}</code></td></tr>
+          <tr><td><code>priority</code></td><td><code>{{ Number($json.body.budget ?? 0) &gt;= 10000 ? "hoch" : "normal" }}</code></td></tr>
+          <tr><td><code>owner_team</code></td><td><code>{{ ($json.body.topic ?? "").toLowerCase() === "support" ? "Support" : "Sales" }}</code></td></tr>
+          <tr><td><code>message</code></td><td><code>{{ $json.body.message ?? "" }}</code></td></tr>
+          <tr><td><code>received_at</code></td><td><code>{{ $now.toFormat('yyyy-LL-dd HH:mm') }}</code></td></tr>
+        </tbody>
+      </table>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">✏️</span><b>Lead vorbereiten</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="n8n-json">{
+  <span class="k">"body"</span>: {
+    <span class="k">"email"</span>: <span class="s">"MIRA@EXAMPLE.COM"</span>,
+    <span class="k">"topic"</span>: <span class="s">"sales"</span>,
+    <span class="k">"budget"</span>: <span class="n">12000</span>
+  }
+}</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>String · email</label><input class="n8n-input is-expr" value="{{ ($json.body.email ?? '').toLowerCase().trim() }}"></div>
+                  <div class="row"><label>String · priority</label><input class="n8n-input is-expr" value="{{ Number($json.body.budget ?? 0) &gt;= 10000 ? 'hoch' : 'normal' }}"></div>
+                  <div class="row"><label>String · owner_team</label><input class="n8n-input is-expr" value="{{ ($json.body.topic ?? '').toLowerCase() === 'support' ? 'Support' : 'Sales' }}"></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <table class="n8n-table">
+                    <thead><tr><th>email</th><th>priority</th><th>owner_team</th></tr></thead>
+                    <tbody><tr><td>mira@example.com</td><td>hoch</td><td>Sales</td></tr></tbody>
+                  </table>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 16.3</span>Der Normalisierungs-Node macht aus rohen Webhook-Daten ein stabiles
+          Lead-Objekt.</figcaption>
+      </figure>
+
+      <h2>Schritt 5 — Pflichtfeld prüfen</h2>
+      <p>Ohne E-Mail-Adresse sollte kein CRM-Kontakt entstehen. Wir setzen deshalb einen IF-Node vor das CRM.</p>
+
+      <ol class="steps">
+        <li><h4>IF-Node anhängen</h4>
+          <p>Ziehe von <strong>Lead vorbereiten</strong> eine Linie ins Leere, suche <code>if</code> und wähle <strong>IF</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>E-Mail vorhanden?</code>.</p></li>
+        <li><h4>Bedingung setzen</h4>
+          <p>Prüfe, ob <code>{{ $json.email }}</code> <strong>is not empty</strong> ist.</p></li>
+        <li><h4>Testen</h4>
+          <p>Führe den Node aus. Der Test-Lead sollte über den <strong>true</strong>-Ausgang laufen.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Früh abbrechen</b>
+        Prüfe Pflichtfelder vor teuren oder sensiblen Aktionen. Ein fehlendes Feld ist kein CRM-Problem, sondern ein
+        Eingangsproblem.
+      </div>
+
+      <h2>Schritt 6 — Routing nach Team</h2>
+      <p>Jetzt verzweigen wir: Sales-Leads gehen an Sales, Support-Anfragen an Support. Dafür ist ein Switch-Node lesbarer
+        als verschachtelte IF-Nodes.</p>
+
+      <ol class="steps">
+        <li><h4>Switch-Node anhängen</h4>
+          <p>Ziehe vom <strong>true</strong>-Ausgang des IF-Nodes eine Linie ins Leere und wähle <strong>Switch</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Routing</code>.</p></li>
+        <li><h4>Expression setzen</h4>
+          <p>Als zu prüfenden Wert nimmst du <code>{{ $json.owner_team }}</code>.</p></li>
+        <li><h4>Regeln anlegen</h4>
+          <p>Regel 1: <code>Sales</code>. Regel 2: <code>Support</code>. Optional Default: Sales.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:620px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🔀</span><b>Routing</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Rules</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Value to check</label><input class="n8n-input is-expr" value="{{ $json.owner_team }}"></div>
+                  <div class="row"><label>Output 0</label><input class="n8n-input" value="equals Sales"></div>
+                  <div class="row"><label>Output 1</label><input class="n8n-input" value="equals Support"></div>
+                  <div class="row"><label>Fallback</label><div class="n8n-select">Send to first matching output <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 16.4</span>Der Switch-Node macht die Routing-Regeln sichtbar: Sales und Support
+          sind getrennte Ausgänge.</figcaption>
+      </figure>
+
+      <h2>Schritt 7 — CRM-Kontakt anlegen</h2>
+      <p>Jetzt folgt die CRM-Aktion. Wir beschreiben sie mit HubSpot-Begriffen; Pipedrive, Salesforce oder ein anderes CRM
+        funktionieren nach demselben Prinzip. Wenn du kein CRM testen willst, ersetze diesen Node durch Google Sheets.</p>
+
+      <ol class="steps">
+        <li><h4>CRM-Node an Sales-Ausgang hängen</h4>
+          <p>Ziehe vom Sales-Ausgang des Switch-Nodes eine Linie ins Leere und wähle deinen CRM-Node, z. B.
+            <strong>HubSpot</strong>.</p></li>
+        <li><h4>Aktion wählen</h4>
+          <p>Wähle <strong>Contact → Create</strong> oder <strong>Create or Update Contact</strong>. Letzteres ist sicherer gegen
+            Dubletten, falls dein CRM es anbietet.</p></li>
+        <li><h4>Credential auswählen</h4>
+          <p>Wähle deine CRM-Credential. Echte Tokens stehen nur dort, nicht im Workflow.</p></li>
+        <li><h4>Felder zuordnen</h4>
+          <p>Ordne <code>Email</code>, <code>First/Last Name</code> bzw. <code>Name</code>, <code>Company</code>, <code>Message</code>
+            und <code>Lead Source</code> zu.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Node mit Testdaten aus und prüfe im CRM, ob genau ein Testkontakt angelegt wurde.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>CRM-Feld</th><th>Expression</th></tr></thead>
+        <tbody>
+          <tr><td>Email</td><td><code>{{ $json.email }}</code></td></tr>
+          <tr><td>Name</td><td><code>{{ $json.name }}</code></td></tr>
+          <tr><td>Company</td><td><code>{{ $json.company }}</code></td></tr>
+          <tr><td>Lead Status</td><td><code>new</code></td></tr>
+          <tr><td>Lead Source</td><td><code>n8n webhook</code></td></tr>
+          <tr><td>Owner/Team</td><td><code>{{ $json.owner_team }}</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">Dubletten skeptisch behandeln</b>
+        „Create Contact“ kann denselben Kontakt mehrfach anlegen. Wenn dein CRM einen Upsert, Search-before-create oder
+        „Create or Update“-Modus hat, nutze ihn. Sonst baust du später vor dem Create-Node eine Suche nach E-Mail ein.
+      </div>
+
+      <h2>Schritt 8 — Support-Zweig bauen</h2>
+      <p>Für Support-Anfragen willst du vielleicht keinen Sales-Kontakt, sondern ein Ticket. Falls dein CRM Tickets kennt,
+        nutzt du im Support-Zweig <strong>Create Ticket</strong>. Wenn nicht, nutze denselben Kontakt-Node mit anderem Status.</p>
+
+      <ol class="steps">
+        <li><h4>CRM-Node an Support-Ausgang hängen</h4>
+          <p>Ziehe vom Support-Ausgang des Switch-Nodes eine Linie ins Leere und wähle den CRM-Node.</p></li>
+        <li><h4>Ticket oder Kontakt wählen</h4>
+          <p>Wähle <strong>Create Ticket</strong>, falls verfügbar. Sonst <strong>Create or Update Contact</strong> mit Status
+            <code>support_requested</code>.</p></li>
+        <li><h4>Felder mappen</h4>
+          <p>Nutze dieselben normalisierten Felder: <code>email</code>, <code>name</code>, <code>company</code>,
+            <code>message</code>.</p></li>
+        <li><h4>Testen</h4>
+          <p>Sende einen zweiten Webhook-Test mit <code>"topic": "support"</code>. Er sollte in den Support-Zweig laufen.</p></li>
+      </ol>
+
+      <h2>Schritt 9 — Team benachrichtigen</h2>
+      <p>Nach der CRM-Aktion soll das zuständige Team wissen, dass ein Lead eingegangen ist. Dafür hängen wir Slack an beide
+        CRM-Zweige. Alternativ kannst du erst beide Zweige mit Merge zusammenführen und danach einmal Slack senden.</p>
+
+      <ol class="steps">
+        <li><h4>Slack-Node an Sales-Zweig hängen</h4>
+          <p>Hänge einen Slack-Node hinter den Sales-CRM-Node. Kanal: <code>#sales-leads-test</code>.</p></li>
+        <li><h4>Slack-Text setzen</h4>
+          <p>Stelle Text auf <strong>Expression</strong> und nutze den folgenden Text.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Slack-Text</div>
+<pre>Neuer {{ $json.priority }} Lead für {{ $json.owner_team }}
+Name: {{ $json.name }}
+Firma: {{ $json.company }}
+E-Mail: {{ $json.email }}
+Budget: {{ $json.budget }} €
+
+{{ $json.message }}</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 2;">
+        <li><h4>Support-Benachrichtigung ergänzen</h4>
+          <p>Hänge einen zweiten Slack-Node hinter den Support-CRM-Node. Kanal: <code>#support-leads-test</code>. Text identisch
+            oder leicht angepasst.</p></li>
+        <li><h4>Beide Zweige testen</h4>
+          <p>Sende je einen Testlead mit <code>topic: sales</code> und <code>topic: support</code>. Prüfe CRM und Slack.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum nach dem CRM informieren?</b>
+        Wenn Slack vor dem CRM kommt, kann dein Team eine Meldung bekommen, obwohl das Anlegen im CRM danach scheitert.
+        Für operative Prozesse ist meist besser: erst dauerhaft speichern, dann melden.
+      </div>
+
+      <h2>Schritt 10 — Fehlerausgang für ungültige Leads</h2>
+      <p>Der false-Ausgang von <strong>E-Mail vorhanden?</strong> darf nicht ins Leere führen. Schicke ungültige Leads in einen
+        Testkanal oder eine Tabelle, damit du die Ursache sehen kannst.</p>
+
+      <ol class="steps">
+        <li><h4>Slack-Node an false-Ausgang hängen</h4>
+          <p>Ziehe vom false-Ausgang des IF-Nodes eine Linie ins Leere und wähle Slack.</p></li>
+        <li><h4>Kanal wählen</h4>
+          <p>Nimm einen internen Kanal wie <code>#automation-errors-test</code>.</p></li>
+        <li><h4>Fehlertext setzen</h4>
+          <p>Text: <code>Lead ohne E-Mail empfangen. Bitte Quelle prüfen.</code> Ergänze optional den rohen Webhook-Inhalt.</p></li>
+        <li><h4>Test ohne E-Mail senden</h4>
+          <p>Sende einen Testlead ohne <code>email</code>. Er muss in diesen Fehlerzweig laufen und darf keinen CRM-Kontakt erzeugen.</p></li>
+      </ol>
+
+      <h2>Schritt 11 — Production-URL aktivieren</h2>
+      <ol class="steps">
+        <li><h4>Gesamttest durchführen</h4>
+          <p>Teste Sales, Support und fehlende E-Mail. Prüfe jedes Mal CRM, Slack und Executions.</p></li>
+        <li><h4>Workflow speichern</h4>
+          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Aktiv schalten</h4>
+          <p>Schalte den Workflow oben rechts auf <strong>Active</strong>.</p></li>
+        <li><h4>Production-URL kopieren</h4>
+          <p>Kopiere aus dem Webhook-Node die URL mit <code>/webhook/lead-routing</code>, nicht die Test-URL.</p></li>
+        <li><h4>Externes Formular verbinden</h4>
+          <p>Trage diese Production-URL in deinem Formularsystem, deiner Website oder deinem Lead-Provider als Ziel ein.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Drei Tests vor Produktivbetrieb</b>
+        Ein guter CRM-Webhook braucht mindestens drei Testfälle: normaler Sales-Lead, Support-Anfrage, ungültiger Lead ohne
+        E-Mail. Erst wenn alle drei korrekt laufen, ist der Workflow reif für echte Daten.
+      </div>
+
+      <h2>Sinnvolle Erweiterungen</h2>
+      <table class="btable">
+        <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
+        <tbody>
+          <tr><td>Dublettenprüfung</td><td>Vor dem CRM-Create nach E-Mail suchen und nur bei Nichtfund anlegen.</td></tr>
+          <tr><td>Lead-Scoring</td><td>Budget, Firmengröße und Thema in einen Score umrechnen.</td></tr>
+          <tr><td>Round-Robin-Zuweisung</td><td>Owner aus einer kleinen Tabelle rotierend auswählen.</td></tr>
+          <tr><td>Antwort an Quelle</td><td>Webhook nicht sofort beantworten, sondern nach erfolgreicher Speicherung eine passende Antwort senden.</td></tr>
+          <tr><td>Audit-Log</td><td>Jeden empfangenen Lead zusätzlich in eine unveränderliche Log-Tabelle schreiben.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Warum verwenden wir POST statt GET?</li>
+          <li>Warum normalisieren wir vor dem Routing?</li>
+          <li>Was passiert mit einem Lead ohne E-Mail?</li>
+          <li>Warum ist „Create or Update“ oft besser als „Create“?</li>
+          <li>Welche drei Testfälle brauchst du vor dem Produktivbetrieb?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) POST sendet strukturierte Daten im Body. ·
+        2) Routing-Regeln sollen auf stabilen Feldern arbeiten. ·
+        3) Er läuft in den Fehlerzweig und erzeugt keinen CRM-Kontakt. ·
+        4) Es verhindert oder reduziert Dubletten. ·
+        5) Sales, Support, fehlende E-Mail.
+      </div>
+
+      <p>Du hast jetzt einen Webhook-Workflow gebaut, der nicht nur Daten weiterreicht, sondern eine Geschäftsentscheidung
+        trifft. Im nächsten Projekt nutzen wir KI nicht als Spielerei, sondern als Assistenten für eine konkrete Aufgabe:
+        E-Mails vorsortieren, zusammenfassen und Antwortentwürfe vorbereiten.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="16-projekt-leads"></nav></section>
 
   </div>
 </div>
 <script>
-var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter","14-projekt-form","15-projekt-news"];
-var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
+var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter","14-projekt-form","15-projekt-news","16-projekt-leads"];
+var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
 
 function show(slug) {
   if (!slug || READY.indexOf(slug) === -1 && slug !== "home") slug = "home";

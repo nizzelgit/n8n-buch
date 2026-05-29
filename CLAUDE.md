@@ -53,7 +53,8 @@ n8n-buch/
 │   ├── 12-credentials.html
 │   ├── 13-projekt-wetter.html
 │   ├── 14-projekt-form.html
-│   └── 15-projekt-news.html
+│   ├── 15-projekt-news.html
+│   └── 16-projekt-leads.html
 ├── assets/
 │   ├── css/
 │   │   ├── book.css            # Layout, Typografie, didaktische Bausteine, Responsiv
@@ -225,12 +226,13 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `13-projekt-wetter` — Projekt 1: täglicher Wetter-Report per Telegram (Schedule → HTTP → Set → Telegram)
 - `14-projekt-form` — Projekt 2: Formular → Google Sheets → Slack (Form Trigger, Normalisierung, Credentials)
 - `15-projekt-news` — Projekt 3: News-Aggregator mit Filter (Schedule → RSS → Filter → Limit → Digest → Slack)
+- `16-projekt-leads` — Projekt 4: Lead-Routing vom Webhook ins CRM (Webhook, Normalisierung, IF/Switch, CRM, Slack)
 
-> **Teil 0, 1 und 2 sind vollständig (Kap. 00–12). Teil 3 ist gestartet (Kap. 13–15).**
+> **Teil 0, 1 und 2 sind vollständig (Kap. 00–12). Teil 3 ist gestartet (Kap. 13–16).**
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `16-projekt-leads` — Lead-Routing vom Webhook ins CRM
-2. weitere Projekte `17`–`19` (steigende Komplexität)
+1. `17-projekt-ai` — KI-E-Mail-Assistent (AI Agent)
+2. weitere Projekte `18`–`19` (steigende Komplexität)
 3. danach KI 20–21, Betrieb 22–25, Anhänge A–D
 
 **Hinweis zu Projekt-Kapiteln (Teil 3):** Sie sind länger/umfangreicher als die Bausteine. Sie sollten die in
@@ -243,6 +245,14 @@ deren Grundlagen zu wiederholen (stattdessen verlinken/verweisen).
 ---
 
 ## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 — Projekt 4 Lead-Routing ergänzt
+- **Kapitel 16 „Lead-Routing vom Webhook ins CRM"** (`ready`): POST-Webhook, Testdatenmodell,
+  Normalisierung, Pflichtfeldprüfung per IF, Routing per Switch, CRM-Kontakt/Ticket-Anlage, Slack-Meldung,
+  Fehlerzweig für Leads ohne E-Mail, Production-URL und Erweiterungen.
+- `assets/js/chapters.js` auf `ready` gesetzt; README aktualisiert.
+- `node build.js` → **18 Kapitel** im Bundle.
+- Nächster offener Schritt: `17-projekt-ai` (KI-E-Mail-Assistent / AI Agent).
 
 ### 2026-05-29 — Projekt 3 News-Aggregator ergänzt
 - **Kapitel 15 „News-Aggregator mit Filter"** (`ready`): Schedule-Trigger, RSS-Read-Node mit
