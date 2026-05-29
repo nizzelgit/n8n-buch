@@ -51,7 +51,8 @@ n8n-buch/
 │   ├── 10-flow.html
 │   ├── 11-fehler.html
 │   ├── 12-credentials.html
-│   └── 13-projekt-wetter.html
+│   ├── 13-projekt-wetter.html
+│   └── 14-projekt-form.html
 ├── assets/
 │   ├── css/
 │   │   ├── book.css            # Layout, Typografie, didaktische Bausteine, Responsiv
@@ -183,7 +184,7 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 ## 9. Git-Konventionen
 
 - Entwickelt wird auf dem vom Harness zugewiesenen Feature-Branch. **Aktuell:**
-  `claude/optimistic-shannon-TJ1d8`. (Der Name kann je Session wechseln — dann hier **und** in
+  `claude/n-acht-n-workflows-guide-EWQxg`. (Der Name kann je Session wechseln — dann hier **und** in
   `.github/workflows/pages.yml` anpassen.)
 - **`main` und der Feature-Branch werden synchron gehalten** (beide enthalten denselben Stand),
   damit eine frisch gestartete Session den kompletten Stand vorfindet — egal welcher Branch als
@@ -191,7 +192,7 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
   ```bash
   node build.js
   git add -A && git commit -m "…"
-  git push origin claude/optimistic-shannon-TJ1d8
+  git push origin claude/n-acht-n-workflows-guide-EWQxg
   git branch -f main HEAD && git push origin main
   ```
   Hinweis: In Web-Sessions ist ein Push auf `main` ggf. erst nach ausdrücklicher Freigabe erlaubt.
@@ -221,12 +222,13 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `11-fehler` — Retry On Fail, Fehlerausgang (On Error), globaler Error-Workflow (Error Trigger), Stop and Error
 - `12-credentials` — Credentials sicher anlegen, vordefiniert vs. generisch (Header Auth), OAuth, Sicherheits-Gewohnheiten
 - `13-projekt-wetter` — Projekt 1: täglicher Wetter-Report per Telegram (Schedule → HTTP → Set → Telegram)
+- `14-projekt-form` — Projekt 2: Formular → Google Sheets → Slack (Form Trigger, Normalisierung, Credentials)
 
-> **Teil 0, 1 und 2 sind vollständig (Kap. 00–12). Teil 3 ist gestartet (Kap. 13).**
+> **Teil 0, 1 und 2 sind vollständig (Kap. 00–12). Teil 3 ist gestartet (Kap. 13–14).**
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `14-projekt-form` — Formular → Sheets → Slack (zweites Praxisprojekt)
-2. weitere Projekte `15`–`19` (steigende Komplexität)
+1. `15-projekt-news` — News-Aggregator mit Filter
+2. weitere Projekte `16`–`19` (steigende Komplexität)
 3. danach KI 20–21, Betrieb 22–25, Anhänge A–D
 
 **Hinweis zu Projekt-Kapiteln (Teil 3):** Sie sind länger/umfangreicher als die Bausteine. Sie sollten die in
@@ -239,6 +241,15 @@ deren Grundlagen zu wiederholen (stattdessen verlinken/verweisen).
 ---
 
 ## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 — Projekt 2 Formular-Pipeline ergänzt
+- **Kapitel 14 „Formular → Sheets → Slack"** (`ready`): n8n-Formular-Trigger, Google-Sheets-Tabelle,
+  Normalisierungs-Node, Sheets-Zeile anhängen, Slack-Nachricht senden, Test- vs. Production-URL,
+  Datenschutz-Hinweise, Erweiterungen und Selbsttest.
+- `assets/js/chapters.js` auf `ready` gesetzt; README und Pages-Workflow aktualisiert.
+- §9 korrigiert: aktuelle Arbeit läuft auf `claude/n-acht-n-workflows-guide-EWQxg`; Pages triggert jetzt auf
+  `main`, `claude/n-acht-n-workflows-guide-EWQxg` und den älteren `claude/optimistic-shannon-TJ1d8`.
+- Nächster offener Schritt: `15-projekt-news` (News-Aggregator mit Filter).
 
 ### 2026-05-29 — Projekt 1 Wetter-Report ergänzt
 - **Kapitel 13 „Täglicher Wetter-Report per Telegram"** (`ready`): erstes End-to-End-Projekt mit

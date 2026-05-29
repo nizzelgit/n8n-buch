@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projekt 2: Formular → Sheets → Slack — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="14-projekt-form" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">14</span> Projekt 2</div>
+      <h1 class="chap-title">Formular → Sheets → Slack</h1>
+      <p class="chap-lede">In diesem Projekt baust du eine kleine Anfrage-Pipeline: Eine Person füllt ein Formular aus,
+        n8n speichert die Anfrage in Google Sheets und informiert dein Team in Slack. Das ist ein Grundmuster für
+        Kontaktformulare, interne Tickets, Workshop-Anmeldungen und einfache Lead-Erfassung.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 42 Minuten</span>
+        <span>🎯 Niveau: Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 7–12</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>n8n läuft und kann Webhooks/Formulare von außen erreichbar machen. In n8n Cloud ist das sofort der Fall.</li>
+          <li>Ein Google-Konto mit Zugriff auf Google Sheets.</li>
+          <li>Ein Slack-Workspace, in dem du Nachrichten in einen Testkanal senden darfst.</li>
+          <li>Google- und Slack-Credentials in n8n. Falls noch nicht vorhanden, legst du sie im Projekt an.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Datenschutz nüchtern prüfen</b>
+        Wir speichern Formularangaben in einer Tabelle und posten sie in Slack. Für echte personenbezogene Daten brauchst du
+        Einwilligung, Zweckbindung, Zugriffskontrolle und Löschregeln. Im Übungsprojekt verwendest du Testdaten.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Der Workflow besteht aus vier Schritten: Formular empfangen, Daten normalisieren, Zeile in Google Sheets anhängen,
+        Slack-Nachricht senden. Die Slack-Nachricht liest die bereinigten Daten später explizit aus dem Node
+        <strong>Daten vorbereiten</strong>, damit sie nicht davon abhängt, was der Google-Sheets-Node zurückgibt.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 920 330" preserveAspectRatio="none">
+                <path class="is-active" d="M 168 150 C 230 150, 245 150, 300 150"></path>
+                <path class="is-active" d="M 392 150 C 465 150, 478 150, 532 150"></path>
+                <path class="is-active" d="M 624 150 C 700 150, 710 150, 760 150"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:50px; top:104px;">
+                <span class="n8n-node__icon">📝</span><span class="ep out"></span>
+                <span class="n8n-node__label">Formular</span><span class="items">1 Item</span></div>
+              <div class="n8n-node n8n-node--code" style="left:300px; top:104px;">
+                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Daten vorbereiten</span><span class="items">1 Item</span></div>
+              <div class="n8n-node" style="left:532px; top:104px;">
+                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Sheets: Zeile</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node" style="left:760px; top:104px;">
+                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Slack melden</span><span class="badge badge--ok">✓</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 14.1</span>Das Projektmuster: Eingang über Formular, strukturierte Ablage in
+          Sheets, sofortige Benachrichtigung in Slack.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Das eigentliche Lernziel</b>
+        Du lernst hier nicht „Google Sheets“ oder „Slack“ isoliert, sondern ein robustes Pipeline-Muster:
+        <strong>Eingang → Normalisierung → dauerhafte Ablage → Benachrichtigung</strong>. Genau dieses Muster taucht in
+        sehr vielen Business-Automationen wieder auf.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Warum Slack später auf einen früheren Node zugreift</b>
+        Manche Nodes geben nach ihrer Aktion andere Daten zurück als sie bekommen haben. Deshalb verwenden wir im Slack-Text
+        nicht blind <code>$json.Name</code>, sondern <code>$('Daten vorbereiten').item.json.Name</code>. Das ist etwas länger,
+        aber stabiler.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 1 — Tabelle vorbereiten</h2>
+      <p>n8n kann nur sauber in eine Tabelle schreiben, wenn die Spalten vorher klar sind. Wir legen deshalb zuerst ein
+        kleines Sheet an.</p>
+
+      <ol class="steps">
+        <li><h4>Neue Google-Tabelle erstellen</h4>
+          <p>Öffne Google Sheets und erstelle eine neue Tabelle. Nenne sie <code>n8n Formular-Anfragen</code>.</p></li>
+        <li><h4>Tab benennen</h4>
+          <p>Unten links heißt das erste Tabellenblatt meist „Tabelle1“. Benenne es in <code>Anfragen</code> um.</p></li>
+        <li><h4>Spaltenüberschriften eintragen</h4>
+          <p>Schreibe in Zeile 1 exakt diese Überschriften: <code>Zeitpunkt</code>, <code>Name</code>, <code>E-Mail</code>,
+            <code>Thema</code>, <code>Nachricht</code>, <code>Priorität</code>, <code>Status</code>.</p></li>
+        <li><h4>Tabellen-ID merken</h4>
+          <p>In der Browser-Adresse steht zwischen <code>/d/</code> und <code>/edit</code> eine lange ID. Du musst sie nicht
+            abschreiben, aber du erkennst daran später die richtige Datei im Google-Sheets-Node.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <table class="n8n-table" style="font-size:12px;">
+            <thead><tr><th>Zeitpunkt</th><th>Name</th><th>E-Mail</th><th>Thema</th><th>Nachricht</th><th>Priorität</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>2026-05-29 09:14</td><td>Anna Beispiel</td><td>anna@example.com</td><td>Workshop</td><td>Ich möchte mehr Infos.</td><td>normal</td><td>neu</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 14.2</span>Die Tabelle ist bewusst simpel. Eine Anfrage = eine Zeile.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn später Spalten fehlen</b>
+        Der Google-Sheets-Node orientiert sich an den Überschriften. Tippfehler in Zeile 1 führen dazu, dass Felder nicht
+        zugeordnet werden oder neue Spalten unerwartet fehlen. Prüfe die Überschriften zuerst.
+      </div>
+
+      <h2>Schritt 2 — Workflow anlegen</h2>
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Gehe in n8n zur Workflow-Übersicht und klicke auf <strong>Create Workflow</strong>.</p></li>
+        <li><h4>Workflow benennen</h4>
+          <p>Klicke oben links auf den Namen und schreibe: <code>Formular zu Sheets und Slack</code>.</p></li>
+        <li><h4>Speichern</h4>
+          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+      </ol>
+
+      <h2>Schritt 3 — Formular-Trigger hinzufügen</h2>
+      <p>Für dieses Projekt ist der n8n-Formular-Trigger ideal: Er erzeugt eine öffentliche Formularseite und startet den
+        Workflow bei jeder Einsendung.</p>
+
+      <ol class="steps">
+        <li><h4>Trigger suchen</h4>
+          <p>Klicke auf das große <span class="kbd">+</span> in der Mitte, tippe <code>form</code> und wähle
+            <strong>Form Trigger</strong>.</p></li>
+        <li><h4>Node öffnen</h4>
+          <p>Doppelklicke den neuen Node. Die Detailansicht öffnet sich.</p></li>
+        <li><h4>Formulartitel setzen</h4>
+          <p>Trage als Titel ein: <code>Anfrage senden</code>.</p></li>
+        <li><h4>Beschreibung setzen</h4>
+          <p>Trage als Beschreibung ein: <code>Schreib kurz, worum es geht. Wir melden uns zeitnah.</code></p></li>
+        <li><h4>Felder hinzufügen</h4>
+          <p>Lege die Formularfelder aus der folgenden Tabelle an.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>Feldname</th><th>Typ</th><th>Pflicht?</th><th>Hinweis</th></tr></thead>
+        <tbody>
+          <tr><td><code>Name</code></td><td>Text</td><td>ja</td><td>voller Name</td></tr>
+          <tr><td><code>E-Mail</code></td><td>Email</td><td>ja</td><td>Kontaktadresse</td></tr>
+          <tr><td><code>Thema</code></td><td>Dropdown</td><td>ja</td><td><code>Workshop</code>, <code>Beratung</code>, <code>Support</code>, <code>Sonstiges</code></td></tr>
+          <tr><td><code>Nachricht</code></td><td>Textarea</td><td>ja</td><td>mehrzeiliger Text</td></tr>
+          <tr><td><code>Dringend?</code></td><td>Checkbox</td><td>nein</td><td>für Priorität</td></tr>
+        </tbody>
+      </table>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:620px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">📝</span><b>Form Trigger</b><span class="ndv__exec-step">⦿ Listen for test event</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Formular</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Form Title</label><input class="n8n-input" value="Anfrage senden"></div>
+                  <div class="row"><label>Form Description</label><input class="n8n-input" value="Schreib kurz, worum es geht. Wir melden uns zeitnah."></div>
+                  <div class="row"><label>Fields</label><input class="n8n-input" value="Name · E-Mail · Thema · Nachricht · Dringend?"></div>
+                  <div class="row"><label>Respond When</label><div class="n8n-select">Form Submitted <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 14.3</span>Der Form Trigger baut die Eingabeseite. Wichtig sind klare Feldnamen,
+          weil sie später als JSON-Felder im Workflow ankommen.</figcaption>
+      </figure>
+
+      <div class="callout callout--info">
+        <b class="t">Alternative: Webhook statt Form Trigger</b>
+        Wenn deine n8n-Version keinen Form Trigger zeigt, baue dasselbe Projekt mit einem <strong>Webhook Trigger</strong>
+        und einem externen Formular. Die restlichen Nodes bleiben gleich; nur der Eingang ändert sich.
+      </div>
+
+      <h2>Schritt 4 — Formular testweise absenden</h2>
+      <ol class="steps">
+        <li><h4>Auf Test-Ereignis warten</h4>
+          <p>Klicke im Form-Trigger auf <strong>Listen for test event</strong> bzw. den Test-Button des Formulars.</p></li>
+        <li><h4>Formular öffnen</h4>
+          <p>Kopiere die Test-URL oder klicke den angezeigten Link. Es öffnet sich die Formularseite.</p></li>
+        <li><h4>Testdaten eintragen</h4>
+          <p>Trage ein: Name <code>Anna Beispiel</code>, E-Mail <code>anna@example.com</code>, Thema <code>Workshop</code>,
+            Nachricht <code>Ich möchte mehr Infos.</code>. Setze <strong>Dringend?</strong> nicht.</p></li>
+        <li><h4>Absenden</h4>
+          <p>Klicke im Formular auf <strong>Submit</strong> bzw. <strong>Absenden</strong>.</p></li>
+        <li><h4>Ausgang prüfen</h4>
+          <p>Zurück in n8n sollte im Ausgang des Triggers ein Item erscheinen. Wechsle auf <strong>JSON</strong> oder
+            <strong>Schema</strong> und prüfe die Feldnamen.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn kein Item erscheint</b>
+        Wahrscheinlich lauschst du nicht mehr auf die Test-Einsendung oder du hast die Production-URL geöffnet. Starte das
+        Test-Lauschen neu und öffne die angezeigte Test-Formular-URL erneut.
+      </div>
+
+      <h2>Schritt 5 — Daten vorbereiten</h2>
+      <p>Jetzt normalisieren wir die Formularwerte. Das ist bewusst ein eigener Node: Die Tabelle und Slack bekommen danach
+        saubere, gleich benannte Felder.</p>
+
+      <ol class="steps">
+        <li><h4>Edit-Fields-Node anhängen</h4>
+          <p>Schließe die Detailansicht. Ziehe vom Form-Trigger eine Linie ins Leere, suche <code>edit fields</code> und wähle
+            <strong>Edit Fields (Set)</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne den Node <code>Daten vorbereiten</code>.</p></li>
+        <li><h4>Node öffnen</h4>
+          <p>Doppelklicke den Node. Links solltest du die Formulardaten aus dem Test sehen.</p></li>
+        <li><h4>Ausgabe schlank halten</h4>
+          <p>Schalte <strong>Include Other Input Fields</strong> aus. Die Ausgabe soll nur die Felder enthalten, die wir jetzt
+            definieren.</p></li>
+        <li><h4>Felder anlegen</h4>
+          <p>Lege die folgenden Felder an. Verwende den Modus <strong>Expression</strong>, wo eine Expression steht.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>Ausgabefeld</th><th>Wert</th></tr></thead>
+        <tbody>
+          <tr><td><code>Zeitpunkt</code></td><td><code>{{ $now.toFormat('yyyy-LL-dd HH:mm') }}</code></td></tr>
+          <tr><td><code>Name</code></td><td><code>{{ $json.Name }}</code></td></tr>
+          <tr><td><code>E-Mail</code></td><td><code>{{ $json["E-Mail"] }}</code></td></tr>
+          <tr><td><code>Thema</code></td><td><code>{{ $json.Thema }}</code></td></tr>
+          <tr><td><code>Nachricht</code></td><td><code>{{ $json.Nachricht }}</code></td></tr>
+          <tr><td><code>Priorität</code></td><td><code>{{ $json["Dringend?"] ? "hoch" : "normal" }}</code></td></tr>
+          <tr><td><code>Status</code></td><td><code>neu</code></td></tr>
+          <tr><td><code>slack_text</code></td><td><code>Neue Anfrage von {{ $json.Name }} ({{ $json.Thema }})</code></td></tr>
+        </tbody>
+      </table>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">✏️</span><b>Daten vorbereiten</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-json">{
+  <span class="k">"Name"</span>: <span class="s">"Anna Beispiel"</span>,
+  <span class="k">"E-Mail"</span>: <span class="s">"anna@example.com"</span>,
+  <span class="k">"Thema"</span>: <span class="s">"Workshop"</span>,
+  <span class="k">"Dringend?"</span>: <span class="b">false</span>
+}</div>
+                </div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>String · Zeitpunkt</label><input class="n8n-input is-expr" value="{{ $now.toFormat('yyyy-LL-dd HH:mm') }}"></div>
+                  <div class="row"><label>String · E-Mail</label><input class="n8n-input is-expr" value="{{ $json[&quot;E-Mail&quot;] }}"></div>
+                  <div class="row"><label>String · Priorität</label><input class="n8n-input is-expr" value="{{ $json[&quot;Dringend?&quot;] ? &quot;hoch&quot; : &quot;normal&quot; }}"></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <table class="n8n-table">
+                    <thead><tr><th>Name</th><th>Thema</th><th>Priorität</th><th>Status</th></tr></thead>
+                    <tbody><tr><td>Anna Beispiel</td><td>Workshop</td><td>normal</td><td>neu</td></tr></tbody>
+                  </table>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 14.4</span>Der Set-Node macht aus Formularfeldern ein stabiles Arbeitsobjekt.
+          Felder mit Sonderzeichen liest du über eckige Klammern.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Normalisieren spart Ärger</b>
+        Formulare ändern sich gern. Wenn du direkt aus dem Trigger in Sheets und Slack schreibst, verteilst du Feldlogik über
+        mehrere Nodes. Ein sauberer Zwischen-Node macht spätere Änderungen kontrollierbar.
+      </div>
+
+      <h2>Schritt 6 — Zeile in Google Sheets anhängen</h2>
+      <ol class="steps">
+        <li><h4>Google-Sheets-Node anhängen</h4>
+          <p>Schließe die Detailansicht. Ziehe vom Node <strong>Daten vorbereiten</strong> eine Linie ins Leere, suche
+            <code>google sheets</code> und wähle <strong>Google Sheets</strong>.</p></li>
+        <li><h4>Aktion wählen</h4>
+          <p>Wähle die Aktion zum <strong>Anhängen einer Zeile</strong> — je nach Oberfläche heißt sie sinngemäß
+            <strong>Append row</strong>, <strong>Append or Update Row</strong> oder <strong>Add row</strong>.</p></li>
+        <li><h4>Credential erstellen oder auswählen</h4>
+          <p>Wähle deine Google-Sheets-Credential. Falls keine existiert: <strong>Create new credential</strong>, mit Google
+            anmelden, Zugriff bestätigen, speichern.</p></li>
+        <li><h4>Dokument auswählen</h4>
+          <p>Wähle die Tabelle <code>n8n Formular-Anfragen</code>.</p></li>
+        <li><h4>Tab auswählen</h4>
+          <p>Wähle das Tabellenblatt <code>Anfragen</code>.</p></li>
+        <li><h4>Spalten zuordnen</h4>
+          <p>Ordne jede Sheet-Spalte dem gleichnamigen Feld aus dem Eingang zu: <code>Zeitpunkt</code> → <code>{{ $json.Zeitpunkt }}</code>,
+            <code>Name</code> → <code>{{ $json.Name }}</code> usw.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. In Google Sheets sollte unten eine neue Zeile erscheinen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:640px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">📊</span><b>Google Sheets — Append row</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Credential</label><div class="n8n-select">Google Sheets – Arbeitskonto <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Document</label><div class="n8n-select">n8n Formular-Anfragen <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Sheet</label><div class="n8n-select">Anfragen <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Mapping</label><input class="n8n-input is-expr" value="Name = {{ $json.Name }} · E-Mail = {{ $json[&quot;E-Mail&quot;] }} · Status = {{ $json.Status }}"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 14.5</span>Der Sheets-Node hängt eine neue Zeile an. Die Spaltennamen kommen aus
+          Zeile 1 deiner Tabelle.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn die Zeile nicht erscheint</b>
+        <p style="margin:0 0 6px">• <strong>Credential-Fehler?</strong> Google-Credential neu verbinden und prüfen, ob du Zugriff auf die Tabelle hast.</p>
+        <p style="margin:0 0 6px">• <strong>Spalten fehlen?</strong> Überschriften in Zeile 1 prüfen und den Node neu laden/aktualisieren.</p>
+        <p style="margin:0">• <strong>Falsches Sheet?</strong> Dokument und Tabellenblatt sind zwei verschiedene Auswahlen.</p>
+      </div>
+
+      <h2>Schritt 7 — Slack-Nachricht senden</h2>
+      <ol class="steps">
+        <li><h4>Slack-Node anhängen</h4>
+          <p>Ziehe vom Google-Sheets-Node eine Linie ins Leere, suche <code>slack</code> und wähle <strong>Slack</strong>.</p></li>
+        <li><h4>Aktion wählen</h4>
+          <p>Wähle <strong>Send a message</strong> bzw. <strong>Nachricht senden</strong>.</p></li>
+        <li><h4>Credential erstellen oder auswählen</h4>
+          <p>Wähle deine Slack-Credential. Falls nötig: <strong>Create new credential</strong>, Slack-Workspace verbinden,
+            Zugriff erlauben, speichern.</p></li>
+        <li><h4>Kanal auswählen</h4>
+          <p>Wähle einen Testkanal, z. B. <code>#anfragen-test</code>. Nimm nicht sofort einen produktiven Kanal.</p></li>
+        <li><h4>Text auf Expression stellen</h4>
+          <p>Schalte das Textfeld auf <strong>Expression</strong>.</p></li>
+        <li><h4>Nachricht einfügen</h4>
+          <p>Trage den folgenden Text ein. Beachte: Wir greifen bewusst auf den früheren Node
+            <code>Daten vorbereiten</code> zu, nicht auf den direkten Eingang des Slack-Nodes.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Slack-Text — Modus: Expression</div>
+<pre>Neue Formular-Anfrage
+Name: {{ $('Daten vorbereiten').item.json.Name }}
+E-Mail: {{ $('Daten vorbereiten').item.json["E-Mail"] }}
+Thema: {{ $('Daten vorbereiten').item.json.Thema }}
+Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
+
+{{ $('Daten vorbereiten').item.json.Nachricht }}</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 6;">
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Im Slack-Testkanal sollte eine neue Nachricht erscheinen.</p></li>
+        <li><h4>Nachricht kritisch lesen</h4>
+          <p>Prüfe, ob alle Felder gefüllt sind, ob die Priorität stimmt und ob die Nachricht für dein Team tatsächlich
+            handlungsfähig ist.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:560px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">💬</span><b>Slack — Send a message</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Credential</label><div class="n8n-select">Slack – Test Workspace <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Channel</label><div class="n8n-select">#anfragen-test <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Text</label><div class="ndv-fxtab"><b>Fest</b><b class="is-active">Expression</b></div><input class="n8n-input is-expr" value="Neue Formular-Anfrage · {{ $('Daten vorbereiten').item.json.Name }}"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 14.6</span>Slack liest die normalisierten Felder explizit aus
+          <b>Daten vorbereiten</b>. Dadurch bleibt die Nachricht unabhängig von der Ausgabe des Sheets-Nodes.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn Slack nichts sendet</b>
+        Prüfe zuerst den Kanal und die Berechtigungen der Slack-App. Viele Fehler liegen nicht in n8n, sondern daran, dass
+        die App nicht in den Kanal eingeladen wurde oder keine Schreibrechte hat.
+      </div>
+
+      <h2>Schritt 8 — Gesamten Workflow testen</h2>
+      <ol class="steps">
+        <li><h4>Zurück zum Canvas</h4>
+          <p>Drücke <span class="kbd">Esc</span>, bis du den gesamten Workflow siehst.</p></li>
+        <li><h4>Workflow speichern</h4>
+          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auf Test-Einsendung warten</h4>
+          <p>Klicke beim Form-Trigger erneut auf <strong>Listen for test event</strong>.</p></li>
+        <li><h4>Formular erneut absenden</h4>
+          <p>Öffne die Test-URL, sende eine zweite Testanfrage ab und beobachte den Workflow.</p></li>
+        <li><h4>Beide Ausgänge prüfen</h4>
+          <p>Prüfe Google Sheets auf eine neue Zeile und Slack auf eine neue Nachricht. Beide müssen denselben Inhalt zeigen.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum zwei Ausgänge prüfen?</b>
+        Ein Workflow kann halb funktionieren: Slack sendet, aber Sheets speichert nicht — oder umgekehrt. Bei Pipelines prüfst
+        du immer jede dauerhafte Wirkung, nicht nur den grünen Haken im letzten Node.
+      </div>
+
+      <h2>Schritt 9 — Aktivieren und Production-URL verwenden</h2>
+      <ol class="steps">
+        <li><h4>Letzten Stand speichern</h4>
+          <p>Speichere den Workflow.</p></li>
+        <li><h4>Workflow aktivieren</h4>
+          <p>Schalte oben rechts auf <strong>Active</strong>.</p></li>
+        <li><h4>Production-Formular-URL kopieren</h4>
+          <p>Öffne den Form-Trigger und kopiere die produktive Formular-URL. Die Test-URL ist nur fürs Bauen gedacht.</p></li>
+        <li><h4>Produktions-Test mit Testdaten</h4>
+          <p>Öffne die Production-URL in einem privaten Browserfenster und sende noch einmal Testdaten ab.</p></li>
+        <li><h4>Execution-Historie prüfen</h4>
+          <p>Öffne <strong>Executions</strong> und prüfe den Lauf. Erst wenn dort alles grün ist und Sheets/Slack stimmen, ist
+            der Workflow wirklich einsatzbereit.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Test-URL ist nicht Produktion</b>
+        Wie beim Webhook gilt: Test-Links sind temporär. Für echte Nutzer:innen brauchst du die Production-URL und einen
+        aktiven Workflow.
+      </div>
+
+      <h2>Sinnvolle Erweiterungen</h2>
+      <table class="btable">
+        <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
+        <tbody>
+          <tr><td>Dringende Anfragen hervorheben</td><td>IF-Node vor Slack: bei <code>Priorität = hoch</code> in einen Alarmkanal senden.</td></tr>
+          <tr><td>Bestätigung an Absender</td><td>E-Mail-Node nach Sheets; Text aus den normalisierten Feldern bauen.</td></tr>
+          <tr><td>Dubletten vermeiden</td><td>Vor Sheets nach E-Mail suchen oder später Datenhygiene einbauen.</td></tr>
+          <tr><td>Status aktualisieren</td><td>Zusätzlicher Workflow, der aus Slack-Reaktionen oder manuellem Status eine Sheet-Zeile aktualisiert.</td></tr>
+          <tr><td>CRM statt Sheet</td><td>Sheets-Node durch HubSpot/Pipedrive/Notion ersetzen; Normalisierungs-Node bleibt.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Warum legen wir die Sheet-Spalten vor dem n8n-Node an?</li>
+          <li>Warum gibt es einen eigenen Node „Daten vorbereiten“?</li>
+          <li>Wo gehört die Google- oder Slack-Anmeldung hin?</li>
+          <li>Was ist der Unterschied zwischen Test-Formular-URL und Production-URL?</li>
+          <li>Welche zwei externen Wirkungen prüfst du nach einem Gesamttest?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Der Sheets-Node braucht stabile Spaltenüberschriften für die Zuordnung. ·
+        2) Damit Formularlogik, Tabellenmapping und Slack-Text entkoppelt bleiben. ·
+        3) In Credentials. ·
+        4) Test ist temporär fürs Bauen, Production läuft nur bei aktivem Workflow. ·
+        5) Neue Tabellenzeile und neue Slack-Nachricht.
+      </div>
+
+      <p>Du hast jetzt eine kleine, aber echte Anfrage-Pipeline gebaut. Im nächsten Projekt wechseln wir von einzelnen
+        Formular-Eingängen zu regelmäßigem Einsammeln: Ein News-Aggregator holt mehrere Quellen, filtert sie und liefert
+        nur relevante Treffer weiter.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

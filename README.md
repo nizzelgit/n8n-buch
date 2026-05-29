@@ -43,7 +43,8 @@ n8n-buch/
 │   ├── 10-flow.html            # IF, Switch, Merge, Loops
 │   ├── 11-fehler.html          # Fehlerbehandlung
 │   ├── 12-credentials.html     # Credentials & Authentifizierung
-│   └── 13-projekt-wetter.html  # Projekt: Wetter-Report per Telegram
+│   ├── 13-projekt-wetter.html  # Projekt: Wetter-Report per Telegram
+│   └── 14-projekt-form.html    # Projekt: Formular → Sheets → Slack
 └── assets/
     ├── css/
     │   ├── book.css            # Layout, Typografie, didaktische Elemente
@@ -58,7 +59,7 @@ n8n-buch/
 Das vollständige Inhaltsverzeichnis (25+ Kapitel über 6 Teile) lebt in
 `assets/js/chapters.js`. Aktueller Ausbaustand:
 
-- **Fertig:** Teil 0, Teil 1, Teil 2 sowie Projekt 1 (täglicher Wetter-Report per Telegram).
+- **Fertig:** Teil 0, Teil 1, Teil 2 sowie Projekt 1–2.
 - **Geplant (markiert „bald“):** weitere Praxis-Projekte, KI-Agenten & RAG,
   Betrieb/Skalierung sowie Anhänge.
 
