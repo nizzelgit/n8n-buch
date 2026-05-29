@@ -134,6 +134,11 @@ Beim Erstellen neuer Abbildungen diese Bausteine nutzen (keine neuen Ad-hoc-Styl
 - **Node-Detailansicht (NDV):** `.ndv` → `.ndv__bar` + `.ndv__cols` (3×) → `.ndv-panel`
   (`.ndv-params` für Mitte), Felder: `.n8n-field`/`.n8n-input`(`.is-expr`)/`.n8n-select`,
   Reiter `.ndv-fxtab` (Fest/Expression), Ausgabe: `.ndv-viewtabs` + `.n8n-table`/`.n8n-json`/`.n8n-schema`.
+- **Ausdruckseditor (Expression):** Live-Ergebnis direkt unter einem `.n8n-input.is-expr` über
+  `.n8n-expr-result` (mit `.lbl` „Ergebnis“; Fehler = `.is-error`). Größerer Editor: `.n8n-expr` →
+  `.n8n-expr__head` + `.n8n-expr__code` + `.n8n-expr__result`. Resolvable-Platzhalter im Code mit
+  `.expr-tok` umranden (Variablen `$json`/`$now` darin als `.expr-var`). Autovervollständigung:
+  `.n8n-autocomplete` mit `.ac`-Zeilen (`.nm`/`.desc`/`.ty`, aktive Zeile `.is-active`).
 - **Node-Auswahl-Panel:** `.nodes-panel` mit `.nodes-panel__search` und `.nodes-panel__item`.
 
 ### Pfeilspitzen-Marker (wichtig!)
@@ -197,11 +202,12 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `03-oberflaeche` — Oberflächen-Tour (visuell dicht)
 - `04-erster-workflow` — **Referenzkapitel für den Detailgrad** (47 Einzelschritte)
 - `05-kernkonzepte` — Items, JSON, Datenfluss, Expressions-Einstieg
+- `06-expressions` — Ausdruckseditor, Variablen-Werkzeugkasten, Text/Zahlen/Datum, Bedingungen, Fehlertabelle
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `06-expressions` — Expressions vertieft (logischer nächster Schritt nach Kap. 5)
-2. `13-projekt-wetter` — erstes vollständiges Projekt (großer Praxis-Sprung)
-3. danach Bausteine 07–12, weitere Projekte 14–19, KI 20–21, Betrieb 22–25, Anhänge A–D
+1. `07-trigger` — Trigger-Nodes (Manual/Schedule/Webhook); das Outro von Kap. 6 leitet bereits dorthin über
+2. `13-projekt-wetter` — alternativ als erster großer Praxis-Sprung (vollständiges Projekt)
+3. danach restliche Bausteine 08–12, weitere Projekte 14–19, KI 20–21, Betrieb 22–25, Anhänge A–D
 
 **Beim Ausbau zwingend:** Detailgrad + Didaktik-Bausteine aus Abschnitt 5 einhalten, danach
 `node build.js`, dann **diese Datei (Abschnitt 10 + 11) aktualisieren**, dann committen/pushen.
@@ -209,6 +215,20 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 ---
 
 ## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 — Kapitel 6 (Expressions) + neue Ausdruckseditor-Komponente
+- **Kapitel 6 „Expressions & der Ausdruckseditor"** geschrieben (status `ready`): Fest/Expression-Schalter,
+  Aufbau einer Expression, Variablen-Werkzeugkasten (`$json`, `$('Node')`, `$now`, `$today`, `$input`, …),
+  Text/Zahlen/Datum (Luxon: `toFormat`, `plus`/`minus`, `toDateTime`), Entscheidungen (Ternary, `||`, `?.`),
+  Autovervollständigung + Drag-and-drop, Mini-Übung am Wetter-Workflow aus Kap. 4, Fehlertabelle, Selbsttest.
+- **Neue, wiederverwendbare UI-Komponente** in `n8n-ui.css` (in §6 dokumentiert): der Ausdruckseditor —
+  `.n8n-expr-result` (Live-Ergebnis), `.n8n-expr` (`__head`/`__code`/`__result`), `.expr-tok`/`.expr-var`
+  (Resolvable-Hervorhebung), `.n8n-autocomplete` (Vorschlagsliste).
+- `node build.js` → **8 Kapitel** im Bundle. Tag-Balance (div/figure/table/ol/ul) & `&gt;`-Escaping geprüft.
+- **Branch-Hinweis:** Diese Session läuft auf dem vom Harness vorgegebenen Branch
+  `claude/optimistic-shannon-TJ1d8` (weicht vom in §9 genannten Namen ab). Push erfolgte **nur** dorthin;
+  der `main`-Sync aus §9 wurde **nicht** ausgeführt (bedarf in Web-Sessions ausdrücklicher Freigabe).
+- Weiter: `07-trigger` — das Outro von Kap. 6 führt bereits dorthin.
 
 ### 2026-05-29 — main-Branch angelegt, Branches synchron, Pages-Trigger erweitert
 - Ursache „keine Commits“ in frischer Session: es gab nur den Feature-Branch, **kein `main`**.
