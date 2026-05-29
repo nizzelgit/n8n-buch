@@ -22,7 +22,6 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
 body {
   margin: 0; background: var(--book-bg); color: var(--book-ink);
   font-family: var(--sans); -webkit-font-smoothing: antialiased;
@@ -92,7 +91,7 @@ body {
 #content { min-width:0; }
 #bookbar {
   position: sticky; top: 0; z-index: 10;
-  background: rgba(244,245,248,.86); backdrop-filter: blur(8px);
+  background: var(--book-bg);              /* deckend statt blur: flüssiges Scrollen auf Mobil */
   border-bottom: 1px solid var(--book-line);
   display:flex; align-items:center; gap:12px; padding: 11px 30px; font-size: 13px;
 }
