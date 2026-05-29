@@ -948,10 +948,10 @@ ol.steps > li p { font-size: 15.5px; }
       </a><a class="sb-link" data-title="credentials & authentifizierung"
       href="#12-credentials" data-slug="12-credentials">
       <span class="num">12</span><span>Credentials & Authentifizierung</span>
-      </a><div class="sb-part">Teil 3 · Projekte (klein → groß)</div><a class="sb-link is-soon" data-title="projekt 1: täglicher report per telegram"
-      href="javascript:void(0)" data-slug="13-projekt-wetter">
+      </a><div class="sb-part">Teil 3 · Projekte (klein → groß)</div><a class="sb-link" data-title="projekt 1: täglicher report per telegram"
+      href="#13-projekt-wetter" data-slug="13-projekt-wetter">
       <span class="num">13</span><span>Projekt 1: Täglicher Report per Telegram</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="projekt 2: formular → sheets → slack"
+      </a><a class="sb-link is-soon" data-title="projekt 2: formular → sheets → slack"
       href="javascript:void(0)" data-slug="14-projekt-form">
       <span class="num">14</span><span>Projekt 2: Formular → Sheets → Slack</span>
       <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="projekt 3: news-aggregator mit filter"
@@ -1052,10 +1052,10 @@ ol.steps > li p { font-size: 15.5px; }
       <span class="pill">lesen</span></a><a class="toc-row" href="#12-credentials">
       <span class="n">12</span><span class="ti">Credentials & Authentifizierung</span>
       <span class="mins">⏱ 15 Min</span>
-      <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Teil 3 · Projekte (klein → groß)</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Teil 3 · Projekte (klein → groß)</h3><div class="toc-list"><a class="toc-row" href="#13-projekt-wetter">
       <span class="n">13</span><span class="ti">Projekt 1: Täglicher Report per Telegram</span>
-      <span class="mins">⏱ 30 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="mins">⏱ 36 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
       <span class="n">14</span><span class="ti">Projekt 2: Formular → Sheets → Slack</span>
       <span class="mins">⏱ 35 Min</span>
       <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
@@ -4483,12 +4483,426 @@ Wind: 12 km/h.</span></div>
 
     </article>
       <nav class="pn-wrap" data-slug="12-credentials"></nav></section>
+<section class="page" id="13-projekt-wetter" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">13</span> Projekt 1</div>
+      <h1 class="chap-title">Täglicher Wetter-Report per Telegram</h1>
+      <p class="chap-lede">Jetzt wird aus den Bausteinen ein echter Workflow: Jeden Morgen holt n8n aktuelle Wetterdaten,
+        baut daraus eine gut lesbare Nachricht und schickt sie dir per Telegram. Das Projekt ist klein genug zum
+        Nachbauen, aber vollständig genug, um als Vorlage für viele Reports zu dienen.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 36 Minuten</span>
+        <span>🎯 Niveau: Einstieg → Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 7–12</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>n8n läuft, und du kannst einen neuen Workflow erstellen.</li>
+          <li>Einen Telegram-Account und einen Telegram-Bot. Falls du noch keinen hast: Schritt 1 führt dich durch.</li>
+          <li>Keinen Wetter-API-Schlüssel: Wir nutzen Open-Meteo, eine freie API ohne Anmeldung.</li>
+          <li>Keine echten Tokens in Notizen, Screenshots oder geteilte Dateien schreiben. Tokens gehören nur in Credentials.</li>
+        </ul>
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Der fertige Workflow hat vier Nodes. Er startet täglich um 8 Uhr, holt Wetterdaten für Berlin, formt daraus
+        einen kompakten Morgenbericht und sendet ihn an deinen Telegram-Chat.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 900 320" preserveAspectRatio="none">
+                <path class="is-active" d="M 168 150 C 230 150, 245 150, 300 150"></path>
+                <path class="is-active" d="M 392 150 C 465 150, 478 150, 532 150"></path>
+                <path class="is-active" d="M 624 150 C 700 150, 710 150, 760 150"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:50px; top:104px;">
+                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__label">Täglich 8 Uhr</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node" style="left:300px; top:104px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span><span class="items">1 Item</span></div>
+              <div class="n8n-node n8n-node--code" style="left:532px; top:104px;">
+                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Report bauen</span><span class="items">1 Item</span></div>
+              <div class="n8n-node" style="left:760px; top:104px;">
+                <span class="n8n-node__icon">✈️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Telegram senden</span><span class="badge badge--ok">✓</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 13.1</span>Der komplette Projekt-Workflow:
+          <b>Schedule</b> → <b>HTTP Request</b> → <b>Edit Fields</b> → <b>Telegram</b>.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Warum genau dieses Projekt?</b>
+        Es bündelt die wichtigsten Bausteine ohne Nebengeräusche: Zeitplan, API-Aufruf, Expressions, Credential,
+        Versand und Aktivierung. Dasselbe Muster verwendest du später für Tagesberichte, Kontrolllisten,
+        Monitoring-Meldungen oder Team-Updates.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 1 — Telegram-Bot vorbereiten</h2>
+      <p>Telegram verschickt Nachrichten über Bots. Der Bot ist technisch der Absender; du gibst n8n sein Token als
+        Credential und deine Chat-ID als Empfänger.</p>
+
+      <ol class="steps">
+        <li><h4>BotFather öffnen</h4>
+          <p>Öffne Telegram und suche nach <strong>@BotFather</strong>. Achte auf den verifizierten Bot von Telegram.</p></li>
+        <li><h4>Neuen Bot erstellen</h4>
+          <p>Starte den Chat und sende <code>/newbot</code>. BotFather fragt nach einem Anzeigenamen und danach nach
+            einem Benutzernamen, der auf <code>bot</code> enden muss, z. B. <code>mein_wetter_report_bot</code>.</p></li>
+        <li><h4>Token kopieren</h4>
+          <p>Am Ende bekommst du ein Bot-Token. Kopiere es, aber speichere es nicht in einer normalen Textdatei.
+            Wir tragen es gleich in eine n8n-Credential ein.</p></li>
+        <li><h4>Dem Bot einmal schreiben</h4>
+          <p>Öffne den Chat mit deinem neuen Bot und sende irgendeine Nachricht, z. B. <code>Hallo</code>.
+            Ohne diesen ersten Kontakt darf der Bot dir später nicht schreiben.</p></li>
+        <li><h4>Chat-ID herausfinden</h4>
+          <p>Suche in Telegram <strong>@userinfobot</strong> und starte ihn. Er antwortet mit deiner numerischen
+            <strong>Id</strong>. Notiere diese Zahl als <code>CHAT_ID</code>.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        Fast alle Telegram-Probleme entstehen hier: falsches Token, falsche Chat-ID oder du hast deinem eigenen Bot
+        noch nie geschrieben. Prüfe diese drei Punkte, bevor du später am Workflow zweifelst.
+      </div>
+
+      <h2>Schritt 2 — Neuen Workflow anlegen und benennen</h2>
+      <ol class="steps">
+        <li><h4>Workflow erstellen</h4>
+          <p>Gehe zur Workflow-Übersicht und klicke auf <strong>Create Workflow</strong> bzw. <strong>Neuer Workflow</strong>.</p></li>
+        <li><h4>Name setzen</h4>
+          <p>Klicke oben links auf den Workflow-Namen und schreibe: <code>Täglicher Wetter-Report</code>.</p></li>
+        <li><h4>Speichern</h4>
+          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Oben sollte <strong>Saved</strong> bzw.
+            <strong>Gespeichert</strong> erscheinen.</p></li>
+      </ol>
+
+      <h2>Schritt 3 — Schedule-Trigger setzen</h2>
+      <p>Der Workflow soll von allein starten, also nehmen wir keinen manuellen Trigger, sondern einen Zeitplan.</p>
+
+      <ol class="steps">
+        <li><h4>Start-Node hinzufügen</h4>
+          <p>Klicke auf das große <span class="kbd">+</span> in der Mitte, suche <code>schedule</code> und wähle
+            <strong>Schedule Trigger</strong>.</p></li>
+        <li><h4>Trigger öffnen</h4>
+          <p>Doppelklicke den Schedule-Node. Die Parameter-Spalte öffnet sich.</p></li>
+        <li><h4>Täglich einstellen</h4>
+          <p>Setze <strong>Trigger Interval</strong> auf <strong>Days</strong>, <strong>Days Between Triggers</strong> auf
+            <code>1</code>, <strong>Trigger at Hour</strong> auf <code>8am</code> und <strong>Trigger at Minute</strong> auf
+            <code>0</code>.</p></li>
+        <li><h4>Testlauf ermöglichen</h4>
+          <p>Klicke oben im Node auf <strong>▶ Schritt ausführen</strong>. Der Node erzeugt sofort ein Test-Item, auch wenn es
+            gerade nicht 8 Uhr ist.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:560px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">⏰</span><b>Schedule Trigger</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Trigger Interval</label><div class="n8n-select">Days <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Days Between Triggers</label><input class="n8n-input" value="1"></div>
+                  <div class="row"><label>Trigger at Hour</label><div class="n8n-select">8am <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Trigger at Minute</label><input class="n8n-input" value="0"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 13.2</span>Der Report startet täglich um 8:00 Uhr. Die tatsächliche Zeitzone
+          kommt aus deinen n8n-Einstellungen.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn die Uhrzeit nicht stimmt</b>
+        Prüfe die Zeitzone deiner n8n-Instanz. Ein Server auf UTC löst 8:00 Uhr UTC aus, nicht automatisch 8:00 Uhr Berlin.
+        Für produktive Reports ist diese Prüfung keine Kosmetik, sondern Pflicht.
+      </div>
+
+      <h2>Schritt 4 — Wetterdaten mit Open-Meteo holen</h2>
+      <p>Jetzt hängen wir einen HTTP-Request-Node an. Wir nutzen Query-Parameter als Name/Wert-Liste, weil das lesbarer ist
+        als eine lange URL.</p>
+
+      <ol class="steps">
+        <li><h4>HTTP-Node anhängen</h4>
+          <p>Schließe die Detailansicht mit <span class="kbd">Esc</span>. Ziehe vom Ausgangspunkt rechts am Schedule-Node
+            eine Verbindung ins Leere, suche <code>http</code> und wähle <strong>HTTP Request</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Klicke den Node-Namen an und benenne ihn in <code>Wetter holen</code> um. Das macht spätere Expressions lesbarer.</p></li>
+        <li><h4>Node öffnen</h4>
+          <p>Doppelklick auf <strong>Wetter holen</strong>.</p></li>
+        <li><h4>Methode und URL setzen</h4>
+          <p><strong>Method</strong> bleibt <code>GET</code>. In <strong>URL</strong> trägst du ein:
+            <code>https://api.open-meteo.com/v1/forecast</code></p></li>
+        <li><h4>Query-Parameter einschalten</h4>
+          <p>Schalte <strong>Send Query Parameters</strong> ein und füge die folgenden Name/Wert-Paare hinzu.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>Name</th><th>Wert</th><th>Bedeutung</th></tr></thead>
+        <tbody>
+          <tr><td><code>latitude</code></td><td><code>52.52</code></td><td>Breitengrad Berlin</td></tr>
+          <tr><td><code>longitude</code></td><td><code>13.41</code></td><td>Längengrad Berlin</td></tr>
+          <tr><td><code>current</code></td><td><code>temperature_2m,wind_speed_10m,weather_code</code></td><td>aktuelle Werte</td></tr>
+          <tr><td><code>daily</code></td><td><code>temperature_2m_max,temperature_2m_min,precipitation_probability_max</code></td><td>Tageswerte</td></tr>
+          <tr><td><code>timezone</code></td><td><code>Europe/Berlin</code></td><td>Zeitzone für Datum/Uhrzeit</td></tr>
+        </tbody>
+      </table>
+
+      <ol class="steps" style="counter-reset: st 5;">
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke oben auf <strong>▶ Schritt ausführen</strong>. Rechts sollte ein JSON-Ergebnis mit <code>current</code>
+            und <code>daily</code> erscheinen.</p></li>
+        <li><h4>Schema prüfen</h4>
+          <p>Wechsle rechts auf <strong>Schema</strong>. Du solltest unter anderem
+            <code>current.temperature_2m</code>, <code>current.wind_speed_10m</code> und
+            <code>daily.temperature_2m_max</code> sehen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>Wetter holen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="ndv-empty">Zeitplan-Item</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                  <div class="row"><label>URL</label><input class="n8n-input" value="https://api.open-meteo.com/v1/forecast"></div>
+                  <div class="row"><label>Query</label><input class="n8n-input" value="latitude = 52.52"></div>
+                  <div class="row"><label>Query</label><input class="n8n-input" value="current = temperature_2m,wind_speed_10m,weather_code"></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-json">{
+  <span class="k">"current"</span>: {
+    <span class="k">"temperature_2m"</span>: <span class="n">17.4</span>,
+    <span class="k">"wind_speed_10m"</span>: <span class="n">12.3</span>,
+    <span class="k">"weather_code"</span>: <span class="n">3</span>
+  },
+  <span class="k">"daily"</span>: {
+    <span class="k">"temperature_2m_max"</span>: [<span class="n">20.1</span>],
+    <span class="k">"temperature_2m_min"</span>: [<span class="n">11.8</span>],
+    <span class="k">"precipitation_probability_max"</span>: [<span class="n">35</span>]
+  }
+}</div>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 13.3</span>Open-Meteo liefert aktuelle Werte unter <code>current</code> und
+          Tageswerte als Listen unter <code>daily</code>. Für den ersten Tageswert verwenden wir gleich <code>[0]</code>.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>Keine Daten?</strong> Prüfe die Query-Namen exakt. <code>latitude</code> ist nicht <code>lat</code>.</p>
+        <p style="margin:0">• <strong>Felder fehlen?</strong> Prüfe den Wert bei <code>current</code> und <code>daily</code>.
+          Open-Meteo liefert nur die Felder zurück, die du angefordert hast.</p>
+      </div>
+
+      <h2>Schritt 5 — Report-Text bauen</h2>
+      <p>Rohes JSON ist kein Report. Der nächste Node erzeugt ein einziges Feld <code>nachricht</code>, das Telegram später
+        verschickt.</p>
+
+      <ol class="steps">
+        <li><h4>Edit-Fields-Node anhängen</h4>
+          <p>Schließe die Detailansicht. Ziehe vom HTTP-Node eine Linie ins Leere, suche <code>edit fields</code> und wähle
+            <strong>Edit Fields (Set)</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Report bauen</code>.</p></li>
+        <li><h4>Node öffnen und Feld anlegen</h4>
+          <p>Doppelklick. Klicke <strong>Add Field</strong> bzw. <strong>Add Value</strong>. Feldname:
+            <code>nachricht</code>.</p></li>
+        <li><h4>Wert auf Expression stellen</h4>
+          <p>Beim Wert-Feld auf <strong>Expression</strong> klicken.</p></li>
+        <li><h4>Nachricht einfügen</h4>
+          <p>Füge den folgenden Ausdruck vollständig ein.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Feld `nachricht` — Modus: Expression</div>
+<pre>Guten Morgen! Wetter für Berlin:
+
+Jetzt: {{ Math.round($json.current.temperature_2m) }} °C, Wind {{ Math.round($json.current.wind_speed_10m) }} km/h.
+Heute: {{ Math.round($json.daily.temperature_2m_min[0]) }}–{{ Math.round($json.daily.temperature_2m_max[0]) }} °C.
+Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unbekannt" }} %.
+
+{{ $json.current.wind_speed_10m >= 40 ? "Achtung: starker Wind." : "Keine Wetterwarnung aus diesem einfachen Check." }}</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 5;">
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Rechts sollte ein einziges Feld <code>nachricht</code> mit einem
+            lesbaren Text stehen.</p></li>
+        <li><h4>Text prüfen</h4>
+          <p>Kontrolliere kritisch: Sind Zahlen gerundet? Wirkt der Satz natürlich? Passt die Windwarnung zum Wert im Eingang?</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Arrays bewusst lesen</b>
+        Die Tageswerte von Open-Meteo sind Listen. <code>temperature_2m_max[0]</code> heißt:
+        „Nimm den ersten Tageswert“. Ohne <code>[0]</code> würdest du die ganze Liste in den Text schreiben.
+      </div>
+
+      <h2>Schritt 6 — Telegram-Credential anlegen</h2>
+      <p>Jetzt kommt das Bot-Token aus Schritt 1 ins Spiel. Es gehört in eine Credential, nicht in den Workflow-Text.</p>
+
+      <ol class="steps">
+        <li><h4>Telegram-Node anhängen</h4>
+          <p>Schließe die Detailansicht. Ziehe vom Node <strong>Report bauen</strong> eine Linie ins Leere, suche
+            <code>telegram</code> und wähle <strong>Telegram</strong>.</p></li>
+        <li><h4>Aktion wählen</h4>
+          <p>Wähle als Aktion <strong>Send a text message</strong> bzw. sinngemäß „Textnachricht senden“.</p></li>
+        <li><h4>Credential erstellen</h4>
+          <p>Beim Feld <strong>Credential to connect with</strong> auf <strong>+ Create new credential</strong> klicken.</p></li>
+        <li><h4>Token eintragen</h4>
+          <p>Füge das Bot-Token von BotFather in das Token-Feld ein. Benenne die Credential z. B.
+            <code>Telegram – Wetter-Report</code> und speichere.</p></li>
+        <li><h4>Zurück zum Node</h4>
+          <p>Die neue Credential sollte jetzt im Telegram-Node ausgewählt sein.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Sicherheitsgrenze</b>
+        Das Token bleibt in der Credential. Es gehört nicht in ein Codefeld, nicht in eine Expression und nicht in eine
+        exportierte Workflow-Beschreibung. Wenn du es versehentlich veröffentlicht hast: BotFather öffnen und Token erneuern.
+      </div>
+
+      <h2>Schritt 7 — Telegram-Nachricht senden</h2>
+
+      <ol class="steps">
+        <li><h4>Chat-ID eintragen</h4>
+          <p>Im Telegram-Node das Feld <strong>Chat ID</strong> mit deiner Zahl aus Schritt 1 füllen.</p></li>
+        <li><h4>Text-Feld auf Expression stellen</h4>
+          <p>Beim Feld <strong>Text</strong> auf <strong>Expression</strong> umschalten.</p></li>
+        <li><h4>Nachricht aus vorherigem Node übernehmen</h4>
+          <p>Trage ein: <code>{{ $json.nachricht }}</code>. Das ist das Feld aus <strong>Report bauen</strong>.</p></li>
+        <li><h4>Telegram-Node einzeln testen</h4>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Innerhalb weniger Sekunden sollte die Nachricht in Telegram erscheinen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:560px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">✈️</span><b>Telegram — Send a text message</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Credential to connect with</label><div class="n8n-select">Telegram – Wetter-Report <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Chat ID</label><input class="n8n-input" value="123456789"></div>
+                  <div class="row"><label>Text</label><div class="ndv-fxtab"><b>Fest</b><b class="is-active">Expression</b></div><input class="n8n-input is-expr" value="{{ $json.nachricht }}"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 13.4</span>Telegram bekommt nur den fertigen Report-Text aus dem vorherigen Node.
+          Das Bot-Token bleibt in der Credential.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn die Nachricht nicht ankommt</b>
+        <p style="margin:0 0 6px">• <strong>Bad Request: chat not found</strong> → Chat-ID falsch oder du hast dem Bot noch nicht geschrieben.</p>
+        <p style="margin:0 0 6px">• <strong>Unauthorized</strong> → Bot-Token falsch oder Credential nicht gespeichert.</p>
+        <p style="margin:0">• <strong>Im Text steht nichts</strong> → Prüfe im vorherigen Node, ob <code>nachricht</code> wirklich erzeugt wurde.</p>
+      </div>
+
+      <h2>Schritt 8 — Den ganzen Workflow testen</h2>
+      <ol class="steps">
+        <li><h4>Zurück zum Canvas</h4>
+          <p>Drücke <span class="kbd">Esc</span>, bis du alle vier Nodes siehst.</p></li>
+        <li><h4>Speichern</h4>
+          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Test workflow starten</h4>
+          <p>Klicke <strong>Test workflow</strong>. n8n läuft von links nach rechts durch: Schedule → Wetter holen →
+            Report bauen → Telegram senden.</p></li>
+        <li><h4>Grüne Häkchen prüfen</h4>
+          <p>Jeder Node sollte ein grünes Häkchen bekommen. Öffne bei einem Fehler genau den roten Node, nicht blind alle.</p></li>
+        <li><h4>Telegram kontrollieren</h4>
+          <p>Prüfe, ob genau eine neue Nachricht angekommen ist und ob sie fachlich plausibel klingt.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum erst manuell testen?</b>
+        Ein aktiver Workflow sendet später automatisch. Wenn du vorher nicht manuell testest, automatisierst du im Zweifel
+        einen Fehler. Bei Benachrichtigungen ist das harmlos; bei Rechnungen, CRM oder Löschaktionen wäre es riskant.
+      </div>
+
+      <h2>Schritt 9 — Aktiv schalten</h2>
+      <ol class="steps">
+        <li><h4>Letzten Stand speichern</h4>
+          <p>Speichere noch einmal. Der Status oben sollte <strong>Saved</strong> sein.</p></li>
+        <li><h4>Aktiv-Schalter umlegen</h4>
+          <p>Oben rechts den Workflow von <strong>Inactive</strong> auf <strong>Active</strong> schalten.</p></li>
+        <li><h4>Was jetzt passiert</h4>
+          <p>n8n lauscht nun auf den Schedule. Der nächste automatische Lauf passiert zur eingestellten Uhrzeit.</p></li>
+        <li><h4>Ersten automatischen Lauf prüfen</h4>
+          <p>Nach der ersten geplanten Ausführung öffnest du den Tab <strong>Executions</strong> und prüfst, ob der Lauf
+            erfolgreich war. Das ist deine Kontrolle, dass nicht nur der manuelle Test funktioniert.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Produktiv heißt: beobachten</b>
+        Aktivieren ist nicht das Ende. Prüfe nach dem ersten echten Lauf die Ausführungshistorie. Erst danach darfst du
+        annehmen, dass der Workflow im Alltag zuverlässig läuft.
+      </div>
+
+      <h2>Varianten, die du sofort bauen kannst</h2>
+      <table class="btable">
+        <thead><tr><th>Variante</th><th>Änderung</th></tr></thead>
+        <tbody>
+          <tr><td>Andere Stadt</td><td><code>latitude</code> und <code>longitude</code> austauschen.</td></tr>
+          <tr><td>Andere Uhrzeit</td><td>Schedule-Trigger ändern, z. B. 7:30 Uhr statt 8:00 Uhr.</td></tr>
+          <tr><td>Nur bei Regenwarnung senden</td><td>Vor Telegram einen IF-Node setzen: <code>precipitation_probability_max[0] &gt;= 60</code>.</td></tr>
+          <tr><td>Mehrere Empfänger</td><td>Entweder mehrere Telegram-Nodes oder später eine Empfängerliste als Items.</td></tr>
+          <tr><td>Slack statt Telegram</td><td>Letzten Node austauschen; Feld <code>nachricht</code> bleibt gleich.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Welcher Node entscheidet, wann der Report startet?</li>
+          <li>Warum stehen Open-Meteo-Parameter als Query-Liste statt in einer langen URL?</li>
+          <li>Warum braucht <code>daily.temperature_2m_max</code> den Zugriff <code>[0]</code>?</li>
+          <li>Wo gehört das Telegram-Bot-Token hin?</li>
+          <li>Was prüfst du nach dem ersten echten automatischen Lauf?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Der Schedule-Trigger. · 2) Es ist lesbarer, wartbarer und Expressions sind leichter einzusetzen. ·
+        3) Weil Open-Meteo Tageswerte als Liste liefert; <code>[0]</code> ist der erste Tag. ·
+        4) In eine Telegram-Credential. · 5) Die Execution-Historie und die tatsächlich gesendete Telegram-Nachricht.
+      </div>
+
+      <p>Du hast jetzt das erste vollständige Projekt gebaut: automatisch, mit externer API, Datenaufbereitung,
+        Credential und echtem Versand. Im nächsten Projekt nutzen wir dasselbe Grundmuster, aber mit einem anderen
+        Eingang: Formular-Daten laufen in eine Tabelle und anschließend als Team-Nachricht weiter.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="13-projekt-wetter"></nav></section>
 
   </div>
 </div>
 <script>
-var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials"];
-var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
+var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter"];
+var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
 
 function show(slug) {
   if (!slug || READY.indexOf(slug) === -1 && slug !== "home") slug = "home";

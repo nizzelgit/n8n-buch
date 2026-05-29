@@ -43,7 +43,15 @@ n8n-buch/
 │   ├── 02-installation.html
 │   ├── 03-oberflaeche.html
 │   ├── 04-erster-workflow.html
-│   └── 05-kernkonzepte.html
+│   ├── 05-kernkonzepte.html
+│   ├── 06-expressions.html
+│   ├── 07-trigger.html
+│   ├── 08-http.html
+│   ├── 09-transform.html
+│   ├── 10-flow.html
+│   ├── 11-fehler.html
+│   ├── 12-credentials.html
+│   └── 13-projekt-wetter.html
 ├── assets/
 │   ├── css/
 │   │   ├── book.css            # Layout, Typografie, didaktische Bausteine, Responsiv
@@ -212,12 +220,13 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `10-flow` — IF (2 Ausgänge), Switch, Merge (Append/Combine), Loops (selten nötig!), Verzweigungs-Übung
 - `11-fehler` — Retry On Fail, Fehlerausgang (On Error), globaler Error-Workflow (Error Trigger), Stop and Error
 - `12-credentials` — Credentials sicher anlegen, vordefiniert vs. generisch (Header Auth), OAuth, Sicherheits-Gewohnheiten
+- `13-projekt-wetter` — Projekt 1: täglicher Wetter-Report per Telegram (Schedule → HTTP → Set → Telegram)
 
-> **Teil 0, 1 und 2 sind damit vollständig (Kap. 00–12).**
+> **Teil 0, 1 und 2 sind vollständig (Kap. 00–12). Teil 3 ist gestartet (Kap. 13).**
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `13-projekt-wetter` — **erstes vollständiges Projekt** (Teil 3): Schedule → HTTP → Set → Telegram, end-to-end
-2. weitere Projekte `14`–`19` (steigende Komplexität)
+1. `14-projekt-form` — Formular → Sheets → Slack (zweites Praxisprojekt)
+2. weitere Projekte `15`–`19` (steigende Komplexität)
 3. danach KI 20–21, Betrieb 22–25, Anhänge A–D
 
 **Hinweis zu Projekt-Kapiteln (Teil 3):** Sie sind länger/umfangreicher als die Bausteine. Sie sollten die in
@@ -230,6 +239,15 @@ deren Grundlagen zu wiederholen (stattdessen verlinken/verweisen).
 ---
 
 ## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 — Projekt 1 Wetter-Report ergänzt
+- **Kapitel 13 „Täglicher Wetter-Report per Telegram"** (`ready`): erstes End-to-End-Projekt mit
+  Schedule-Trigger, Open-Meteo-HTTP-Request, Edit-Fields-Reporttext, Telegram-Credential, Telegram-Versand,
+  manuellem Gesamttest, Aktivierung und Varianten.
+- `node build.js` → **15 Kapitel** im Bundle.
+- Wichtiger Session-Befund: Der zuerst ausgecheckte Branch `claude/n-acht-n-workflows-guide-EWQxg` war veraltet;
+  `origin/main` enthielt bereits Kap. 06–12. Weiterarbeit wurde daher auf aktuellem `main` fortgesetzt.
+- Nächster offener Schritt: `14-projekt-form` (Formular → Sheets → Slack).
 
 ### 2026-05-29 — Stand auf `main` konsolidiert, Doku aufgefrischt
 - **`main` trägt den vollständigen Stand:** `HEAD` = `origin/main` = `origin/claude/optimistic-shannon-TJ1d8`

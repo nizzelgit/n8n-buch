@@ -41,7 +41,7 @@ window.BOOK = {
     {
       part: "Teil 3 · Projekte (klein → groß)",
       chapters: [
-        { num: "13", slug: "13-projekt-wetter", title: "Projekt 1: Täglicher Report per Telegram", status: "soon", mins: 30 },
+        { num: "13", slug: "13-projekt-wetter", title: "Projekt 1: Täglicher Report per Telegram", status: "ready", mins: 36 },
         { num: "14", slug: "14-projekt-form",   title: "Projekt 2: Formular → Sheets → Slack", status: "soon", mins: 35 },
         { num: "15", slug: "15-projekt-news",   title: "Projekt 3: News-Aggregator mit Filter", status: "soon", mins: 35 },
         { num: "16", slug: "16-projekt-leads",  title: "Projekt 4: Lead-Routing vom Webhook ins CRM", status: "soon", mins: 40 },
