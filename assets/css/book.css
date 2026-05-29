@@ -318,6 +318,42 @@ ol.steps > li p { font-size: 15.5px; }
   .ndv__cols { grid-template-columns: 1fr; }
 }
 
+/* ---------- Mobile-Performance: teure Effekte auf kleinen Screens aus ----
+   Auf dem Handy verursachen das berechnete Punkteraster (radial-gradient)
+   und die vielen weich-geblurrten Schatten ruckeliges Scrollen, weil sie
+   beim Scrollen ständig neu gerastert werden. Hier ersetzen wir das Raster
+   durch eine flache Fläche und entfernen die Schatten — die Optik bleibt
+   nahezu identisch, das Scrollen wird flüssig. */
+@media (max-width: 1000px) {
+  .n8n-canvas {
+    background-image: none;
+    background-color: var(--n8n-canvas-bg);
+  }
+  .n8n,
+  .n8n-node,
+  .n8n-node__tools,
+  .ndv,
+  .nodes-panel,
+  .n8n-sticky,
+  .n8n-zoom,
+  .figure .frame,
+  .card,
+  .clickpath,
+  .prereq,
+  .code,
+  .callout,
+  .pn,
+  .barbtn,
+  .kbd { box-shadow: none !important; }
+
+  /* Schwere Animation beim Seitenwechsel deaktivieren */
+  .page { animation: none !important; }
+
+  /* Verlaufs-Hintergrund der mobilen Sidebar-Schattenfläche vermeiden */
+  #sidebar { box-shadow: none; }
+  #app.nav-open #sidebar { box-shadow: 2px 0 0 rgba(0,0,0,.15); }
+}
+
 /* Druck / PDF-Export */
 @media print {
   #sidebar, #bookbar, #prevnext, .sb-toggle { display:none !important; }
