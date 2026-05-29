@@ -212,11 +212,13 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `05-kernkonzepte` — Items, JSON, Datenfluss, Expressions-Einstieg
 - `06-expressions` — Expressions vertieft: Ausdruckseditor, Variablen, Text/Datum/Zahlen,
   Bedingungen & Fallbacks, Listen, Stolpersteine, Mini-Spickzettel
+- `07-trigger` — **Auftakt Teil 2 „Bausteine“**: Manual/Schedule/Webhook-Trigger, der
+  Test-vs.-Produktiv-/Aktiv-Schalter, App-/Form-/Chat-/Error-Trigger, Entscheidungshilfe
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `13-projekt-wetter` — erstes vollständiges Projekt (großer Praxis-Sprung), ODER
-   `07-trigger` (folgt der Manifest-Reihenfolge, Teil 2 „Bausteine“).
-2. danach Bausteine 07–12, weitere Projekte 14–19, KI 20–21, Betrieb 22–25, Anhänge A–D
+1. `08-http` — HTTP-Request-Node (folgt der Manifest-Reihenfolge, Teil 2 „Bausteine“), ODER
+   `13-projekt-wetter` — erstes vollständiges Projekt (großer Praxis-Sprung).
+2. restliche Bausteine 09–12, weitere Projekte 14–19, KI 20–21, Betrieb 22–25, Anhänge A–D
 3. Anhang C (`C-expressions`) baut direkt auf Kap. 6 auf — dort die `.expr-editor`-Komponente
    und das Cheatsheet wiederverwenden.
 
@@ -226,6 +228,21 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 ---
 
 ## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 (3) — Kapitel 7 (Trigger) geschrieben — Auftakt Teil 2
+- **`07-trigger` komplett geschrieben** (`status: "ready"`): Trigger-Grundform (abgerundet, kein
+  Eingang), der zentrale **Test-vs.-Produktiv-/Aktiv-Schalter**, die drei Universal-Trigger
+  Manuell / **Schedule** (ol.steps „täglich 8:00“ + Intervall-Tabelle + Cron-Hinweis) / **Webhook**
+  (ol.steps + Test-URL vs. Production-URL als Hauptstolperstein + Sicherheits-Hinweis), App-/Form-/
+  Chat-/Error-Trigger (Cards), Entscheidungshilfe-Tabelle, Mehrfach-Trigger, Stolperstein-Tabelle,
+  Selbsttest. Didaktik: 2× `ol.steps`, 2× „Wenn etwas schiefgeht" + Stolperstein-Tabelle, ⚡-Pareto
+  + ⚡-Tipp, Voraussetzungs-Box, 4 Abbildungen (7.1 Trigger-Formen, 7.2 Aktiv-Schalter,
+  7.3 Schedule-NDV, 7.4 Webhook-URLs).
+- Genutzte Komponenten: `.n8n-canvas` mit drei Triggern, `.n8n-topbar` + `.n8n-toggle`/`.n8n-switch`
+  (Inaktiv-Zustand = ohne `.is-on`), zwei `.ndv`, `.cards`. Keine neuen CSS-Bausteine nötig.
+- `node build.js` → 9 Kapitel im Bundle (209 KB). `node --check chapters.js` grün.
+- Branch wie gehabt: `claude/awesome-brown-r45is` (Push nur dorthin, kein `main`-Sync).
+- Offen / als Nächstes: `08-http` (Manifest-Reihenfolge) oder `13-projekt-wetter`.
 
 ### 2026-05-29 (2) — Kapitel 6 (Expressions) geschrieben + Expression-Editor-Komponente
 - **`06-expressions` komplett geschrieben** (`status: "ready"`): Was eine Expression ist

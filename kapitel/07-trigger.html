@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trigger-Nodes (Manual, Schedule, Webhook) — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="07-trigger" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">7</span> Bausteine</div>
+      <h1 class="chap-title">Trigger-Nodes: Manual, Schedule & Webhook</h1>
+      <p class="chap-lede">Jeder Workflow braucht einen Anfang — einen <strong>Trigger</strong>, der bestimmt, <em>wann</em> es
+        losgeht. In Teil 1 hast du den manuellen Trigger schon benutzt. Jetzt lernst du die drei wichtigsten kennen und
+        verstehst den einen Unterschied, an dem die meisten Anfänger:innen hängen bleiben: <em>Testen</em> vs. <em>Produktiv</em>.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 18 Minuten</span>
+        <span>🎯 Niveau: Einstieg → Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 4 (erster Workflow)</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du können solltest</h4>
+        <ul>
+          <li>Du hast schon einen <strong>manuellen Trigger</strong> hinzugefügt und einen Workflow ausgeführt (Kap. 4).</li>
+          <li>Du weißt, wo der <strong>Aktiv</strong>-Schalter sitzt (oben rechts) und dass n8n nicht automatisch speichert (Kap. 3).</li>
+          <li>Zum Mitmachen reicht ein leerer Workflow — wir hängen an die Trigger nur einen einzigen Test-Node.</li>
+        </ul>
+      </div>
+
+      <h2>Was ein Trigger ist — und was ihn besonders macht</h2>
+      <p>Ein <strong>Trigger</strong> ist der <em>erste</em> Node eines Workflows. Er produziert das Start-Item und legt fest,
+        <strong>wodurch</strong> der Ablauf ausgelöst wird. Drei Dinge unterscheiden ihn von allen anderen Nodes:</p>
+      <ul>
+        <li>Er hat eine <strong>abgerundete linke Seite</strong> und <strong>keinen Eingang</strong> — er steht ja am Anfang.</li>
+        <li>Du kannst ihn nicht „mittendrin“ einbauen; er gehört immer ganz nach links.</li>
+        <li>Sein Verhalten hängt davon ab, ob der Workflow <strong>aktiv</strong> ist (dazu gleich mehr).</li>
+      </ul>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 820 420" preserveAspectRatio="none">
+                <path d="M 158 70 C 230 70, 250 70, 320 70"></path>
+                <path d="M 158 200 C 230 200, 250 200, 320 200"></path>
+                <path d="M 158 330 C 230 330, 250 330, 320 330"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:52px; top:24px;">
+                <span class="n8n-node__icon">🖐️</span><span class="ep out"></span>
+                <span class="n8n-node__label">Manuell</span></div>
+              <div class="n8n-node n8n-node--trigger" style="left:52px; top:154px;">
+                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__label">Zeitplan</span></div>
+              <div class="n8n-node n8n-node--trigger" style="left:52px; top:284px;">
+                <span class="n8n-node__icon">🔗</span><span class="ep out"></span>
+                <span class="n8n-node__label">Webhook</span></div>
+              <div class="n8n-node" style="left:320px; top:24px;">
+                <span class="n8n-node__icon">⚙️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">… dein Workflow</span></div>
+              <div class="n8n-node" style="left:320px; top:154px;">
+                <span class="n8n-node__icon">⚙️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">… dein Workflow</span></div>
+              <div class="n8n-node" style="left:320px; top:284px;">
+                <span class="n8n-node__icon">⚙️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">… dein Workflow</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 7.1</span>Drei Trigger, dieselbe charakteristische Form (abgerundet links, kein
+          Eingang). Egal wodurch gestartet wird — was <em>danach</em> kommt, baust du immer gleich.</figcaption>
+      </figure>
+
+      <h2>Test vs. Produktiv — die Unterscheidung, die alles ändert</h2>
+      <p>Das ist <strong>der</strong> Punkt, an dem Trigger verwirren. Es gibt zwei völlig verschiedene Arten, wie ein Workflow läuft:</p>
+      <ul>
+        <li><strong>Beim Bauen (Test):</strong> Du klickst selbst auf <strong>„Test workflow“</strong>. Der Workflow läuft <em>einmal</em>,
+          egal welcher Trigger vorne sitzt. Perfekt zum Entwickeln.</li>
+        <li><strong>Im Betrieb (Produktiv):</strong> Der Trigger feuert <em>von selbst</em> — der Zeitplan zur eingestellten Uhrzeit,
+          der Webhook bei jeder Anfrage. Das passiert <strong>nur, wenn der Workflow „Aktiv“ ist</strong>.</li>
+      </ul>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-topbar">
+              <div class="n8n-logo">n8</div>
+              <div class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><span class="n8n-wfname">Täglicher Report</span></div>
+              <div class="n8n-topbar__right">
+                <span class="n8n-saved">Gespeichert</span>
+                <div class="n8n-toggle"><span>Inaktiv</span><span class="n8n-switch"></span></div>
+                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Test workflow</button>
+                <button class="n8n-btn n8n-btn--sm">⋯</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 7.2</span>Der <b>Aktiv-Schalter</b> steht hier auf <em>Inaktiv</em> (grau) — richtig
+          fürs Bauen. Du testest über <b>„Test workflow“</b>. Erst wenn alles läuft, schaltest du auf <em>Aktiv</em>.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die Regel, die dir stundenlanges Rätselraten erspart</b>
+        Ein Zeitplan- oder Webhook-Trigger tut im Betrieb <strong>gar nichts</strong>, solange der Workflow <strong>inaktiv</strong>
+        ist. „Mein Workflow läuft nicht um 8 Uhr!“ heißt fast immer: Der <strong>Aktiv-Schalter ist aus</strong>. Erst testen,
+        dann aktiv schalten.
+      </div>
+
+      <h2>Trigger 1: Der manuelle Trigger (zum Bauen)</h2>
+      <p>Den kennst du schon aus Kapitel 4. In der Trigger-Auswahl heißt er <strong>„Trigger manually“</strong>. Er macht genau
+        eine Sache: Er feuert, wenn <em>du</em> auf <strong>„Test workflow“</strong> klickst, und liefert ein leeres Start-Item.</p>
+      <ul>
+        <li><strong>Wofür:</strong> zum Entwickeln und Ausprobieren — solange noch kein „echter“ Auslöser feststeht.</li>
+        <li><strong>Wofür nicht:</strong> für den Dauerbetrieb. Ein produktiver Workflow soll ja von selbst starten, nicht auf
+          deinen Klick warten.</li>
+      </ul>
+
+      <div class="callout callout--tip">
+        <b class="t">⚡ Trigger später austauschen — ohne den Rest anzufassen</b>
+        Du baust einen Workflow oft mit dem manuellen Trigger fertig und ersetzt ihn am Ende durch einen Zeitplan oder Webhook.
+        Der Clou: Alles dahinter bleibt unverändert, weil jeder Trigger denselben „Ausgang“ hat. Nur der <em>Anlass</em> ändert sich.
+      </div>
+
+      <h2>Trigger 2: Schedule (Zeitplan) — das Arbeitspferd</h2>
+      <p>Der <strong>Schedule Trigger</strong> (in der Auswahl: <strong>„On a schedule“</strong>) startet den Workflow nach Zeitplan:
+        täglich um 8 Uhr, alle 15 Minuten, jeden Montag … Er ist der häufigste Produktiv-Trigger überhaupt. Bauen wir „jeden Tag
+        um 8:00 Uhr“:</p>
+
+      <ol class="steps">
+        <li><h4>Trigger-Auswahl öffnen</h4>
+          <p>Im leeren Workflow auf das große <span class="kbd">+</span> klicken. Rechts erscheint das Panel „Wie soll der Workflow
+            starten?“.</p></li>
+        <li><h4>„On a schedule“ wählen</h4>
+          <p>Tippe <code>schedule</code> ins Suchfeld (oder wähle den Eintrag mit der ⏰-Uhr direkt). Klick darauf — der
+            Schedule-Trigger erscheint auf dem Canvas.</p></li>
+        <li><h4>Node öffnen</h4>
+          <p><strong>Doppelklick</strong> auf den neuen Node. Die Detailansicht öffnet sich. In der Mitte siehst du das Feld
+            <strong>„Trigger Interval“</strong> (Auslöse-Intervall).</p></li>
+        <li><h4>Intervall auf „Days“ stellen</h4>
+          <p>Klick auf das Auswahlfeld und wähle <strong>„Days“</strong> (Tage). Darunter erscheinen passende Zusatzfelder.</p></li>
+        <li><h4>Uhrzeit festlegen</h4>
+          <p>Lass <strong>„Days Between Triggers“</strong> auf <code>1</code> (jeden Tag). Setze <strong>„Trigger at Hour“</strong>
+            auf <code>8am</code> und <strong>„Trigger at Minute“</strong> auf <code>0</code>.</p></li>
+        <li><h4>Was du jetzt siehst</h4>
+          <p>Der Node ist fertig konfiguriert: „läuft täglich um 08:00“. Du musst hier <em>nichts</em> ausführen — zum Testen des
+            restlichen Workflows klickst du wie gewohnt auf „Test workflow“.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">⏰</span><b>Schedule Trigger</b><span class="ndv-docs">Doku ↗</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang</div>
+                <div class="ndv-panel__body"><div class="ndv-empty">Ein Trigger hat keinen Eingang.<br>Er erzeugt das Start-Item selbst.</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Trigger Interval</label><div class="n8n-select">Days <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Days Between Triggers</label><input class="n8n-input" value="1"></div>
+                  <div class="row"><label>Trigger at Hour</label><div class="n8n-select">8am <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Trigger at Minute</label><input class="n8n-input" value="0"></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-viewtabs"><b>Tabelle</b><b class="is-active">JSON</b><b>Schema</b></div>
+                  <div class="n8n-json" style="margin-top:10px;">{
+  <span class="k">"timestamp"</span>: <span class="s">"2026-05-29T08:00:00+02:00"</span>,
+  <span class="k">"Readable date"</span>: <span class="s">"29 May 2026, 08:00"</span>
+}</div>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 7.3</span>Der Schedule-Trigger für „täglich 08:00“. Im Ausgang liefert er einen
+          Zeitstempel mit — praktisch, wenn dein Workflow das aktuelle Datum braucht (z. B. <code>{{ $json.timestamp }}</code>).</figcaption>
+      </figure>
+
+      <p>Über das Feld <strong>„Trigger Interval“</strong> deckst du fast alles ab. Die häufigsten Einstellungen:</p>
+      <table class="btable">
+        <thead><tr><th>Du willst …</th><th>Trigger Interval</th></tr></thead>
+        <tbody>
+          <tr><td>alle paar Minuten prüfen</td><td><strong>Minutes</strong>, z. B. „15“ = alle 15 Min</td></tr>
+          <tr><td>stündlich</td><td><strong>Hours</strong>, „1“</td></tr>
+          <tr><td>täglich zu fester Uhrzeit</td><td><strong>Days</strong> + Hour/Minute (wie oben)</td></tr>
+          <tr><td>wöchentlich an bestimmten Tagen</td><td><strong>Weeks</strong> + Wochentage wählen</td></tr>
+          <tr><td>komplex (z. B. werktags 8 Uhr)</td><td><strong>Custom (Cron)</strong> — siehe Kasten</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Für Profis: der Cron-Ausdruck</b>
+        Wählst du als Intervall <strong>„Custom (Cron)“</strong>, gibst du einen Cron-Ausdruck aus fünf Teilen ein:
+        <code>Minute Stunde Tag Monat Wochentag</code>. Beispiel <code>0 8 * * 1-5</code> = „um 8:00 an Wochentagen (Mo–Fr)“.
+        Das brauchst du selten — die normalen Intervalle reichen fast immer.
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <strong>Der Zeitplan löst nie aus?</strong> Zu 90 % ist der Workflow noch <strong>inaktiv</strong>. Teste erst mit „Test
+        workflow“, ob alles funktioniert, und leg dann oben rechts den <strong>Aktiv-Schalter</strong> um. Ab da läuft der Zeitplan
+        wirklich — auch wenn der Editor geschlossen ist.
+      </div>
+
+      <h2>Trigger 3: Webhook — auf Ereignisse von außen reagieren</h2>
+      <p>Ein <strong>Webhook</strong> ist eine Adresse (URL), die n8n für dich bereitstellt. Schickt <em>irgendetwas</em> eine Anfrage
+        an diese URL — ein Online-Formular, ein anderes System, ein Shop —, startet der Workflow und bekommt die mitgeschickten
+        Daten als Item. So verbindest du n8n mit der Außenwelt, auch mit Diensten, die n8n nicht von Haus aus kennt.</p>
+
+      <ol class="steps">
+        <li><h4>Webhook-Trigger hinzufügen</h4>
+          <p>Auf das <span class="kbd">+</span>, dann <code>webhook</code> suchen und <strong>„On webhook call“</strong> wählen.</p></li>
+        <li><h4>Node öffnen und die Methode prüfen</h4>
+          <p><strong>Doppelklick</strong>. Das Feld <strong>„HTTP Method“</strong> steht auf <strong>GET</strong>. Für ein Formular,
+            das Daten <em>sendet</em>, wählst du oft <strong>POST</strong>. Fürs erste Ausprobieren lassen wir GET.</p></li>
+        <li><h4>Die zwei URLs entdecken</h4>
+          <p>Oben im Node siehst du zwei Reiter: <strong>Test URL</strong> und <strong>Production URL</strong>. Das ist der Kern des
+            Webhooks — und Stolperstein Nummer 1 (siehe unten).</p></li>
+        <li><h4>Auf Testereignis lauschen</h4>
+          <p>Klicke auf <strong>„Listen for test event“</strong> (Auf Testereignis warten). n8n wartet jetzt einige Minuten auf eine
+            Anfrage an die <strong>Test-URL</strong>.</p></li>
+        <li><h4>Die Test-URL aufrufen</h4>
+          <p>Kopiere die Test-URL und öffne sie in einem neuen Browser-Tab (das ist eine GET-Anfrage). Im Node erscheinen sofort die
+            empfangenen Daten — der Webhook hat „gefeuert“.</p></li>
+        <li><h4>Was du jetzt siehst</h4>
+          <p>Im Ausgang stehen die Bestandteile der Anfrage: <code>headers</code>, <code>params</code>, <code>query</code> und (bei
+            POST) <code>body</code>. Auf diese Felder greifst du danach mit Expressions zu, z. B. <code>{{ $json.query.name }}</code>.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">🔗</span><b>Webhook</b><span class="ndv-docs">Doku ↗</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang</div>
+                <div class="ndv-panel__body"><div class="ndv-empty">Kein Eingang.<div class="ndv-exec">⏻ Listen for test event</div></div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-fxtab"><b class="is-active">Test URL</b><b>Production URL</b></div>
+                  <div class="row"><input class="n8n-input" value="https://…/webhook-test/a1b2c3d4"></div>
+                  <div class="row"><label>HTTP Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Path</label><input class="n8n-input" value="a1b2c3d4-...-e5f6"></div>
+                  <div class="row"><label>Authentication</label><div class="n8n-select">None <span class="chev">▾</span></div></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-viewtabs"><b>Tabelle</b><b class="is-active">JSON</b><b>Schema</b></div>
+                  <div class="n8n-json" style="margin-top:10px;">{
+  <span class="k">"headers"</span>: { <span class="k">"host"</span>: <span class="s">"…"</span> },
+  <span class="k">"params"</span>: {},
+  <span class="k">"query"</span>: { <span class="k">"name"</span>: <span class="s">"Anna"</span> },
+  <span class="k">"body"</span>: {}
+}</div>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 7.4</span>Der Webhook-Node mit <b>Test-</b> und <b>Production-URL</b>. Hier wurde
+          die Test-URL mit <code>?name=Anna</code> aufgerufen — der Wert landet im Ausgang unter <code>query.name</code>.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht — der klassische Webhook-Fehler</b>
+        <p style="margin:0 0 6px"><strong>Test-URL vs. Production-URL nicht verwechseln!</strong></p>
+        <p style="margin:0 0 6px">• Die <strong>Test-URL</strong> funktioniert nur <em>kurz</em>, nachdem du auf „Listen for test
+          event“ geklickt hast — gedacht zum Entwickeln. Danach gibt sie „404 / not registered“ zurück.</p>
+        <p style="margin:0">• Die <strong>Production-URL</strong> funktioniert dauerhaft — aber <strong>nur, wenn der Workflow aktiv
+          ist</strong>. Vergisst du den Aktiv-Schalter, bekommt der Aufrufer ebenfalls einen 404.</p>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Sicherheit: eine Webhook-URL ist öffentlich</b>
+        Jeder, der die URL kennt, kann deinen Workflow auslösen. Die zufällige Zeichenfolge im Pfad macht sie schwer zu erraten —
+        für sensible Fälle schaltest du zusätzlich bei <strong>„Authentication“</strong> einen Schutz ein (z. B. Header- oder
+        Basic-Auth). Mehr zu Zugängen in Kapitel 12.
+      </div>
+
+      <h2>App-Trigger & Spezialfälle</h2>
+      <p>Neben den drei Universal-Triggern bringen viele Integrationen <strong>eigene</strong> Trigger mit — sie reagieren direkt auf
+        ein Ereignis im jeweiligen Dienst, ohne dass du eine URL verdrahten musst:</p>
+
+      <div class="cards">
+        <div class="card"><div class="ic">💬</div><b>App-Trigger</b><p>z. B. „Telegram → neue Nachricht“, „Gmail → neue E-Mail“,
+          „Airtable → neuer Datensatz“. Reagiert direkt auf das Ereignis in der App.</p></div>
+        <div class="card"><div class="ic">📝</div><b>Form Trigger</b><p>Stellt ein fertiges Web-Formular bereit. Beim Absenden startet
+          der Workflow mit den Formularfeldern als Daten — ideal für kleine Eingaben.</p></div>
+        <div class="card"><div class="ic">💬</div><b>Chat Trigger</b><p>Öffnet ein Chat-Fenster für KI-Assistenten. Grundlage der
+          AI-Agent-Workflows in <a href="../index.html">Kapitel 20</a>.</p></div>
+        <div class="card"><div class="ic">⚠️</div><b>Error Trigger</b><p>Startet, wenn ein <em>anderer</em> Workflow scheitert — dein
+          Frühwarnsystem. Details in <a href="../index.html">Kapitel 11</a>.</p></div>
+      </div>
+
+      <h2>Welcher Trigger für welchen Fall?</h2>
+      <table class="btable">
+        <thead><tr><th>Dein Ziel</th><th>Passender Trigger</th></tr></thead>
+        <tbody>
+          <tr><td>Beim Bauen selbst starten</td><td><strong>Manuell</strong> (Trigger manually)</td></tr>
+          <tr><td>Regelmäßig automatisch (täglich, stündlich …)</td><td><strong>Schedule</strong> (On a schedule)</td></tr>
+          <tr><td>Auf ein externes System/Formular reagieren</td><td><strong>Webhook</strong> (On webhook call)</td></tr>
+          <tr><td>Auf neue Telegram-Nachricht / E-Mail reagieren</td><td><strong>App-Trigger</strong> (Telegram, Gmail …)</td></tr>
+          <tr><td>Eine einfache Eingabemaske anbieten</td><td><strong>Form Trigger</strong></td></tr>
+          <tr><td>Auf Fehler anderer Workflows reagieren</td><td><strong>Error Trigger</strong> (Kap. 11)</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Mehrere Trigger in einem Workflow</h2>
+      <p>Ein Workflow darf <strong>mehrere</strong> Trigger haben — z. B. einen manuellen <em>und</em> einen Zeitplan, die beide in
+        denselben ersten Verarbeitungs-Node münden. Es feuert immer nur <em>einer</em> pro Lauf, nämlich der, dessen Ereignis
+        eingetreten ist. In den <strong>Ausführungen</strong> (Kap. 3) verrät dir die Spalte <strong>„Modus“</strong> hinterher,
+        welcher es war.</p>
+
+      <h2>Wenn etwas schiefgeht — Trigger-Stolpersteine</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>Zeitplan feuert nie</td><td>Workflow inaktiv</td><td>Aktiv-Schalter einschalten</td></tr>
+          <tr><td>Webhook gibt „404 not registered“</td><td>Test-URL abgelaufen <em>oder</em> Workflow inaktiv</td><td>erneut „Listen“ klicken bzw. aktiv schalten</td></tr>
+          <tr><td>Webhook empfängt keine Daten</td><td>falsche Methode (GET statt POST)</td><td>HTTP Method im Node anpassen</td></tr>
+          <tr><td>Zeitplan läuft zu oft / nie zur erwarteten Zeit</td><td>Intervall/Uhrzeit falsch</td><td>Trigger Interval + Stunde prüfen (Zeitzone!)</td></tr>
+          <tr><td>„Test workflow“ tut nichts</td><td>kein Trigger vorhanden</td><td>einen Trigger als ersten Node hinzufügen</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest — sitzen die Trigger?</h4>
+        <ul>
+          <li>Woran erkennst du einen Trigger-Node auf den ersten Blick?</li>
+          <li>Dein Zeitplan-Workflow läuft im Test, aber nachts um 3 passiert nichts. Was hast du vergessen?</li>
+          <li>Was ist der Unterschied zwischen der Test-URL und der Production-URL eines Webhooks?</li>
+          <li>Du willst beim Entwickeln selbst starten, später aber stündlich automatisch. Welche Trigger nutzt du nacheinander?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) An der abgerundeten linken Seite und am fehlenden Eingang. ·
+        2) Den <strong>Aktiv-Schalter</strong> einzuschalten. ·
+        3) Test-URL = nur kurz nach „Listen“, zum Entwickeln; Production-URL = dauerhaft, aber nur bei <em>aktivem</em> Workflow. ·
+        4) Erst <strong>Manuell</strong> zum Bauen, dann gegen <strong>Schedule</strong> (Hours = 1) tauschen.
+      </div>
+
+      <p>Du weißt jetzt, <em>wie</em> Workflows starten. Im nächsten Kapitel kümmern wir uns um den vielseitigsten Baustein
+        überhaupt — den <strong>HTTP-Request-Node</strong>, mit dem du praktisch <em>jede</em> Schnittstelle im Internet ansprichst
+        (und der hinter unzähligen App-Nodes steckt).</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>
