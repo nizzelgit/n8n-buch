@@ -231,6 +231,14 @@ deren Grundlagen zu wiederholen (stattdessen verlinken/verweisen).
 
 ## 11. Logbuch (neuester Eintrag oben)
 
+### 2026-05-29 — Stand auf `main` konsolidiert, Doku aufgefrischt
+- **`main` trägt den vollständigen Stand:** `HEAD` = `origin/main` = `origin/claude/optimistic-shannon-TJ1d8`
+  (identischer Commit; Differenz 0/0). Alle **14 Kapitel (00–12)** liegen auf `main`. Es war nichts gesondert zu
+  „mergen", weil `main` nach jedem Commit gespiegelt wird (vgl. §9) — der Merge ist damit faktisch laufend erledigt.
+- Eine frisch gestartete Session findet also **egal auf welchem Branch** den kompletten Stand vor.
+- Diese CLAUDE.md auf Wunsch aktualisiert (dieser Eintrag); §10-Status und §9-Konventionen sind aktuell.
+- Nächster offener Block unverändert: **Teil 3 (Projekte) ab `13-projekt-wetter`**.
+
 ### 2026-05-29 — Teil 2 abgeschlossen: Kapitel 11 (Fehler) & 12 (Credentials)
 - **Kapitel 11 „Fehlerbehandlung & Error-Workflows"** (`ready`): drei Ebenen — Retry On Fail (Settings-Reiter),
   Fehlerausgang via „On Error → Continue (using error output)" (Canvas mit zweitem roten Ausgang, `$json.error`),
