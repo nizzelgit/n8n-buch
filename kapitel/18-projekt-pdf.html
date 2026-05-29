@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projekt 6: PDF-/Rechnungs-Extraktion — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="18-projekt-pdf" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">18</span> Projekt 6</div>
+      <h1 class="chap-title">PDF-/Rechnungs-Extraktion</h1>
+      <p class="chap-lede">In diesem Projekt liest n8n eine Rechnung als PDF, extrahiert den Text, erkennt zentrale
+        Rechnungsdaten zuerst mit einfachen Regeln und nutzt KI als Fallback für schwierige Layouts. Das Ziel ist nicht
+        blinde Automatisierung, sondern ein prüfbarer Eingang für Buchhaltung, Einkauf oder Freigabe.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 55 Minuten</span>
+        <span>🎯 Niveau: Mittel bis fortgeschritten</span>
+        <span>🧩 Voraussetzung: Kapitel 7–12, 17</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>Ein Test-Postfach, das E-Mails mit PDF-Anhang empfangen kann. IMAP ist für dieses Kapitel am anschaulichsten.</li>
+          <li>Eine selbst erstellte Testrechnung als PDF. Keine echten Rechnungen im ersten Durchlauf.</li>
+          <li>Eine Google-Sheets- oder Tabellen-Credential für die Ergebnisliste.</li>
+          <li>Eine Slack-Credential oder einen anderen Kanal für manuelle Prüfung.</li>
+          <li>Optional: eine Chat-Model-Credential für den KI-Fallback.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Rechnungen sind sensible Daten</b>
+        Rechnungen enthalten Namen, Adressen, Bankdaten, Steuernummern und Zahlungsfristen. Der Workflow darf Daten
+        vorbereiten und markieren. Er darf in diesem Kapitel nicht automatisch zahlen, buchen oder endgültig freigeben.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Der Workflow bekommt eine E-Mail mit PDF-Anhang. n8n liest den PDF-Text, extrahiert Rechnungsnummer, Datum,
+        Betrag und Lieferant per Regel-Code. Wenn diese Regeln nicht genug erkennen, geht derselbe Text in einen
+        KI-Extractor. Danach wird das Ergebnis geprüft: saubere Datensätze landen in einer Tabelle, unsichere Fälle in
+        einem Review-Kanal.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 1120 440" preserveAspectRatio="none">
+                <path class="is-active" d="M 158 190 C 220 190, 240 190, 298 190"></path>
+                <path class="is-active" d="M 390 190 C 455 190, 470 190, 528 190"></path>
+                <path class="is-active" d="M 620 190 C 680 190, 690 190, 748 190"></path>
+                <path class="is-active" d="M 840 190 C 900 190, 910 105, 968 105"></path>
+                <path class="is-active" d="M 840 190 C 900 190, 910 275, 968 275"></path>
+                <path class="is-active" d="M 1060 275 C 1088 275, 1092 178, 1078 125"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:40px; top:144px;">
+                <span class="n8n-node__icon">✉️</span><span class="ep out"></span>
+                <span class="n8n-node__label">Rechnungsmail</span><span class="items">1 Item</span></div>
+              <div class="n8n-node" style="left:298px; top:144px;">
+                <span class="n8n-node__icon">📄</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">PDF-Text lesen</span></div>
+              <div class="n8n-node n8n-node--code" style="left:528px; top:144px;">
+                <span class="n8n-node__icon">🔎</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Regeln</span><span class="items">0.75</span></div>
+              <div class="n8n-node" style="left:748px; top:144px;">
+                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="ep out" style="top:30px;"></span><span class="ep out" style="top:64px;"></span>
+                <span class="n8n-node__label">sicher?</span></div>
+              <div class="n8n-node" style="left:968px; top:59px;">
+                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Tabelle</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node n8n-node--ai" style="left:968px; top:229px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">KI-Fallback</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 18.1</span>Die Regeln sind der erste Weg. KI wird erst genutzt, wenn die
+          transparenten Regeln zu wenig erkennen.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Erst Regeln, dann KI</b>
+        Rechnungen sind strukturiert genug für einfache Regeln, aber uneinheitlich genug für Ausnahmen. Die robuste
+        Konstruktion ist deshalb zweistufig: billig, schnell und erklärbar zuerst; flexibel und teurer danach.
+      </div>
+
+      <h2>Zwei Wege, ein Ergebnis</h2>
+      <table class="btable">
+        <thead><tr><th>Weg</th><th>Stärken</th><th>Schwächen</th><th>Hier im Projekt</th></tr></thead>
+        <tbody>
+          <tr><td>Regeln</td><td>schnell, günstig, nachvollziehbar</td><td>bricht bei ungewohnten Layouts</td><td>Standardweg für klare Testrechnungen</td></tr>
+          <tr><td>KI</td><td>versteht Varianten und Synonyme</td><td>kostet Geld, kann unsicher oder falsch sein</td><td>Fallback mit Validierung und Review</td></tr>
+        </tbody>
+      </table>
+
+      <hr>
+
+      <h2>Schritt 1 — Testrechnung vorbereiten</h2>
+      <p>Wir starten kontrolliert. Erstelle eine kleine Rechnung, die du verstehst und deren erwartete Werte eindeutig sind.</p>
+
+      <ol class="steps">
+        <li><h4>Textdokument öffnen</h4>
+          <p>Öffne ein leeres Dokument in Word, Google Docs, LibreOffice oder einem anderen Editor.</p></li>
+        <li><h4>Testdaten einfügen</h4>
+          <p>Füge diesen Text ein:</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Testrechnung</div>
+<pre>Demo GmbH
+Musterstraße 12
+10115 Berlin
+
+Rechnung Nr. RE-2026-0042
+Rechnungsdatum: 29.05.2026
+Fällig bis: 12.06.2026
+
+Leistung: Workshop Automatisierung
+Nettobetrag: 800,00 EUR
+Umsatzsteuer 19 %: 152,00 EUR
+Gesamtbetrag: 952,00 EUR
+
+IBAN: DE89 3704 0044 0532 0130 00</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 2;">
+        <li><h4>Als PDF exportieren</h4>
+          <p>Exportiere oder drucke das Dokument als PDF. Nenne die Datei <code>rechnung-demo.pdf</code>.</p></li>
+        <li><h4>Testmail senden</h4>
+          <p>Sende dir selbst eine E-Mail mit Betreff <code>n8n Rechnung Test</code> und hänge die PDF-Datei an.</p></li>
+        <li><h4>Mail ungelesen lassen</h4>
+          <p>Lasse die E-Mail ungelesen, damit der Trigger sie sauber findet.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum eine eigene Testrechnung?</b>
+        Du kennst die richtigen Werte. Wenn später <code>952,00</code> statt <code>800,00</code> gespeichert wird, weißt du:
+        Der Workflow nimmt den Bruttobetrag. Ohne erwartete Werte testest du nur, ob irgendetwas passiert.
+      </div>
+
+      <h2>Schritt 2 — E-Mail-Trigger mit Anhang anlegen</h2>
+      <p>Wir nehmen den E-Mail-Eingang als realistische Quelle. Alternativ könntest du PDFs per Webhook oder Formular
+        hochladen; die Extraktionsschritte bleiben gleich.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen Workflow und nenne ihn <code>Rechnung aus PDF extrahieren</code>.</p></li>
+        <li><h4>E-Mail Trigger suchen</h4>
+          <p>Klicke auf das große <span class="kbd">+</span>, suche <code>email trigger</code> und wähle
+            <strong>Email Trigger (IMAP)</strong>.</p></li>
+        <li><h4>Credential auswählen</h4>
+          <p>Wähle deine IMAP-Credential oder lege eine Test-Credential an.</p></li>
+        <li><h4>Postfach begrenzen</h4>
+          <p>Setze <strong>Mailbox</strong> auf <code>INBOX</code>. Wenn dein Trigger Suchregeln anbietet, begrenze auf
+            ungelesene E-Mails mit Betreff <code>n8n Rechnung Test</code>.</p></li>
+        <li><h4>Anhänge herunterladen</h4>
+          <p>Schalte <strong>Download Attachments</strong> ein. Ohne diese Option sieht n8n nur die E-Mail, nicht die PDF-Datei.</p></li>
+        <li><h4>Trigger testen</h4>
+          <p>Klicke <strong>Listen for test event</strong> oder <strong>Execute step</strong> und warte auf die Testmail.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:690px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">✉️</span><b>Rechnungsmail</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Mailbox</label><input class="n8n-input" value="INBOX"></div>
+                  <div class="row"><label>Download Attachments</label><div class="n8n-select">true <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Format</label><div class="n8n-select">Resolved <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Subject Filter</label><input class="n8n-input" value="n8n Rechnung Test"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 18.2</span>Der Trigger muss die Anhänge als Binary Data mitbringen. Sonst hat
+          der PDF-Node später nichts zu lesen.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn kein Binary-Feld erscheint</b>
+        Öffne den Output des Triggers und wechsle auf <strong>Binary</strong>. Ist dort nichts zu sehen, ist meist
+        <strong>Download Attachments</strong> aus, der Anhang fehlt wirklich, oder dein Testmail-Provider blockiert den Abruf.
+      </div>
+
+      <h2>Schritt 3 — PDF-Text aus dem Anhang lesen</h2>
+      <p>Jetzt kommt der Kern: Aus der PDF-Datei wird reiner Text. Das funktioniert gut bei „echten“ PDFs mit Text. Bei
+        gescannten Bildern brauchst du später OCR.</p>
+
+      <ol class="steps">
+        <li><h4>Binary-Feldnamen merken</h4>
+          <p>Öffne den Output des Triggers. Im Reiter <strong>Binary</strong> steht der Name des Anhangs, häufig
+            <code>attachment_0</code> oder <code>data</code>. Merke dir diesen Namen.</p></li>
+        <li><h4>Extract-Node anhängen</h4>
+          <p>Ziehe vom Trigger eine Linie ins Leere, suche <code>extract from file</code> und wähle
+            <strong>Extract From File</strong>.</p></li>
+        <li><h4>PDF-Operation wählen</h4>
+          <p>Wähle als Operation <strong>Extract From PDF</strong> bzw. die PDF-Text-Extraktion deiner n8n-Version.</p></li>
+        <li><h4>Binary-Feld eintragen</h4>
+          <p>Setze <strong>Input Binary Field</strong> auf den Namen aus Schritt 1, z. B. <code>attachment_0</code>.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Im JSON-Output sollte ein Feld wie <code>text</code> mit dem
+            Rechnungsinhalt stehen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:700px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">📄</span><b>PDF-Text lesen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Operation</label><div class="n8n-select">Extract From PDF <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Input Binary Field</label><input class="n8n-input" value="attachment_0"></div>
+                  <div class="row"><label>Output</label><div class="n8n-json">{ "text": "Demo GmbH Rechnung Nr. RE-2026-0042 ..." }</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 18.3</span>Nach der Extraktion arbeiten wir nicht mehr mit der Datei, sondern
+          mit Text. Das macht Regeln und KI deutlich einfacher.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der Text leer ist</b>
+        Viele PDFs sind nur Bilder. Dann kann der PDF-Node keinen Text finden. Für solche Fälle brauchst du OCR, z. B.
+        einen spezialisierten Dienst oder einen späteren KI-/Dokumenten-Parser mit Bildverständnis. Dieses Kapitel behandelt
+        zuerst maschinenlesbare PDFs.
+      </div>
+
+      <h2>Schritt 4 — Rechnungstext säubern</h2>
+      <p>Der extrahierte Text enthält oft Zeilenumbrüche, mehrere Leerzeichen und Seitentrenner. Vor Regeln und KI machen wir
+        daraus einen kompakten Text.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Ziehe von <strong>PDF-Text lesen</strong> eine Linie ins Leere, suche <code>code</code> und wähle
+            <strong>Code</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Rechnungstext vorbereiten</code>.</p></li>
+        <li><h4>Modus wählen</h4>
+          <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge diesen Code ein. Falls dein Extract-Node das Textfeld anders nennt, passe die erste Zeile an.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Rechnungstext vorbereiten</div>
+<pre>const raw = $json.text ?? $json.data ?? $json.extractedText ?? '';
+
+const pdfText = String(raw)
+  .replace(/\s+/g, ' ')
+  .replace(/\s+([,.;:])/g, '$1')
+  .trim();
+
+return {
+  json: {
+    ...$json,
+    pdf_text: pdfText.slice(0, 12000),
+    text_length: pdfText.length
+  }
+};</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Textlänge ist ein Qualitätsindikator</b>
+        Wenn <code>text_length</code> sehr klein ist, stimmt die Extraktion wahrscheinlich nicht. Prüfe solche Fälle manuell,
+        statt sie automatisch in eine Tabelle zu schreiben.
+      </div>
+
+      <h2>Schritt 5 — Regel-Extraktion bauen</h2>
+      <p>Jetzt extrahieren wir die wichtigsten Felder mit einfachen Mustern. Das ist nicht „magisch“, aber gerade deshalb
+        gut prüfbar.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter <strong>Rechnungstext vorbereiten</strong> einen Code-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Regel-Extraktion</code>.</p></li>
+        <li><h4>Modus wählen</h4>
+          <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge diesen Code ein:</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Regel-Extraktion</div>
+<pre>const text = $json.pdf_text ?? '';
+
+function find(patterns) {
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match?.[1]) return match[1].trim();
+  }
+  return '';
+}
+
+function cleanAmount(value) {
+  if (!value) return null;
+  return Number(
+    value
+      .replace(/\./g, '')
+      .replace(',', '.')
+      .replace(/[^\d.]/g, '')
+  );
+}
+
+const invoice = {
+  supplier: find([/^([A-ZÄÖÜ][\wÄÖÜäöüß .&amp;-]+ GmbH)/, /^([A-ZÄÖÜ][\wÄÖÜäöüß .&amp;-]+ AG)/]),
+  invoice_number: find([/Rechnung(?:snummer| Nr\.?)?:?\s*([A-Z0-9-]+)/i]),
+  invoice_date: find([/Rechnungsdatum:?\s*(\d{2}\.\d{2}\.\d{4})/i]),
+  due_date: find([/Fällig(?: bis)?:?\s*(\d{2}\.\d{2}\.\d{4})/i]),
+  total_gross: cleanAmount(find([/Gesamtbetrag:?\s*([\d.,]+)\s*(?:EUR|€)/i, /Brutto:?\s*([\d.,]+)\s*(?:EUR|€)/i])),
+  currency: text.match(/(?:EUR|€)/) ? 'EUR' : '',
+  iban: find([/IBAN:?\s*([A-Z]{2}\d{2}(?:\s?\d{4}){4,7})/i])
+};
+
+const required = [
+  invoice.supplier,
+  invoice.invoice_number,
+  invoice.invoice_date,
+  invoice.total_gross
+].filter(Boolean).length;
+
+const confidence = required / 4;
+
+return {
+  json: {
+    ...$json,
+    method: 'rules',
+    invoice,
+    confidence,
+    needs_ai: confidence &lt; 0.75 || ($json.text_length ?? 0) &lt; 100
+  }
+};</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 4;">
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>.</p></li>
+        <li><h4>Ergebnis prüfen</h4>
+          <p>Im Output sollte <code>invoice.total_gross</code> den Wert <code>952</code> enthalten und
+            <code>needs_ai</code> sollte <code>false</code> sein.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der Betrag falsch ist</b>
+        Prüfe zuerst, welches Wort vor dem Betrag steht. <code>Nettobetrag</code>, <code>Brutto</code> und
+        <code>Gesamtbetrag</code> sind fachlich verschieden. Regeln müssen diese Begriffe ausdrücklich unterscheiden.
+      </div>
+
+      <h2>Schritt 6 — Sicher genug? IF-Node einbauen</h2>
+      <p>Die Regeln bekommen einen Score. Alles mit <code>confidence &gt;= 0.75</code> speichern wir direkt. Alles darunter
+        geht in den KI-Fallback.</p>
+
+      <ol class="steps">
+        <li><h4>IF-Node anhängen</h4>
+          <p>Ziehe von <strong>Regel-Extraktion</strong> eine Linie ins Leere, suche <code>if</code> und wähle
+            <strong>IF</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Regeln sicher?</code>.</p></li>
+        <li><h4>Bedingung setzen</h4>
+          <p>Setze eine Bedingung: <code>{{ $json.confidence }}</code> ist größer oder gleich <code>0.75</code>.</p></li>
+        <li><h4>Ausgänge merken</h4>
+          <p>Der true-Ausgang ist der direkte Regelweg. Der false-Ausgang geht später zur KI.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 860 320" preserveAspectRatio="none">
+                <path class="is-active" d="M 178 150 C 240 150, 260 150, 318 150"></path>
+                <path class="is-active" d="M 410 150 C 470 150, 500 90, 558 90"></path>
+                <path class="is-active" d="M 410 150 C 470 150, 500 230, 558 230"></path>
+              </svg>
+              <div class="n8n-node n8n-node--code" style="left:60px; top:104px;">
+                <span class="n8n-node__icon">🔎</span><span class="ep out"></span>
+                <span class="n8n-node__label">Regeln</span></div>
+              <div class="n8n-node" style="left:318px; top:104px;">
+                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="ep out" style="top:30px;"></span><span class="ep out" style="top:64px;"></span>
+                <span class="n8n-node__label">Regeln sicher?</span></div>
+              <div class="n8n-node" style="left:558px; top:44px;">
+                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">speichern</span></div>
+              <div class="n8n-node n8n-node--ai" style="left:558px; top:184px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">KI prüfen</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 18.4</span>Ein Score macht die Entscheidung sichtbar. Versteckte
+          „wird schon passen“-Logik ist bei Rechnungen zu riskant.</figcaption>
+      </figure>
+
+      <h2>Schritt 7 — Regel-Ergebnis in die Tabelle schreiben</h2>
+      <p>Der true-Ausgang des IF-Nodes ist der einfache Fall. Er enthält schon ein strukturiertes Objekt.</p>
+
+      <ol class="steps">
+        <li><h4>Tabelle vorbereiten</h4>
+          <p>Lege eine Tabelle <code>Rechnungseingang</code> mit diesen Spalten an:
+            <code>supplier</code>, <code>invoice_number</code>, <code>invoice_date</code>, <code>due_date</code>,
+            <code>total_gross</code>, <code>currency</code>, <code>iban</code>, <code>method</code>,
+            <code>confidence</code>, <code>review_status</code>.</p></li>
+        <li><h4>Google-Sheets-Node anhängen</h4>
+          <p>Ziehe vom true-Ausgang von <strong>Regeln sicher?</strong> eine Linie ins Leere und wähle
+            <strong>Google Sheets</strong>.</p></li>
+        <li><h4>Aktion wählen</h4>
+          <p>Wähle <strong>Append Row</strong> bzw. <strong>Append or Update Row</strong>, je nach Node-Version.</p></li>
+        <li><h4>Felder zuordnen</h4>
+          <p>Setze die Spalten mit Expressions, z. B. <code>{{ $json.invoice.supplier }}</code>,
+            <code>{{ $json.invoice.invoice_number }}</code> und <code>{{ $json.invoice.total_gross }}</code>.</p></li>
+        <li><h4>Review-Status setzen</h4>
+          <p>Setze <code>review_status</code> auf <code>auto_rule_ok</code>.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Die Testrechnung sollte als eine Zeile in deiner Tabelle erscheinen.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Flache Tabellenfelder</b>
+        Speichere nicht das komplette PDF-JSON in einer Zelle. Lege die Kernfelder flach ab. Das macht Sortieren, Filtern
+        und spätere Prüfung viel einfacher.
+      </div>
+
+      <h2>Schritt 8 — KI-Fallback für schwierige Rechnungen</h2>
+      <p>Jetzt bauen wir den zweiten Weg. Er bekommt denselben PDF-Text, soll aber strukturierte Felder liefern, auch wenn
+        die Begriffe anders heißen.</p>
+
+      <ol class="steps">
+        <li><h4>Information Extractor anhängen</h4>
+          <p>Ziehe vom false-Ausgang von <strong>Regeln sicher?</strong> eine Linie ins Leere, suche
+            <code>information extractor</code> und wähle <strong>Information Extractor</strong>.</p></li>
+        <li><h4>Chat Model verbinden</h4>
+          <p>Klicke am KI-Node auf den Anschluss für <strong>Chat Model</strong> und wähle z. B.
+            <strong>OpenAI Chat Model</strong>. Nutze eine Test-Credential.</p></li>
+        <li><h4>Textfeld setzen</h4>
+          <p>Setze das Eingabefeld auf Expression: <code>{{ $json.pdf_text }}</code>.</p></li>
+        <li><h4>Schema definieren</h4>
+          <p>Nutze ein festes Schema. Wenn deine n8n-Version nur ein JSON-Beispiel anbietet, nutze dieselben Feldnamen.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Schema für den Information Extractor</div>
+<pre>{
+  "supplier": "Name des Rechnungsstellers",
+  "invoice_number": "Rechnungsnummer",
+  "invoice_date": "Rechnungsdatum im Format TT.MM.JJJJ",
+  "due_date": "Fälligkeitsdatum im Format TT.MM.JJJJ oder leer",
+  "total_gross": "Bruttobetrag als Zahl",
+  "currency": "Währung, meistens EUR",
+  "iban": "IBAN oder leer",
+  "confidence": "Zahl von 0 bis 1",
+  "needs_review": "true, wenn wichtige Felder fehlen oder unsicher sind"
+}</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:720px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🤖</span><b>KI-Fallback</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Information Extractor</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Text</label><input class="n8n-input is-expr" value="{{ $json.pdf_text }}"></div>
+                  <div class="row"><label>Chat Model</label><div class="n8n-select">OpenAI Chat Model verbunden <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Fields</label><div class="n8n-json">supplier, invoice_number, invoice_date, total_gross, confidence</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 18.5</span>Der KI-Node bekommt nur den Rechnungstext und ein enges Schema.
+          Je enger das Schema, desto leichter ist die Prüfung danach.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">KI ersetzt keine Validierung</b>
+        Auch wenn der KI-Node ein schönes JSON liefert: Betrag, Datum und Rechnungsnummer müssen danach geprüft werden.
+        KI kann bei ähnlichen Beträgen den falschen nehmen oder aus einem unklaren Layout zu selbstsicher schließen.
+      </div>
+
+      <h2>Schritt 9 — KI-Ergebnis normalisieren</h2>
+      <p>Der Information Extractor liefert je nach Version direkte Felder oder ein verschachteltes Ergebnis. Wir machen daraus
+        dasselbe Format wie beim Regelweg.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter den KI-Node einen Code-Node und nenne ihn <code>KI-Ergebnis prüfen</code>.</p></li>
+        <li><h4>Modus wählen</h4>
+          <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge diesen Code ein:</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · KI-Ergebnis prüfen</div>
+<pre>let data = $json.output ?? $json;
+
+if (typeof data === 'string') {
+  try {
+    data = JSON.parse(data);
+  } catch (error) {
+    data = {};
+  }
+}
+
+function asNumber(value) {
+  if (typeof value === 'number') return value;
+  if (!value) return null;
+  return Number(String(value).replace(/\./g, '').replace(',', '.').replace(/[^\d.]/g, ''));
+}
+
+const invoice = {
+  supplier: data.supplier ?? '',
+  invoice_number: data.invoice_number ?? '',
+  invoice_date: data.invoice_date ?? '',
+  due_date: data.due_date ?? '',
+  total_gross: asNumber(data.total_gross),
+  currency: data.currency ?? 'EUR',
+  iban: data.iban ?? ''
+};
+
+const missing = [];
+if (!invoice.supplier) missing.push('supplier');
+if (!invoice.invoice_number) missing.push('invoice_number');
+if (!invoice.invoice_date) missing.push('invoice_date');
+if (!invoice.total_gross) missing.push('total_gross');
+
+const confidence = Math.max(0, Math.min(1, Number(data.confidence ?? 0.6)));
+
+return {
+  json: {
+    method: 'ai_fallback',
+    invoice,
+    confidence,
+    missing,
+    needs_review: Boolean(data.needs_review) || missing.length &gt; 0 || confidence &lt; 0.8
+  }
+};</pre>
+      </div>
+
+      <h2>Schritt 10 — Review-Zweig für unsichere Fälle</h2>
+      <p>Der KI-Weg darf nicht automatisch speichern, wenn wichtige Felder fehlen. Dafür bauen wir einen zweiten IF-Node.</p>
+
+      <ol class="steps">
+        <li><h4>IF-Node anhängen</h4>
+          <p>Hänge hinter <strong>KI-Ergebnis prüfen</strong> einen IF-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Manuelle Prüfung nötig?</code>.</p></li>
+        <li><h4>Bedingung setzen</h4>
+          <p>Setze <code>{{ $json.needs_review }}</code> ist gleich <code>true</code>.</p></li>
+        <li><h4>true-Ausgang an Slack hängen</h4>
+          <p>Verbinde den true-Ausgang mit Slack. Kanal: <code>#rechnung-review-test</code>.</p></li>
+        <li><h4>Slack-Text setzen</h4>
+          <p>Nutze eine Nachricht wie unten.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Slack-Nachricht für Review</div>
+<pre>Rechnung braucht manuelle Prüfung.
+Lieferant: {{ $json.invoice.supplier || 'unbekannt' }}
+Rechnungsnummer: {{ $json.invoice.invoice_number || 'fehlt' }}
+Betrag: {{ $json.invoice.total_gross || 'fehlt' }} {{ $json.invoice.currency }}
+Score: {{ $json.confidence }}
+Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 5;">
+        <li><h4>false-Ausgang speichern</h4>
+          <p>Verbinde den false-Ausgang mit deinem Google-Sheets-Node oder dupliziere den Node aus Schritt 7.</p></li>
+        <li><h4>Review-Status setzen</h4>
+          <p>Setze <code>review_status</code> für den KI-Erfolg auf <code>auto_ai_ok</code>. Für Slack-Fälle wird nichts
+            automatisch gespeichert oder nur mit <code>manual_review</code>, wenn du bewusst ein Review-Log willst.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 900 330" preserveAspectRatio="none">
+                <path class="is-active" d="M 178 155 C 245 155, 260 155, 318 155"></path>
+                <path class="is-active" d="M 410 155 C 480 155, 500 92, 560 92"></path>
+                <path class="is-active" d="M 410 155 C 480 155, 500 235, 560 235"></path>
+              </svg>
+              <div class="n8n-node n8n-node--ai" style="left:60px; top:109px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep out"></span>
+                <span class="n8n-node__label">KI geprüft</span></div>
+              <div class="n8n-node" style="left:318px; top:109px;">
+                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="ep out" style="top:30px;"></span><span class="ep out" style="top:64px;"></span>
+                <span class="n8n-node__label">Review nötig?</span></div>
+              <div class="n8n-node" style="left:560px; top:46px;">
+                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Review melden</span></div>
+              <div class="n8n-node" style="left:560px; top:189px;">
+                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">speichern</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 18.6</span>Der KI-Weg endet nicht automatisch in der Tabelle. Erst die Prüfung
+          entscheidet, ob gespeichert oder eskaliert wird.</figcaption>
+      </figure>
+
+      <h2>Schritt 11 — Drei Tests durchführen</h2>
+      <p>Ein einzelner Erfolgstest reicht hier nicht. Du brauchst bewusst gute, schwierige und schlechte Fälle.</p>
+
+      <ol class="steps">
+        <li><h4>Klare Testrechnung senden</h4>
+          <p>Sende die Demo-Rechnung aus Schritt 1. Erwartung: Regelweg, Tabelle, <code>review_status = auto_rule_ok</code>.</p></li>
+        <li><h4>Ungewöhnliche Rechnung senden</h4>
+          <p>Ändere die Begriffe im PDF, z. B. <code>Belegnummer</code> statt <code>Rechnung Nr.</code> und
+            <code>zu zahlen</code> statt <code>Gesamtbetrag</code>. Erwartung: Regelweg scheitert teilweise, KI-Fallback
+            erkennt genug Felder.</p></li>
+        <li><h4>Schlechte Rechnung senden</h4>
+          <p>Erstelle ein PDF als Screenshot oder lösche wichtige Felder. Erwartung: Slack-Review, keine blinde Speicherung.</p></li>
+        <li><h4>Executions öffnen</h4>
+          <p>Prüfe bei jedem Test, welchen Weg das Item genommen hat: Regeln, KI-Fallback oder Review.</p></li>
+        <li><h4>Workflow erst danach aktivieren</h4>
+          <p>Schalte den Workflow nur aktiv, wenn alle drei Fälle erwartungsgemäß laufen.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Teste den Fehlerweg absichtlich</b>
+        Bei Rechnungen ist ein sauberer Stopp wertvoller als ein spektakulärer Treffer. Der wichtigste Test ist:
+        Erkennt der Workflow, wann er nicht genug weiß?
+      </div>
+
+      <h2>Sinnvolle Erweiterungen</h2>
+      <table class="btable">
+        <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
+        <tbody>
+          <tr><td>OCR für Scans</td><td>Vor der Text-Extraktion einen OCR-Dienst einbauen und den erkannten Text weiterreichen.</td></tr>
+          <tr><td>Dublettenprüfung</td><td>Vor dem Speichern nach Lieferant + Rechnungsnummer suchen und Treffer in Review schicken.</td></tr>
+          <tr><td>Freigabeprozess</td><td>Slack- oder Formular-Freigabe einbauen, bevor die Rechnung an Buchhaltung oder ERP geht.</td></tr>
+          <tr><td>Positionsdaten</td><td>Neben Kopfdaten auch einzelne Rechnungspositionen extrahieren; dafür meist KI oder spezialisierte Parser nutzen.</td></tr>
+          <tr><td>Archivierung</td><td>PDF nach erfolgreicher Prüfung in Drive, S3 oder einem DMS ablegen und Link in der Tabelle speichern.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Warum extrahieren wir zuerst mit Regeln und erst danach mit KI?</li>
+          <li>Warum ist <code>text_length</code> ein nützlicher Prüfwert?</li>
+          <li>Welche vier Felder bestimmen im Beispiel den Regel-Score?</li>
+          <li>Warum darf der KI-Fallback nicht ohne Validierung speichern?</li>
+          <li>Welche drei Testfälle brauchst du vor dem Aktivieren?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Regeln sind erklärbar und günstig; KI ist der flexible Fallback. ·
+        2) Sehr kurzer Text deutet auf Scan, falsches Binary-Feld oder kaputte Extraktion hin. ·
+        3) Lieferant, Rechnungsnummer, Rechnungsdatum, Bruttobetrag. ·
+        4) Weil KI Felder verwechseln oder zu sicher wirken kann. ·
+        5) Klare Rechnung, ungewöhnliche Rechnung, schlechte/gescannte Rechnung.
+      </div>
+
+      <p>Du hast jetzt einen Workflow gebaut, der Dokumente nicht nur weiterleitet, sondern strukturiert auswertet und seine
+        eigene Unsicherheit sichtbar macht. Im nächsten Projekt verbinden wir mehrere dieser Bausteine zu einer größeren
+        Content-Pipeline.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

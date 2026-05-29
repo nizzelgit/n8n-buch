@@ -316,6 +316,12 @@ ol.steps > li p { font-size: 15.5px; }
   h1.chap-title { font-size: 31px; }
   #prevnext { flex-direction:column; padding: 0 18px 50px; }
   .ndv__cols { grid-template-columns: 1fr; }
+  .btable {
+    display:block;
+    max-width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 /* ---------- Mobile-Performance: teure Effekte auf kleinen Screens aus ----

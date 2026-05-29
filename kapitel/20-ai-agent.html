@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-Agent, Chat-Trigger, Memory &amp; Tools — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="20-ai-agent" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">20</span> KI &amp; Agenten</div>
+      <h1 class="chap-title">AI-Agent, Chat-Trigger, Memory &amp; Tools</h1>
+      <p class="chap-lede">In diesem Kapitel baust du einen kleinen Chat-Agenten, der Fragen entgegennimmt,
+        sich den Gesprächskontext merkt und bei Bedarf externe Werkzeuge nutzt. Der wichtige Unterschied zu Kapitel 17:
+        Hier ist die KI nicht nur ein Klassifikator. Sie entscheidet, ob ein Tool gebraucht wird.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 38 Minuten</span>
+        <span>🎯 Niveau: Fortgeschrittene Grundlagen</span>
+        <span>🧩 Voraussetzung: Kapitel 6–12, 17</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>Eine n8n-Instanz mit den AI-/LangChain-Nodes.</li>
+          <li>Eine Chat-Model-Credential, z. B. OpenAI, Anthropic, Mistral, Groq oder Azure OpenAI.</li>
+          <li>Für das Beispiel keine weitere Credential: Die Wetterdaten kommen über die freie Open-Meteo-API.</li>
+          <li>Ein Testfenster im n8n-Chat. Veröffentliche den Chat erst nach den Tests.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Agent heißt nicht Autonomie ohne Grenzen</b>
+        Ein Agent darf nur die Werkzeuge bekommen, die er wirklich braucht. Liesende Tools sind zum Lernen gut.
+        Schreibende Tools wie E-Mail senden, CRM ändern oder Dateien löschen gehören hinter Freigaben.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Wir bauen einen Wetter-Chat. Der Nutzer schreibt eine Frage wie „Wie wird das Wetter morgen in Hamburg?“.
+        Der Chat Trigger startet den Workflow, der AI Agent nutzt zwei HTTP-Tools, merkt sich den Ort über Memory und
+        antwortet im Chat. Das Beispiel ist absichtlich klein: Es zeigt das Agenten-Muster, ohne einen riskanten
+        Geschäftsprozess auszulösen.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas" style="min-height:400px;">
+              <svg class="n8n-conns" viewBox="0 0 760 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 142 196 C 172 196, 188 196, 220 196"></path>
+                <path class="is-active" d="M 312 196 C 352 196, 382 196, 430 196"></path>
+                <path d="M 312 150 C 410 64, 520 56, 620 66"></path>
+                <path d="M 312 196 C 410 196, 520 196, 620 196"></path>
+                <path d="M 312 242 C 410 328, 520 336, 620 326"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:24px; top:150px;">
+                <span class="n8n-node__icon">💬</span><span class="ep out"></span>
+                <span class="n8n-node__label">Chat Trigger</span><span class="items">1 Nachricht</span></div>
+              <div class="n8n-node n8n-node--ai" style="left:220px; top:150px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">AI Agent</span></div>
+              <div class="n8n-node" style="left:430px; top:150px;">
+                <span class="n8n-node__icon">↩</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Antwort im Chat</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node" style="left:620px; top:20px;">
+                <span class="n8n-node__icon">🧠</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Simple Memory</span></div>
+              <div class="n8n-node" style="left:620px; top:150px;">
+                <span class="n8n-node__icon">🌍</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Ort suchen</span></div>
+              <div class="n8n-node" style="left:620px; top:280px;">
+                <span class="n8n-node__icon">🌦</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 20.1</span>Der Agent ist der Entscheidungsknoten. Chat Model, Memory und
+          Tools hängen als Unter-Nodes am Agenten.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Agenten-Muster</b>
+        Ein Agent besteht praktisch aus vier Dingen: <strong>Chat-Eingang</strong>, <strong>Modell</strong>,
+        <strong>Memory</strong> und <strong>Tools</strong>. Ohne klare Tool-Grenzen wird aus Automatisierung schnell
+        unkontrolliertes Raten.
+      </div>
+
+      <h2>Agent, Chain, Tool — kurz auseinanderhalten</h2>
+      <table class="btable">
+        <thead><tr><th>Baustein</th><th>Was er tut</th><th>Wann du ihn nutzt</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Basic LLM Chain</strong></td><td>ein Prompt geht ins Modell, eine Antwort kommt zurück</td><td>Zusammenfassen, umformulieren, extrahieren</td></tr>
+          <tr><td><strong>AI Agent</strong></td><td>entscheidet, ob und welche Tools er nutzt</td><td>Fragen beantworten, die zusätzliche Daten oder Aktionen brauchen</td></tr>
+          <tr><td><strong>Tool</strong></td><td>eine vom Agenten aufrufbare Fähigkeit</td><td>API lesen, Workflow aufrufen, Datenbank suchen</td></tr>
+          <tr><td><strong>Memory</strong></td><td>speichert Gesprächsverlauf einer Sitzung</td><td>Folgefragen wie „und morgen dort?“ verstehen</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Skeptische Faustregel</b>
+        Wenn der Ablauf deterministisch ist, nimm keinen Agenten. Wenn das Modell wirklich entscheiden muss, welches
+        Werkzeug passt, ist ein Agent sinnvoll.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 1 — Workflow und Chat Trigger anlegen</h2>
+      <p>Der Chat Trigger startet bei jeder Nachricht eine Workflow-Ausführung. Eine Unterhaltung mit zehn Nachrichten
+        sind also zehn Ausführungen. Das ist für Kosten und Rate-Limits wichtig.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen Workflow und nenne ihn <code>Wetter-Chat-Agent</code>.</p></li>
+        <li><h4>Chat Trigger hinzufügen</h4>
+          <p>Klicke auf <strong>Add first step</strong>, suche <code>chat trigger</code> und wähle
+            <strong>Chat Trigger</strong>.</p></li>
+        <li><h4>Öffentlichkeit aus lassen</h4>
+          <p>Lasse <strong>Make Chat Publicly Available</strong> zunächst ausgeschaltet. Du testest im n8n-internen Chat.</p></li>
+        <li><h4>Hosted Chat vormerken</h4>
+          <p>Wenn du später veröffentlichst, wähle <strong>Hosted Chat</strong>. Für dieses Kapitel brauchst du keinen
+            eigenen Chat-Client.</p></li>
+        <li><h4>Starttext setzen</h4>
+          <p>Setze als Initial Message z. B. <code>Frag mich nach dem Wetter in einer Stadt.</code></p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:720px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">💬</span><b>Chat Trigger</b><span class="ndv__exec-step">▶ Chat öffnen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Make Chat Publicly Available</label><div class="n8n-select">aus <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Mode</label><div class="n8n-select">Hosted Chat <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Initial Message</label><input class="n8n-input" value="Frag mich nach dem Wetter in einer Stadt."></div>
+                  <div class="row"><label>Response Mode</label><div class="n8n-select">When Last Node Finishes <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 20.2</span>Beim Bauen bleibt der Chat privat. Veröffentlichen kommt erst
+          nach den Tests.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn du sofort veröffentlichst</b>
+        Ohne Authentifizierung kann jeder mit der Chat-URL Ausführungen und Modellkosten verursachen. Für Tests reicht der
+        interne Chat in n8n.
+      </div>
+
+      <h2>Schritt 2 — AI Agent hinzufügen</h2>
+      <p>Der Agent bekommt die Chatnachricht vom Trigger. In aktuellen n8n-Versionen arbeitet der AI Agent als Tool-Agent:
+        Er erwartet ein Chat Model und mindestens ein Tool. Für reine Textantworten wäre eine Basic LLM Chain schlichter.</p>
+
+      <ol class="steps">
+        <li><h4>AI Agent anhängen</h4>
+          <p>Schließe die Detailansicht. Ziehe vom Chat Trigger eine Linie ins Leere, suche <code>ai agent</code> und wähle
+            <strong>AI Agent</strong>.</p></li>
+        <li><h4>Prompt automatisch nehmen</h4>
+          <p>Setze <strong>Prompt</strong> auf <strong>Take from previous node automatically</strong>. Der Agent nutzt dann
+            die Chat-Eingabe, meist das Feld <code>chatInput</code>.</p></li>
+        <li><h4>System Message öffnen</h4>
+          <p>Öffne die Optionen des Agenten und suche <strong>System Message</strong>. Dort kommt gleich die Arbeitsregel
+            für den Agenten hinein.</p></li>
+        <li><h4>Max Iterations begrenzen</h4>
+          <p>Setze <strong>Max Iterations</strong> für den Anfang auf <code>4</code>. Das verhindert lange Tool-Schleifen.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; System Message</div>
+<pre>Du bist ein vorsichtiger Wetter-Assistent in n8n.
+Antworte auf Deutsch, kurz und überprüfbar.
+
+Regeln:
+- Nutze Tools nur, wenn du externe Wetter- oder Ortsdaten brauchst.
+- Frage nach, wenn der Ort fehlt oder mehrdeutig ist.
+- Erfinde keine Messwerte.
+- Nenne Unsicherheit, wenn ein Tool keine Daten liefert.
+- Speichere keine sensiblen personenbezogenen Daten im Gespräch.
+- Führe keine Aktionen außerhalb der bereitgestellten Tools aus.</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Begrenze Iterationen</b>
+        Ein Agent kann mehrmals denken, ein Tool aufrufen, Tool-Antwort lesen und erneut entscheiden. Das ist nützlich,
+        aber nicht kostenlos. Setze beim Lernen ein niedriges Limit.
+      </div>
+
+      <h2>Schritt 3 — Chat Model verbinden</h2>
+      <p>Der Agent selbst ist noch kein Modell. Er braucht ein Chat Model als Unter-Node.</p>
+
+      <ol class="steps">
+        <li><h4>Model-Anschluss öffnen</h4>
+          <p>Klicke am AI-Agent-Node auf den Anschluss <strong>Chat Model</strong>.</p></li>
+        <li><h4>Chat Model wählen</h4>
+          <p>Wähle z. B. <strong>OpenAI Chat Model</strong>, <strong>Anthropic Chat Model</strong> oder ein anderes
+            unterstütztes Modell.</p></li>
+        <li><h4>Credential auswählen</h4>
+          <p>Wähle deine Credential. Lege keine API-Keys im Prompt oder in Codefeldern ab.</p></li>
+        <li><h4>Temperatur niedrig halten</h4>
+          <p>Setze die Temperatur für dieses Beispiel auf etwa <code>0.2</code>. Faktenantworten sollen stabil sein, nicht
+            poetisch.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">🤖</span><b>AI Agent</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="n8n-json">{
+  <span class="k">"chatInput"</span>: <span class="s">"Wie wird das Wetter morgen in Hamburg?"</span>,
+  <span class="k">"sessionId"</span>: <span class="s">"chat-abc123"</span>
+}</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Agent</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Prompt</label><div class="n8n-select">Take from previous node automatically <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Chat Model</label><div class="n8n-select">OpenAI Chat Model verbunden <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Memory</label><div class="n8n-select">Simple Memory verbunden <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Tools</label><div class="n8n-select">2 Tools verbunden <span class="chev">▾</span></div></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="n8n-json">{
+  <span class="k">"output"</span>: <span class="s">"Morgen in Hamburg ..."</span>
+}</div></div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 20.3</span>Der Agent bekommt die Chat-Eingabe und liefert am Ende ein
+          Feld wie <code>output</code> oder <code>text</code> zurück.</figcaption>
+      </figure>
+
+      <h2>Schritt 4 — Simple Memory anschließen</h2>
+      <p>Memory sorgt dafür, dass Folgefragen im selben Chat nicht bei null anfangen. Ohne Memory versteht der Agent
+        „morgen dort?“ nicht zuverlässig.</p>
+
+      <ol class="steps">
+        <li><h4>Memory-Anschluss öffnen</h4>
+          <p>Klicke am AI-Agent-Node auf <strong>Memory</strong> und wähle <strong>Simple Memory</strong>.</p></li>
+        <li><h4>Session ID setzen</h4>
+          <p>Setze <strong>Session ID</strong> auf <strong>Connected Chat Trigger Node</strong>. Damit nutzt der Speicher
+            die Session aus dem Chat Trigger.</p></li>
+        <li><h4>Fenster begrenzen</h4>
+          <p>Setze <strong>Context Window Length</strong> z. B. auf <code>8</code>. Der Agent braucht nicht die komplette
+            Lebensgeschichte des Chats.</p></li>
+        <li><h4>Chat Trigger mit Memory verbinden</h4>
+          <p>Wenn du im Chat Trigger später <strong>Load Previous Session</strong> auf <strong>From Memory</strong> setzt,
+            verbinde denselben Simple-Memory-Node auch mit dem Chat Trigger.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Simple Memory ist nicht immer produktionsfest</b>
+        Für Queue-Mode oder mehrere Worker ist Simple Memory problematisch, weil nicht garantiert ist, dass alle
+        Nachrichten beim selben Worker landen. Für Produktion eher Redis, Postgres oder einen anderen persistenteren
+        Speicher prüfen.
+      </div>
+
+      <h2>Schritt 5 — Tool 1: Ort suchen</h2>
+      <p>Der Agent soll nicht raten, welche Koordinaten Hamburg hat. Das erste Tool ruft die Geocoding-API von Open-Meteo
+        auf und übersetzt einen Ortsnamen in Koordinaten.</p>
+
+      <ol class="steps">
+        <li><h4>Tool-Anschluss öffnen</h4>
+          <p>Klicke am AI-Agent-Node auf <strong>Tool</strong> und wähle <strong>HTTP Request Tool</strong>.</p></li>
+        <li><h4>Tool benennen</h4>
+          <p>Nenne das Tool <code>Ort suchen</code>.</p></li>
+        <li><h4>Beschreibung eintragen</h4>
+          <p>Schreibe als Beschreibung: <code>Sucht zu einem Ortsnamen die wahrscheinlichsten Koordinaten.</code></p></li>
+        <li><h4>Methode setzen</h4>
+          <p>Setze <strong>Method</strong> auf <strong>GET</strong>.</p></li>
+        <li><h4>URL eintragen</h4>
+          <p>Setze die URL auf die folgende Expression.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; URL · Ort suchen</div>
+<pre>https://geocoding-api.open-meteo.com/v1/search?name={{ $fromAI('city', 'Stadt oder Ort aus der Nutzerfrage', 'string') }}&amp;count=1&amp;language=de&amp;format=json</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:760px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🌍</span><b>Ort suchen</b><span class="ndv__exec-step">Tool</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">HTTP Request Tool</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Description</label><input class="n8n-input" value="Sucht zu einem Ortsnamen die wahrscheinlichsten Koordinaten."></div>
+                  <div class="row"><label>Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                  <div class="row"><label>URL</label><input class="n8n-input is-expr" value="https://geocoding-api.open-meteo.com/v1/search?name={{ $fromAI('city') }}..."></div>
+                  <div class="row"><label>Authentication</label><div class="n8n-select">None <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 20.4</span><code>$fromAI()</code> lässt den Agenten Tool-Parameter aus der
+          Nutzerfrage ableiten.</figcaption>
+      </figure>
+
+      <div class="callout callout--info">
+        <b class="t">Was <code>$fromAI()</code> hier bedeutet</b>
+        <code>$fromAI('city')</code> ist kein Zugriff auf ein vorhandenes JSON-Feld. Es ist eine Aufforderung an das Modell:
+        „Fülle diesen Tool-Parameter sinnvoll aus.“
+      </div>
+
+      <h2>Schritt 6 — Tool 2: Wetter holen</h2>
+      <p>Das zweite Tool ruft die Wetterdaten mit Koordinaten ab. Der Agent soll erst den Ort suchen und dann mit den
+        Koordinaten das Wetter holen.</p>
+
+      <ol class="steps">
+        <li><h4>Zweites HTTP Request Tool hinzufügen</h4>
+          <p>Füge am Tool-Anschluss des AI Agent ein weiteres <strong>HTTP Request Tool</strong> hinzu.</p></li>
+        <li><h4>Tool benennen</h4>
+          <p>Nenne es <code>Wetter holen</code>.</p></li>
+        <li><h4>Beschreibung eintragen</h4>
+          <p>Schreibe: <code>Holt aktuelle Wetterdaten und Tageswerte für gegebene Koordinaten.</code></p></li>
+        <li><h4>Methode setzen</h4>
+          <p>Setze <strong>Method</strong> wieder auf <strong>GET</strong>.</p></li>
+        <li><h4>URL eintragen</h4>
+          <p>Setze die URL auf diese Expression. Die Beschreibungen helfen dem Modell, Latitude und Longitude aus dem
+            Ergebnis von <code>Ort suchen</code> zu übernehmen.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; URL · Wetter holen</div>
+<pre>https://api.open-meteo.com/v1/forecast?latitude={{ $fromAI('latitude', 'Breitengrad aus dem Tool Ort suchen', 'number') }}&amp;longitude={{ $fromAI('longitude', 'Längengrad aus dem Tool Ort suchen', 'number') }}&amp;current=temperature_2m,precipitation,wind_speed_10m&amp;daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&amp;timezone=auto</pre>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der Agent das zweite Tool falsch füllt</b>
+        Dann ist die Tool-Beschreibung zu vage oder der erste Tool-Output zu groß. Mache die Beschreibung enger und bitte
+        den Agenten im System Prompt ausdrücklich: „Nutze zuerst Ort suchen und verwende dessen latitude/longitude.“
+      </div>
+
+      <h2>Schritt 7 — Agentenregel für die Tool-Reihenfolge schärfen</h2>
+      <p>Jetzt ergänzen wir die System Message. Das ist keine Garantie, aber eine wichtige Leitplanke.</p>
+
+      <ol class="steps">
+        <li><h4>AI Agent öffnen</h4>
+          <p>Doppelklicke den AI-Agent-Node.</p></li>
+        <li><h4>System Message ergänzen</h4>
+          <p>Erweitere die System Message um die folgenden Regeln.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Zusatzregeln für Tools</div>
+<pre>Tool-Nutzung:
+- Wenn der Nutzer einen Ort nennt, rufe zuerst "Ort suchen" auf.
+- Verwende aus dem ersten Ergebnis latitude und longitude.
+- Rufe danach "Wetter holen" auf.
+- Wenn kein Ort genannt wird, frage nach dem Ort.
+- Wenn der Nutzer "dort" oder "dieselbe Stadt" sagt, nutze den Ort aus Memory.
+- Antworte mit Ort, Zeitraum, Temperatur, Regenwahrscheinlichkeit und kurzer Handlungsempfehlung.</pre>
+      </div>
+
+      <h2>Schritt 8 — Ersten Chat-Test ausführen</h2>
+      <p>Jetzt testest du nicht nur die Antwort, sondern die Werkzeugkette.</p>
+
+      <ol class="steps">
+        <li><h4>Chat öffnen</h4>
+          <p>Klicke im Chat Trigger auf <strong>Open Chat</strong> oder nutze den Testchat in n8n.</p></li>
+        <li><h4>Konkrete Frage stellen</h4>
+          <p>Schreibe: <code>Wie wird das Wetter morgen in Hamburg?</code></p></li>
+        <li><h4>Antwort prüfen</h4>
+          <p>Die Antwort sollte Hamburg nennen und konkrete Wetterdaten enthalten. Sie darf keine exakten Werte erfinden,
+            wenn die API nichts geliefert hat.</p></li>
+        <li><h4>Execution öffnen</h4>
+          <p>Öffne die Ausführung. Prüfe, ob <code>Ort suchen</code> und <code>Wetter holen</code> aufgerufen wurden.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas" style="height:330px;">
+              <svg class="n8n-conns" viewBox="0 0 760 330" preserveAspectRatio="none">
+                <path class="is-active" d="M 132 160 C 165 160, 178 160, 205 160"></path>
+                <path class="is-active" d="M 297 160 C 335 160, 355 88, 400 88"></path>
+                <path class="is-active" d="M 492 88 C 545 88, 570 160, 625 160"></path>
+                <path class="is-active" d="M 297 160 C 335 160, 355 232, 400 232"></path>
+                <path class="is-active" d="M 492 232 C 545 232, 570 160, 625 160"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:14px; top:114px;">
+                <span class="n8n-node__icon">💬</span><span class="ep out"></span>
+                <span class="n8n-node__label">Chatfrage</span></div>
+              <div class="n8n-node n8n-node--ai n8n-node--selected" style="left:205px; top:114px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep in"></span>
+                <span class="ep out" style="top:28px;"></span><span class="ep out" style="top:64px;"></span>
+                <span class="n8n-node__label">AI Agent</span><span class="items">2 Tool Calls</span></div>
+              <div class="n8n-node" style="left:400px; top:42px;">
+                <span class="n8n-node__icon">🌍</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Ort suchen</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node" style="left:400px; top:186px;">
+                <span class="n8n-node__icon">🌦</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node" style="left:625px; top:114px;">
+                <span class="n8n-node__icon">↩</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Chatantwort</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 20.5</span>In der Execution erkennst du, ob der Agent wirklich die Tools
+          genutzt hat oder nur geraten hat.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Execution lesen, nicht nur Chat lesen</b>
+        Eine plausible Chatantwort beweist wenig. Öffne die Ausführung und prüfe Tool-Aufrufe, Parameter und Rückgaben.
+      </div>
+
+      <h2>Schritt 9 — Memory mit Folgefragen testen</h2>
+      <p>Memory ist erst dann sichtbar, wenn du absichtlich eine Folgefrage stellst.</p>
+
+      <ol class="steps">
+        <li><h4>Erste Nachricht senden</h4>
+          <p>Schreibe: <code>Merke dir bitte: Mein Arbeitsort ist Leipzig.</code></p></li>
+        <li><h4>Folgefrage senden</h4>
+          <p>Schreibe danach: <code>Wie wird das Wetter morgen dort?</code></p></li>
+        <li><h4>Ort prüfen</h4>
+          <p>Die Antwort muss Leipzig verwenden. Wenn der Agent wieder nach dem Ort fragt, ist Memory nicht korrekt
+            verbunden oder die Session ID stimmt nicht.</p></li>
+        <li><h4>Neuen Chat starten</h4>
+          <p>Starte eine neue Unterhaltung. Frage wieder <code>Wie wird das Wetter morgen dort?</code>. Jetzt sollte der
+            Agent nachfragen, weil der alte Kontext nicht in diese neue Session gehört.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Memory ist kein Wissensspeicher</b>
+        Memory ist Gesprächsverlauf, keine Datenbank. Für dauerhaftes Wissen über Dokumente, Produkte oder interne Regeln
+        brauchst du später RAG oder eine normale Datenquelle.
+      </div>
+
+      <h2>Schritt 10 — Antwort manuell formen, falls nötig</h2>
+      <p>Im einfachen Fall sendet der Chat Trigger die Agent-Ausgabe direkt zurück. Wenn du nach dem Agenten noch Nodes
+        ausführst, musst du die Antwort bewusst als <code>output</code> oder <code>text</code> bereitstellen oder den
+        Response Mode auf Response-Nodes umstellen.</p>
+
+      <ol class="steps">
+        <li><h4>Direktantwort beibehalten</h4>
+          <p>Für dieses Kapitel lässt du den Agenten die finale Antwort liefern. Das ist die einfachste Form.</p></li>
+        <li><h4>Optional Code-Node anhängen</h4>
+          <p>Wenn du die Antwort formatieren willst, hänge einen Code-Node nach dem Agenten.</p></li>
+        <li><h4>Feldnamen beachten</h4>
+          <p>Der Chat Trigger erwartet für eine einfache manuelle Antwort ein Feld wie <code>output</code> oder
+            <code>text</code>.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Optional · Antwort normalisieren</div>
+<pre><span class="ky">return</span> {
+  json: {
+    output: $json.output ?? $json.text ?? <span class="st">'Ich konnte keine Antwort erzeugen.'</span>
+  }
+};</pre>
+      </div>
+
+      <h2>Schritt 11 — Fehlerfälle sichtbar machen</h2>
+      <p>Agentenfehler sind oft leise: falscher Ort, falscher Tool-Parameter, leere API-Antwort. Baue deshalb kleine
+        Kontrollfragen ein.</p>
+
+      <table class="btable">
+        <thead><tr><th>Fehler</th><th>Woran du ihn erkennst</th><th>Gegenmaßnahme</th></tr></thead>
+        <tbody>
+          <tr><td>Tool nicht genutzt</td><td>Execution zeigt keinen Tool Call</td><td>System Message enger formulieren, Tool-Beschreibung verbessern</td></tr>
+          <tr><td>falsche Stadt</td><td>Geocoding liefert anderen Ort</td><td>Agent soll bei Mehrdeutigkeit nach Land/Bundesland fragen</td></tr>
+          <tr><td>zu viele Tool Calls</td><td>Agent ruft dieselbe API mehrfach auf</td><td>Max Iterations senken, Prompt präzisieren</td></tr>
+          <tr><td>kein Memory</td><td>Folgefrage „dort“ scheitert</td><td>Session ID prüfen, denselben Memory-Node verbinden</td></tr>
+          <tr><td>API-Ausfall</td><td>Tool gibt Fehler oder leere Daten zurück</td><td>Agent soll ehrlich antworten und keine Werte erfinden</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Minimaler Kontrollsatz</b>
+        Teste immer: konkrete Frage, mehrdeutige Frage, Folgefrage mit Memory, API-Fehler. Wenn einer dieser Fälle
+        scheitert, ist der Agent noch nicht robust.
+      </div>
+
+      <h2>Schritt 12 — Chat sicher veröffentlichen</h2>
+      <p>Erst wenn die Tests passen, machst du den Chat öffentlich. Öffentlich heißt: Jemand außerhalb des Editors kann
+        Ausführungen starten.</p>
+
+      <ol class="steps">
+        <li><h4>Chat Trigger öffnen</h4>
+          <p>Doppelklicke den Chat Trigger.</p></li>
+        <li><h4>Public einschalten</h4>
+          <p>Setze <strong>Make Chat Publicly Available</strong> auf an.</p></li>
+        <li><h4>Authentifizierung wählen</h4>
+          <p>Wähle für Tests <strong>Basic Auth</strong> oder <strong>n8n User Auth</strong>. <strong>None</strong> ist nur
+            für absichtlich öffentliche Demos sinnvoll.</p></li>
+        <li><h4>CORS begrenzen</h4>
+          <p>Setze <strong>Allowed Origin</strong> nicht dauerhaft auf <code>*</code>, wenn du den Chat in eine Website
+            einbettest. Trage deine konkrete Domain ein.</p></li>
+        <li><h4>Load Previous Session prüfen</h4>
+          <p>Wenn Nutzer frühere Chatnachrichten laden sollen, setze <strong>Load Previous Session</strong> auf
+            <strong>From Memory</strong> und nutze denselben Memory-Node wie am Agenten.</p></li>
+        <li><h4>Workflow aktivieren</h4>
+          <p>Speichere den Workflow und schalte ihn erst dann aktiv.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Schreibende Tools brauchen Review</b>
+        Wenn du später ein Gmail-, Slack-, CRM- oder Datenbank-Tool anschließt, baue Human-in-the-loop ein. Der Mensch
+        sieht dann vor der Ausführung, welches Tool mit welchen Parametern genutzt werden soll.
+      </div>
+
+      <h2>Sinnvolle Erweiterungen</h2>
+      <table class="btable">
+        <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
+        <tbody>
+          <tr><td>Human Review</td><td>Schreibende Tools hinter eine Freigabe per Slack, Chat oder E-Mail hängen.</td></tr>
+          <tr><td>Call n8n Workflow Tool</td><td>Komplexe Logik als eigenes Workflow-Tool kapseln statt alles in den Agenten zu legen.</td></tr>
+          <tr><td>Redis/Postgres Memory</td><td>Für produktive oder skalierte Chats statt Simple Memory nutzen.</td></tr>
+          <tr><td>Antwortqualität messen</td><td>Testfragen in einem Sheet sammeln und regelmäßig gegen den Agenten laufen lassen.</td></tr>
+          <tr><td>RAG</td><td>Eigene Dokumente über einen Vector Store anbinden. Das kommt im nächsten Kapitel.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Wann ist ein AI Agent sinnvoller als eine Basic LLM Chain?</li>
+          <li>Warum sollte der Wetter-Agent zuerst <code>Ort suchen</code> und erst danach <code>Wetter holen</code> nutzen?</li>
+          <li>Warum ist <code>$fromAI()</code> kein normaler Feldzugriff?</li>
+          <li>Wie prüfst du, ob Memory wirklich funktioniert?</li>
+          <li>Welche Tools gehören hinter Human Review?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Wenn das Modell entscheiden muss, welches Tool nötig ist. ·
+        2) Weil Wetter-APIs Koordinaten brauchen und der Ort erst aufgelöst werden muss. ·
+        3) Weil das Modell den Parameter aus Kontext und Tool-Beschreibung ableitet. ·
+        4) Mit einer Folgefrage wie „morgen dort?“ in derselben Session und einer neuen Session als Gegenprobe. ·
+        5) Alle Tools mit Außenwirkung: senden, löschen, kaufen, CRM ändern, Daten veröffentlichen.
+      </div>
+
+      <p>Du hast jetzt das Grundmuster eines n8n-Agenten gebaut: Chat rein, Modell entscheidet, Tools liefern Daten,
+        Memory hält den Gesprächskontext. Im nächsten KI-Kapitel wird aus Gesprächsgedächtnis ein Wissenssystem:
+        RAG über eigene Dokumente.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

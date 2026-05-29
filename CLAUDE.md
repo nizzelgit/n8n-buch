@@ -54,7 +54,11 @@ n8n-buch/
 │   ├── 13-projekt-wetter.html
 │   ├── 14-projekt-form.html
 │   ├── 15-projekt-news.html
-│   └── 16-projekt-leads.html
+│   ├── 16-projekt-leads.html
+│   ├── 17-projekt-ai.html
+│   ├── 18-projekt-pdf.html
+│   ├── 19-grossprojekt.html
+│   └── 20-ai-agent.html
 ├── assets/
 │   ├── css/
 │   │   ├── book.css            # Layout, Typografie, didaktische Bausteine, Responsiv
@@ -227,13 +231,16 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `14-projekt-form` — Projekt 2: Formular → Google Sheets → Slack (Form Trigger, Normalisierung, Credentials)
 - `15-projekt-news` — Projekt 3: News-Aggregator mit Filter (Schedule → RSS → Filter → Limit → Digest → Slack)
 - `16-projekt-leads` — Projekt 4: Lead-Routing vom Webhook ins CRM (Webhook, Normalisierung, IF/Switch, CRM, Slack)
+- `17-projekt-ai` — Projekt 5: KI-E-Mail-Assistent (Gmail Trigger, AI Agent, Entwurf, Slack-Eskalation)
+- `18-projekt-pdf` — Projekt 6: PDF-/Rechnungs-Extraktion (PDF-Text, Regel-Extraktion, KI-Fallback, Review)
+- `19-grossprojekt` — Großprojekt: Content-Pipeline end-to-end (Backlog-Sheet, Recherche, KI-Entwurf, Review-Gate, Publish-Workflow)
+- `20-ai-agent` — AI-Agent, Chat-Trigger, Memory & Tools (Chat Trigger, Tool-Agent, Simple Memory, HTTP-Tools, sichere Veröffentlichung)
 
-> **Teil 0, 1 und 2 sind vollständig (Kap. 00–12). Teil 3 ist gestartet (Kap. 13–16).**
+> **Teil 0, 1 und 2 sind vollständig (Kap. 00–12). Teil 3 ist vollständig (Kap. 13–19). Teil 4 ist gestartet (Kap. 20).**
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `17-projekt-ai` — KI-E-Mail-Assistent (AI Agent)
-2. weitere Projekte `18`–`19` (steigende Komplexität)
-3. danach KI 20–21, Betrieb 22–25, Anhänge A–D
+1. `21-rag` — RAG: Vektorstores & Q&A über eigene Daten
+2. danach Betrieb 22–25, Anhänge A–D
 
 **Hinweis zu Projekt-Kapiteln (Teil 3):** Sie sind länger/umfangreicher als die Bausteine. Sie sollten die in
 Kap. 4 etablierte Schritt-für-Schritt-Tiefe haben und auf den fertigen Bausteinen (07–12) aufbauen, statt
@@ -245,6 +252,36 @@ deren Grundlagen zu wiederholen (stattdessen verlinken/verweisen).
 ---
 
 ## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 — Kapitel 20 AI-Agent ergänzt
+- **Kapitel 20 „AI-Agent, Chat-Trigger, Memory & Tools"** (`ready`): Chat-Trigger-Workflow mit AI Agent,
+  Chat Model, Simple Memory, Open-Meteo-HTTP-Tools, `$fromAI()`-Parametern, Tool-Reihenfolge, Memory-Test,
+  Antwortnormalisierung, Fehlerfall-Tabelle, sicherer Veröffentlichung und Human-Review-Grenzen für schreibende Tools.
+- `assets/js/chapters.js` auf `ready` gesetzt; README aktualisiert.
+- Nächster offener Schritt: `21-rag` (RAG: Vektorstores & Q&A über eigene Daten).
+
+### 2026-05-29 — Projekt 6 PDF-/Rechnungs-Extraktion ergänzt
+- **Kapitel 18 „PDF-/Rechnungs-Extraktion"** (`ready`): E-Mail-Trigger mit PDF-Anhang, Extract From File für PDF-Text,
+  Textbereinigung, regelbasierte Rechnungsfeld-Erkennung, Confidence-IF, Google-Sheets-Ausgabe, KI-Fallback per
+  Information Extractor, Validierung, Slack-Review-Zweig und Drei-Fälle-Test.
+- `assets/js/chapters.js` auf `ready` gesetzt; README aktualisiert.
+- Nächster offener Schritt: `20-ai-agent` (AI-Agent, Chat-Trigger, Memory & Tools).
+
+### 2026-05-29 — Kapitel 19 Content-Pipeline ergänzt
+- **Kapitel 19 „Content-Pipeline end-to-end"** (`ready`): Zwei-Workflow-Großprojekt mit Google-Sheets-Backlog,
+  Statusmodell (`ready` → `review` → `approved` → `published`), HTTP-Recherche-Signalen, KI-Entwurf als JSON,
+  Parser/Fallbacks, menschlichem Review-Gate, Slack-Testveröffentlichung, Status-Update, Fehlerzweigen und Gesamttest.
+- `assets/js/chapters.js` auf `ready` gesetzt; README aktualisiert; mobile Tabellen in `book.css` gegen Seitenüberlauf abgesichert.
+- Nach parallelen Ergänzungen von Kapitel 18 und 20: `node build.js` → **22 Kapitel** im Bundle.
+- Nächster offener Schritt: `21-rag` (RAG: Vektorstores & Q&A über eigene Daten).
+
+### 2026-05-29 — Projekt 5 KI-E-Mail-Assistent ergänzt
+- **Kapitel 17 „KI-E-Mail-Assistent"** (`ready`): Gmail-Testlabel, Gmail Trigger, vollständige E-Mail holen,
+  Text vorbereiten, AI Agent mit Chat Model, strukturierte JSON-Ausgabe, Parser/Fallbacks, Gmail-Entwurf,
+  Slack-Eskalation für dringende Fälle, Labels, Gesamttests und Sicherheitsgrenzen.
+- `assets/js/chapters.js` auf `ready` gesetzt; README aktualisiert.
+- `node build.js` → **19 Kapitel** im Bundle.
+- Nächster offener Schritt: `18-projekt-pdf` (PDF-/Rechnungs-Extraktion).
 
 ### 2026-05-29 — Projekt 4 Lead-Routing ergänzt
 - **Kapitel 16 „Lead-Routing vom Webhook ins CRM"** (`ready`): POST-Webhook, Testdatenmodell,

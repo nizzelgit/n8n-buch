@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projekt 5: KI-E-Mail-Assistent — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="17-projekt-ai" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">17</span> Projekt 5</div>
+      <h1 class="chap-title">KI-E-Mail-Assistent</h1>
+      <p class="chap-lede">In diesem Projekt liest n8n neue E-Mails, lässt einen AI Agent die Nachricht klassifizieren,
+        erzeugt einen Antwortentwurf und meldet dringende Fälle an dein Team. Wichtig: Der Workflow sendet keine Antwort
+        automatisch. KI schlägt vor, der Mensch entscheidet.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 50 Minuten</span>
+        <span>🎯 Niveau: Mittel bis fortgeschritten</span>
+        <span>🧩 Voraussetzung: Kapitel 6–12, 14</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>Ein Test-Postfach, idealerweise Gmail. IMAP funktioniert ähnlich, aber die Node-Namen unterscheiden sich.</li>
+          <li>Eine Gmail-Credential mit Zugriff auf Lesen, Labels und Entwürfe.</li>
+          <li>Eine OpenAI- oder andere Chat-Model-Credential für den AI Agent.</li>
+          <li>Eine Slack-Credential oder einen anderen Benachrichtigungskanal für dringende Fälle.</li>
+          <li>Test-E-Mails. Keine produktiven Kundenmails, bevor du die Klassifikation geprüft hast.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">KI ist kein Autopilot</b>
+        Dieses Kapitel baut bewusst einen <strong>Assistenten</strong>, keinen automatischen Absender. Eine falsche Antwort
+        kann rechtlich, fachlich oder menschlich teuer werden. Der sichere Standard ist: Entwurf erstellen, markieren,
+        Mensch prüft.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Der Workflow reagiert auf neue ungelesene E-Mails. Er holt den vollständigen Inhalt, kürzt ihn auf das Nötige,
+        fragt einen AI Agent nach Kategorie, Dringlichkeit und Antwortentwurf, verarbeitet die strukturierte Ausgabe und
+        legt einen Gmail-Entwurf an. Sehr dringende E-Mails werden zusätzlich in Slack gemeldet.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 1080 390" preserveAspectRatio="none">
+                <path class="is-active" d="M 150 170 C 210 170, 230 170, 288 170"></path>
+                <path class="is-active" d="M 380 170 C 430 170, 450 170, 508 170"></path>
+                <path class="is-active" d="M 600 170 C 660 170, 680 170, 738 170"></path>
+                <path class="is-active" d="M 830 170 C 890 170, 900 105, 958 105"></path>
+                <path class="is-active" d="M 830 170 C 890 170, 900 235, 958 235"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:32px; top:124px;">
+                <span class="n8n-node__icon">✉️</span><span class="ep out"></span>
+                <span class="n8n-node__label">Neue E-Mail</span><span class="items">1 Item</span></div>
+              <div class="n8n-node" style="left:288px; top:124px;">
+                <span class="n8n-node__icon">📩</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">E-Mail holen</span></div>
+              <div class="n8n-node n8n-node--code" style="left:508px; top:124px;">
+                <span class="n8n-node__icon">🧹</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Text vorbereiten</span></div>
+              <div class="n8n-node n8n-node--ai" style="left:738px; top:124px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep in"></span>
+                <span class="ep out" style="top:46px;"></span>
+                <span class="n8n-node__label">AI Agent</span></div>
+              <div class="n8n-node" style="left:958px; top:59px;">
+                <span class="n8n-node__icon">📝</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Entwurf</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node" style="left:958px; top:189px;">
+                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Dringend melden</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 17.1</span>Der AI Agent entscheidet nicht allein: Er erzeugt strukturierte
+          Vorschläge, n8n macht daraus Entwurf, Label und Team-Hinweis.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Das robuste KI-Muster</b>
+        Nutze KI für <strong>Bewertung und Textentwurf</strong>, aber lasse n8n die Regeln ausführen:
+        JSON prüfen, IF-Node verzweigen, Entwurf statt Sendung, Label statt endgültiger Entscheidung.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 1 — Testpostfach vorbereiten</h2>
+      <p>Der wichtigste Schutz ist ein klar begrenzter Eingang. Wir lassen den Trigger nicht auf dein ganzes Postfach los,
+        sondern nur auf Testmails oder ein eigenes Label.</p>
+
+      <ol class="steps">
+        <li><h4>Gmail-Label anlegen</h4>
+          <p>Lege in Gmail ein Label <code>n8n-test-ai</code> an.</p></li>
+        <li><h4>Test-E-Mail senden</h4>
+          <p>Sende dir selbst eine E-Mail mit Betreff <code>Bitte Angebot für Workshop</code> und einem kurzen Text.</p></li>
+        <li><h4>Label setzen</h4>
+          <p>Markiere die Test-E-Mail mit <code>n8n-test-ai</code> und lasse sie ungelesen.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum ein Label?</b>
+        Trigger auf „alle ungelesenen E-Mails“ sind beim Lernen unnötig riskant. Ein Testlabel ist ein kleiner Zaun:
+        Du entscheidest, welche Mails der Workflow überhaupt sehen darf.
+      </div>
+
+      <h2>Schritt 2 — Workflow und Gmail Trigger anlegen</h2>
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen Workflow und nenne ihn <code>KI-E-Mail-Assistent</code>.</p></li>
+        <li><h4>Gmail Trigger hinzufügen</h4>
+          <p>Klicke auf das große <span class="kbd">+</span>, suche <code>gmail trigger</code> und wähle
+            <strong>Gmail Trigger</strong>.</p></li>
+        <li><h4>Credential auswählen</h4>
+          <p>Wähle deine Gmail-Credential oder lege sie wie in Kapitel 12 an.</p></li>
+        <li><h4>Ereignis setzen</h4>
+          <p>Setze <strong>Event</strong> auf <strong>Message Received</strong>.</p></li>
+        <li><h4>Poll-Zeit setzen</h4>
+          <p>Setze <strong>Poll Times</strong> für den Test z. B. auf alle fünf Minuten. Später kannst du langsamer pollen.</p></li>
+        <li><h4>Filter setzen</h4>
+          <p>Setze <strong>Read Status</strong> auf <strong>Unread only</strong> und <strong>Label Names or IDs</strong> auf
+            <code>n8n-test-ai</code>.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:660px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">✉️</span><b>Neue E-Mail</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Event</label><div class="n8n-select">Message Received <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Read Status</label><div class="n8n-select">Unread only <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Label Names or IDs</label><input class="n8n-input" value="n8n-test-ai"></div>
+                  <div class="row"><label>Max Emails per Poll</label><input class="n8n-input" value="3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 17.2</span>Der Gmail Trigger wird auf ungelesene Testmails begrenzt. Das ist
+          langsamer, aber beim Bauen deutlich sicherer.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der Trigger nichts findet</b>
+        Prüfe drei Dinge: Die Mail ist ungelesen, sie hat wirklich das Label <code>n8n-test-ai</code>, und der Trigger nutzt
+        dieselbe Gmail-Credential wie dein Postfach.
+      </div>
+
+      <h2>Schritt 3 — Vollständige E-Mail holen</h2>
+      <p>Der Trigger liefert je nach Einstellung oft nur eine vereinfachte Nachricht. Für die KI brauchen wir Betreff,
+        Absender und Textkörper. Deshalb hängen wir einen Gmail-Node an, der die Nachricht per ID holt.</p>
+
+      <ol class="steps">
+        <li><h4>Gmail-Node anhängen</h4>
+          <p>Ziehe vom Gmail Trigger eine Linie ins Leere, suche <code>gmail</code> und wähle <strong>Gmail</strong>.</p></li>
+        <li><h4>Operation wählen</h4>
+          <p>Wähle <strong>Message → Get</strong>.</p></li>
+        <li><h4>Message ID einsetzen</h4>
+          <p>Setze das ID-Feld auf Expression und verwende <code>{{ $json.id }}</code>.</p></li>
+        <li><h4>Simplify prüfen</h4>
+          <p>Schalte <strong>Simplify</strong> ein, wenn du die Felder direkt als <code>subject</code>, <code>from</code> und
+            <code>text</code> bekommst. Wenn dein Output anders aussieht, nutze die Feldnamen aus der Schema-Ansicht.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Node aus und prüfe rechts, ob Betreff, Absender und Inhalt sichtbar sind.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">📩</span><b>E-Mail holen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="n8n-json">{
+  <span class="k">"id"</span>: <span class="s">"18f-test-id"</span>,
+  <span class="k">"labelIds"</span>: [<span class="s">"UNREAD"</span>, <span class="s">"n8n-test-ai"</span>]
+}</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Resource</label><div class="n8n-select">Message <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Operation</label><div class="n8n-select">Get <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Message ID</label><input class="n8n-input is-expr" value="{{ $json.id }}"></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <table class="n8n-table">
+                    <thead><tr><th>subject</th><th>from</th></tr></thead>
+                    <tbody><tr><td>Bitte Angebot für Workshop</td><td>mira@example.com</td></tr></tbody>
+                  </table>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 17.3</span>Der zweite Gmail-Node holt den vollständigen Inhalt der Nachricht,
+          den der Trigger nur anstößt.</figcaption>
+      </figure>
+
+      <h2>Schritt 4 — E-Mail-Text vorbereiten</h2>
+      <p>KI-Modelle brauchen nicht jede Signatur, jedes Tracking-Bild und jede alte Antwortkette. Wir bauen ein kompaktes
+        Objekt, das der AI Agent lesen soll.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Ziehe von <strong>E-Mail holen</strong> eine Linie ins Leere, suche <code>code</code> und wähle <strong>Code</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>E-Mail vorbereiten</code>.</p></li>
+        <li><h4>Modus wählen</h4>
+          <p>Setze den Modus auf <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge diesen Code ein. Falls dein Gmail-Output andere Feldnamen nutzt, passe die ersten Zeilen an.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Run Once for Each Item</div>
+<pre><span class="ky">const</span> subject = $json.subject ?? $json.headers?.subject ?? <span class="st">''</span>;
+<span class="ky">const</span> from = $json.from ?? $json.headers?.from ?? <span class="st">''</span>;
+<span class="ky">const</span> rawText = $json.text ?? $json.textPlain ?? $json.snippet ?? <span class="st">''</span>;
+
+<span class="ky">const</span> cleaned = rawText
+  .replace(/On .* wrote:/s, <span class="st">''</span>)
+  .replace(/--\s*[\s\S]*$/m, <span class="st">''</span>)
+  .replace(/\s+/g, <span class="st">' '</span>)
+  .trim()
+  .slice(<span class="nm">0</span>, <span class="nm">4000</span>);
+
+<span class="ky">return</span> {
+  json: {
+    message_id: $json.id,
+    thread_id: $json.threadId,
+    subject,
+    from,
+    email_text: cleaned
+  }
+};</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Kontext begrenzen</b>
+        Mehr Text ist nicht automatisch besser. Für Klassifikation und Antwortentwurf reicht oft die aktuelle Nachricht.
+        Alte Zitate und Signaturen erhöhen Kosten und Fehlerwahrscheinlichkeit.
+      </div>
+
+      <h2>Schritt 5 — AI Agent hinzufügen</h2>
+      <p>Jetzt kommt der Agent. Er soll keine Tools aufrufen und keine E-Mail senden. Seine Aufgabe ist enger:
+        klassifizieren, begründen, Entwurf formulieren.</p>
+
+      <ol class="steps">
+        <li><h4>AI Agent anhängen</h4>
+          <p>Ziehe von <strong>E-Mail vorbereiten</strong> eine Linie ins Leere, suche <code>ai agent</code> und wähle
+            <strong>AI Agent</strong>.</p></li>
+        <li><h4>Agent-Typ schlicht halten</h4>
+          <p>Nutze den Standard-Agenten bzw. eine einfache Konfiguration ohne externe Tools.</p></li>
+        <li><h4>Chat Model verbinden</h4>
+          <p>Klicke am AI-Agent-Node auf den Anschluss für <strong>Chat Model</strong> und wähle z. B.
+            <strong>OpenAI Chat Model</strong>. Wähle deine Credential und ein günstiges, zuverlässiges Modell.</p></li>
+        <li><h4>Prompt-Modus setzen</h4>
+          <p>Setze <strong>Prompt</strong> auf <strong>Define below</strong>.</p></li>
+        <li><h4>User Message einfügen</h4>
+          <p>Trage den folgenden Prompt ein.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Prompt für den AI Agent</div>
+<pre>Du bist ein vorsichtiger E-Mail-Assistent.
+Analysiere die E-Mail und antworte ausschließlich als gültiges JSON.
+
+Erlaubte Kategorien: sales, support, billing, personal, other.
+Erlaubte Dringlichkeit: low, normal, high.
+
+JSON-Schema:
+{
+  "category": "sales|support|billing|personal|other",
+  "urgency": "low|normal|high",
+  "summary": "maximal 2 Sätze",
+  "reason": "kurze Begründung",
+  "draft_subject": "Antwortbetreff",
+  "draft_body": "höflicher Antwortentwurf in Du-Form oder neutraler Form"
+}
+
+Regeln:
+- Keine Fakten erfinden.
+- Wenn Informationen fehlen, im Entwurf gezielt nachfragen.
+- Bei rechtlichen, medizinischen oder finanziellen Aussagen keine definitive Beratung geben.
+- Niemals behaupten, dass eine Aktion bereits erledigt wurde.
+
+E-Mail:
+Von: {{ $json.from }}
+Betreff: {{ $json.subject }}
+Text: {{ $json.email_text }}</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:720px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🤖</span><b>AI Agent</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Agent</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Prompt</label><div class="n8n-select">Define below <span class="chev">▾</span></div></div>
+                  <div class="row"><label>User Message</label><input class="n8n-input is-expr" value="Analysiere die E-Mail und antworte ausschließlich als gültiges JSON ..."></div>
+                  <div class="row"><label>Chat Model</label><div class="n8n-select">OpenAI Chat Model verbunden <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Tools</label><div class="n8n-select">keine Tools verbunden <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 17.4</span>Für diesen Workflow braucht der Agent keine Werkzeuge. Er soll nur
+          strukturiert antworten.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der Agent kein JSON liefert</b>
+        Prüfe, ob dein Prompt wirklich „ausschließlich gültiges JSON“ verlangt. Falls deine n8n-Version einen Output Parser
+        oder „Require Specific Output Format“ anbietet, nutze ihn. Trotzdem solltest du den nächsten Prüfschritt behalten.
+      </div>
+
+      <h2>Schritt 6 — KI-Ausgabe prüfen und zerlegen</h2>
+      <p>Wir vertrauen der KI-Ausgabe nicht blind. Ein Code-Node versucht, JSON zu parsen, setzt Fallbacks und markiert
+        fehlerhafte Antworten.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter den AI Agent einen Code-Node und nenne ihn <code>KI-Ausgabe prüfen</code>.</p></li>
+        <li><h4>Modus wählen</h4>
+          <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge diesen robusten Parser ein. Je nach n8n-Version heißt das Agent-Ausgabefeld <code>output</code>,
+            <code>text</code> oder ähnlich; passe die erste Zeile bei Bedarf an.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · KI-Ausgabe prüfen</div>
+<pre><span class="ky">const</span> raw = $json.output ?? $json.text ?? $json.response ?? <span class="st">''</span>;
+<span class="ky">let</span> parsed;
+
+<span class="ky">try</span> {
+  parsed = JSON.parse(raw);
+} <span class="ky">catch</span> (error) {
+  parsed = {
+    category: <span class="st">'other'</span>,
+    urgency: <span class="st">'normal'</span>,
+    summary: <span class="st">'KI-Ausgabe konnte nicht als JSON gelesen werden.'</span>,
+    reason: raw.slice(<span class="nm">0</span>, <span class="nm">500</span>),
+    draft_subject: <span class="st">'Re: '</span> + ($json.subject ?? <span class="st">''</span>),
+    draft_body: <span class="st">'Danke für deine Nachricht. Ich prüfe das und melde mich.'</span>,
+    parse_error: true
+  };
+}
+
+<span class="ky">const</span> allowedCategories = [<span class="st">'sales'</span>, <span class="st">'support'</span>, <span class="st">'billing'</span>, <span class="st">'personal'</span>, <span class="st">'other'</span>];
+<span class="ky">const</span> allowedUrgency = [<span class="st">'low'</span>, <span class="st">'normal'</span>, <span class="st">'high'</span>];
+
+<span class="ky">return</span> {
+  json: {
+    ...$json,
+    category: allowedCategories.includes(parsed.category) ? parsed.category : <span class="st">'other'</span>,
+    urgency: allowedUrgency.includes(parsed.urgency) ? parsed.urgency : <span class="st">'normal'</span>,
+    summary: parsed.summary ?? <span class="st">''</span>,
+    reason: parsed.reason ?? <span class="st">''</span>,
+    draft_subject: parsed.draft_subject ?? (<span class="st">'Re: '</span> + ($json.subject ?? <span class="st">''</span>)),
+    draft_body: parsed.draft_body ?? <span class="st">'Danke für deine Nachricht.'</span>,
+    parse_error: Boolean(parsed.parse_error)
+  }
+};</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ KI-Ausgaben sind Eingaben</b>
+        Behandle Agent-Antworten wie Daten von außen: parsen, validieren, Defaults setzen. Erst danach darf der Workflow
+        Entscheidungen treffen.
+      </div>
+
+      <h2>Schritt 7 — Entwurf in Gmail erstellen</h2>
+      <p>Jetzt macht der Workflow etwas Nützliches, aber Reversibles: Er legt einen Entwurf an.</p>
+
+      <ol class="steps">
+        <li><h4>Gmail-Node anhängen</h4>
+          <p>Hänge hinter <strong>KI-Ausgabe prüfen</strong> einen Gmail-Node.</p></li>
+        <li><h4>Operation wählen</h4>
+          <p>Wähle <strong>Draft → Create</strong>. Falls deine n8n-Version anders formuliert: Es geht um
+            <strong>Entwurf erstellen</strong>, nicht um Senden.</p></li>
+        <li><h4>Empfänger setzen</h4>
+          <p>Setze <strong>To</strong> auf <code>{{ $json.from }}</code>. Prüfe bei echten Mails später, ob das Feld nur die
+            Adresse enthält oder auch den Anzeigenamen.</p></li>
+        <li><h4>Betreff setzen</h4>
+          <p>Setze <strong>Subject</strong> auf <code>{{ $json.draft_subject }}</code>.</p></li>
+        <li><h4>Text setzen</h4>
+          <p>Setze <strong>Message</strong> auf <code>{{ $json.draft_body }}</code>.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Node aus und öffne danach Gmail. Im Entwurfsordner sollte ein neuer Antwortentwurf liegen.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Nicht „Send“ wählen</b>
+        In manchen Gmail-Nodes liegen „Create Draft“, „Reply“ und „Send“ nah beieinander. Für dieses Kapitel ist nur
+        <strong>Create Draft</strong> gemeint.
+      </div>
+
+      <h2>Schritt 8 — Dringende Fälle melden</h2>
+      <p>Jetzt verzweigen wir. Nur E-Mails mit <code>urgency = high</code> gehen zusätzlich in Slack. Normale E-Mails bekommen
+        nur den Gmail-Entwurf.</p>
+
+      <ol class="steps">
+        <li><h4>IF-Node anhängen</h4>
+          <p>Hänge hinter <strong>KI-Ausgabe prüfen</strong> zusätzlich einen IF-Node oder setze ihn vor den Gmail-Entwurf,
+            wenn du die Verzweigung sichtbarer haben willst.</p></li>
+        <li><h4>Bedingung setzen</h4>
+          <p>Prüfe <code>{{ $json.urgency }}</code> <strong>equals</strong> <code>high</code>.</p></li>
+        <li><h4>Slack an true-Ausgang hängen</h4>
+          <p>Hänge an den true-Ausgang einen Slack-Node mit Kanal <code>#inbox-urgent-test</code>.</p></li>
+        <li><h4>Slack-Text setzen</h4>
+          <p>Setze den Text auf die folgende Expression.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Slack-Text</div>
+<pre>Dringende E-Mail erkannt
+Von: {{ $json.from }}
+Betreff: {{ $json.subject }}
+Kategorie: {{ $json.category }}
+Grund: {{ $json.reason }}
+
+Zusammenfassung:
+{{ $json.summary }}</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 860 310" preserveAspectRatio="none">
+                <path class="is-active" d="M 178 140 C 240 140, 255 140, 312 140"></path>
+                <path class="is-active" d="M 404 140 C 470 140, 490 85, 548 85"></path>
+                <path class="is-active" d="M 404 140 C 470 140, 490 205, 548 205"></path>
+              </svg>
+              <div class="n8n-node n8n-node--ai" style="left:60px; top:94px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep out"></span>
+                <span class="n8n-node__label">geprüfte KI-Daten</span></div>
+              <div class="n8n-node" style="left:312px; top:94px;">
+                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="ep out" style="top:30px;"></span><span class="ep out" style="top:64px;"></span>
+                <span class="n8n-node__label">urgency = high?</span></div>
+              <div class="n8n-node" style="left:548px; top:39px;">
+                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Slack</span></div>
+              <div class="n8n-node" style="left:548px; top:159px;">
+                <span class="n8n-node__icon">📝</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">nur Entwurf</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 17.5</span>Die Dringlichkeit ist nur eine Entscheidungshilfe. Der IF-Node macht
+          daraus eine transparente Regel.</figcaption>
+      </figure>
+
+      <h2>Schritt 9 — Label setzen und Mail markieren</h2>
+      <p>Zum Abschluss soll sichtbar sein, dass n8n diese E-Mail bearbeitet hat. Wir setzen ein Label und markieren die
+        Nachricht erst danach als gelesen.</p>
+
+      <ol class="steps">
+        <li><h4>Label vorbereiten</h4>
+          <p>Lege in Gmail ein Label <code>n8n-ai-draft</code> an.</p></li>
+        <li><h4>Gmail-Node anhängen</h4>
+          <p>Hänge nach dem Entwurf einen weiteren Gmail-Node an.</p></li>
+        <li><h4>Label hinzufügen</h4>
+          <p>Wähle <strong>Message → Add Label</strong>, setze die Message ID auf <code>{{ $json.message_id }}</code> und das
+            Label auf <code>n8n-ai-draft</code>.</p></li>
+        <li><h4>Optional als gelesen markieren</h4>
+          <p>Füge danach einen Gmail-Node <strong>Message → Mark as Read</strong> hinzu. Mache das erst, wenn Entwurf und Label
+            zuverlässig funktionieren.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum erst am Ende als gelesen?</b>
+        Wenn der Workflow vorher scheitert, bleibt die Mail ungelesen und taucht weiter als offene Aufgabe auf. Das ist
+        absichtlich konservativ.
+      </div>
+
+      <h2>Schritt 10 — Gesamttest</h2>
+      <ol class="steps">
+        <li><h4>Normale Testmail senden</h4>
+          <p>Sende eine harmlose Anfrage mit dem Testlabel. Erwartung: Entwurf entsteht, keine Slack-Meldung.</p></li>
+        <li><h4>Dringende Testmail senden</h4>
+          <p>Sende eine Mail mit klarer Dringlichkeit, z. B. „Zugang funktioniert nicht, Kundentermin in 30 Minuten“.
+            Erwartung: Entwurf und Slack-Meldung.</p></li>
+        <li><h4>Unklare Testmail senden</h4>
+          <p>Sende eine kurze, mehrdeutige Mail. Erwartung: Der Entwurf fragt nach, statt Details zu erfinden.</p></li>
+        <li><h4>Executions prüfen</h4>
+          <p>Öffne jede Ausführung. Prüfe besonders die Felder <code>category</code>, <code>urgency</code>,
+            <code>summary</code> und <code>draft_body</code>.</p></li>
+        <li><h4>Workflow aktivieren</h4>
+          <p>Erst wenn alle drei Fälle passen, speichere und aktiviere den Workflow. Lasse das Testlabel zunächst bestehen.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Teste Grenzfälle, nicht nur Wunschfälle</b>
+        Eine KI-Demo funktioniert fast immer mit perfekten Beispielen. Relevant sind die schlechten Fälle: zu wenig Kontext,
+        widersprüchlicher Text, Dringlichkeit ohne klare Zuständigkeit.
+      </div>
+
+      <h2>Sinnvolle Erweiterungen</h2>
+      <table class="btable">
+        <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
+        <tbody>
+          <tr><td>Human approval</td><td>Slack- oder Gmail-Schritt mit Freigabe einbauen, bevor eine Antwort gesendet wird.</td></tr>
+          <tr><td>CRM-Kontext</td><td>Vor dem Agenten Kontakt im CRM suchen und Kundentyp oder offene Tickets ergänzen.</td></tr>
+          <tr><td>Mehrere Labels</td><td>Nach <code>category</code> unterschiedliche Gmail-Labels setzen.</td></tr>
+          <tr><td>Kostenkontrolle</td><td>Nur Mails über einer Mindestlänge an KI senden; Newsletter vorher filtern.</td></tr>
+          <tr><td>Output Parser</td><td>Falls verfügbar, Structured Output Parser nutzen und den Code-Parser trotzdem als Sicherheitsnetz behalten.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Warum triggert der Workflow zuerst nur auf ein Testlabel?</li>
+          <li>Warum erstellt der Workflow einen Entwurf statt direkt zu senden?</li>
+          <li>Warum wird die KI-Ausgabe noch einmal geparst und validiert?</li>
+          <li>Welche drei Testfälle brauchst du vor dem Aktivieren?</li>
+          <li>Warum markieren wir die Mail erst am Ende als gelesen?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Damit nur bewusst ausgewählte Mails verarbeitet werden. ·
+        2) Weil KI-Text menschlich geprüft werden sollte. ·
+        3) Weil KI-Ausgaben trotz Prompt fehlerhaft oder unvollständig sein können. ·
+        4) Normal, dringend, unklar. ·
+        5) Damit Fehler nicht unsichtbar werden.
+      </div>
+
+      <p>Du hast jetzt einen KI-Workflow gebaut, der einen realen Arbeitsprozess unterstützt, ohne die Kontrolle abzugeben.
+        Im nächsten Projekt wird die Eingabe schwieriger: PDFs oder Rechnungen müssen erst gelesen, strukturiert und geprüft
+        werden, bevor n8n zuverlässig weiterarbeiten kann.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

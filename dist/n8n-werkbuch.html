@@ -323,6 +323,12 @@ ol.steps > li p { font-size: 15.5px; }
   h1.chap-title { font-size: 31px; }
   #prevnext { flex-direction:column; padding: 0 18px 50px; }
   .ndv__cols { grid-template-columns: 1fr; }
+  .btable {
+    display:block;
+    max-width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 /* ---------- Mobile-Performance: teure Effekte auf kleinen Screens aus ----
@@ -960,19 +966,19 @@ ol.steps > li p { font-size: 15.5px; }
       </a><a class="sb-link" data-title="projekt 4: lead-routing vom webhook ins crm"
       href="#16-projekt-leads" data-slug="16-projekt-leads">
       <span class="num">16</span><span>Projekt 4: Lead-Routing vom Webhook ins CRM</span>
-      </a><a class="sb-link is-soon" data-title="projekt 5: ki-e-mail-assistent (ai agent)"
-      href="javascript:void(0)" data-slug="17-projekt-ai">
+      </a><a class="sb-link" data-title="projekt 5: ki-e-mail-assistent (ai agent)"
+      href="#17-projekt-ai" data-slug="17-projekt-ai">
       <span class="num">17</span><span>Projekt 5: KI-E-Mail-Assistent (AI Agent)</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="projekt 6: pdf-/rechnungs-extraktion"
-      href="javascript:void(0)" data-slug="18-projekt-pdf">
+      </a><a class="sb-link" data-title="projekt 6: pdf-/rechnungs-extraktion"
+      href="#18-projekt-pdf" data-slug="18-projekt-pdf">
       <span class="num">18</span><span>Projekt 6: PDF-/Rechnungs-Extraktion</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="großprojekt: content-pipeline end-to-end"
-      href="javascript:void(0)" data-slug="19-grossprojekt">
+      </a><a class="sb-link" data-title="großprojekt: content-pipeline end-to-end"
+      href="#19-grossprojekt" data-slug="19-grossprojekt">
       <span class="num">19</span><span>Großprojekt: Content-Pipeline end-to-end</span>
-      <span class="soon">bald</span></a><div class="sb-part">Teil 4 · KI & Agenten</div><a class="sb-link is-soon" data-title="ai-agent, chat-trigger, memory & tools"
-      href="javascript:void(0)" data-slug="20-ai-agent">
+      </a><div class="sb-part">Teil 4 · KI & Agenten</div><a class="sb-link" data-title="ai-agent, chat-trigger, memory & tools"
+      href="#20-ai-agent" data-slug="20-ai-agent">
       <span class="num">20</span><span>AI-Agent, Chat-Trigger, Memory & Tools</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="rag: vektorstores & q&a über eigene daten"
+      </a><a class="sb-link is-soon" data-title="rag: vektorstores & q&a über eigene daten"
       href="javascript:void(0)" data-slug="21-rag">
       <span class="num">21</span><span>RAG: Vektorstores & Q&A über eigene Daten</span>
       <span class="soon">bald</span></a><div class="sb-part">Teil 5 · Profi & Betrieb</div><a class="sb-link is-soon" data-title="sub-workflows & modularisierung"
@@ -1064,19 +1070,19 @@ ol.steps > li p { font-size: 15.5px; }
       <span class="pill">lesen</span></a><a class="toc-row" href="#16-projekt-leads">
       <span class="n">16</span><span class="ti">Projekt 4: Lead-Routing vom Webhook ins CRM</span>
       <span class="mins">⏱ 45 Min</span>
-      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#17-projekt-ai">
       <span class="n">17</span><span class="ti">Projekt 5: KI-E-Mail-Assistent (AI Agent)</span>
-      <span class="mins">⏱ 45 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="mins">⏱ 50 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row" href="#18-projekt-pdf">
       <span class="n">18</span><span class="ti">Projekt 6: PDF-/Rechnungs-Extraktion</span>
-      <span class="mins">⏱ 45 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="mins">⏱ 55 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row" href="#19-grossprojekt">
       <span class="n">19</span><span class="ti">Großprojekt: Content-Pipeline end-to-end</span>
       <span class="mins">⏱ 70 Min</span>
-      <span class="pill">bald</span></a></div></div><div class="toc-part"><h3>Teil 4 · KI & Agenten</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Teil 4 · KI & Agenten</h3><div class="toc-list"><a class="toc-row" href="#20-ai-agent">
       <span class="n">20</span><span class="ti">AI-Agent, Chat-Trigger, Memory & Tools</span>
-      <span class="mins">⏱ 28 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="mins">⏱ 38 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
       <span class="n">21</span><span class="ti">RAG: Vektorstores & Q&A über eigene Daten</span>
       <span class="mins">⏱ 30 Min</span>
       <span class="pill">bald</span></a></div></div><div class="toc-part"><h3>Teil 5 · Profi & Betrieb</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
@@ -6201,12 +6207,2572 @@ Budget: {{ $json.budget }} €
 
     </article>
       <nav class="pn-wrap" data-slug="16-projekt-leads"></nav></section>
+<section class="page" id="17-projekt-ai" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">17</span> Projekt 5</div>
+      <h1 class="chap-title">KI-E-Mail-Assistent</h1>
+      <p class="chap-lede">In diesem Projekt liest n8n neue E-Mails, lässt einen AI Agent die Nachricht klassifizieren,
+        erzeugt einen Antwortentwurf und meldet dringende Fälle an dein Team. Wichtig: Der Workflow sendet keine Antwort
+        automatisch. KI schlägt vor, der Mensch entscheidet.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 50 Minuten</span>
+        <span>🎯 Niveau: Mittel bis fortgeschritten</span>
+        <span>🧩 Voraussetzung: Kapitel 6–12, 14</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>Ein Test-Postfach, idealerweise Gmail. IMAP funktioniert ähnlich, aber die Node-Namen unterscheiden sich.</li>
+          <li>Eine Gmail-Credential mit Zugriff auf Lesen, Labels und Entwürfe.</li>
+          <li>Eine OpenAI- oder andere Chat-Model-Credential für den AI Agent.</li>
+          <li>Eine Slack-Credential oder einen anderen Benachrichtigungskanal für dringende Fälle.</li>
+          <li>Test-E-Mails. Keine produktiven Kundenmails, bevor du die Klassifikation geprüft hast.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">KI ist kein Autopilot</b>
+        Dieses Kapitel baut bewusst einen <strong>Assistenten</strong>, keinen automatischen Absender. Eine falsche Antwort
+        kann rechtlich, fachlich oder menschlich teuer werden. Der sichere Standard ist: Entwurf erstellen, markieren,
+        Mensch prüft.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Der Workflow reagiert auf neue ungelesene E-Mails. Er holt den vollständigen Inhalt, kürzt ihn auf das Nötige,
+        fragt einen AI Agent nach Kategorie, Dringlichkeit und Antwortentwurf, verarbeitet die strukturierte Ausgabe und
+        legt einen Gmail-Entwurf an. Sehr dringende E-Mails werden zusätzlich in Slack gemeldet.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 1080 390" preserveAspectRatio="none">
+                <path class="is-active" d="M 150 170 C 210 170, 230 170, 288 170"></path>
+                <path class="is-active" d="M 380 170 C 430 170, 450 170, 508 170"></path>
+                <path class="is-active" d="M 600 170 C 660 170, 680 170, 738 170"></path>
+                <path class="is-active" d="M 830 170 C 890 170, 900 105, 958 105"></path>
+                <path class="is-active" d="M 830 170 C 890 170, 900 235, 958 235"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:32px; top:124px;">
+                <span class="n8n-node__icon">✉️</span><span class="ep out"></span>
+                <span class="n8n-node__label">Neue E-Mail</span><span class="items">1 Item</span></div>
+              <div class="n8n-node" style="left:288px; top:124px;">
+                <span class="n8n-node__icon">📩</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">E-Mail holen</span></div>
+              <div class="n8n-node n8n-node--code" style="left:508px; top:124px;">
+                <span class="n8n-node__icon">🧹</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Text vorbereiten</span></div>
+              <div class="n8n-node n8n-node--ai" style="left:738px; top:124px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep in"></span>
+                <span class="ep out" style="top:46px;"></span>
+                <span class="n8n-node__label">AI Agent</span></div>
+              <div class="n8n-node" style="left:958px; top:59px;">
+                <span class="n8n-node__icon">📝</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Entwurf</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node" style="left:958px; top:189px;">
+                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Dringend melden</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 17.1</span>Der AI Agent entscheidet nicht allein: Er erzeugt strukturierte
+          Vorschläge, n8n macht daraus Entwurf, Label und Team-Hinweis.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Das robuste KI-Muster</b>
+        Nutze KI für <strong>Bewertung und Textentwurf</strong>, aber lasse n8n die Regeln ausführen:
+        JSON prüfen, IF-Node verzweigen, Entwurf statt Sendung, Label statt endgültiger Entscheidung.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 1 — Testpostfach vorbereiten</h2>
+      <p>Der wichtigste Schutz ist ein klar begrenzter Eingang. Wir lassen den Trigger nicht auf dein ganzes Postfach los,
+        sondern nur auf Testmails oder ein eigenes Label.</p>
+
+      <ol class="steps">
+        <li><h4>Gmail-Label anlegen</h4>
+          <p>Lege in Gmail ein Label <code>n8n-test-ai</code> an.</p></li>
+        <li><h4>Test-E-Mail senden</h4>
+          <p>Sende dir selbst eine E-Mail mit Betreff <code>Bitte Angebot für Workshop</code> und einem kurzen Text.</p></li>
+        <li><h4>Label setzen</h4>
+          <p>Markiere die Test-E-Mail mit <code>n8n-test-ai</code> und lasse sie ungelesen.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum ein Label?</b>
+        Trigger auf „alle ungelesenen E-Mails“ sind beim Lernen unnötig riskant. Ein Testlabel ist ein kleiner Zaun:
+        Du entscheidest, welche Mails der Workflow überhaupt sehen darf.
+      </div>
+
+      <h2>Schritt 2 — Workflow und Gmail Trigger anlegen</h2>
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen Workflow und nenne ihn <code>KI-E-Mail-Assistent</code>.</p></li>
+        <li><h4>Gmail Trigger hinzufügen</h4>
+          <p>Klicke auf das große <span class="kbd">+</span>, suche <code>gmail trigger</code> und wähle
+            <strong>Gmail Trigger</strong>.</p></li>
+        <li><h4>Credential auswählen</h4>
+          <p>Wähle deine Gmail-Credential oder lege sie wie in Kapitel 12 an.</p></li>
+        <li><h4>Ereignis setzen</h4>
+          <p>Setze <strong>Event</strong> auf <strong>Message Received</strong>.</p></li>
+        <li><h4>Poll-Zeit setzen</h4>
+          <p>Setze <strong>Poll Times</strong> für den Test z. B. auf alle fünf Minuten. Später kannst du langsamer pollen.</p></li>
+        <li><h4>Filter setzen</h4>
+          <p>Setze <strong>Read Status</strong> auf <strong>Unread only</strong> und <strong>Label Names or IDs</strong> auf
+            <code>n8n-test-ai</code>.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:660px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">✉️</span><b>Neue E-Mail</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Event</label><div class="n8n-select">Message Received <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Read Status</label><div class="n8n-select">Unread only <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Label Names or IDs</label><input class="n8n-input" value="n8n-test-ai"></div>
+                  <div class="row"><label>Max Emails per Poll</label><input class="n8n-input" value="3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 17.2</span>Der Gmail Trigger wird auf ungelesene Testmails begrenzt. Das ist
+          langsamer, aber beim Bauen deutlich sicherer.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der Trigger nichts findet</b>
+        Prüfe drei Dinge: Die Mail ist ungelesen, sie hat wirklich das Label <code>n8n-test-ai</code>, und der Trigger nutzt
+        dieselbe Gmail-Credential wie dein Postfach.
+      </div>
+
+      <h2>Schritt 3 — Vollständige E-Mail holen</h2>
+      <p>Der Trigger liefert je nach Einstellung oft nur eine vereinfachte Nachricht. Für die KI brauchen wir Betreff,
+        Absender und Textkörper. Deshalb hängen wir einen Gmail-Node an, der die Nachricht per ID holt.</p>
+
+      <ol class="steps">
+        <li><h4>Gmail-Node anhängen</h4>
+          <p>Ziehe vom Gmail Trigger eine Linie ins Leere, suche <code>gmail</code> und wähle <strong>Gmail</strong>.</p></li>
+        <li><h4>Operation wählen</h4>
+          <p>Wähle <strong>Message → Get</strong>.</p></li>
+        <li><h4>Message ID einsetzen</h4>
+          <p>Setze das ID-Feld auf Expression und verwende <code>{{ $json.id }}</code>.</p></li>
+        <li><h4>Simplify prüfen</h4>
+          <p>Schalte <strong>Simplify</strong> ein, wenn du die Felder direkt als <code>subject</code>, <code>from</code> und
+            <code>text</code> bekommst. Wenn dein Output anders aussieht, nutze die Feldnamen aus der Schema-Ansicht.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Node aus und prüfe rechts, ob Betreff, Absender und Inhalt sichtbar sind.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">📩</span><b>E-Mail holen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="n8n-json">{
+  <span class="k">"id"</span>: <span class="s">"18f-test-id"</span>,
+  <span class="k">"labelIds"</span>: [<span class="s">"UNREAD"</span>, <span class="s">"n8n-test-ai"</span>]
+}</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Resource</label><div class="n8n-select">Message <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Operation</label><div class="n8n-select">Get <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Message ID</label><input class="n8n-input is-expr" value="{{ $json.id }}"></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <table class="n8n-table">
+                    <thead><tr><th>subject</th><th>from</th></tr></thead>
+                    <tbody><tr><td>Bitte Angebot für Workshop</td><td>mira@example.com</td></tr></tbody>
+                  </table>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 17.3</span>Der zweite Gmail-Node holt den vollständigen Inhalt der Nachricht,
+          den der Trigger nur anstößt.</figcaption>
+      </figure>
+
+      <h2>Schritt 4 — E-Mail-Text vorbereiten</h2>
+      <p>KI-Modelle brauchen nicht jede Signatur, jedes Tracking-Bild und jede alte Antwortkette. Wir bauen ein kompaktes
+        Objekt, das der AI Agent lesen soll.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Ziehe von <strong>E-Mail holen</strong> eine Linie ins Leere, suche <code>code</code> und wähle <strong>Code</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>E-Mail vorbereiten</code>.</p></li>
+        <li><h4>Modus wählen</h4>
+          <p>Setze den Modus auf <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge diesen Code ein. Falls dein Gmail-Output andere Feldnamen nutzt, passe die ersten Zeilen an.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Run Once for Each Item</div>
+<pre><span class="ky">const</span> subject = $json.subject ?? $json.headers?.subject ?? <span class="st">''</span>;
+<span class="ky">const</span> from = $json.from ?? $json.headers?.from ?? <span class="st">''</span>;
+<span class="ky">const</span> rawText = $json.text ?? $json.textPlain ?? $json.snippet ?? <span class="st">''</span>;
+
+<span class="ky">const</span> cleaned = rawText
+  .replace(/On .* wrote:/s, <span class="st">''</span>)
+  .replace(/--\s*[\s\S]*$/m, <span class="st">''</span>)
+  .replace(/\s+/g, <span class="st">' '</span>)
+  .trim()
+  .slice(<span class="nm">0</span>, <span class="nm">4000</span>);
+
+<span class="ky">return</span> {
+  json: {
+    message_id: $json.id,
+    thread_id: $json.threadId,
+    subject,
+    from,
+    email_text: cleaned
+  }
+};</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Kontext begrenzen</b>
+        Mehr Text ist nicht automatisch besser. Für Klassifikation und Antwortentwurf reicht oft die aktuelle Nachricht.
+        Alte Zitate und Signaturen erhöhen Kosten und Fehlerwahrscheinlichkeit.
+      </div>
+
+      <h2>Schritt 5 — AI Agent hinzufügen</h2>
+      <p>Jetzt kommt der Agent. Er soll keine Tools aufrufen und keine E-Mail senden. Seine Aufgabe ist enger:
+        klassifizieren, begründen, Entwurf formulieren.</p>
+
+      <ol class="steps">
+        <li><h4>AI Agent anhängen</h4>
+          <p>Ziehe von <strong>E-Mail vorbereiten</strong> eine Linie ins Leere, suche <code>ai agent</code> und wähle
+            <strong>AI Agent</strong>.</p></li>
+        <li><h4>Agent-Typ schlicht halten</h4>
+          <p>Nutze den Standard-Agenten bzw. eine einfache Konfiguration ohne externe Tools.</p></li>
+        <li><h4>Chat Model verbinden</h4>
+          <p>Klicke am AI-Agent-Node auf den Anschluss für <strong>Chat Model</strong> und wähle z. B.
+            <strong>OpenAI Chat Model</strong>. Wähle deine Credential und ein günstiges, zuverlässiges Modell.</p></li>
+        <li><h4>Prompt-Modus setzen</h4>
+          <p>Setze <strong>Prompt</strong> auf <strong>Define below</strong>.</p></li>
+        <li><h4>User Message einfügen</h4>
+          <p>Trage den folgenden Prompt ein.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Prompt für den AI Agent</div>
+<pre>Du bist ein vorsichtiger E-Mail-Assistent.
+Analysiere die E-Mail und antworte ausschließlich als gültiges JSON.
+
+Erlaubte Kategorien: sales, support, billing, personal, other.
+Erlaubte Dringlichkeit: low, normal, high.
+
+JSON-Schema:
+{
+  "category": "sales|support|billing|personal|other",
+  "urgency": "low|normal|high",
+  "summary": "maximal 2 Sätze",
+  "reason": "kurze Begründung",
+  "draft_subject": "Antwortbetreff",
+  "draft_body": "höflicher Antwortentwurf in Du-Form oder neutraler Form"
+}
+
+Regeln:
+- Keine Fakten erfinden.
+- Wenn Informationen fehlen, im Entwurf gezielt nachfragen.
+- Bei rechtlichen, medizinischen oder finanziellen Aussagen keine definitive Beratung geben.
+- Niemals behaupten, dass eine Aktion bereits erledigt wurde.
+
+E-Mail:
+Von: {{ $json.from }}
+Betreff: {{ $json.subject }}
+Text: {{ $json.email_text }}</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:720px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🤖</span><b>AI Agent</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Agent</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Prompt</label><div class="n8n-select">Define below <span class="chev">▾</span></div></div>
+                  <div class="row"><label>User Message</label><input class="n8n-input is-expr" value="Analysiere die E-Mail und antworte ausschließlich als gültiges JSON ..."></div>
+                  <div class="row"><label>Chat Model</label><div class="n8n-select">OpenAI Chat Model verbunden <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Tools</label><div class="n8n-select">keine Tools verbunden <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 17.4</span>Für diesen Workflow braucht der Agent keine Werkzeuge. Er soll nur
+          strukturiert antworten.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der Agent kein JSON liefert</b>
+        Prüfe, ob dein Prompt wirklich „ausschließlich gültiges JSON“ verlangt. Falls deine n8n-Version einen Output Parser
+        oder „Require Specific Output Format“ anbietet, nutze ihn. Trotzdem solltest du den nächsten Prüfschritt behalten.
+      </div>
+
+      <h2>Schritt 6 — KI-Ausgabe prüfen und zerlegen</h2>
+      <p>Wir vertrauen der KI-Ausgabe nicht blind. Ein Code-Node versucht, JSON zu parsen, setzt Fallbacks und markiert
+        fehlerhafte Antworten.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter den AI Agent einen Code-Node und nenne ihn <code>KI-Ausgabe prüfen</code>.</p></li>
+        <li><h4>Modus wählen</h4>
+          <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge diesen robusten Parser ein. Je nach n8n-Version heißt das Agent-Ausgabefeld <code>output</code>,
+            <code>text</code> oder ähnlich; passe die erste Zeile bei Bedarf an.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · KI-Ausgabe prüfen</div>
+<pre><span class="ky">const</span> raw = $json.output ?? $json.text ?? $json.response ?? <span class="st">''</span>;
+<span class="ky">let</span> parsed;
+
+<span class="ky">try</span> {
+  parsed = JSON.parse(raw);
+} <span class="ky">catch</span> (error) {
+  parsed = {
+    category: <span class="st">'other'</span>,
+    urgency: <span class="st">'normal'</span>,
+    summary: <span class="st">'KI-Ausgabe konnte nicht als JSON gelesen werden.'</span>,
+    reason: raw.slice(<span class="nm">0</span>, <span class="nm">500</span>),
+    draft_subject: <span class="st">'Re: '</span> + ($json.subject ?? <span class="st">''</span>),
+    draft_body: <span class="st">'Danke für deine Nachricht. Ich prüfe das und melde mich.'</span>,
+    parse_error: true
+  };
+}
+
+<span class="ky">const</span> allowedCategories = [<span class="st">'sales'</span>, <span class="st">'support'</span>, <span class="st">'billing'</span>, <span class="st">'personal'</span>, <span class="st">'other'</span>];
+<span class="ky">const</span> allowedUrgency = [<span class="st">'low'</span>, <span class="st">'normal'</span>, <span class="st">'high'</span>];
+
+<span class="ky">return</span> {
+  json: {
+    ...$json,
+    category: allowedCategories.includes(parsed.category) ? parsed.category : <span class="st">'other'</span>,
+    urgency: allowedUrgency.includes(parsed.urgency) ? parsed.urgency : <span class="st">'normal'</span>,
+    summary: parsed.summary ?? <span class="st">''</span>,
+    reason: parsed.reason ?? <span class="st">''</span>,
+    draft_subject: parsed.draft_subject ?? (<span class="st">'Re: '</span> + ($json.subject ?? <span class="st">''</span>)),
+    draft_body: parsed.draft_body ?? <span class="st">'Danke für deine Nachricht.'</span>,
+    parse_error: Boolean(parsed.parse_error)
+  }
+};</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ KI-Ausgaben sind Eingaben</b>
+        Behandle Agent-Antworten wie Daten von außen: parsen, validieren, Defaults setzen. Erst danach darf der Workflow
+        Entscheidungen treffen.
+      </div>
+
+      <h2>Schritt 7 — Entwurf in Gmail erstellen</h2>
+      <p>Jetzt macht der Workflow etwas Nützliches, aber Reversibles: Er legt einen Entwurf an.</p>
+
+      <ol class="steps">
+        <li><h4>Gmail-Node anhängen</h4>
+          <p>Hänge hinter <strong>KI-Ausgabe prüfen</strong> einen Gmail-Node.</p></li>
+        <li><h4>Operation wählen</h4>
+          <p>Wähle <strong>Draft → Create</strong>. Falls deine n8n-Version anders formuliert: Es geht um
+            <strong>Entwurf erstellen</strong>, nicht um Senden.</p></li>
+        <li><h4>Empfänger setzen</h4>
+          <p>Setze <strong>To</strong> auf <code>{{ $json.from }}</code>. Prüfe bei echten Mails später, ob das Feld nur die
+            Adresse enthält oder auch den Anzeigenamen.</p></li>
+        <li><h4>Betreff setzen</h4>
+          <p>Setze <strong>Subject</strong> auf <code>{{ $json.draft_subject }}</code>.</p></li>
+        <li><h4>Text setzen</h4>
+          <p>Setze <strong>Message</strong> auf <code>{{ $json.draft_body }}</code>.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Node aus und öffne danach Gmail. Im Entwurfsordner sollte ein neuer Antwortentwurf liegen.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Nicht „Send“ wählen</b>
+        In manchen Gmail-Nodes liegen „Create Draft“, „Reply“ und „Send“ nah beieinander. Für dieses Kapitel ist nur
+        <strong>Create Draft</strong> gemeint.
+      </div>
+
+      <h2>Schritt 8 — Dringende Fälle melden</h2>
+      <p>Jetzt verzweigen wir. Nur E-Mails mit <code>urgency = high</code> gehen zusätzlich in Slack. Normale E-Mails bekommen
+        nur den Gmail-Entwurf.</p>
+
+      <ol class="steps">
+        <li><h4>IF-Node anhängen</h4>
+          <p>Hänge hinter <strong>KI-Ausgabe prüfen</strong> zusätzlich einen IF-Node oder setze ihn vor den Gmail-Entwurf,
+            wenn du die Verzweigung sichtbarer haben willst.</p></li>
+        <li><h4>Bedingung setzen</h4>
+          <p>Prüfe <code>{{ $json.urgency }}</code> <strong>equals</strong> <code>high</code>.</p></li>
+        <li><h4>Slack an true-Ausgang hängen</h4>
+          <p>Hänge an den true-Ausgang einen Slack-Node mit Kanal <code>#inbox-urgent-test</code>.</p></li>
+        <li><h4>Slack-Text setzen</h4>
+          <p>Setze den Text auf die folgende Expression.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Slack-Text</div>
+<pre>Dringende E-Mail erkannt
+Von: {{ $json.from }}
+Betreff: {{ $json.subject }}
+Kategorie: {{ $json.category }}
+Grund: {{ $json.reason }}
+
+Zusammenfassung:
+{{ $json.summary }}</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 860 310" preserveAspectRatio="none">
+                <path class="is-active" d="M 178 140 C 240 140, 255 140, 312 140"></path>
+                <path class="is-active" d="M 404 140 C 470 140, 490 85, 548 85"></path>
+                <path class="is-active" d="M 404 140 C 470 140, 490 205, 548 205"></path>
+              </svg>
+              <div class="n8n-node n8n-node--ai" style="left:60px; top:94px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep out"></span>
+                <span class="n8n-node__label">geprüfte KI-Daten</span></div>
+              <div class="n8n-node" style="left:312px; top:94px;">
+                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="ep out" style="top:30px;"></span><span class="ep out" style="top:64px;"></span>
+                <span class="n8n-node__label">urgency = high?</span></div>
+              <div class="n8n-node" style="left:548px; top:39px;">
+                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Slack</span></div>
+              <div class="n8n-node" style="left:548px; top:159px;">
+                <span class="n8n-node__icon">📝</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">nur Entwurf</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 17.5</span>Die Dringlichkeit ist nur eine Entscheidungshilfe. Der IF-Node macht
+          daraus eine transparente Regel.</figcaption>
+      </figure>
+
+      <h2>Schritt 9 — Label setzen und Mail markieren</h2>
+      <p>Zum Abschluss soll sichtbar sein, dass n8n diese E-Mail bearbeitet hat. Wir setzen ein Label und markieren die
+        Nachricht erst danach als gelesen.</p>
+
+      <ol class="steps">
+        <li><h4>Label vorbereiten</h4>
+          <p>Lege in Gmail ein Label <code>n8n-ai-draft</code> an.</p></li>
+        <li><h4>Gmail-Node anhängen</h4>
+          <p>Hänge nach dem Entwurf einen weiteren Gmail-Node an.</p></li>
+        <li><h4>Label hinzufügen</h4>
+          <p>Wähle <strong>Message → Add Label</strong>, setze die Message ID auf <code>{{ $json.message_id }}</code> und das
+            Label auf <code>n8n-ai-draft</code>.</p></li>
+        <li><h4>Optional als gelesen markieren</h4>
+          <p>Füge danach einen Gmail-Node <strong>Message → Mark as Read</strong> hinzu. Mache das erst, wenn Entwurf und Label
+            zuverlässig funktionieren.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum erst am Ende als gelesen?</b>
+        Wenn der Workflow vorher scheitert, bleibt die Mail ungelesen und taucht weiter als offene Aufgabe auf. Das ist
+        absichtlich konservativ.
+      </div>
+
+      <h2>Schritt 10 — Gesamttest</h2>
+      <ol class="steps">
+        <li><h4>Normale Testmail senden</h4>
+          <p>Sende eine harmlose Anfrage mit dem Testlabel. Erwartung: Entwurf entsteht, keine Slack-Meldung.</p></li>
+        <li><h4>Dringende Testmail senden</h4>
+          <p>Sende eine Mail mit klarer Dringlichkeit, z. B. „Zugang funktioniert nicht, Kundentermin in 30 Minuten“.
+            Erwartung: Entwurf und Slack-Meldung.</p></li>
+        <li><h4>Unklare Testmail senden</h4>
+          <p>Sende eine kurze, mehrdeutige Mail. Erwartung: Der Entwurf fragt nach, statt Details zu erfinden.</p></li>
+        <li><h4>Executions prüfen</h4>
+          <p>Öffne jede Ausführung. Prüfe besonders die Felder <code>category</code>, <code>urgency</code>,
+            <code>summary</code> und <code>draft_body</code>.</p></li>
+        <li><h4>Workflow aktivieren</h4>
+          <p>Erst wenn alle drei Fälle passen, speichere und aktiviere den Workflow. Lasse das Testlabel zunächst bestehen.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Teste Grenzfälle, nicht nur Wunschfälle</b>
+        Eine KI-Demo funktioniert fast immer mit perfekten Beispielen. Relevant sind die schlechten Fälle: zu wenig Kontext,
+        widersprüchlicher Text, Dringlichkeit ohne klare Zuständigkeit.
+      </div>
+
+      <h2>Sinnvolle Erweiterungen</h2>
+      <table class="btable">
+        <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
+        <tbody>
+          <tr><td>Human approval</td><td>Slack- oder Gmail-Schritt mit Freigabe einbauen, bevor eine Antwort gesendet wird.</td></tr>
+          <tr><td>CRM-Kontext</td><td>Vor dem Agenten Kontakt im CRM suchen und Kundentyp oder offene Tickets ergänzen.</td></tr>
+          <tr><td>Mehrere Labels</td><td>Nach <code>category</code> unterschiedliche Gmail-Labels setzen.</td></tr>
+          <tr><td>Kostenkontrolle</td><td>Nur Mails über einer Mindestlänge an KI senden; Newsletter vorher filtern.</td></tr>
+          <tr><td>Output Parser</td><td>Falls verfügbar, Structured Output Parser nutzen und den Code-Parser trotzdem als Sicherheitsnetz behalten.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Warum triggert der Workflow zuerst nur auf ein Testlabel?</li>
+          <li>Warum erstellt der Workflow einen Entwurf statt direkt zu senden?</li>
+          <li>Warum wird die KI-Ausgabe noch einmal geparst und validiert?</li>
+          <li>Welche drei Testfälle brauchst du vor dem Aktivieren?</li>
+          <li>Warum markieren wir die Mail erst am Ende als gelesen?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Damit nur bewusst ausgewählte Mails verarbeitet werden. ·
+        2) Weil KI-Text menschlich geprüft werden sollte. ·
+        3) Weil KI-Ausgaben trotz Prompt fehlerhaft oder unvollständig sein können. ·
+        4) Normal, dringend, unklar. ·
+        5) Damit Fehler nicht unsichtbar werden.
+      </div>
+
+      <p>Du hast jetzt einen KI-Workflow gebaut, der einen realen Arbeitsprozess unterstützt, ohne die Kontrolle abzugeben.
+        Im nächsten Projekt wird die Eingabe schwieriger: PDFs oder Rechnungen müssen erst gelesen, strukturiert und geprüft
+        werden, bevor n8n zuverlässig weiterarbeiten kann.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="17-projekt-ai"></nav></section>
+<section class="page" id="18-projekt-pdf" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">18</span> Projekt 6</div>
+      <h1 class="chap-title">PDF-/Rechnungs-Extraktion</h1>
+      <p class="chap-lede">In diesem Projekt liest n8n eine Rechnung als PDF, extrahiert den Text, erkennt zentrale
+        Rechnungsdaten zuerst mit einfachen Regeln und nutzt KI als Fallback für schwierige Layouts. Das Ziel ist nicht
+        blinde Automatisierung, sondern ein prüfbarer Eingang für Buchhaltung, Einkauf oder Freigabe.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 55 Minuten</span>
+        <span>🎯 Niveau: Mittel bis fortgeschritten</span>
+        <span>🧩 Voraussetzung: Kapitel 7–12, 17</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>Ein Test-Postfach, das E-Mails mit PDF-Anhang empfangen kann. IMAP ist für dieses Kapitel am anschaulichsten.</li>
+          <li>Eine selbst erstellte Testrechnung als PDF. Keine echten Rechnungen im ersten Durchlauf.</li>
+          <li>Eine Google-Sheets- oder Tabellen-Credential für die Ergebnisliste.</li>
+          <li>Eine Slack-Credential oder einen anderen Kanal für manuelle Prüfung.</li>
+          <li>Optional: eine Chat-Model-Credential für den KI-Fallback.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Rechnungen sind sensible Daten</b>
+        Rechnungen enthalten Namen, Adressen, Bankdaten, Steuernummern und Zahlungsfristen. Der Workflow darf Daten
+        vorbereiten und markieren. Er darf in diesem Kapitel nicht automatisch zahlen, buchen oder endgültig freigeben.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Der Workflow bekommt eine E-Mail mit PDF-Anhang. n8n liest den PDF-Text, extrahiert Rechnungsnummer, Datum,
+        Betrag und Lieferant per Regel-Code. Wenn diese Regeln nicht genug erkennen, geht derselbe Text in einen
+        KI-Extractor. Danach wird das Ergebnis geprüft: saubere Datensätze landen in einer Tabelle, unsichere Fälle in
+        einem Review-Kanal.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 1120 440" preserveAspectRatio="none">
+                <path class="is-active" d="M 158 190 C 220 190, 240 190, 298 190"></path>
+                <path class="is-active" d="M 390 190 C 455 190, 470 190, 528 190"></path>
+                <path class="is-active" d="M 620 190 C 680 190, 690 190, 748 190"></path>
+                <path class="is-active" d="M 840 190 C 900 190, 910 105, 968 105"></path>
+                <path class="is-active" d="M 840 190 C 900 190, 910 275, 968 275"></path>
+                <path class="is-active" d="M 1060 275 C 1088 275, 1092 178, 1078 125"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:40px; top:144px;">
+                <span class="n8n-node__icon">✉️</span><span class="ep out"></span>
+                <span class="n8n-node__label">Rechnungsmail</span><span class="items">1 Item</span></div>
+              <div class="n8n-node" style="left:298px; top:144px;">
+                <span class="n8n-node__icon">📄</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">PDF-Text lesen</span></div>
+              <div class="n8n-node n8n-node--code" style="left:528px; top:144px;">
+                <span class="n8n-node__icon">🔎</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Regeln</span><span class="items">0.75</span></div>
+              <div class="n8n-node" style="left:748px; top:144px;">
+                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="ep out" style="top:30px;"></span><span class="ep out" style="top:64px;"></span>
+                <span class="n8n-node__label">sicher?</span></div>
+              <div class="n8n-node" style="left:968px; top:59px;">
+                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Tabelle</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node n8n-node--ai" style="left:968px; top:229px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">KI-Fallback</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 18.1</span>Die Regeln sind der erste Weg. KI wird erst genutzt, wenn die
+          transparenten Regeln zu wenig erkennen.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Erst Regeln, dann KI</b>
+        Rechnungen sind strukturiert genug für einfache Regeln, aber uneinheitlich genug für Ausnahmen. Die robuste
+        Konstruktion ist deshalb zweistufig: billig, schnell und erklärbar zuerst; flexibel und teurer danach.
+      </div>
+
+      <h2>Zwei Wege, ein Ergebnis</h2>
+      <table class="btable">
+        <thead><tr><th>Weg</th><th>Stärken</th><th>Schwächen</th><th>Hier im Projekt</th></tr></thead>
+        <tbody>
+          <tr><td>Regeln</td><td>schnell, günstig, nachvollziehbar</td><td>bricht bei ungewohnten Layouts</td><td>Standardweg für klare Testrechnungen</td></tr>
+          <tr><td>KI</td><td>versteht Varianten und Synonyme</td><td>kostet Geld, kann unsicher oder falsch sein</td><td>Fallback mit Validierung und Review</td></tr>
+        </tbody>
+      </table>
+
+      <hr>
+
+      <h2>Schritt 1 — Testrechnung vorbereiten</h2>
+      <p>Wir starten kontrolliert. Erstelle eine kleine Rechnung, die du verstehst und deren erwartete Werte eindeutig sind.</p>
+
+      <ol class="steps">
+        <li><h4>Textdokument öffnen</h4>
+          <p>Öffne ein leeres Dokument in Word, Google Docs, LibreOffice oder einem anderen Editor.</p></li>
+        <li><h4>Testdaten einfügen</h4>
+          <p>Füge diesen Text ein:</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Testrechnung</div>
+<pre>Demo GmbH
+Musterstraße 12
+10115 Berlin
+
+Rechnung Nr. RE-2026-0042
+Rechnungsdatum: 29.05.2026
+Fällig bis: 12.06.2026
+
+Leistung: Workshop Automatisierung
+Nettobetrag: 800,00 EUR
+Umsatzsteuer 19 %: 152,00 EUR
+Gesamtbetrag: 952,00 EUR
+
+IBAN: DE89 3704 0044 0532 0130 00</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 2;">
+        <li><h4>Als PDF exportieren</h4>
+          <p>Exportiere oder drucke das Dokument als PDF. Nenne die Datei <code>rechnung-demo.pdf</code>.</p></li>
+        <li><h4>Testmail senden</h4>
+          <p>Sende dir selbst eine E-Mail mit Betreff <code>n8n Rechnung Test</code> und hänge die PDF-Datei an.</p></li>
+        <li><h4>Mail ungelesen lassen</h4>
+          <p>Lasse die E-Mail ungelesen, damit der Trigger sie sauber findet.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum eine eigene Testrechnung?</b>
+        Du kennst die richtigen Werte. Wenn später <code>952,00</code> statt <code>800,00</code> gespeichert wird, weißt du:
+        Der Workflow nimmt den Bruttobetrag. Ohne erwartete Werte testest du nur, ob irgendetwas passiert.
+      </div>
+
+      <h2>Schritt 2 — E-Mail-Trigger mit Anhang anlegen</h2>
+      <p>Wir nehmen den E-Mail-Eingang als realistische Quelle. Alternativ könntest du PDFs per Webhook oder Formular
+        hochladen; die Extraktionsschritte bleiben gleich.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen Workflow und nenne ihn <code>Rechnung aus PDF extrahieren</code>.</p></li>
+        <li><h4>E-Mail Trigger suchen</h4>
+          <p>Klicke auf das große <span class="kbd">+</span>, suche <code>email trigger</code> und wähle
+            <strong>Email Trigger (IMAP)</strong>.</p></li>
+        <li><h4>Credential auswählen</h4>
+          <p>Wähle deine IMAP-Credential oder lege eine Test-Credential an.</p></li>
+        <li><h4>Postfach begrenzen</h4>
+          <p>Setze <strong>Mailbox</strong> auf <code>INBOX</code>. Wenn dein Trigger Suchregeln anbietet, begrenze auf
+            ungelesene E-Mails mit Betreff <code>n8n Rechnung Test</code>.</p></li>
+        <li><h4>Anhänge herunterladen</h4>
+          <p>Schalte <strong>Download Attachments</strong> ein. Ohne diese Option sieht n8n nur die E-Mail, nicht die PDF-Datei.</p></li>
+        <li><h4>Trigger testen</h4>
+          <p>Klicke <strong>Listen for test event</strong> oder <strong>Execute step</strong> und warte auf die Testmail.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:690px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">✉️</span><b>Rechnungsmail</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Mailbox</label><input class="n8n-input" value="INBOX"></div>
+                  <div class="row"><label>Download Attachments</label><div class="n8n-select">true <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Format</label><div class="n8n-select">Resolved <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Subject Filter</label><input class="n8n-input" value="n8n Rechnung Test"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 18.2</span>Der Trigger muss die Anhänge als Binary Data mitbringen. Sonst hat
+          der PDF-Node später nichts zu lesen.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn kein Binary-Feld erscheint</b>
+        Öffne den Output des Triggers und wechsle auf <strong>Binary</strong>. Ist dort nichts zu sehen, ist meist
+        <strong>Download Attachments</strong> aus, der Anhang fehlt wirklich, oder dein Testmail-Provider blockiert den Abruf.
+      </div>
+
+      <h2>Schritt 3 — PDF-Text aus dem Anhang lesen</h2>
+      <p>Jetzt kommt der Kern: Aus der PDF-Datei wird reiner Text. Das funktioniert gut bei „echten“ PDFs mit Text. Bei
+        gescannten Bildern brauchst du später OCR.</p>
+
+      <ol class="steps">
+        <li><h4>Binary-Feldnamen merken</h4>
+          <p>Öffne den Output des Triggers. Im Reiter <strong>Binary</strong> steht der Name des Anhangs, häufig
+            <code>attachment_0</code> oder <code>data</code>. Merke dir diesen Namen.</p></li>
+        <li><h4>Extract-Node anhängen</h4>
+          <p>Ziehe vom Trigger eine Linie ins Leere, suche <code>extract from file</code> und wähle
+            <strong>Extract From File</strong>.</p></li>
+        <li><h4>PDF-Operation wählen</h4>
+          <p>Wähle als Operation <strong>Extract From PDF</strong> bzw. die PDF-Text-Extraktion deiner n8n-Version.</p></li>
+        <li><h4>Binary-Feld eintragen</h4>
+          <p>Setze <strong>Input Binary Field</strong> auf den Namen aus Schritt 1, z. B. <code>attachment_0</code>.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Im JSON-Output sollte ein Feld wie <code>text</code> mit dem
+            Rechnungsinhalt stehen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:700px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">📄</span><b>PDF-Text lesen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Operation</label><div class="n8n-select">Extract From PDF <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Input Binary Field</label><input class="n8n-input" value="attachment_0"></div>
+                  <div class="row"><label>Output</label><div class="n8n-json">{ "text": "Demo GmbH Rechnung Nr. RE-2026-0042 ..." }</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 18.3</span>Nach der Extraktion arbeiten wir nicht mehr mit der Datei, sondern
+          mit Text. Das macht Regeln und KI deutlich einfacher.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der Text leer ist</b>
+        Viele PDFs sind nur Bilder. Dann kann der PDF-Node keinen Text finden. Für solche Fälle brauchst du OCR, z. B.
+        einen spezialisierten Dienst oder einen späteren KI-/Dokumenten-Parser mit Bildverständnis. Dieses Kapitel behandelt
+        zuerst maschinenlesbare PDFs.
+      </div>
+
+      <h2>Schritt 4 — Rechnungstext säubern</h2>
+      <p>Der extrahierte Text enthält oft Zeilenumbrüche, mehrere Leerzeichen und Seitentrenner. Vor Regeln und KI machen wir
+        daraus einen kompakten Text.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Ziehe von <strong>PDF-Text lesen</strong> eine Linie ins Leere, suche <code>code</code> und wähle
+            <strong>Code</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Rechnungstext vorbereiten</code>.</p></li>
+        <li><h4>Modus wählen</h4>
+          <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge diesen Code ein. Falls dein Extract-Node das Textfeld anders nennt, passe die erste Zeile an.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Rechnungstext vorbereiten</div>
+<pre>const raw = $json.text ?? $json.data ?? $json.extractedText ?? '';
+
+const pdfText = String(raw)
+  .replace(/\s+/g, ' ')
+  .replace(/\s+([,.;:])/g, '$1')
+  .trim();
+
+return {
+  json: {
+    ...$json,
+    pdf_text: pdfText.slice(0, 12000),
+    text_length: pdfText.length
+  }
+};</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Textlänge ist ein Qualitätsindikator</b>
+        Wenn <code>text_length</code> sehr klein ist, stimmt die Extraktion wahrscheinlich nicht. Prüfe solche Fälle manuell,
+        statt sie automatisch in eine Tabelle zu schreiben.
+      </div>
+
+      <h2>Schritt 5 — Regel-Extraktion bauen</h2>
+      <p>Jetzt extrahieren wir die wichtigsten Felder mit einfachen Mustern. Das ist nicht „magisch“, aber gerade deshalb
+        gut prüfbar.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter <strong>Rechnungstext vorbereiten</strong> einen Code-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Regel-Extraktion</code>.</p></li>
+        <li><h4>Modus wählen</h4>
+          <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge diesen Code ein:</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Regel-Extraktion</div>
+<pre>const text = $json.pdf_text ?? '';
+
+function find(patterns) {
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match?.[1]) return match[1].trim();
+  }
+  return '';
+}
+
+function cleanAmount(value) {
+  if (!value) return null;
+  return Number(
+    value
+      .replace(/\./g, '')
+      .replace(',', '.')
+      .replace(/[^\d.]/g, '')
+  );
+}
+
+const invoice = {
+  supplier: find([/^([A-ZÄÖÜ][\wÄÖÜäöüß .&amp;-]+ GmbH)/, /^([A-ZÄÖÜ][\wÄÖÜäöüß .&amp;-]+ AG)/]),
+  invoice_number: find([/Rechnung(?:snummer| Nr\.?)?:?\s*([A-Z0-9-]+)/i]),
+  invoice_date: find([/Rechnungsdatum:?\s*(\d{2}\.\d{2}\.\d{4})/i]),
+  due_date: find([/Fällig(?: bis)?:?\s*(\d{2}\.\d{2}\.\d{4})/i]),
+  total_gross: cleanAmount(find([/Gesamtbetrag:?\s*([\d.,]+)\s*(?:EUR|€)/i, /Brutto:?\s*([\d.,]+)\s*(?:EUR|€)/i])),
+  currency: text.match(/(?:EUR|€)/) ? 'EUR' : '',
+  iban: find([/IBAN:?\s*([A-Z]{2}\d{2}(?:\s?\d{4}){4,7})/i])
+};
+
+const required = [
+  invoice.supplier,
+  invoice.invoice_number,
+  invoice.invoice_date,
+  invoice.total_gross
+].filter(Boolean).length;
+
+const confidence = required / 4;
+
+return {
+  json: {
+    ...$json,
+    method: 'rules',
+    invoice,
+    confidence,
+    needs_ai: confidence &lt; 0.75 || ($json.text_length ?? 0) &lt; 100
+  }
+};</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 4;">
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>.</p></li>
+        <li><h4>Ergebnis prüfen</h4>
+          <p>Im Output sollte <code>invoice.total_gross</code> den Wert <code>952</code> enthalten und
+            <code>needs_ai</code> sollte <code>false</code> sein.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der Betrag falsch ist</b>
+        Prüfe zuerst, welches Wort vor dem Betrag steht. <code>Nettobetrag</code>, <code>Brutto</code> und
+        <code>Gesamtbetrag</code> sind fachlich verschieden. Regeln müssen diese Begriffe ausdrücklich unterscheiden.
+      </div>
+
+      <h2>Schritt 6 — Sicher genug? IF-Node einbauen</h2>
+      <p>Die Regeln bekommen einen Score. Alles mit <code>confidence &gt;= 0.75</code> speichern wir direkt. Alles darunter
+        geht in den KI-Fallback.</p>
+
+      <ol class="steps">
+        <li><h4>IF-Node anhängen</h4>
+          <p>Ziehe von <strong>Regel-Extraktion</strong> eine Linie ins Leere, suche <code>if</code> und wähle
+            <strong>IF</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Regeln sicher?</code>.</p></li>
+        <li><h4>Bedingung setzen</h4>
+          <p>Setze eine Bedingung: <code>{{ $json.confidence }}</code> ist größer oder gleich <code>0.75</code>.</p></li>
+        <li><h4>Ausgänge merken</h4>
+          <p>Der true-Ausgang ist der direkte Regelweg. Der false-Ausgang geht später zur KI.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 860 320" preserveAspectRatio="none">
+                <path class="is-active" d="M 178 150 C 240 150, 260 150, 318 150"></path>
+                <path class="is-active" d="M 410 150 C 470 150, 500 90, 558 90"></path>
+                <path class="is-active" d="M 410 150 C 470 150, 500 230, 558 230"></path>
+              </svg>
+              <div class="n8n-node n8n-node--code" style="left:60px; top:104px;">
+                <span class="n8n-node__icon">🔎</span><span class="ep out"></span>
+                <span class="n8n-node__label">Regeln</span></div>
+              <div class="n8n-node" style="left:318px; top:104px;">
+                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="ep out" style="top:30px;"></span><span class="ep out" style="top:64px;"></span>
+                <span class="n8n-node__label">Regeln sicher?</span></div>
+              <div class="n8n-node" style="left:558px; top:44px;">
+                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">speichern</span></div>
+              <div class="n8n-node n8n-node--ai" style="left:558px; top:184px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">KI prüfen</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 18.4</span>Ein Score macht die Entscheidung sichtbar. Versteckte
+          „wird schon passen“-Logik ist bei Rechnungen zu riskant.</figcaption>
+      </figure>
+
+      <h2>Schritt 7 — Regel-Ergebnis in die Tabelle schreiben</h2>
+      <p>Der true-Ausgang des IF-Nodes ist der einfache Fall. Er enthält schon ein strukturiertes Objekt.</p>
+
+      <ol class="steps">
+        <li><h4>Tabelle vorbereiten</h4>
+          <p>Lege eine Tabelle <code>Rechnungseingang</code> mit diesen Spalten an:
+            <code>supplier</code>, <code>invoice_number</code>, <code>invoice_date</code>, <code>due_date</code>,
+            <code>total_gross</code>, <code>currency</code>, <code>iban</code>, <code>method</code>,
+            <code>confidence</code>, <code>review_status</code>.</p></li>
+        <li><h4>Google-Sheets-Node anhängen</h4>
+          <p>Ziehe vom true-Ausgang von <strong>Regeln sicher?</strong> eine Linie ins Leere und wähle
+            <strong>Google Sheets</strong>.</p></li>
+        <li><h4>Aktion wählen</h4>
+          <p>Wähle <strong>Append Row</strong> bzw. <strong>Append or Update Row</strong>, je nach Node-Version.</p></li>
+        <li><h4>Felder zuordnen</h4>
+          <p>Setze die Spalten mit Expressions, z. B. <code>{{ $json.invoice.supplier }}</code>,
+            <code>{{ $json.invoice.invoice_number }}</code> und <code>{{ $json.invoice.total_gross }}</code>.</p></li>
+        <li><h4>Review-Status setzen</h4>
+          <p>Setze <code>review_status</code> auf <code>auto_rule_ok</code>.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Die Testrechnung sollte als eine Zeile in deiner Tabelle erscheinen.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Flache Tabellenfelder</b>
+        Speichere nicht das komplette PDF-JSON in einer Zelle. Lege die Kernfelder flach ab. Das macht Sortieren, Filtern
+        und spätere Prüfung viel einfacher.
+      </div>
+
+      <h2>Schritt 8 — KI-Fallback für schwierige Rechnungen</h2>
+      <p>Jetzt bauen wir den zweiten Weg. Er bekommt denselben PDF-Text, soll aber strukturierte Felder liefern, auch wenn
+        die Begriffe anders heißen.</p>
+
+      <ol class="steps">
+        <li><h4>Information Extractor anhängen</h4>
+          <p>Ziehe vom false-Ausgang von <strong>Regeln sicher?</strong> eine Linie ins Leere, suche
+            <code>information extractor</code> und wähle <strong>Information Extractor</strong>.</p></li>
+        <li><h4>Chat Model verbinden</h4>
+          <p>Klicke am KI-Node auf den Anschluss für <strong>Chat Model</strong> und wähle z. B.
+            <strong>OpenAI Chat Model</strong>. Nutze eine Test-Credential.</p></li>
+        <li><h4>Textfeld setzen</h4>
+          <p>Setze das Eingabefeld auf Expression: <code>{{ $json.pdf_text }}</code>.</p></li>
+        <li><h4>Schema definieren</h4>
+          <p>Nutze ein festes Schema. Wenn deine n8n-Version nur ein JSON-Beispiel anbietet, nutze dieselben Feldnamen.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Schema für den Information Extractor</div>
+<pre>{
+  "supplier": "Name des Rechnungsstellers",
+  "invoice_number": "Rechnungsnummer",
+  "invoice_date": "Rechnungsdatum im Format TT.MM.JJJJ",
+  "due_date": "Fälligkeitsdatum im Format TT.MM.JJJJ oder leer",
+  "total_gross": "Bruttobetrag als Zahl",
+  "currency": "Währung, meistens EUR",
+  "iban": "IBAN oder leer",
+  "confidence": "Zahl von 0 bis 1",
+  "needs_review": "true, wenn wichtige Felder fehlen oder unsicher sind"
+}</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:720px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🤖</span><b>KI-Fallback</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Information Extractor</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Text</label><input class="n8n-input is-expr" value="{{ $json.pdf_text }}"></div>
+                  <div class="row"><label>Chat Model</label><div class="n8n-select">OpenAI Chat Model verbunden <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Fields</label><div class="n8n-json">supplier, invoice_number, invoice_date, total_gross, confidence</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 18.5</span>Der KI-Node bekommt nur den Rechnungstext und ein enges Schema.
+          Je enger das Schema, desto leichter ist die Prüfung danach.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">KI ersetzt keine Validierung</b>
+        Auch wenn der KI-Node ein schönes JSON liefert: Betrag, Datum und Rechnungsnummer müssen danach geprüft werden.
+        KI kann bei ähnlichen Beträgen den falschen nehmen oder aus einem unklaren Layout zu selbstsicher schließen.
+      </div>
+
+      <h2>Schritt 9 — KI-Ergebnis normalisieren</h2>
+      <p>Der Information Extractor liefert je nach Version direkte Felder oder ein verschachteltes Ergebnis. Wir machen daraus
+        dasselbe Format wie beim Regelweg.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter den KI-Node einen Code-Node und nenne ihn <code>KI-Ergebnis prüfen</code>.</p></li>
+        <li><h4>Modus wählen</h4>
+          <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge diesen Code ein:</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · KI-Ergebnis prüfen</div>
+<pre>let data = $json.output ?? $json;
+
+if (typeof data === 'string') {
+  try {
+    data = JSON.parse(data);
+  } catch (error) {
+    data = {};
+  }
+}
+
+function asNumber(value) {
+  if (typeof value === 'number') return value;
+  if (!value) return null;
+  return Number(String(value).replace(/\./g, '').replace(',', '.').replace(/[^\d.]/g, ''));
+}
+
+const invoice = {
+  supplier: data.supplier ?? '',
+  invoice_number: data.invoice_number ?? '',
+  invoice_date: data.invoice_date ?? '',
+  due_date: data.due_date ?? '',
+  total_gross: asNumber(data.total_gross),
+  currency: data.currency ?? 'EUR',
+  iban: data.iban ?? ''
+};
+
+const missing = [];
+if (!invoice.supplier) missing.push('supplier');
+if (!invoice.invoice_number) missing.push('invoice_number');
+if (!invoice.invoice_date) missing.push('invoice_date');
+if (!invoice.total_gross) missing.push('total_gross');
+
+const confidence = Math.max(0, Math.min(1, Number(data.confidence ?? 0.6)));
+
+return {
+  json: {
+    method: 'ai_fallback',
+    invoice,
+    confidence,
+    missing,
+    needs_review: Boolean(data.needs_review) || missing.length &gt; 0 || confidence &lt; 0.8
+  }
+};</pre>
+      </div>
+
+      <h2>Schritt 10 — Review-Zweig für unsichere Fälle</h2>
+      <p>Der KI-Weg darf nicht automatisch speichern, wenn wichtige Felder fehlen. Dafür bauen wir einen zweiten IF-Node.</p>
+
+      <ol class="steps">
+        <li><h4>IF-Node anhängen</h4>
+          <p>Hänge hinter <strong>KI-Ergebnis prüfen</strong> einen IF-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Manuelle Prüfung nötig?</code>.</p></li>
+        <li><h4>Bedingung setzen</h4>
+          <p>Setze <code>{{ $json.needs_review }}</code> ist gleich <code>true</code>.</p></li>
+        <li><h4>true-Ausgang an Slack hängen</h4>
+          <p>Verbinde den true-Ausgang mit Slack. Kanal: <code>#rechnung-review-test</code>.</p></li>
+        <li><h4>Slack-Text setzen</h4>
+          <p>Nutze eine Nachricht wie unten.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Slack-Nachricht für Review</div>
+<pre>Rechnung braucht manuelle Prüfung.
+Lieferant: {{ $json.invoice.supplier || 'unbekannt' }}
+Rechnungsnummer: {{ $json.invoice.invoice_number || 'fehlt' }}
+Betrag: {{ $json.invoice.total_gross || 'fehlt' }} {{ $json.invoice.currency }}
+Score: {{ $json.confidence }}
+Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 5;">
+        <li><h4>false-Ausgang speichern</h4>
+          <p>Verbinde den false-Ausgang mit deinem Google-Sheets-Node oder dupliziere den Node aus Schritt 7.</p></li>
+        <li><h4>Review-Status setzen</h4>
+          <p>Setze <code>review_status</code> für den KI-Erfolg auf <code>auto_ai_ok</code>. Für Slack-Fälle wird nichts
+            automatisch gespeichert oder nur mit <code>manual_review</code>, wenn du bewusst ein Review-Log willst.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 900 330" preserveAspectRatio="none">
+                <path class="is-active" d="M 178 155 C 245 155, 260 155, 318 155"></path>
+                <path class="is-active" d="M 410 155 C 480 155, 500 92, 560 92"></path>
+                <path class="is-active" d="M 410 155 C 480 155, 500 235, 560 235"></path>
+              </svg>
+              <div class="n8n-node n8n-node--ai" style="left:60px; top:109px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep out"></span>
+                <span class="n8n-node__label">KI geprüft</span></div>
+              <div class="n8n-node" style="left:318px; top:109px;">
+                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="ep out" style="top:30px;"></span><span class="ep out" style="top:64px;"></span>
+                <span class="n8n-node__label">Review nötig?</span></div>
+              <div class="n8n-node" style="left:560px; top:46px;">
+                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Review melden</span></div>
+              <div class="n8n-node" style="left:560px; top:189px;">
+                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">speichern</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 18.6</span>Der KI-Weg endet nicht automatisch in der Tabelle. Erst die Prüfung
+          entscheidet, ob gespeichert oder eskaliert wird.</figcaption>
+      </figure>
+
+      <h2>Schritt 11 — Drei Tests durchführen</h2>
+      <p>Ein einzelner Erfolgstest reicht hier nicht. Du brauchst bewusst gute, schwierige und schlechte Fälle.</p>
+
+      <ol class="steps">
+        <li><h4>Klare Testrechnung senden</h4>
+          <p>Sende die Demo-Rechnung aus Schritt 1. Erwartung: Regelweg, Tabelle, <code>review_status = auto_rule_ok</code>.</p></li>
+        <li><h4>Ungewöhnliche Rechnung senden</h4>
+          <p>Ändere die Begriffe im PDF, z. B. <code>Belegnummer</code> statt <code>Rechnung Nr.</code> und
+            <code>zu zahlen</code> statt <code>Gesamtbetrag</code>. Erwartung: Regelweg scheitert teilweise, KI-Fallback
+            erkennt genug Felder.</p></li>
+        <li><h4>Schlechte Rechnung senden</h4>
+          <p>Erstelle ein PDF als Screenshot oder lösche wichtige Felder. Erwartung: Slack-Review, keine blinde Speicherung.</p></li>
+        <li><h4>Executions öffnen</h4>
+          <p>Prüfe bei jedem Test, welchen Weg das Item genommen hat: Regeln, KI-Fallback oder Review.</p></li>
+        <li><h4>Workflow erst danach aktivieren</h4>
+          <p>Schalte den Workflow nur aktiv, wenn alle drei Fälle erwartungsgemäß laufen.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Teste den Fehlerweg absichtlich</b>
+        Bei Rechnungen ist ein sauberer Stopp wertvoller als ein spektakulärer Treffer. Der wichtigste Test ist:
+        Erkennt der Workflow, wann er nicht genug weiß?
+      </div>
+
+      <h2>Sinnvolle Erweiterungen</h2>
+      <table class="btable">
+        <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
+        <tbody>
+          <tr><td>OCR für Scans</td><td>Vor der Text-Extraktion einen OCR-Dienst einbauen und den erkannten Text weiterreichen.</td></tr>
+          <tr><td>Dublettenprüfung</td><td>Vor dem Speichern nach Lieferant + Rechnungsnummer suchen und Treffer in Review schicken.</td></tr>
+          <tr><td>Freigabeprozess</td><td>Slack- oder Formular-Freigabe einbauen, bevor die Rechnung an Buchhaltung oder ERP geht.</td></tr>
+          <tr><td>Positionsdaten</td><td>Neben Kopfdaten auch einzelne Rechnungspositionen extrahieren; dafür meist KI oder spezialisierte Parser nutzen.</td></tr>
+          <tr><td>Archivierung</td><td>PDF nach erfolgreicher Prüfung in Drive, S3 oder einem DMS ablegen und Link in der Tabelle speichern.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Warum extrahieren wir zuerst mit Regeln und erst danach mit KI?</li>
+          <li>Warum ist <code>text_length</code> ein nützlicher Prüfwert?</li>
+          <li>Welche vier Felder bestimmen im Beispiel den Regel-Score?</li>
+          <li>Warum darf der KI-Fallback nicht ohne Validierung speichern?</li>
+          <li>Welche drei Testfälle brauchst du vor dem Aktivieren?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Regeln sind erklärbar und günstig; KI ist der flexible Fallback. ·
+        2) Sehr kurzer Text deutet auf Scan, falsches Binary-Feld oder kaputte Extraktion hin. ·
+        3) Lieferant, Rechnungsnummer, Rechnungsdatum, Bruttobetrag. ·
+        4) Weil KI Felder verwechseln oder zu sicher wirken kann. ·
+        5) Klare Rechnung, ungewöhnliche Rechnung, schlechte/gescannte Rechnung.
+      </div>
+
+      <p>Du hast jetzt einen Workflow gebaut, der Dokumente nicht nur weiterleitet, sondern strukturiert auswertet und seine
+        eigene Unsicherheit sichtbar macht. Im nächsten Projekt verbinden wir mehrere dieser Bausteine zu einer größeren
+        Content-Pipeline.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="18-projekt-pdf"></nav></section>
+<section class="page" id="19-grossprojekt" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">19</span> Großprojekt</div>
+      <h1 class="chap-title">Content-Pipeline end-to-end</h1>
+      <p class="chap-lede">In diesem Großprojekt baust du keinen einzelnen Trick, sondern einen kleinen
+        Produktionsprozess: Thema aus einem Backlog holen, Recherche-Signale sammeln, Entwurf erzeugen, menschlich
+        freigeben, veröffentlichen und alles protokollieren. Der wichtigste Punkt ist nicht die KI. Der wichtigste Punkt
+        ist die Kontrolle zwischen den Schritten.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 70 Minuten</span>
+        <span>🎯 Niveau: Mittel bis fortgeschritten</span>
+        <span>🧩 Voraussetzung: Kapitel 7–17</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>Ein Google-Sheet als Content-Backlog und Prüfprotokoll.</li>
+          <li>Eine Google-Sheets-Credential in n8n.</li>
+          <li>Eine Slack-Credential oder einen anderen internen Benachrichtigungskanal.</li>
+          <li>Eine Chat-Model-Credential für den Entwurfsschritt.</li>
+          <li>Optional: ein CMS, ein WordPress-Testsystem oder ein eigener Webhook als späterer Ausgabekanal.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Keine automatische Publikation ohne Freigabe</b>
+        Content kann falsch, rechtlich heikel oder markenschädlich sein. Dieses Kapitel baut deshalb bewusst eine Pipeline
+        mit Statusfeldern. n8n veröffentlicht erst, wenn ein Mensch im Sheet <code>approved</code> gesetzt hat.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Die Pipeline besteht aus zwei Workflows. Der erste Workflow erzeugt aus einem Backlog-Eintrag einen prüfbaren
+        Entwurf. Der zweite Workflow veröffentlicht nur freigegebene Entwürfe und setzt danach den Status auf
+        <code>published</code>. Das Sheet ist dabei der gemeinsame Speicher zwischen Mensch und Maschine.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 1120 470" preserveAspectRatio="none">
+                <path class="is-active" d="M 145 120 C 205 120, 220 120, 278 120"></path>
+                <path class="is-active" d="M 370 120 C 430 120, 450 120, 508 120"></path>
+                <path class="is-active" d="M 600 120 C 660 120, 680 120, 738 120"></path>
+                <path class="is-active" d="M 830 120 C 890 120, 910 120, 968 120"></path>
+                <path d="M 1015 166 C 1015 215, 145 215, 145 300"></path>
+                <path class="is-active" d="M 145 300 C 205 300, 220 300, 278 300"></path>
+                <path class="is-active" d="M 370 300 C 430 300, 450 300, 508 300"></path>
+                <path class="is-active" d="M 600 300 C 660 300, 680 300, 738 300"></path>
+                <path class="is-active" d="M 830 300 C 890 300, 910 300, 968 300"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:28px; top:74px;">
+                <span class="n8n-node__icon">🧪</span><span class="ep out"></span>
+                <span class="n8n-node__label">Draft-Test</span></div>
+              <div class="n8n-node" style="left:278px; top:74px;">
+                <span class="n8n-node__icon">📋</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Backlog lesen</span></div>
+              <div class="n8n-node" style="left:508px; top:74px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Recherche holen</span></div>
+              <div class="n8n-node n8n-node--ai" style="left:738px; top:74px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Entwurf bauen</span></div>
+              <div class="n8n-node" style="left:968px; top:74px;">
+                <span class="n8n-node__icon">✅</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Review melden</span><span class="badge badge--ok">✓</span></div>
+
+              <div class="n8n-node n8n-node--trigger" style="left:28px; top:254px;">
+                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__label">Publish-Check</span></div>
+              <div class="n8n-node" style="left:278px; top:254px;">
+                <span class="n8n-node__icon">📋</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">approved lesen</span></div>
+              <div class="n8n-node n8n-node--code" style="left:508px; top:254px;">
+                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Post formatieren</span></div>
+              <div class="n8n-node" style="left:738px; top:254px;">
+                <span class="n8n-node__icon">📣</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">veröffentlichen</span></div>
+              <div class="n8n-node" style="left:968px; top:254px;">
+                <span class="n8n-node__icon">🧾</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Status setzen</span><span class="items">1 Item</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 19.1</span>Die Content-Pipeline hat zwei getrennte Läufe: Entwurf erzeugen
+          und nach menschlicher Freigabe veröffentlichen.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Das Muster</b>
+        Große Workflows werden stabiler, wenn du sie in Zustände zerlegst: <code>ready</code> → <code>review</code> →
+        <code>approved</code> → <code>published</code>. Jeder Zustand ist sichtbar, prüfbar und wiederholbar.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 1 — Das Backlog-Sheet anlegen</h2>
+      <p>Das Sheet ist nicht nur eine Eingabeliste. Es ist der Kontrollraum der Pipeline. Lege ein neues Google-Sheet mit
+        dem Namen <code>n8n-content-pipeline</code> an.</p>
+
+      <ol class="steps">
+        <li><h4>Tabellenblatt benennen</h4>
+          <p>Nenne das erste Tabellenblatt <code>Backlog</code>.</p></li>
+        <li><h4>Spalten anlegen</h4>
+          <p>Trage in Zeile 1 die Spalten aus der folgenden Tabelle ein. Schreibe die Namen exakt gleich, damit die späteren
+            Expressions leichter bleiben.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>Spalte</th><th>Bedeutung</th><th>Beispiel</th></tr></thead>
+        <tbody>
+          <tr><td><code>id</code></td><td>eindeutige Kennung</td><td><code>post-001</code></td></tr>
+          <tr><td><code>status</code></td><td>aktueller Zustand</td><td><code>ready</code></td></tr>
+          <tr><td><code>keyword</code></td><td>Thema oder Suchbegriff</td><td><code>workflow automation</code></td></tr>
+          <tr><td><code>audience</code></td><td>Zielgruppe</td><td><code>Einsteiger:innen in n8n</code></td></tr>
+          <tr><td><code>format</code></td><td>Ausgabeformat</td><td><code>linkedin</code></td></tr>
+          <tr><td><code>angle</code></td><td>Blickwinkel</td><td><code>praktisch, skeptisch, nicht hype-getrieben</code></td></tr>
+          <tr><td><code>draft_title</code></td><td>wird von n8n gefüllt</td><td>leer lassen</td></tr>
+          <tr><td><code>draft_body</code></td><td>wird von n8n gefüllt</td><td>leer lassen</td></tr>
+          <tr><td><code>review_notes</code></td><td>menschliche Hinweise</td><td><code>Kürzer, Beispiel ergänzen</code></td></tr>
+          <tr><td><code>published_at</code></td><td>Zeitpunkt der Veröffentlichung</td><td>leer lassen</td></tr>
+        </tbody>
+      </table>
+
+      <ol class="steps" style="counter-reset: st 2;">
+        <li><h4>Erste Testzeile eintragen</h4>
+          <p>Trage in Zeile 2 ein: <code>post-001</code>, Status <code>ready</code>, Keyword <code>workflow automation</code>,
+            Audience <code>n8n-Anfänger:innen</code>, Format <code>linkedin</code> und einen klaren Angle.</p></li>
+        <li><h4>Zweite Testzeile blockieren</h4>
+          <p>Lege eine zweite Zeile an, setze den Status aber auf <code>idea</code>. Diese Zeile darf noch nicht verarbeitet
+            werden. Sie ist dein Kontrollfall.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn später zu viele Zeilen laufen</b>
+        Fast immer fehlt dann die Statusprüfung oder ein Limit. Eine Pipeline ohne Statusfeld verarbeitet blind alles, was
+        sie sieht. Das ist bei Content genauso riskant wie bei CRM- oder E-Mail-Workflows.
+      </div>
+
+      <h2>Schritt 2 — Workflow 1 erstellen: Entwürfe erzeugen</h2>
+      <p>Der erste Workflow liest genau eine fertige Backlog-Zeile, sammelt Recherche-Signale und schreibt einen Entwurf
+        zurück ins Sheet.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen neuen Workflow und nenne ihn <code>Content Drafts erzeugen</code>.</p></li>
+        <li><h4>Manual Trigger hinzufügen</h4>
+          <p>Klicke auf das große <span class="kbd">+</span>, suche <code>manual</code> und wähle <strong>Trigger manually</strong>.
+            Für den Aufbau starten wir bewusst von Hand.</p></li>
+        <li><h4>Speichern</h4>
+          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Prüfe oben, ob der Speichern-Status auf
+            <strong>Saved</strong> steht.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum kein Schedule am Anfang?</b>
+        Ein Zeitplan wiederholt Fehler automatisch. Beim Bauen ist ein manueller Trigger die bessere Bremse. Den Schedule
+        ergänzt du erst, wenn jeder Zwischenschritt geprüft ist.
+      </div>
+
+      <h2>Schritt 3 — Backlog aus Google Sheets lesen</h2>
+      <ol class="steps">
+        <li><h4>Google-Sheets-Node anhängen</h4>
+          <p>Ziehe vom Manual Trigger eine Linie ins Leere, suche <code>google sheets</code> und wähle
+            <strong>Google Sheets</strong>.</p></li>
+        <li><h4>Credential auswählen</h4>
+          <p>Wähle deine Google-Sheets-Credential. Falls du noch keine hast, lege sie wie in Kapitel 12 an.</p></li>
+        <li><h4>Dokument wählen</h4>
+          <p>Wähle das Sheet <code>n8n-content-pipeline</code> und das Tabellenblatt <code>Backlog</code>.</p></li>
+        <li><h4>Zeilen lesen</h4>
+          <p>Wähle eine Operation zum Lesen mehrerer Zeilen, je nach n8n-Version z. B. <strong>Get Many</strong> oder
+            <strong>Read Rows</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne den Node <code>Backlog lesen</code>.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke auf <strong>Schritt ausführen</strong>. Rechts sollten deine Testzeilen als Items erscheinen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">📋</span><b>Backlog lesen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="ndv-empty">Der manuelle Trigger liefert nur den Startimpuls.</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Document</label><input class="n8n-input" value="n8n-content-pipeline"></div>
+                  <div class="row"><label>Sheet</label><input class="n8n-input" value="Backlog"></div>
+                  <div class="row"><label>Operation</label><div class="n8n-select">Read Rows <span class="chev">▾</span></div></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">2 Items</span></div>
+                <div class="ndv-panel__body">
+                  <table class="n8n-table">
+                    <thead><tr><th>id</th><th>status</th><th>keyword</th></tr></thead>
+                    <tbody>
+                      <tr><td>post-001</td><td>ready</td><td>workflow automation</td></tr>
+                      <tr><td>post-002</td><td>idea</td><td>newsletter automation</td></tr>
+                    </tbody>
+                  </table>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 19.2</span>Der Sheets-Node liest mehrere Zeilen. Noch ist nichts gefiltert.</figcaption>
+      </figure>
+
+      <h2>Schritt 4 — Nur <code>ready</code>-Zeilen durchlassen</h2>
+      <p>Jetzt kommt die erste Sicherheitsregel: Nur Zeilen mit Status <code>ready</code> werden verarbeitet.</p>
+
+      <ol class="steps">
+        <li><h4>Filter-Node anhängen</h4>
+          <p>Hänge hinter <strong>Backlog lesen</strong> einen <strong>Filter</strong>-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Nur ready</code>.</p></li>
+        <li><h4>Bedingung setzen</h4>
+          <p>Setze die Bedingung: <code>{{ $json.status }}</code> <strong>equals</strong> <code>ready</code>.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Node aus. Rechts darf nur noch die Zeile <code>post-001</code> stehen.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Status vor Inhalt</b>
+        Prüfe erst, <em>ob</em> eine Zeile verarbeitet werden darf. Erst danach lohnt sich die Frage, <em>was</em> darin
+        steht. Diese Reihenfolge verhindert die meisten versehentlichen Massenläufe.
+      </div>
+
+      <h2>Schritt 5 — Pro Lauf nur ein Thema verarbeiten</h2>
+      <p>Auch wenn zehn Zeilen <code>ready</code> sind: Während du testest, soll nur eine Zeile laufen. Das macht Fehler
+        übersichtlich und schont KI-Kosten.</p>
+
+      <ol class="steps">
+        <li><h4>Limit-Node anhängen</h4>
+          <p>Hänge hinter <strong>Nur ready</strong> einen <strong>Limit</strong>-Node.</p></li>
+        <li><h4>Maximale Anzahl setzen</h4>
+          <p>Setze die Anzahl auf <code>1</code>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne den Node <code>Ein Thema</code>.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Später mehr Durchsatz</b>
+        Wenn die Pipeline stabil ist, kannst du das Limit erhöhen oder Batching einbauen. Für den ersten End-to-End-Test ist
+        <code>1</code> die richtige Zahl.
+      </div>
+
+      <h2>Schritt 6 — Recherche-Signale per HTTP holen</h2>
+      <p>Wir nutzen eine offene Such-API von Hacker News, weil sie ohne Login funktioniert. Das ist keine vollständige
+        Recherche und kein Wahrheitsbeweis. Es liefert nur Signale: Titel, Links, Punkte und Begriffe, aus denen der
+        Entwurf eine Richtung ableiten kann.</p>
+
+      <ol class="steps">
+        <li><h4>HTTP-Request-Node anhängen</h4>
+          <p>Ziehe von <strong>Ein Thema</strong> eine Linie ins Leere und wähle <strong>HTTP Request</strong>.</p></li>
+        <li><h4>Methode prüfen</h4>
+          <p>Lass <strong>Method</strong> auf <strong>GET</strong>.</p></li>
+        <li><h4>URL setzen</h4>
+          <p>Setze die URL auf <code>https://hn.algolia.com/api/v1/search</code>.</p></li>
+        <li><h4>Query-Parameter aktivieren</h4>
+          <p>Füge Query-Parameter hinzu. Trage <code>query</code>, <code>tags</code> und <code>hitsPerPage</code> wie unten ein.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>Name</th><th>Wert</th></tr></thead>
+        <tbody>
+          <tr><td><code>query</code></td><td><code>{{ $json.keyword }}</code></td></tr>
+          <tr><td><code>tags</code></td><td><code>story</code></td></tr>
+          <tr><td><code>hitsPerPage</code></td><td><code>5</code></td></tr>
+        </tbody>
+      </table>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>Recherche holen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="n8n-json">{
+  <span class="k">"id"</span>: <span class="s">"post-001"</span>,
+  <span class="k">"keyword"</span>: <span class="s">"workflow automation"</span>
+}</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                  <div class="row"><label>URL</label><input class="n8n-input" value="https://hn.algolia.com/api/v1/search"></div>
+                  <div class="row"><label>query</label><input class="n8n-input is-expr" value="{{ $json.keyword }}"></div>
+                  <div class="row"><label>hitsPerPage</label><input class="n8n-input" value="5"></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-json">{
+  <span class="k">"hits"</span>: [
+    { <span class="k">"title"</span>: <span class="s">"Workflow automation..."</span>, <span class="k">"url"</span>: <span class="s">"https://..."</span> }
+  ]
+}</div>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 19.3</span>Der HTTP-Request nutzt das Keyword aus dem Sheet als Query-Parameter.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der HTTP-Node leer zurückkommt</b>
+        Prüfe zuerst das Keyword. Sehr deutsche oder sehr spezielle Begriffe liefern bei Hacker News oft wenig. Für den
+        Test ist <code>workflow automation</code> absichtlich breit gewählt.
+      </div>
+
+      <h2>Schritt 7 — Recherche verdichten</h2>
+      <p>Der HTTP-Node liefert ein verschachteltes Ergebnis. Die KI soll aber nicht das ganze Rohobjekt bekommen. Wir
+        extrahieren nur die wichtigsten Felder.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter <strong>Recherche holen</strong> einen <strong>Code</strong>-Node.</p></li>
+        <li><h4>Modus setzen</h4>
+          <p>Setze den Modus auf <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Recherche verdichten</code>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge den folgenden Code ein.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Recherche verdichten</div>
+<pre>const hits = Array.isArray($json.hits) ? $json.hits : [];
+
+const sources = hits
+  .slice(0, 5)
+  .map((hit, index) => ({
+    rank: index + 1,
+    title: hit.title ?? hit.story_title ?? 'Ohne Titel',
+    url: hit.url ?? hit.story_url ?? '',
+    points: hit.points ?? 0,
+    comments: hit.num_comments ?? 0
+  }))
+  .filter((source) => source.title);
+
+return {
+  json: {
+    id: $('Ein Thema').item.json.id,
+    keyword: $('Ein Thema').item.json.keyword,
+    audience: $('Ein Thema').item.json.audience,
+    format: $('Ein Thema').item.json.format,
+    angle: $('Ein Thema').item.json.angle,
+    sources,
+    source_summary: sources
+      .map((source) => `${source.rank}. ${source.title} (${source.url || 'kein Link'})`)
+      .join('\n')
+  }
+};</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Rohdaten reduzieren</b>
+        Gib einem KI-Schritt nur die Daten, die er wirklich braucht. Das spart Kosten, reduziert Ablenkung und macht den
+        späteren Fehlerfall lesbarer.
+      </div>
+
+      <h2>Schritt 8 — Entwurf mit dem AI Agent erzeugen</h2>
+      <p>Der Agent bekommt ein klares Briefing und muss strukturiertes JSON zurückgeben. Er darf Quellen nicht abschreiben
+        und soll Unsicherheiten offen markieren.</p>
+
+      <ol class="steps">
+        <li><h4>AI-Agent-Node anhängen</h4>
+          <p>Hänge hinter <strong>Recherche verdichten</strong> einen <strong>AI Agent</strong>-Node.</p></li>
+        <li><h4>Chat Model verbinden</h4>
+          <p>Verbinde ein Chat Model, z. B. OpenAI Chat Model, und wähle deine Credential.</p></li>
+        <li><h4>Keine Tools verbinden</h4>
+          <p>Für diesen Workflow braucht der Agent keine externen Tools. Die Recherche wurde bereits vorher geholt.</p></li>
+        <li><h4>Prompt definieren</h4>
+          <p>Setze <strong>Prompt</strong> auf <strong>Define below</strong> und füge den folgenden Text ein.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Prompt für den AI Agent</div>
+<pre>Du bist ein vorsichtiger Content-Editor.
+Erstelle einen Entwurf und antworte ausschließlich als gültiges JSON.
+
+Ziel:
+- Format: {{ $json.format }}
+- Zielgruppe: {{ $json.audience }}
+- Thema: {{ $json.keyword }}
+- Blickwinkel: {{ $json.angle }}
+
+Recherche-Signale:
+{{ $json.source_summary }}
+
+JSON-Schema:
+{
+  "draft_title": "präziser Titel, keine Clickbait-Formulierung",
+  "draft_body": "fertiger Entwurf im angegebenen Format",
+  "key_points": ["3 bis 5 Kernaussagen"],
+  "source_notes": ["welche Quellen nur als Signal dienten"],
+  "risks": ["mögliche Unsicherheiten, Lücken oder rechtliche Vorsichtspunkte"]
+}
+
+Regeln:
+- Keine Fakten erfinden.
+- Keine fremden Texte kopieren oder paraphrasieren, als wären sie eigene Recherche.
+- Wenn die Recherche dünn ist, schreibe das in risks.
+- Schreibe auf Deutsch.
+- Ton: klar, skeptisch, praktisch.</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:720px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🤖</span><b>Entwurf bauen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Agent</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Prompt</label><div class="n8n-select">Define below <span class="chev">▾</span></div></div>
+                  <div class="row"><label>User Message</label><input class="n8n-input is-expr" value="Erstelle einen Entwurf und antworte ausschließlich als gültiges JSON ..."></div>
+                  <div class="row"><label>Chat Model</label><div class="n8n-select">verbunden <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Tools</label><div class="n8n-select">keine Tools verbunden <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 19.4</span>Der Agent arbeitet als Editor. Er veröffentlicht nichts und
+          verändert keine externen Systeme.</figcaption>
+      </figure>
+
+      <h2>Schritt 9 — KI-Ausgabe prüfen</h2>
+      <p>Wie in Kapitel 17 behandeln wir die KI-Ausgabe als unsichere Eingabe. Ein Parser-Node macht aus Text wieder ein
+        sauberes Objekt und setzt Fallbacks.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter den AI Agent einen <strong>Code</strong>-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Entwurf prüfen</code>.</p></li>
+        <li><h4>Modus setzen</h4>
+          <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge den folgenden Parser ein. Falls dein Agent-Ausgabefeld anders heißt, passe die erste Zeile an.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Entwurf prüfen</div>
+<pre>const raw = $json.output ?? $json.text ?? $json.response ?? '';
+let parsed;
+
+try {
+  parsed = JSON.parse(raw);
+} catch (error) {
+  parsed = {
+    draft_title: `Entwurf zu ${$('Recherche verdichten').item.json.keyword}`,
+    draft_body: raw || 'Kein verwertbarer KI-Entwurf.',
+    key_points: [],
+    source_notes: [],
+    risks: ['KI-Ausgabe war kein gültiges JSON.'],
+    parse_error: true
+  };
+}
+
+return {
+  json: {
+    id: $('Recherche verdichten').item.json.id,
+    keyword: $('Recherche verdichten').item.json.keyword,
+    audience: $('Recherche verdichten').item.json.audience,
+    format: $('Recherche verdichten').item.json.format,
+    draft_title: String(parsed.draft_title ?? '').slice(0, 160),
+    draft_body: String(parsed.draft_body ?? '').slice(0, 5000),
+    key_points: Array.isArray(parsed.key_points) ? parsed.key_points.join('\n') : '',
+    source_notes: Array.isArray(parsed.source_notes) ? parsed.source_notes.join('\n') : '',
+    risks: Array.isArray(parsed.risks) ? parsed.risks.join('\n') : '',
+    parse_error: Boolean(parsed.parse_error)
+  }
+};</pre>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn <code>parse_error</code> true ist</b>
+        Veröffentliche nichts. Prüfe den Prompt, das Modell und die Rohantwort. Ein Parser-Fehler ist kein kosmetisches
+        Problem, sondern ein Signal, dass die Pipeline nicht zuverlässig genug ist.
+      </div>
+
+      <h2>Schritt 10 — Entwurf ins Sheet zurückschreiben</h2>
+      <p>Jetzt verlässt der Entwurf den Workflow und landet dort, wo ein Mensch ihn prüfen kann: im Backlog-Sheet.</p>
+
+      <ol class="steps">
+        <li><h4>Google-Sheets-Node anhängen</h4>
+          <p>Hänge hinter <strong>Entwurf prüfen</strong> einen Google-Sheets-Node.</p></li>
+        <li><h4>Operation wählen</h4>
+          <p>Wähle eine Update-Operation, je nach Version z. B. <strong>Update Row</strong>.</p></li>
+        <li><h4>Zeile finden</h4>
+          <p>Nutze <code>id</code> als Such- oder Matching-Spalte und setze den Wert auf <code>{{ $json.id }}</code>.</p></li>
+        <li><h4>Felder setzen</h4>
+          <p>Aktualisiere <code>status</code> auf <code>review</code>, schreibe <code>draft_title</code>,
+            <code>draft_body</code>, <code>source_notes</code> und <code>risks</code> zurück.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Node aus und öffne das Sheet. Die Zeile <code>post-001</code> sollte jetzt einen Entwurf enthalten.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>Sheet-Spalte</th><th>Wert</th></tr></thead>
+        <tbody>
+          <tr><td><code>status</code></td><td><code>review</code></td></tr>
+          <tr><td><code>draft_title</code></td><td><code>{{ $json.draft_title }}</code></td></tr>
+          <tr><td><code>draft_body</code></td><td><code>{{ $json.draft_body }}</code></td></tr>
+          <tr><td><code>review_notes</code></td><td><code>{{ $json.risks }}</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Warum zurück ins Sheet?</b>
+        Ein Entwurf in n8n ist für Redakteur:innen unsichtbar. Ein Entwurf im Sheet ist prüfbar, kommentierbar und kann
+        durch ein einfaches Statusfeld weitergeschaltet werden.
+      </div>
+
+      <h2>Schritt 11 — Review in Slack melden</h2>
+      <ol class="steps">
+        <li><h4>Slack-Node anhängen</h4>
+          <p>Hänge hinter den Sheet-Update-Node einen Slack-Node.</p></li>
+        <li><h4>Kanal wählen</h4>
+          <p>Wähle einen Testkanal, z. B. <code>#content-review-test</code>.</p></li>
+        <li><h4>Nachricht setzen</h4>
+          <p>Setze den Nachrichtentext auf die folgende Expression.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Slack-Review-Hinweis</div>
+<pre>Neuer Content-Entwurf wartet auf Review.
+
+ID: {{ $json.id }}
+Thema: {{ $json.keyword }}
+Titel: {{ $json.draft_title }}
+
+Bitte im Sheet prüfen und status auf approved setzen, wenn der Entwurf veröffentlicht werden darf.</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Menschliche Freigabe ist ein Datenpunkt</b>
+        Schreibe Freigaben nicht in Chat-Floskeln fest. Ein Statusfeld wie <code>approved</code> ist maschinenlesbar und
+        für n8n eindeutig.
+      </div>
+
+      <h2>Schritt 12 — Workflow 1 vollständig testen</h2>
+      <ol class="steps">
+        <li><h4>Canvas schließen</h4>
+          <p>Schließe die Node-Detailansicht, damit du den kompletten Workflow siehst.</p></li>
+        <li><h4>Speichern</h4>
+          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Test workflow starten</h4>
+          <p>Klicke auf <strong>Test workflow</strong>. Beobachte, ob alle Nodes nacheinander grün werden.</p></li>
+        <li><h4>Sheet prüfen</h4>
+          <p>Die Testzeile sollte jetzt Status <code>review</code> haben. Die Zeile mit Status <code>idea</code> muss
+            unverändert geblieben sein.</p></li>
+        <li><h4>Slack prüfen</h4>
+          <p>Im Review-Kanal sollte genau eine Nachricht erscheinen.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn zwei Entwürfe entstanden sind</b>
+        Prüfe den Filter <code>status = ready</code> und den Limit-Node. Für den Testlauf darf nur ein Item beim
+        KI-Schritt ankommen.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 13 — Menschliche Prüfung im Sheet</h2>
+      <p>Jetzt verlässt du kurz n8n. Lies den Entwurf im Sheet wirklich kritisch. Das ist kein Formalismus.</p>
+
+      <ol class="steps">
+        <li><h4>Entwurf lesen</h4>
+          <p>Prüfe Titel, Inhalt, Quellenhinweise und Risiken. Achte besonders auf erfundene Details.</p></li>
+        <li><h4>Bei Mängeln zurückstellen</h4>
+          <p>Wenn der Entwurf nicht passt, setze <code>status</code> auf <code>needs_revision</code> und schreibe in
+            <code>review_notes</code>, was fehlt.</p></li>
+        <li><h4>Für den Test freigeben</h4>
+          <p>Wenn der Entwurf für den Test ausreichend ist, setze <code>status</code> auf <code>approved</code>.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Minimaler Review-Standard</b>
+        Prüfe mindestens vier Fragen: Ist der Text fachlich plausibel? Ist er eigenständig formuliert? Passt er zur
+        Zielgruppe? Gibt es rechtliche oder markenbezogene Risiken?
+      </div>
+
+      <h2>Schritt 14 — Workflow 2 erstellen: Freigegebenen Content veröffentlichen</h2>
+      <p>Der zweite Workflow liest nur Zeilen mit <code>approved</code>. Für den ersten Test veröffentlichen wir nicht auf
+        LinkedIn oder WordPress, sondern in einen internen Slack-Kanal. Damit testest du den End-to-End-Ablauf ohne
+        öffentliches Risiko.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen Workflow und nenne ihn <code>Content veröffentlichen</code>.</p></li>
+        <li><h4>Manual Trigger hinzufügen</h4>
+          <p>Nutze wieder zuerst <strong>Trigger manually</strong>. Ein Schedule kommt erst nach dem Test.</p></li>
+        <li><h4>Google-Sheets-Node hinzufügen</h4>
+          <p>Lies erneut das Tabellenblatt <code>Backlog</code>.</p></li>
+        <li><h4>Filter setzen</h4>
+          <p>Hänge einen Filter an: <code>{{ $json.status }}</code> <strong>equals</strong> <code>approved</code>.</p></li>
+        <li><h4>Limit setzen</h4>
+          <p>Hänge wieder einen Limit-Node mit Anzahl <code>1</code> an.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 920 320" preserveAspectRatio="none">
+                <path class="is-active" d="M 150 150 C 210 150, 230 150, 288 150"></path>
+                <path class="is-active" d="M 380 150 C 440 150, 460 150, 518 150"></path>
+                <path class="is-active" d="M 610 150 C 670 150, 690 150, 748 150"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:32px; top:104px;">
+                <span class="n8n-node__icon">🧪</span><span class="ep out"></span>
+                <span class="n8n-node__label">Publish-Test</span></div>
+              <div class="n8n-node" style="left:288px; top:104px;">
+                <span class="n8n-node__icon">📋</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">approved lesen</span></div>
+              <div class="n8n-node n8n-node--code" style="left:518px; top:104px;">
+                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Post formatieren</span></div>
+              <div class="n8n-node" style="left:748px; top:104px;">
+                <span class="n8n-node__icon">📣</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Slack Publish</span><span class="badge badge--ok">✓</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 19.5</span>Der zweite Workflow ist absichtlich schlicht: Freigabe lesen,
+          formatieren, in einen sicheren Kanal ausgeben.</figcaption>
+      </figure>
+
+      <h2>Schritt 15 — Post formatieren</h2>
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter den Limit-Node einen <strong>Code</strong>-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Post formatieren</code>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge den folgenden Code ein. Er baut aus Titel und Text eine Ausgabenachricht.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Post formatieren</div>
+<pre>const title = $json.draft_title ?? '';
+const body = $json.draft_body ?? '';
+const notes = $json.review_notes ?? '';
+
+return {
+  json: {
+    id: $json.id,
+    publish_text: `${title}\n\n${body}`.trim(),
+    audit_note: notes ? `Review-Hinweise: ${notes}` : 'Keine Review-Hinweise',
+    published_at: $now.toISO()
+  }
+};</pre>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Leerer Entwurf?</b>
+        Wenn <code>publish_text</code> leer ist, darfst du nicht veröffentlichen. Ergänze vor dem Slack- oder CMS-Node einen
+        IF-Node, der leere Texte in einen Fehlerkanal schickt.
+      </div>
+
+      <h2>Schritt 16 — In einen sicheren Kanal veröffentlichen</h2>
+      <ol class="steps">
+        <li><h4>Slack-Node anhängen</h4>
+          <p>Hänge hinter <strong>Post formatieren</strong> einen Slack-Node.</p></li>
+        <li><h4>Kanal wählen</h4>
+          <p>Wähle <code>#content-published-test</code> oder einen ähnlich harmlosen Testkanal.</p></li>
+        <li><h4>Text setzen</h4>
+          <p>Setze den Slack-Text auf <code>{{ $json.publish_text }}</code>.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Node aus. Im Testkanal sollte der freigegebene Entwurf erscheinen.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Echte Veröffentlichung später ersetzen</b>
+        Wenn der Ablauf stabil ist, ersetzt du Slack durch WordPress, Webflow, einen CMS-Webhook oder eine Social-Media-Node.
+        Die Sicherheitslogik davor bleibt gleich: nur <code>approved</code>, nur ein Item, nach Erfolg Status setzen.
+      </div>
+
+      <h2>Schritt 17 — Status auf <code>published</code> setzen</h2>
+      <ol class="steps">
+        <li><h4>Google-Sheets-Node anhängen</h4>
+          <p>Hänge hinter den Veröffentlichungs-Node einen Google-Sheets-Node.</p></li>
+        <li><h4>Zeile aktualisieren</h4>
+          <p>Finde die Zeile wieder über <code>id = {{ $json.id }}</code>.</p></li>
+        <li><h4>Status setzen</h4>
+          <p>Setze <code>status</code> auf <code>published</code> und <code>published_at</code> auf
+            <code>{{ $json.published_at }}</code>.</p></li>
+        <li><h4>Audit-Hinweis ergänzen</h4>
+          <p>Schreibe optional <code>{{ $json.audit_note }}</code> in eine zusätzliche Spalte <code>audit_note</code>.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Erfolg erst nach dem letzten Schritt</b>
+        Setze <code>published</code> erst, nachdem die Veröffentlichung erfolgreich war. Wenn du den Status vorher setzt und
+        der letzte Node scheitert, sieht das Sheet fälschlich fertig aus.
+      </div>
+
+      <h2>Schritt 18 — Fehlerzweige ergänzen</h2>
+      <p>Ein Großprojekt ohne Fehlerpfad ist nur eine Demo. Du brauchst mindestens zwei Schutzmechanismen.</p>
+
+      <table class="btable">
+        <thead><tr><th>Risiko</th><th>Schutz</th></tr></thead>
+        <tbody>
+          <tr><td>KI liefert kein JSON</td><td><code>parse_error</code> prüfen und Status auf <code>needs_revision</code> setzen.</td></tr>
+          <tr><td>Leerer Publish-Text</td><td>IF-Node vor Veröffentlichung, Fehlerkanal statt Slack/CMS.</td></tr>
+          <tr><td>HTTP-Recherche schlägt fehl</td><td>Retry sparsam nutzen und einen Hinweis ins Sheet schreiben.</td></tr>
+          <tr><td>Doppelte Veröffentlichung</td><td>Nach Erfolg sofort <code>published</code> setzen und nur <code>approved</code> lesen.</td></tr>
+        </tbody>
+      </table>
+
+      <ol class="steps">
+        <li><h4>IF nach <code>Entwurf prüfen</code> einbauen</h4>
+          <p>Prüfe <code>{{ $json.parse_error }}</code> <strong>equals</strong> <code>false</code>. Nur der true-Ausgang darf zum
+            Sheet-Update mit Status <code>review</code> gehen.</p></li>
+        <li><h4>False-Ausgang behandeln</h4>
+          <p>Schicke den false-Ausgang in einen Sheet-Update-Node, der Status <code>needs_revision</code> setzt und den
+            Fehler in <code>review_notes</code> schreibt.</p></li>
+        <li><h4>Fehlerkanal informieren</h4>
+          <p>Hänge danach Slack an, z. B. <code>#automation-errors-test</code>.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Nicht alles mit Retry lösen</b>
+        Retry hilft bei temporären Netzwerkfehlern. Retry hilft nicht bei schlechtem Prompt, leerem Entwurf oder falschem
+        Statusmodell. Diese Fehler müssen sichtbar werden.
+      </div>
+
+      <h2>Schritt 19 — Schedule erst nach dem End-to-End-Test</h2>
+      <p>Wenn beide Workflows manuell funktionieren, kannst du sie zeitgesteuert starten.</p>
+
+      <ol class="steps">
+        <li><h4>Workflow 1 auf Schedule umstellen</h4>
+          <p>Ersetze den Manual Trigger durch einen Schedule Trigger, z. B. werktags um 09:00 Uhr. Lass das Limit zunächst
+            bei <code>1</code>.</p></li>
+        <li><h4>Workflow 2 auf Schedule umstellen</h4>
+          <p>Starte den Publish-Workflow später, z. B. werktags um 15:00 Uhr. So bleibt Zeit für Review.</p></li>
+        <li><h4>Aktivieren</h4>
+          <p>Speichere beide Workflows und schalte sie erst aktiv, wenn der manuelle Test vollständig war.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:660px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">⏰</span><b>Draft-Schedule</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Trigger Interval</label><div class="n8n-select">Days <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Hour</label><input class="n8n-input" value="09"></div>
+                  <div class="row"><label>Minute</label><input class="n8n-input" value="00"></div>
+                  <div class="row"><label>Timezone</label><input class="n8n-input" value="Europe/Berlin"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 19.6</span>Ein Schedule kommt erst am Ende. Vorher testest du manuell.</figcaption>
+      </figure>
+
+      <h2>Schritt 20 — Gesamttest mit drei Fällen</h2>
+      <ol class="steps">
+        <li><h4>Normalfall testen</h4>
+          <p>Eine Zeile steht auf <code>ready</code>. Erwartung: Workflow 1 setzt <code>review</code>, du setzt
+            <code>approved</code>, Workflow 2 setzt <code>published</code>.</p></li>
+        <li><h4>Nicht-freigegebene Zeile testen</h4>
+          <p>Eine Zeile steht auf <code>idea</code> oder <code>needs_revision</code>. Erwartung: Kein Workflow verarbeitet sie.</p></li>
+        <li><h4>Fehlerfall testen</h4>
+          <p>Manipuliere testweise den Agent-Prompt so, dass kein JSON zurückkommt. Erwartung: Status
+            <code>needs_revision</code>, keine Veröffentlichung.</p></li>
+        <li><h4>Executions prüfen</h4>
+          <p>Öffne die Ausführungshistorie beider Workflows. Prüfe, wie viele Items an jedem Node ankamen.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Der wichtigste Test ist der Nicht-Lauf</b>
+        Bei Automatisierung ist nicht nur wichtig, dass der richtige Fall läuft. Genauso wichtig ist, dass unfertige,
+        fehlerhafte oder nicht freigegebene Fälle <strong>nicht</strong> laufen.
+      </div>
+
+      <h2>Sinnvolle Erweiterungen</h2>
+      <table class="btable">
+        <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
+        <tbody>
+          <tr><td>Google Docs statt Sheet-Text</td><td>Nach dem Entwurf ein Dokument erstellen und den Link ins Sheet schreiben.</td></tr>
+          <tr><td>CMS-Veröffentlichung</td><td>Slack-Publish durch WordPress, Webflow oder einen eigenen CMS-Webhook ersetzen.</td></tr>
+          <tr><td>Mehrere Formate</td><td>Aus demselben Briefing LinkedIn-Post, Newsletter-Teaser und Blog-Outline erzeugen.</td></tr>
+          <tr><td>Redaktionskalender</td><td>Spalte <code>publish_date</code> ergänzen und im Publish-Workflow prüfen.</td></tr>
+          <tr><td>Qualitätscheck</td><td>Vor dem Review einen zweiten KI-Schritt als Kritiker einsetzen, aber nie als alleinige Freigabe.</td></tr>
+          <tr><td>Sub-Workflows</td><td>Später wiederkehrende Bausteine wie Slack-Fehlermeldung auslagern.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Warum besteht die Pipeline aus zwei Workflows statt aus einem einzigen langen Ablauf?</li>
+          <li>Warum ist <code>approved</code> ein besseres Freigabesignal als eine Slack-Nachricht?</li>
+          <li>Warum wird pro Testlauf nur ein Item verarbeitet?</li>
+          <li>Warum darf <code>published</code> erst nach dem Veröffentlichungs-Node gesetzt werden?</li>
+          <li>Welche drei Fälle musst du testen, bevor ein Schedule aktiv wird?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Weil menschliche Prüfung Zeit braucht und ein Statusfeld den Prozess sauber unterbricht. ·
+        2) Weil <code>approved</code> maschinenlesbar und eindeutig ist. ·
+        3) Damit Fehler, Kosten und versehentliche Massenläufe begrenzt bleiben. ·
+        4) Weil sonst ein gescheiterter Publish-Schritt als Erfolg im Sheet steht. ·
+        5) Normalfall, nicht freigegebene Zeile, Fehlerfall.
+      </div>
+
+      <p>Du hast jetzt eine echte End-to-End-Pipeline gebaut: mit Eingang, Verarbeitung, KI-Schritt, Review-Gate,
+        Veröffentlichung und Audit-Spur. Das ist die Form, in der n8n in produktiven Prozessen stark wird: nicht als
+        magischer Ein-Klick-Automat, sondern als klar kontrollierte Kette kleiner, prüfbarer Schritte.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="19-grossprojekt"></nav></section>
+<section class="page" id="20-ai-agent" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">20</span> KI &amp; Agenten</div>
+      <h1 class="chap-title">AI-Agent, Chat-Trigger, Memory &amp; Tools</h1>
+      <p class="chap-lede">In diesem Kapitel baust du einen kleinen Chat-Agenten, der Fragen entgegennimmt,
+        sich den Gesprächskontext merkt und bei Bedarf externe Werkzeuge nutzt. Der wichtige Unterschied zu Kapitel 17:
+        Hier ist die KI nicht nur ein Klassifikator. Sie entscheidet, ob ein Tool gebraucht wird.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 38 Minuten</span>
+        <span>🎯 Niveau: Fortgeschrittene Grundlagen</span>
+        <span>🧩 Voraussetzung: Kapitel 6–12, 17</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>Eine n8n-Instanz mit den AI-/LangChain-Nodes.</li>
+          <li>Eine Chat-Model-Credential, z. B. OpenAI, Anthropic, Mistral, Groq oder Azure OpenAI.</li>
+          <li>Für das Beispiel keine weitere Credential: Die Wetterdaten kommen über die freie Open-Meteo-API.</li>
+          <li>Ein Testfenster im n8n-Chat. Veröffentliche den Chat erst nach den Tests.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Agent heißt nicht Autonomie ohne Grenzen</b>
+        Ein Agent darf nur die Werkzeuge bekommen, die er wirklich braucht. Liesende Tools sind zum Lernen gut.
+        Schreibende Tools wie E-Mail senden, CRM ändern oder Dateien löschen gehören hinter Freigaben.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Wir bauen einen Wetter-Chat. Der Nutzer schreibt eine Frage wie „Wie wird das Wetter morgen in Hamburg?“.
+        Der Chat Trigger startet den Workflow, der AI Agent nutzt zwei HTTP-Tools, merkt sich den Ort über Memory und
+        antwortet im Chat. Das Beispiel ist absichtlich klein: Es zeigt das Agenten-Muster, ohne einen riskanten
+        Geschäftsprozess auszulösen.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas" style="min-height:400px;">
+              <svg class="n8n-conns" viewBox="0 0 760 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 142 196 C 172 196, 188 196, 220 196"></path>
+                <path class="is-active" d="M 312 196 C 352 196, 382 196, 430 196"></path>
+                <path d="M 312 150 C 410 64, 520 56, 620 66"></path>
+                <path d="M 312 196 C 410 196, 520 196, 620 196"></path>
+                <path d="M 312 242 C 410 328, 520 336, 620 326"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:24px; top:150px;">
+                <span class="n8n-node__icon">💬</span><span class="ep out"></span>
+                <span class="n8n-node__label">Chat Trigger</span><span class="items">1 Nachricht</span></div>
+              <div class="n8n-node n8n-node--ai" style="left:220px; top:150px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">AI Agent</span></div>
+              <div class="n8n-node" style="left:430px; top:150px;">
+                <span class="n8n-node__icon">↩</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Antwort im Chat</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node" style="left:620px; top:20px;">
+                <span class="n8n-node__icon">🧠</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Simple Memory</span></div>
+              <div class="n8n-node" style="left:620px; top:150px;">
+                <span class="n8n-node__icon">🌍</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Ort suchen</span></div>
+              <div class="n8n-node" style="left:620px; top:280px;">
+                <span class="n8n-node__icon">🌦</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 20.1</span>Der Agent ist der Entscheidungsknoten. Chat Model, Memory und
+          Tools hängen als Unter-Nodes am Agenten.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Agenten-Muster</b>
+        Ein Agent besteht praktisch aus vier Dingen: <strong>Chat-Eingang</strong>, <strong>Modell</strong>,
+        <strong>Memory</strong> und <strong>Tools</strong>. Ohne klare Tool-Grenzen wird aus Automatisierung schnell
+        unkontrolliertes Raten.
+      </div>
+
+      <h2>Agent, Chain, Tool — kurz auseinanderhalten</h2>
+      <table class="btable">
+        <thead><tr><th>Baustein</th><th>Was er tut</th><th>Wann du ihn nutzt</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Basic LLM Chain</strong></td><td>ein Prompt geht ins Modell, eine Antwort kommt zurück</td><td>Zusammenfassen, umformulieren, extrahieren</td></tr>
+          <tr><td><strong>AI Agent</strong></td><td>entscheidet, ob und welche Tools er nutzt</td><td>Fragen beantworten, die zusätzliche Daten oder Aktionen brauchen</td></tr>
+          <tr><td><strong>Tool</strong></td><td>eine vom Agenten aufrufbare Fähigkeit</td><td>API lesen, Workflow aufrufen, Datenbank suchen</td></tr>
+          <tr><td><strong>Memory</strong></td><td>speichert Gesprächsverlauf einer Sitzung</td><td>Folgefragen wie „und morgen dort?“ verstehen</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Skeptische Faustregel</b>
+        Wenn der Ablauf deterministisch ist, nimm keinen Agenten. Wenn das Modell wirklich entscheiden muss, welches
+        Werkzeug passt, ist ein Agent sinnvoll.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 1 — Workflow und Chat Trigger anlegen</h2>
+      <p>Der Chat Trigger startet bei jeder Nachricht eine Workflow-Ausführung. Eine Unterhaltung mit zehn Nachrichten
+        sind also zehn Ausführungen. Das ist für Kosten und Rate-Limits wichtig.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen Workflow und nenne ihn <code>Wetter-Chat-Agent</code>.</p></li>
+        <li><h4>Chat Trigger hinzufügen</h4>
+          <p>Klicke auf <strong>Add first step</strong>, suche <code>chat trigger</code> und wähle
+            <strong>Chat Trigger</strong>.</p></li>
+        <li><h4>Öffentlichkeit aus lassen</h4>
+          <p>Lasse <strong>Make Chat Publicly Available</strong> zunächst ausgeschaltet. Du testest im n8n-internen Chat.</p></li>
+        <li><h4>Hosted Chat vormerken</h4>
+          <p>Wenn du später veröffentlichst, wähle <strong>Hosted Chat</strong>. Für dieses Kapitel brauchst du keinen
+            eigenen Chat-Client.</p></li>
+        <li><h4>Starttext setzen</h4>
+          <p>Setze als Initial Message z. B. <code>Frag mich nach dem Wetter in einer Stadt.</code></p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:720px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">💬</span><b>Chat Trigger</b><span class="ndv__exec-step">▶ Chat öffnen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Make Chat Publicly Available</label><div class="n8n-select">aus <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Mode</label><div class="n8n-select">Hosted Chat <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Initial Message</label><input class="n8n-input" value="Frag mich nach dem Wetter in einer Stadt."></div>
+                  <div class="row"><label>Response Mode</label><div class="n8n-select">When Last Node Finishes <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 20.2</span>Beim Bauen bleibt der Chat privat. Veröffentlichen kommt erst
+          nach den Tests.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn du sofort veröffentlichst</b>
+        Ohne Authentifizierung kann jeder mit der Chat-URL Ausführungen und Modellkosten verursachen. Für Tests reicht der
+        interne Chat in n8n.
+      </div>
+
+      <h2>Schritt 2 — AI Agent hinzufügen</h2>
+      <p>Der Agent bekommt die Chatnachricht vom Trigger. In aktuellen n8n-Versionen arbeitet der AI Agent als Tool-Agent:
+        Er erwartet ein Chat Model und mindestens ein Tool. Für reine Textantworten wäre eine Basic LLM Chain schlichter.</p>
+
+      <ol class="steps">
+        <li><h4>AI Agent anhängen</h4>
+          <p>Schließe die Detailansicht. Ziehe vom Chat Trigger eine Linie ins Leere, suche <code>ai agent</code> und wähle
+            <strong>AI Agent</strong>.</p></li>
+        <li><h4>Prompt automatisch nehmen</h4>
+          <p>Setze <strong>Prompt</strong> auf <strong>Take from previous node automatically</strong>. Der Agent nutzt dann
+            die Chat-Eingabe, meist das Feld <code>chatInput</code>.</p></li>
+        <li><h4>System Message öffnen</h4>
+          <p>Öffne die Optionen des Agenten und suche <strong>System Message</strong>. Dort kommt gleich die Arbeitsregel
+            für den Agenten hinein.</p></li>
+        <li><h4>Max Iterations begrenzen</h4>
+          <p>Setze <strong>Max Iterations</strong> für den Anfang auf <code>4</code>. Das verhindert lange Tool-Schleifen.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; System Message</div>
+<pre>Du bist ein vorsichtiger Wetter-Assistent in n8n.
+Antworte auf Deutsch, kurz und überprüfbar.
+
+Regeln:
+- Nutze Tools nur, wenn du externe Wetter- oder Ortsdaten brauchst.
+- Frage nach, wenn der Ort fehlt oder mehrdeutig ist.
+- Erfinde keine Messwerte.
+- Nenne Unsicherheit, wenn ein Tool keine Daten liefert.
+- Speichere keine sensiblen personenbezogenen Daten im Gespräch.
+- Führe keine Aktionen außerhalb der bereitgestellten Tools aus.</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Begrenze Iterationen</b>
+        Ein Agent kann mehrmals denken, ein Tool aufrufen, Tool-Antwort lesen und erneut entscheiden. Das ist nützlich,
+        aber nicht kostenlos. Setze beim Lernen ein niedriges Limit.
+      </div>
+
+      <h2>Schritt 3 — Chat Model verbinden</h2>
+      <p>Der Agent selbst ist noch kein Modell. Er braucht ein Chat Model als Unter-Node.</p>
+
+      <ol class="steps">
+        <li><h4>Model-Anschluss öffnen</h4>
+          <p>Klicke am AI-Agent-Node auf den Anschluss <strong>Chat Model</strong>.</p></li>
+        <li><h4>Chat Model wählen</h4>
+          <p>Wähle z. B. <strong>OpenAI Chat Model</strong>, <strong>Anthropic Chat Model</strong> oder ein anderes
+            unterstütztes Modell.</p></li>
+        <li><h4>Credential auswählen</h4>
+          <p>Wähle deine Credential. Lege keine API-Keys im Prompt oder in Codefeldern ab.</p></li>
+        <li><h4>Temperatur niedrig halten</h4>
+          <p>Setze die Temperatur für dieses Beispiel auf etwa <code>0.2</code>. Faktenantworten sollen stabil sein, nicht
+            poetisch.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">🤖</span><b>AI Agent</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="n8n-json">{
+  <span class="k">"chatInput"</span>: <span class="s">"Wie wird das Wetter morgen in Hamburg?"</span>,
+  <span class="k">"sessionId"</span>: <span class="s">"chat-abc123"</span>
+}</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Agent</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Prompt</label><div class="n8n-select">Take from previous node automatically <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Chat Model</label><div class="n8n-select">OpenAI Chat Model verbunden <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Memory</label><div class="n8n-select">Simple Memory verbunden <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Tools</label><div class="n8n-select">2 Tools verbunden <span class="chev">▾</span></div></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="n8n-json">{
+  <span class="k">"output"</span>: <span class="s">"Morgen in Hamburg ..."</span>
+}</div></div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 20.3</span>Der Agent bekommt die Chat-Eingabe und liefert am Ende ein
+          Feld wie <code>output</code> oder <code>text</code> zurück.</figcaption>
+      </figure>
+
+      <h2>Schritt 4 — Simple Memory anschließen</h2>
+      <p>Memory sorgt dafür, dass Folgefragen im selben Chat nicht bei null anfangen. Ohne Memory versteht der Agent
+        „morgen dort?“ nicht zuverlässig.</p>
+
+      <ol class="steps">
+        <li><h4>Memory-Anschluss öffnen</h4>
+          <p>Klicke am AI-Agent-Node auf <strong>Memory</strong> und wähle <strong>Simple Memory</strong>.</p></li>
+        <li><h4>Session ID setzen</h4>
+          <p>Setze <strong>Session ID</strong> auf <strong>Connected Chat Trigger Node</strong>. Damit nutzt der Speicher
+            die Session aus dem Chat Trigger.</p></li>
+        <li><h4>Fenster begrenzen</h4>
+          <p>Setze <strong>Context Window Length</strong> z. B. auf <code>8</code>. Der Agent braucht nicht die komplette
+            Lebensgeschichte des Chats.</p></li>
+        <li><h4>Chat Trigger mit Memory verbinden</h4>
+          <p>Wenn du im Chat Trigger später <strong>Load Previous Session</strong> auf <strong>From Memory</strong> setzt,
+            verbinde denselben Simple-Memory-Node auch mit dem Chat Trigger.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Simple Memory ist nicht immer produktionsfest</b>
+        Für Queue-Mode oder mehrere Worker ist Simple Memory problematisch, weil nicht garantiert ist, dass alle
+        Nachrichten beim selben Worker landen. Für Produktion eher Redis, Postgres oder einen anderen persistenteren
+        Speicher prüfen.
+      </div>
+
+      <h2>Schritt 5 — Tool 1: Ort suchen</h2>
+      <p>Der Agent soll nicht raten, welche Koordinaten Hamburg hat. Das erste Tool ruft die Geocoding-API von Open-Meteo
+        auf und übersetzt einen Ortsnamen in Koordinaten.</p>
+
+      <ol class="steps">
+        <li><h4>Tool-Anschluss öffnen</h4>
+          <p>Klicke am AI-Agent-Node auf <strong>Tool</strong> und wähle <strong>HTTP Request Tool</strong>.</p></li>
+        <li><h4>Tool benennen</h4>
+          <p>Nenne das Tool <code>Ort suchen</code>.</p></li>
+        <li><h4>Beschreibung eintragen</h4>
+          <p>Schreibe als Beschreibung: <code>Sucht zu einem Ortsnamen die wahrscheinlichsten Koordinaten.</code></p></li>
+        <li><h4>Methode setzen</h4>
+          <p>Setze <strong>Method</strong> auf <strong>GET</strong>.</p></li>
+        <li><h4>URL eintragen</h4>
+          <p>Setze die URL auf die folgende Expression.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; URL · Ort suchen</div>
+<pre>https://geocoding-api.open-meteo.com/v1/search?name={{ $fromAI('city', 'Stadt oder Ort aus der Nutzerfrage', 'string') }}&amp;count=1&amp;language=de&amp;format=json</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:760px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🌍</span><b>Ort suchen</b><span class="ndv__exec-step">Tool</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">HTTP Request Tool</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Description</label><input class="n8n-input" value="Sucht zu einem Ortsnamen die wahrscheinlichsten Koordinaten."></div>
+                  <div class="row"><label>Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                  <div class="row"><label>URL</label><input class="n8n-input is-expr" value="https://geocoding-api.open-meteo.com/v1/search?name={{ $fromAI('city') }}..."></div>
+                  <div class="row"><label>Authentication</label><div class="n8n-select">None <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 20.4</span><code>$fromAI()</code> lässt den Agenten Tool-Parameter aus der
+          Nutzerfrage ableiten.</figcaption>
+      </figure>
+
+      <div class="callout callout--info">
+        <b class="t">Was <code>$fromAI()</code> hier bedeutet</b>
+        <code>$fromAI('city')</code> ist kein Zugriff auf ein vorhandenes JSON-Feld. Es ist eine Aufforderung an das Modell:
+        „Fülle diesen Tool-Parameter sinnvoll aus.“
+      </div>
+
+      <h2>Schritt 6 — Tool 2: Wetter holen</h2>
+      <p>Das zweite Tool ruft die Wetterdaten mit Koordinaten ab. Der Agent soll erst den Ort suchen und dann mit den
+        Koordinaten das Wetter holen.</p>
+
+      <ol class="steps">
+        <li><h4>Zweites HTTP Request Tool hinzufügen</h4>
+          <p>Füge am Tool-Anschluss des AI Agent ein weiteres <strong>HTTP Request Tool</strong> hinzu.</p></li>
+        <li><h4>Tool benennen</h4>
+          <p>Nenne es <code>Wetter holen</code>.</p></li>
+        <li><h4>Beschreibung eintragen</h4>
+          <p>Schreibe: <code>Holt aktuelle Wetterdaten und Tageswerte für gegebene Koordinaten.</code></p></li>
+        <li><h4>Methode setzen</h4>
+          <p>Setze <strong>Method</strong> wieder auf <strong>GET</strong>.</p></li>
+        <li><h4>URL eintragen</h4>
+          <p>Setze die URL auf diese Expression. Die Beschreibungen helfen dem Modell, Latitude und Longitude aus dem
+            Ergebnis von <code>Ort suchen</code> zu übernehmen.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; URL · Wetter holen</div>
+<pre>https://api.open-meteo.com/v1/forecast?latitude={{ $fromAI('latitude', 'Breitengrad aus dem Tool Ort suchen', 'number') }}&amp;longitude={{ $fromAI('longitude', 'Längengrad aus dem Tool Ort suchen', 'number') }}&amp;current=temperature_2m,precipitation,wind_speed_10m&amp;daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&amp;timezone=auto</pre>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der Agent das zweite Tool falsch füllt</b>
+        Dann ist die Tool-Beschreibung zu vage oder der erste Tool-Output zu groß. Mache die Beschreibung enger und bitte
+        den Agenten im System Prompt ausdrücklich: „Nutze zuerst Ort suchen und verwende dessen latitude/longitude.“
+      </div>
+
+      <h2>Schritt 7 — Agentenregel für die Tool-Reihenfolge schärfen</h2>
+      <p>Jetzt ergänzen wir die System Message. Das ist keine Garantie, aber eine wichtige Leitplanke.</p>
+
+      <ol class="steps">
+        <li><h4>AI Agent öffnen</h4>
+          <p>Doppelklicke den AI-Agent-Node.</p></li>
+        <li><h4>System Message ergänzen</h4>
+          <p>Erweitere die System Message um die folgenden Regeln.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Zusatzregeln für Tools</div>
+<pre>Tool-Nutzung:
+- Wenn der Nutzer einen Ort nennt, rufe zuerst "Ort suchen" auf.
+- Verwende aus dem ersten Ergebnis latitude und longitude.
+- Rufe danach "Wetter holen" auf.
+- Wenn kein Ort genannt wird, frage nach dem Ort.
+- Wenn der Nutzer "dort" oder "dieselbe Stadt" sagt, nutze den Ort aus Memory.
+- Antworte mit Ort, Zeitraum, Temperatur, Regenwahrscheinlichkeit und kurzer Handlungsempfehlung.</pre>
+      </div>
+
+      <h2>Schritt 8 — Ersten Chat-Test ausführen</h2>
+      <p>Jetzt testest du nicht nur die Antwort, sondern die Werkzeugkette.</p>
+
+      <ol class="steps">
+        <li><h4>Chat öffnen</h4>
+          <p>Klicke im Chat Trigger auf <strong>Open Chat</strong> oder nutze den Testchat in n8n.</p></li>
+        <li><h4>Konkrete Frage stellen</h4>
+          <p>Schreibe: <code>Wie wird das Wetter morgen in Hamburg?</code></p></li>
+        <li><h4>Antwort prüfen</h4>
+          <p>Die Antwort sollte Hamburg nennen und konkrete Wetterdaten enthalten. Sie darf keine exakten Werte erfinden,
+            wenn die API nichts geliefert hat.</p></li>
+        <li><h4>Execution öffnen</h4>
+          <p>Öffne die Ausführung. Prüfe, ob <code>Ort suchen</code> und <code>Wetter holen</code> aufgerufen wurden.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas" style="height:330px;">
+              <svg class="n8n-conns" viewBox="0 0 760 330" preserveAspectRatio="none">
+                <path class="is-active" d="M 132 160 C 165 160, 178 160, 205 160"></path>
+                <path class="is-active" d="M 297 160 C 335 160, 355 88, 400 88"></path>
+                <path class="is-active" d="M 492 88 C 545 88, 570 160, 625 160"></path>
+                <path class="is-active" d="M 297 160 C 335 160, 355 232, 400 232"></path>
+                <path class="is-active" d="M 492 232 C 545 232, 570 160, 625 160"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:14px; top:114px;">
+                <span class="n8n-node__icon">💬</span><span class="ep out"></span>
+                <span class="n8n-node__label">Chatfrage</span></div>
+              <div class="n8n-node n8n-node--ai n8n-node--selected" style="left:205px; top:114px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep in"></span>
+                <span class="ep out" style="top:28px;"></span><span class="ep out" style="top:64px;"></span>
+                <span class="n8n-node__label">AI Agent</span><span class="items">2 Tool Calls</span></div>
+              <div class="n8n-node" style="left:400px; top:42px;">
+                <span class="n8n-node__icon">🌍</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Ort suchen</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node" style="left:400px; top:186px;">
+                <span class="n8n-node__icon">🌦</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node" style="left:625px; top:114px;">
+                <span class="n8n-node__icon">↩</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Chatantwort</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 20.5</span>In der Execution erkennst du, ob der Agent wirklich die Tools
+          genutzt hat oder nur geraten hat.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Execution lesen, nicht nur Chat lesen</b>
+        Eine plausible Chatantwort beweist wenig. Öffne die Ausführung und prüfe Tool-Aufrufe, Parameter und Rückgaben.
+      </div>
+
+      <h2>Schritt 9 — Memory mit Folgefragen testen</h2>
+      <p>Memory ist erst dann sichtbar, wenn du absichtlich eine Folgefrage stellst.</p>
+
+      <ol class="steps">
+        <li><h4>Erste Nachricht senden</h4>
+          <p>Schreibe: <code>Merke dir bitte: Mein Arbeitsort ist Leipzig.</code></p></li>
+        <li><h4>Folgefrage senden</h4>
+          <p>Schreibe danach: <code>Wie wird das Wetter morgen dort?</code></p></li>
+        <li><h4>Ort prüfen</h4>
+          <p>Die Antwort muss Leipzig verwenden. Wenn der Agent wieder nach dem Ort fragt, ist Memory nicht korrekt
+            verbunden oder die Session ID stimmt nicht.</p></li>
+        <li><h4>Neuen Chat starten</h4>
+          <p>Starte eine neue Unterhaltung. Frage wieder <code>Wie wird das Wetter morgen dort?</code>. Jetzt sollte der
+            Agent nachfragen, weil der alte Kontext nicht in diese neue Session gehört.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Memory ist kein Wissensspeicher</b>
+        Memory ist Gesprächsverlauf, keine Datenbank. Für dauerhaftes Wissen über Dokumente, Produkte oder interne Regeln
+        brauchst du später RAG oder eine normale Datenquelle.
+      </div>
+
+      <h2>Schritt 10 — Antwort manuell formen, falls nötig</h2>
+      <p>Im einfachen Fall sendet der Chat Trigger die Agent-Ausgabe direkt zurück. Wenn du nach dem Agenten noch Nodes
+        ausführst, musst du die Antwort bewusst als <code>output</code> oder <code>text</code> bereitstellen oder den
+        Response Mode auf Response-Nodes umstellen.</p>
+
+      <ol class="steps">
+        <li><h4>Direktantwort beibehalten</h4>
+          <p>Für dieses Kapitel lässt du den Agenten die finale Antwort liefern. Das ist die einfachste Form.</p></li>
+        <li><h4>Optional Code-Node anhängen</h4>
+          <p>Wenn du die Antwort formatieren willst, hänge einen Code-Node nach dem Agenten.</p></li>
+        <li><h4>Feldnamen beachten</h4>
+          <p>Der Chat Trigger erwartet für eine einfache manuelle Antwort ein Feld wie <code>output</code> oder
+            <code>text</code>.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Optional · Antwort normalisieren</div>
+<pre><span class="ky">return</span> {
+  json: {
+    output: $json.output ?? $json.text ?? <span class="st">'Ich konnte keine Antwort erzeugen.'</span>
+  }
+};</pre>
+      </div>
+
+      <h2>Schritt 11 — Fehlerfälle sichtbar machen</h2>
+      <p>Agentenfehler sind oft leise: falscher Ort, falscher Tool-Parameter, leere API-Antwort. Baue deshalb kleine
+        Kontrollfragen ein.</p>
+
+      <table class="btable">
+        <thead><tr><th>Fehler</th><th>Woran du ihn erkennst</th><th>Gegenmaßnahme</th></tr></thead>
+        <tbody>
+          <tr><td>Tool nicht genutzt</td><td>Execution zeigt keinen Tool Call</td><td>System Message enger formulieren, Tool-Beschreibung verbessern</td></tr>
+          <tr><td>falsche Stadt</td><td>Geocoding liefert anderen Ort</td><td>Agent soll bei Mehrdeutigkeit nach Land/Bundesland fragen</td></tr>
+          <tr><td>zu viele Tool Calls</td><td>Agent ruft dieselbe API mehrfach auf</td><td>Max Iterations senken, Prompt präzisieren</td></tr>
+          <tr><td>kein Memory</td><td>Folgefrage „dort“ scheitert</td><td>Session ID prüfen, denselben Memory-Node verbinden</td></tr>
+          <tr><td>API-Ausfall</td><td>Tool gibt Fehler oder leere Daten zurück</td><td>Agent soll ehrlich antworten und keine Werte erfinden</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Minimaler Kontrollsatz</b>
+        Teste immer: konkrete Frage, mehrdeutige Frage, Folgefrage mit Memory, API-Fehler. Wenn einer dieser Fälle
+        scheitert, ist der Agent noch nicht robust.
+      </div>
+
+      <h2>Schritt 12 — Chat sicher veröffentlichen</h2>
+      <p>Erst wenn die Tests passen, machst du den Chat öffentlich. Öffentlich heißt: Jemand außerhalb des Editors kann
+        Ausführungen starten.</p>
+
+      <ol class="steps">
+        <li><h4>Chat Trigger öffnen</h4>
+          <p>Doppelklicke den Chat Trigger.</p></li>
+        <li><h4>Public einschalten</h4>
+          <p>Setze <strong>Make Chat Publicly Available</strong> auf an.</p></li>
+        <li><h4>Authentifizierung wählen</h4>
+          <p>Wähle für Tests <strong>Basic Auth</strong> oder <strong>n8n User Auth</strong>. <strong>None</strong> ist nur
+            für absichtlich öffentliche Demos sinnvoll.</p></li>
+        <li><h4>CORS begrenzen</h4>
+          <p>Setze <strong>Allowed Origin</strong> nicht dauerhaft auf <code>*</code>, wenn du den Chat in eine Website
+            einbettest. Trage deine konkrete Domain ein.</p></li>
+        <li><h4>Load Previous Session prüfen</h4>
+          <p>Wenn Nutzer frühere Chatnachrichten laden sollen, setze <strong>Load Previous Session</strong> auf
+            <strong>From Memory</strong> und nutze denselben Memory-Node wie am Agenten.</p></li>
+        <li><h4>Workflow aktivieren</h4>
+          <p>Speichere den Workflow und schalte ihn erst dann aktiv.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Schreibende Tools brauchen Review</b>
+        Wenn du später ein Gmail-, Slack-, CRM- oder Datenbank-Tool anschließt, baue Human-in-the-loop ein. Der Mensch
+        sieht dann vor der Ausführung, welches Tool mit welchen Parametern genutzt werden soll.
+      </div>
+
+      <h2>Sinnvolle Erweiterungen</h2>
+      <table class="btable">
+        <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
+        <tbody>
+          <tr><td>Human Review</td><td>Schreibende Tools hinter eine Freigabe per Slack, Chat oder E-Mail hängen.</td></tr>
+          <tr><td>Call n8n Workflow Tool</td><td>Komplexe Logik als eigenes Workflow-Tool kapseln statt alles in den Agenten zu legen.</td></tr>
+          <tr><td>Redis/Postgres Memory</td><td>Für produktive oder skalierte Chats statt Simple Memory nutzen.</td></tr>
+          <tr><td>Antwortqualität messen</td><td>Testfragen in einem Sheet sammeln und regelmäßig gegen den Agenten laufen lassen.</td></tr>
+          <tr><td>RAG</td><td>Eigene Dokumente über einen Vector Store anbinden. Das kommt im nächsten Kapitel.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Wann ist ein AI Agent sinnvoller als eine Basic LLM Chain?</li>
+          <li>Warum sollte der Wetter-Agent zuerst <code>Ort suchen</code> und erst danach <code>Wetter holen</code> nutzen?</li>
+          <li>Warum ist <code>$fromAI()</code> kein normaler Feldzugriff?</li>
+          <li>Wie prüfst du, ob Memory wirklich funktioniert?</li>
+          <li>Welche Tools gehören hinter Human Review?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Wenn das Modell entscheiden muss, welches Tool nötig ist. ·
+        2) Weil Wetter-APIs Koordinaten brauchen und der Ort erst aufgelöst werden muss. ·
+        3) Weil das Modell den Parameter aus Kontext und Tool-Beschreibung ableitet. ·
+        4) Mit einer Folgefrage wie „morgen dort?“ in derselben Session und einer neuen Session als Gegenprobe. ·
+        5) Alle Tools mit Außenwirkung: senden, löschen, kaufen, CRM ändern, Daten veröffentlichen.
+      </div>
+
+      <p>Du hast jetzt das Grundmuster eines n8n-Agenten gebaut: Chat rein, Modell entscheidet, Tools liefern Daten,
+        Memory hält den Gesprächskontext. Im nächsten KI-Kapitel wird aus Gesprächsgedächtnis ein Wissenssystem:
+        RAG über eigene Dokumente.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="20-ai-agent"></nav></section>
 
   </div>
 </div>
 <script>
-var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter","14-projekt-form","15-projekt-news","16-projekt-leads"];
-var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
+var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter","14-projekt-form","15-projekt-news","16-projekt-leads","17-projekt-ai","18-projekt-pdf","19-grossprojekt","20-ai-agent"];
+var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
 
 function show(slug) {
   if (!slug || READY.indexOf(slug) === -1 && slug !== "home") slug = "home";

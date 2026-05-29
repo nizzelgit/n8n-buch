@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Großprojekt: Content-Pipeline end-to-end — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="19-grossprojekt" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">19</span> Großprojekt</div>
+      <h1 class="chap-title">Content-Pipeline end-to-end</h1>
+      <p class="chap-lede">In diesem Großprojekt baust du keinen einzelnen Trick, sondern einen kleinen
+        Produktionsprozess: Thema aus einem Backlog holen, Recherche-Signale sammeln, Entwurf erzeugen, menschlich
+        freigeben, veröffentlichen und alles protokollieren. Der wichtigste Punkt ist nicht die KI. Der wichtigste Punkt
+        ist die Kontrolle zwischen den Schritten.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 70 Minuten</span>
+        <span>🎯 Niveau: Mittel bis fortgeschritten</span>
+        <span>🧩 Voraussetzung: Kapitel 7–17</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>Ein Google-Sheet als Content-Backlog und Prüfprotokoll.</li>
+          <li>Eine Google-Sheets-Credential in n8n.</li>
+          <li>Eine Slack-Credential oder einen anderen internen Benachrichtigungskanal.</li>
+          <li>Eine Chat-Model-Credential für den Entwurfsschritt.</li>
+          <li>Optional: ein CMS, ein WordPress-Testsystem oder ein eigener Webhook als späterer Ausgabekanal.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Keine automatische Publikation ohne Freigabe</b>
+        Content kann falsch, rechtlich heikel oder markenschädlich sein. Dieses Kapitel baut deshalb bewusst eine Pipeline
+        mit Statusfeldern. n8n veröffentlicht erst, wenn ein Mensch im Sheet <code>approved</code> gesetzt hat.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Die Pipeline besteht aus zwei Workflows. Der erste Workflow erzeugt aus einem Backlog-Eintrag einen prüfbaren
+        Entwurf. Der zweite Workflow veröffentlicht nur freigegebene Entwürfe und setzt danach den Status auf
+        <code>published</code>. Das Sheet ist dabei der gemeinsame Speicher zwischen Mensch und Maschine.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 1120 470" preserveAspectRatio="none">
+                <path class="is-active" d="M 145 120 C 205 120, 220 120, 278 120"></path>
+                <path class="is-active" d="M 370 120 C 430 120, 450 120, 508 120"></path>
+                <path class="is-active" d="M 600 120 C 660 120, 680 120, 738 120"></path>
+                <path class="is-active" d="M 830 120 C 890 120, 910 120, 968 120"></path>
+                <path d="M 1015 166 C 1015 215, 145 215, 145 300"></path>
+                <path class="is-active" d="M 145 300 C 205 300, 220 300, 278 300"></path>
+                <path class="is-active" d="M 370 300 C 430 300, 450 300, 508 300"></path>
+                <path class="is-active" d="M 600 300 C 660 300, 680 300, 738 300"></path>
+                <path class="is-active" d="M 830 300 C 890 300, 910 300, 968 300"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:28px; top:74px;">
+                <span class="n8n-node__icon">🧪</span><span class="ep out"></span>
+                <span class="n8n-node__label">Draft-Test</span></div>
+              <div class="n8n-node" style="left:278px; top:74px;">
+                <span class="n8n-node__icon">📋</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Backlog lesen</span></div>
+              <div class="n8n-node" style="left:508px; top:74px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Recherche holen</span></div>
+              <div class="n8n-node n8n-node--ai" style="left:738px; top:74px;">
+                <span class="n8n-node__icon">🤖</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Entwurf bauen</span></div>
+              <div class="n8n-node" style="left:968px; top:74px;">
+                <span class="n8n-node__icon">✅</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Review melden</span><span class="badge badge--ok">✓</span></div>
+
+              <div class="n8n-node n8n-node--trigger" style="left:28px; top:254px;">
+                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__label">Publish-Check</span></div>
+              <div class="n8n-node" style="left:278px; top:254px;">
+                <span class="n8n-node__icon">📋</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">approved lesen</span></div>
+              <div class="n8n-node n8n-node--code" style="left:508px; top:254px;">
+                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Post formatieren</span></div>
+              <div class="n8n-node" style="left:738px; top:254px;">
+                <span class="n8n-node__icon">📣</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">veröffentlichen</span></div>
+              <div class="n8n-node" style="left:968px; top:254px;">
+                <span class="n8n-node__icon">🧾</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Status setzen</span><span class="items">1 Item</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 19.1</span>Die Content-Pipeline hat zwei getrennte Läufe: Entwurf erzeugen
+          und nach menschlicher Freigabe veröffentlichen.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Das Muster</b>
+        Große Workflows werden stabiler, wenn du sie in Zustände zerlegst: <code>ready</code> → <code>review</code> →
+        <code>approved</code> → <code>published</code>. Jeder Zustand ist sichtbar, prüfbar und wiederholbar.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 1 — Das Backlog-Sheet anlegen</h2>
+      <p>Das Sheet ist nicht nur eine Eingabeliste. Es ist der Kontrollraum der Pipeline. Lege ein neues Google-Sheet mit
+        dem Namen <code>n8n-content-pipeline</code> an.</p>
+
+      <ol class="steps">
+        <li><h4>Tabellenblatt benennen</h4>
+          <p>Nenne das erste Tabellenblatt <code>Backlog</code>.</p></li>
+        <li><h4>Spalten anlegen</h4>
+          <p>Trage in Zeile 1 die Spalten aus der folgenden Tabelle ein. Schreibe die Namen exakt gleich, damit die späteren
+            Expressions leichter bleiben.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>Spalte</th><th>Bedeutung</th><th>Beispiel</th></tr></thead>
+        <tbody>
+          <tr><td><code>id</code></td><td>eindeutige Kennung</td><td><code>post-001</code></td></tr>
+          <tr><td><code>status</code></td><td>aktueller Zustand</td><td><code>ready</code></td></tr>
+          <tr><td><code>keyword</code></td><td>Thema oder Suchbegriff</td><td><code>workflow automation</code></td></tr>
+          <tr><td><code>audience</code></td><td>Zielgruppe</td><td><code>Einsteiger:innen in n8n</code></td></tr>
+          <tr><td><code>format</code></td><td>Ausgabeformat</td><td><code>linkedin</code></td></tr>
+          <tr><td><code>angle</code></td><td>Blickwinkel</td><td><code>praktisch, skeptisch, nicht hype-getrieben</code></td></tr>
+          <tr><td><code>draft_title</code></td><td>wird von n8n gefüllt</td><td>leer lassen</td></tr>
+          <tr><td><code>draft_body</code></td><td>wird von n8n gefüllt</td><td>leer lassen</td></tr>
+          <tr><td><code>review_notes</code></td><td>menschliche Hinweise</td><td><code>Kürzer, Beispiel ergänzen</code></td></tr>
+          <tr><td><code>published_at</code></td><td>Zeitpunkt der Veröffentlichung</td><td>leer lassen</td></tr>
+        </tbody>
+      </table>
+
+      <ol class="steps" style="counter-reset: st 2;">
+        <li><h4>Erste Testzeile eintragen</h4>
+          <p>Trage in Zeile 2 ein: <code>post-001</code>, Status <code>ready</code>, Keyword <code>workflow automation</code>,
+            Audience <code>n8n-Anfänger:innen</code>, Format <code>linkedin</code> und einen klaren Angle.</p></li>
+        <li><h4>Zweite Testzeile blockieren</h4>
+          <p>Lege eine zweite Zeile an, setze den Status aber auf <code>idea</code>. Diese Zeile darf noch nicht verarbeitet
+            werden. Sie ist dein Kontrollfall.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn später zu viele Zeilen laufen</b>
+        Fast immer fehlt dann die Statusprüfung oder ein Limit. Eine Pipeline ohne Statusfeld verarbeitet blind alles, was
+        sie sieht. Das ist bei Content genauso riskant wie bei CRM- oder E-Mail-Workflows.
+      </div>
+
+      <h2>Schritt 2 — Workflow 1 erstellen: Entwürfe erzeugen</h2>
+      <p>Der erste Workflow liest genau eine fertige Backlog-Zeile, sammelt Recherche-Signale und schreibt einen Entwurf
+        zurück ins Sheet.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen neuen Workflow und nenne ihn <code>Content Drafts erzeugen</code>.</p></li>
+        <li><h4>Manual Trigger hinzufügen</h4>
+          <p>Klicke auf das große <span class="kbd">+</span>, suche <code>manual</code> und wähle <strong>Trigger manually</strong>.
+            Für den Aufbau starten wir bewusst von Hand.</p></li>
+        <li><h4>Speichern</h4>
+          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Prüfe oben, ob der Speichern-Status auf
+            <strong>Saved</strong> steht.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum kein Schedule am Anfang?</b>
+        Ein Zeitplan wiederholt Fehler automatisch. Beim Bauen ist ein manueller Trigger die bessere Bremse. Den Schedule
+        ergänzt du erst, wenn jeder Zwischenschritt geprüft ist.
+      </div>
+
+      <h2>Schritt 3 — Backlog aus Google Sheets lesen</h2>
+      <ol class="steps">
+        <li><h4>Google-Sheets-Node anhängen</h4>
+          <p>Ziehe vom Manual Trigger eine Linie ins Leere, suche <code>google sheets</code> und wähle
+            <strong>Google Sheets</strong>.</p></li>
+        <li><h4>Credential auswählen</h4>
+          <p>Wähle deine Google-Sheets-Credential. Falls du noch keine hast, lege sie wie in Kapitel 12 an.</p></li>
+        <li><h4>Dokument wählen</h4>
+          <p>Wähle das Sheet <code>n8n-content-pipeline</code> und das Tabellenblatt <code>Backlog</code>.</p></li>
+        <li><h4>Zeilen lesen</h4>
+          <p>Wähle eine Operation zum Lesen mehrerer Zeilen, je nach n8n-Version z. B. <strong>Get Many</strong> oder
+            <strong>Read Rows</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne den Node <code>Backlog lesen</code>.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke auf <strong>Schritt ausführen</strong>. Rechts sollten deine Testzeilen als Items erscheinen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">📋</span><b>Backlog lesen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="ndv-empty">Der manuelle Trigger liefert nur den Startimpuls.</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Document</label><input class="n8n-input" value="n8n-content-pipeline"></div>
+                  <div class="row"><label>Sheet</label><input class="n8n-input" value="Backlog"></div>
+                  <div class="row"><label>Operation</label><div class="n8n-select">Read Rows <span class="chev">▾</span></div></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">2 Items</span></div>
+                <div class="ndv-panel__body">
+                  <table class="n8n-table">
+                    <thead><tr><th>id</th><th>status</th><th>keyword</th></tr></thead>
+                    <tbody>
+                      <tr><td>post-001</td><td>ready</td><td>workflow automation</td></tr>
+                      <tr><td>post-002</td><td>idea</td><td>newsletter automation</td></tr>
+                    </tbody>
+                  </table>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 19.2</span>Der Sheets-Node liest mehrere Zeilen. Noch ist nichts gefiltert.</figcaption>
+      </figure>
+
+      <h2>Schritt 4 — Nur <code>ready</code>-Zeilen durchlassen</h2>
+      <p>Jetzt kommt die erste Sicherheitsregel: Nur Zeilen mit Status <code>ready</code> werden verarbeitet.</p>
+
+      <ol class="steps">
+        <li><h4>Filter-Node anhängen</h4>
+          <p>Hänge hinter <strong>Backlog lesen</strong> einen <strong>Filter</strong>-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Nur ready</code>.</p></li>
+        <li><h4>Bedingung setzen</h4>
+          <p>Setze die Bedingung: <code>{{ $json.status }}</code> <strong>equals</strong> <code>ready</code>.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Node aus. Rechts darf nur noch die Zeile <code>post-001</code> stehen.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Status vor Inhalt</b>
+        Prüfe erst, <em>ob</em> eine Zeile verarbeitet werden darf. Erst danach lohnt sich die Frage, <em>was</em> darin
+        steht. Diese Reihenfolge verhindert die meisten versehentlichen Massenläufe.
+      </div>
+
+      <h2>Schritt 5 — Pro Lauf nur ein Thema verarbeiten</h2>
+      <p>Auch wenn zehn Zeilen <code>ready</code> sind: Während du testest, soll nur eine Zeile laufen. Das macht Fehler
+        übersichtlich und schont KI-Kosten.</p>
+
+      <ol class="steps">
+        <li><h4>Limit-Node anhängen</h4>
+          <p>Hänge hinter <strong>Nur ready</strong> einen <strong>Limit</strong>-Node.</p></li>
+        <li><h4>Maximale Anzahl setzen</h4>
+          <p>Setze die Anzahl auf <code>1</code>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne den Node <code>Ein Thema</code>.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Später mehr Durchsatz</b>
+        Wenn die Pipeline stabil ist, kannst du das Limit erhöhen oder Batching einbauen. Für den ersten End-to-End-Test ist
+        <code>1</code> die richtige Zahl.
+      </div>
+
+      <h2>Schritt 6 — Recherche-Signale per HTTP holen</h2>
+      <p>Wir nutzen eine offene Such-API von Hacker News, weil sie ohne Login funktioniert. Das ist keine vollständige
+        Recherche und kein Wahrheitsbeweis. Es liefert nur Signale: Titel, Links, Punkte und Begriffe, aus denen der
+        Entwurf eine Richtung ableiten kann.</p>
+
+      <ol class="steps">
+        <li><h4>HTTP-Request-Node anhängen</h4>
+          <p>Ziehe von <strong>Ein Thema</strong> eine Linie ins Leere und wähle <strong>HTTP Request</strong>.</p></li>
+        <li><h4>Methode prüfen</h4>
+          <p>Lass <strong>Method</strong> auf <strong>GET</strong>.</p></li>
+        <li><h4>URL setzen</h4>
+          <p>Setze die URL auf <code>https://hn.algolia.com/api/v1/search</code>.</p></li>
+        <li><h4>Query-Parameter aktivieren</h4>
+          <p>Füge Query-Parameter hinzu. Trage <code>query</code>, <code>tags</code> und <code>hitsPerPage</code> wie unten ein.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>Name</th><th>Wert</th></tr></thead>
+        <tbody>
+          <tr><td><code>query</code></td><td><code>{{ $json.keyword }}</code></td></tr>
+          <tr><td><code>tags</code></td><td><code>story</code></td></tr>
+          <tr><td><code>hitsPerPage</code></td><td><code>5</code></td></tr>
+        </tbody>
+      </table>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>Recherche holen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="n8n-json">{
+  <span class="k">"id"</span>: <span class="s">"post-001"</span>,
+  <span class="k">"keyword"</span>: <span class="s">"workflow automation"</span>
+}</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                  <div class="row"><label>URL</label><input class="n8n-input" value="https://hn.algolia.com/api/v1/search"></div>
+                  <div class="row"><label>query</label><input class="n8n-input is-expr" value="{{ $json.keyword }}"></div>
+                  <div class="row"><label>hitsPerPage</label><input class="n8n-input" value="5"></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-json">{
+  <span class="k">"hits"</span>: [
+    { <span class="k">"title"</span>: <span class="s">"Workflow automation..."</span>, <span class="k">"url"</span>: <span class="s">"https://..."</span> }
+  ]
+}</div>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 19.3</span>Der HTTP-Request nutzt das Keyword aus dem Sheet als Query-Parameter.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der HTTP-Node leer zurückkommt</b>
+        Prüfe zuerst das Keyword. Sehr deutsche oder sehr spezielle Begriffe liefern bei Hacker News oft wenig. Für den
+        Test ist <code>workflow automation</code> absichtlich breit gewählt.
+      </div>
+
+      <h2>Schritt 7 — Recherche verdichten</h2>
+      <p>Der HTTP-Node liefert ein verschachteltes Ergebnis. Die KI soll aber nicht das ganze Rohobjekt bekommen. Wir
+        extrahieren nur die wichtigsten Felder.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter <strong>Recherche holen</strong> einen <strong>Code</strong>-Node.</p></li>
+        <li><h4>Modus setzen</h4>
+          <p>Setze den Modus auf <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Recherche verdichten</code>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge den folgenden Code ein.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Recherche verdichten</div>
+<pre>const hits = Array.isArray($json.hits) ? $json.hits : [];
+
+const sources = hits
+  .slice(0, 5)
+  .map((hit, index) => ({
+    rank: index + 1,
+    title: hit.title ?? hit.story_title ?? 'Ohne Titel',
+    url: hit.url ?? hit.story_url ?? '',
+    points: hit.points ?? 0,
+    comments: hit.num_comments ?? 0
+  }))
+  .filter((source) => source.title);
+
+return {
+  json: {
+    id: $('Ein Thema').item.json.id,
+    keyword: $('Ein Thema').item.json.keyword,
+    audience: $('Ein Thema').item.json.audience,
+    format: $('Ein Thema').item.json.format,
+    angle: $('Ein Thema').item.json.angle,
+    sources,
+    source_summary: sources
+      .map((source) => `${source.rank}. ${source.title} (${source.url || 'kein Link'})`)
+      .join('\n')
+  }
+};</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Rohdaten reduzieren</b>
+        Gib einem KI-Schritt nur die Daten, die er wirklich braucht. Das spart Kosten, reduziert Ablenkung und macht den
+        späteren Fehlerfall lesbarer.
+      </div>
+
+      <h2>Schritt 8 — Entwurf mit dem AI Agent erzeugen</h2>
+      <p>Der Agent bekommt ein klares Briefing und muss strukturiertes JSON zurückgeben. Er darf Quellen nicht abschreiben
+        und soll Unsicherheiten offen markieren.</p>
+
+      <ol class="steps">
+        <li><h4>AI-Agent-Node anhängen</h4>
+          <p>Hänge hinter <strong>Recherche verdichten</strong> einen <strong>AI Agent</strong>-Node.</p></li>
+        <li><h4>Chat Model verbinden</h4>
+          <p>Verbinde ein Chat Model, z. B. OpenAI Chat Model, und wähle deine Credential.</p></li>
+        <li><h4>Keine Tools verbinden</h4>
+          <p>Für diesen Workflow braucht der Agent keine externen Tools. Die Recherche wurde bereits vorher geholt.</p></li>
+        <li><h4>Prompt definieren</h4>
+          <p>Setze <strong>Prompt</strong> auf <strong>Define below</strong> und füge den folgenden Text ein.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Prompt für den AI Agent</div>
+<pre>Du bist ein vorsichtiger Content-Editor.
+Erstelle einen Entwurf und antworte ausschließlich als gültiges JSON.
+
+Ziel:
+- Format: {{ $json.format }}
+- Zielgruppe: {{ $json.audience }}
+- Thema: {{ $json.keyword }}
+- Blickwinkel: {{ $json.angle }}
+
+Recherche-Signale:
+{{ $json.source_summary }}
+
+JSON-Schema:
+{
+  "draft_title": "präziser Titel, keine Clickbait-Formulierung",
+  "draft_body": "fertiger Entwurf im angegebenen Format",
+  "key_points": ["3 bis 5 Kernaussagen"],
+  "source_notes": ["welche Quellen nur als Signal dienten"],
+  "risks": ["mögliche Unsicherheiten, Lücken oder rechtliche Vorsichtspunkte"]
+}
+
+Regeln:
+- Keine Fakten erfinden.
+- Keine fremden Texte kopieren oder paraphrasieren, als wären sie eigene Recherche.
+- Wenn die Recherche dünn ist, schreibe das in risks.
+- Schreibe auf Deutsch.
+- Ton: klar, skeptisch, praktisch.</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:720px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🤖</span><b>Entwurf bauen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Agent</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Prompt</label><div class="n8n-select">Define below <span class="chev">▾</span></div></div>
+                  <div class="row"><label>User Message</label><input class="n8n-input is-expr" value="Erstelle einen Entwurf und antworte ausschließlich als gültiges JSON ..."></div>
+                  <div class="row"><label>Chat Model</label><div class="n8n-select">verbunden <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Tools</label><div class="n8n-select">keine Tools verbunden <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 19.4</span>Der Agent arbeitet als Editor. Er veröffentlicht nichts und
+          verändert keine externen Systeme.</figcaption>
+      </figure>
+
+      <h2>Schritt 9 — KI-Ausgabe prüfen</h2>
+      <p>Wie in Kapitel 17 behandeln wir die KI-Ausgabe als unsichere Eingabe. Ein Parser-Node macht aus Text wieder ein
+        sauberes Objekt und setzt Fallbacks.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter den AI Agent einen <strong>Code</strong>-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Entwurf prüfen</code>.</p></li>
+        <li><h4>Modus setzen</h4>
+          <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge den folgenden Parser ein. Falls dein Agent-Ausgabefeld anders heißt, passe die erste Zeile an.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Entwurf prüfen</div>
+<pre>const raw = $json.output ?? $json.text ?? $json.response ?? '';
+let parsed;
+
+try {
+  parsed = JSON.parse(raw);
+} catch (error) {
+  parsed = {
+    draft_title: `Entwurf zu ${$('Recherche verdichten').item.json.keyword}`,
+    draft_body: raw || 'Kein verwertbarer KI-Entwurf.',
+    key_points: [],
+    source_notes: [],
+    risks: ['KI-Ausgabe war kein gültiges JSON.'],
+    parse_error: true
+  };
+}
+
+return {
+  json: {
+    id: $('Recherche verdichten').item.json.id,
+    keyword: $('Recherche verdichten').item.json.keyword,
+    audience: $('Recherche verdichten').item.json.audience,
+    format: $('Recherche verdichten').item.json.format,
+    draft_title: String(parsed.draft_title ?? '').slice(0, 160),
+    draft_body: String(parsed.draft_body ?? '').slice(0, 5000),
+    key_points: Array.isArray(parsed.key_points) ? parsed.key_points.join('\n') : '',
+    source_notes: Array.isArray(parsed.source_notes) ? parsed.source_notes.join('\n') : '',
+    risks: Array.isArray(parsed.risks) ? parsed.risks.join('\n') : '',
+    parse_error: Boolean(parsed.parse_error)
+  }
+};</pre>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn <code>parse_error</code> true ist</b>
+        Veröffentliche nichts. Prüfe den Prompt, das Modell und die Rohantwort. Ein Parser-Fehler ist kein kosmetisches
+        Problem, sondern ein Signal, dass die Pipeline nicht zuverlässig genug ist.
+      </div>
+
+      <h2>Schritt 10 — Entwurf ins Sheet zurückschreiben</h2>
+      <p>Jetzt verlässt der Entwurf den Workflow und landet dort, wo ein Mensch ihn prüfen kann: im Backlog-Sheet.</p>
+
+      <ol class="steps">
+        <li><h4>Google-Sheets-Node anhängen</h4>
+          <p>Hänge hinter <strong>Entwurf prüfen</strong> einen Google-Sheets-Node.</p></li>
+        <li><h4>Operation wählen</h4>
+          <p>Wähle eine Update-Operation, je nach Version z. B. <strong>Update Row</strong>.</p></li>
+        <li><h4>Zeile finden</h4>
+          <p>Nutze <code>id</code> als Such- oder Matching-Spalte und setze den Wert auf <code>{{ $json.id }}</code>.</p></li>
+        <li><h4>Felder setzen</h4>
+          <p>Aktualisiere <code>status</code> auf <code>review</code>, schreibe <code>draft_title</code>,
+            <code>draft_body</code>, <code>source_notes</code> und <code>risks</code> zurück.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Node aus und öffne das Sheet. Die Zeile <code>post-001</code> sollte jetzt einen Entwurf enthalten.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>Sheet-Spalte</th><th>Wert</th></tr></thead>
+        <tbody>
+          <tr><td><code>status</code></td><td><code>review</code></td></tr>
+          <tr><td><code>draft_title</code></td><td><code>{{ $json.draft_title }}</code></td></tr>
+          <tr><td><code>draft_body</code></td><td><code>{{ $json.draft_body }}</code></td></tr>
+          <tr><td><code>review_notes</code></td><td><code>{{ $json.risks }}</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Warum zurück ins Sheet?</b>
+        Ein Entwurf in n8n ist für Redakteur:innen unsichtbar. Ein Entwurf im Sheet ist prüfbar, kommentierbar und kann
+        durch ein einfaches Statusfeld weitergeschaltet werden.
+      </div>
+
+      <h2>Schritt 11 — Review in Slack melden</h2>
+      <ol class="steps">
+        <li><h4>Slack-Node anhängen</h4>
+          <p>Hänge hinter den Sheet-Update-Node einen Slack-Node.</p></li>
+        <li><h4>Kanal wählen</h4>
+          <p>Wähle einen Testkanal, z. B. <code>#content-review-test</code>.</p></li>
+        <li><h4>Nachricht setzen</h4>
+          <p>Setze den Nachrichtentext auf die folgende Expression.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Slack-Review-Hinweis</div>
+<pre>Neuer Content-Entwurf wartet auf Review.
+
+ID: {{ $json.id }}
+Thema: {{ $json.keyword }}
+Titel: {{ $json.draft_title }}
+
+Bitte im Sheet prüfen und status auf approved setzen, wenn der Entwurf veröffentlicht werden darf.</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Menschliche Freigabe ist ein Datenpunkt</b>
+        Schreibe Freigaben nicht in Chat-Floskeln fest. Ein Statusfeld wie <code>approved</code> ist maschinenlesbar und
+        für n8n eindeutig.
+      </div>
+
+      <h2>Schritt 12 — Workflow 1 vollständig testen</h2>
+      <ol class="steps">
+        <li><h4>Canvas schließen</h4>
+          <p>Schließe die Node-Detailansicht, damit du den kompletten Workflow siehst.</p></li>
+        <li><h4>Speichern</h4>
+          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Test workflow starten</h4>
+          <p>Klicke auf <strong>Test workflow</strong>. Beobachte, ob alle Nodes nacheinander grün werden.</p></li>
+        <li><h4>Sheet prüfen</h4>
+          <p>Die Testzeile sollte jetzt Status <code>review</code> haben. Die Zeile mit Status <code>idea</code> muss
+            unverändert geblieben sein.</p></li>
+        <li><h4>Slack prüfen</h4>
+          <p>Im Review-Kanal sollte genau eine Nachricht erscheinen.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn zwei Entwürfe entstanden sind</b>
+        Prüfe den Filter <code>status = ready</code> und den Limit-Node. Für den Testlauf darf nur ein Item beim
+        KI-Schritt ankommen.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 13 — Menschliche Prüfung im Sheet</h2>
+      <p>Jetzt verlässt du kurz n8n. Lies den Entwurf im Sheet wirklich kritisch. Das ist kein Formalismus.</p>
+
+      <ol class="steps">
+        <li><h4>Entwurf lesen</h4>
+          <p>Prüfe Titel, Inhalt, Quellenhinweise und Risiken. Achte besonders auf erfundene Details.</p></li>
+        <li><h4>Bei Mängeln zurückstellen</h4>
+          <p>Wenn der Entwurf nicht passt, setze <code>status</code> auf <code>needs_revision</code> und schreibe in
+            <code>review_notes</code>, was fehlt.</p></li>
+        <li><h4>Für den Test freigeben</h4>
+          <p>Wenn der Entwurf für den Test ausreichend ist, setze <code>status</code> auf <code>approved</code>.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Minimaler Review-Standard</b>
+        Prüfe mindestens vier Fragen: Ist der Text fachlich plausibel? Ist er eigenständig formuliert? Passt er zur
+        Zielgruppe? Gibt es rechtliche oder markenbezogene Risiken?
+      </div>
+
+      <h2>Schritt 14 — Workflow 2 erstellen: Freigegebenen Content veröffentlichen</h2>
+      <p>Der zweite Workflow liest nur Zeilen mit <code>approved</code>. Für den ersten Test veröffentlichen wir nicht auf
+        LinkedIn oder WordPress, sondern in einen internen Slack-Kanal. Damit testest du den End-to-End-Ablauf ohne
+        öffentliches Risiko.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen Workflow und nenne ihn <code>Content veröffentlichen</code>.</p></li>
+        <li><h4>Manual Trigger hinzufügen</h4>
+          <p>Nutze wieder zuerst <strong>Trigger manually</strong>. Ein Schedule kommt erst nach dem Test.</p></li>
+        <li><h4>Google-Sheets-Node hinzufügen</h4>
+          <p>Lies erneut das Tabellenblatt <code>Backlog</code>.</p></li>
+        <li><h4>Filter setzen</h4>
+          <p>Hänge einen Filter an: <code>{{ $json.status }}</code> <strong>equals</strong> <code>approved</code>.</p></li>
+        <li><h4>Limit setzen</h4>
+          <p>Hänge wieder einen Limit-Node mit Anzahl <code>1</code> an.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 920 320" preserveAspectRatio="none">
+                <path class="is-active" d="M 150 150 C 210 150, 230 150, 288 150"></path>
+                <path class="is-active" d="M 380 150 C 440 150, 460 150, 518 150"></path>
+                <path class="is-active" d="M 610 150 C 670 150, 690 150, 748 150"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:32px; top:104px;">
+                <span class="n8n-node__icon">🧪</span><span class="ep out"></span>
+                <span class="n8n-node__label">Publish-Test</span></div>
+              <div class="n8n-node" style="left:288px; top:104px;">
+                <span class="n8n-node__icon">📋</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">approved lesen</span></div>
+              <div class="n8n-node n8n-node--code" style="left:518px; top:104px;">
+                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Post formatieren</span></div>
+              <div class="n8n-node" style="left:748px; top:104px;">
+                <span class="n8n-node__icon">📣</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Slack Publish</span><span class="badge badge--ok">✓</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 19.5</span>Der zweite Workflow ist absichtlich schlicht: Freigabe lesen,
+          formatieren, in einen sicheren Kanal ausgeben.</figcaption>
+      </figure>
+
+      <h2>Schritt 15 — Post formatieren</h2>
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter den Limit-Node einen <strong>Code</strong>-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Post formatieren</code>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge den folgenden Code ein. Er baut aus Titel und Text eine Ausgabenachricht.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Post formatieren</div>
+<pre>const title = $json.draft_title ?? '';
+const body = $json.draft_body ?? '';
+const notes = $json.review_notes ?? '';
+
+return {
+  json: {
+    id: $json.id,
+    publish_text: `${title}\n\n${body}`.trim(),
+    audit_note: notes ? `Review-Hinweise: ${notes}` : 'Keine Review-Hinweise',
+    published_at: $now.toISO()
+  }
+};</pre>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Leerer Entwurf?</b>
+        Wenn <code>publish_text</code> leer ist, darfst du nicht veröffentlichen. Ergänze vor dem Slack- oder CMS-Node einen
+        IF-Node, der leere Texte in einen Fehlerkanal schickt.
+      </div>
+
+      <h2>Schritt 16 — In einen sicheren Kanal veröffentlichen</h2>
+      <ol class="steps">
+        <li><h4>Slack-Node anhängen</h4>
+          <p>Hänge hinter <strong>Post formatieren</strong> einen Slack-Node.</p></li>
+        <li><h4>Kanal wählen</h4>
+          <p>Wähle <code>#content-published-test</code> oder einen ähnlich harmlosen Testkanal.</p></li>
+        <li><h4>Text setzen</h4>
+          <p>Setze den Slack-Text auf <code>{{ $json.publish_text }}</code>.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Node aus. Im Testkanal sollte der freigegebene Entwurf erscheinen.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Echte Veröffentlichung später ersetzen</b>
+        Wenn der Ablauf stabil ist, ersetzt du Slack durch WordPress, Webflow, einen CMS-Webhook oder eine Social-Media-Node.
+        Die Sicherheitslogik davor bleibt gleich: nur <code>approved</code>, nur ein Item, nach Erfolg Status setzen.
+      </div>
+
+      <h2>Schritt 17 — Status auf <code>published</code> setzen</h2>
+      <ol class="steps">
+        <li><h4>Google-Sheets-Node anhängen</h4>
+          <p>Hänge hinter den Veröffentlichungs-Node einen Google-Sheets-Node.</p></li>
+        <li><h4>Zeile aktualisieren</h4>
+          <p>Finde die Zeile wieder über <code>id = {{ $json.id }}</code>.</p></li>
+        <li><h4>Status setzen</h4>
+          <p>Setze <code>status</code> auf <code>published</code> und <code>published_at</code> auf
+            <code>{{ $json.published_at }}</code>.</p></li>
+        <li><h4>Audit-Hinweis ergänzen</h4>
+          <p>Schreibe optional <code>{{ $json.audit_note }}</code> in eine zusätzliche Spalte <code>audit_note</code>.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Erfolg erst nach dem letzten Schritt</b>
+        Setze <code>published</code> erst, nachdem die Veröffentlichung erfolgreich war. Wenn du den Status vorher setzt und
+        der letzte Node scheitert, sieht das Sheet fälschlich fertig aus.
+      </div>
+
+      <h2>Schritt 18 — Fehlerzweige ergänzen</h2>
+      <p>Ein Großprojekt ohne Fehlerpfad ist nur eine Demo. Du brauchst mindestens zwei Schutzmechanismen.</p>
+
+      <table class="btable">
+        <thead><tr><th>Risiko</th><th>Schutz</th></tr></thead>
+        <tbody>
+          <tr><td>KI liefert kein JSON</td><td><code>parse_error</code> prüfen und Status auf <code>needs_revision</code> setzen.</td></tr>
+          <tr><td>Leerer Publish-Text</td><td>IF-Node vor Veröffentlichung, Fehlerkanal statt Slack/CMS.</td></tr>
+          <tr><td>HTTP-Recherche schlägt fehl</td><td>Retry sparsam nutzen und einen Hinweis ins Sheet schreiben.</td></tr>
+          <tr><td>Doppelte Veröffentlichung</td><td>Nach Erfolg sofort <code>published</code> setzen und nur <code>approved</code> lesen.</td></tr>
+        </tbody>
+      </table>
+
+      <ol class="steps">
+        <li><h4>IF nach <code>Entwurf prüfen</code> einbauen</h4>
+          <p>Prüfe <code>{{ $json.parse_error }}</code> <strong>equals</strong> <code>false</code>. Nur der true-Ausgang darf zum
+            Sheet-Update mit Status <code>review</code> gehen.</p></li>
+        <li><h4>False-Ausgang behandeln</h4>
+          <p>Schicke den false-Ausgang in einen Sheet-Update-Node, der Status <code>needs_revision</code> setzt und den
+            Fehler in <code>review_notes</code> schreibt.</p></li>
+        <li><h4>Fehlerkanal informieren</h4>
+          <p>Hänge danach Slack an, z. B. <code>#automation-errors-test</code>.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Nicht alles mit Retry lösen</b>
+        Retry hilft bei temporären Netzwerkfehlern. Retry hilft nicht bei schlechtem Prompt, leerem Entwurf oder falschem
+        Statusmodell. Diese Fehler müssen sichtbar werden.
+      </div>
+
+      <h2>Schritt 19 — Schedule erst nach dem End-to-End-Test</h2>
+      <p>Wenn beide Workflows manuell funktionieren, kannst du sie zeitgesteuert starten.</p>
+
+      <ol class="steps">
+        <li><h4>Workflow 1 auf Schedule umstellen</h4>
+          <p>Ersetze den Manual Trigger durch einen Schedule Trigger, z. B. werktags um 09:00 Uhr. Lass das Limit zunächst
+            bei <code>1</code>.</p></li>
+        <li><h4>Workflow 2 auf Schedule umstellen</h4>
+          <p>Starte den Publish-Workflow später, z. B. werktags um 15:00 Uhr. So bleibt Zeit für Review.</p></li>
+        <li><h4>Aktivieren</h4>
+          <p>Speichere beide Workflows und schalte sie erst aktiv, wenn der manuelle Test vollständig war.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:660px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">⏰</span><b>Draft-Schedule</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Trigger Interval</label><div class="n8n-select">Days <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Hour</label><input class="n8n-input" value="09"></div>
+                  <div class="row"><label>Minute</label><input class="n8n-input" value="00"></div>
+                  <div class="row"><label>Timezone</label><input class="n8n-input" value="Europe/Berlin"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 19.6</span>Ein Schedule kommt erst am Ende. Vorher testest du manuell.</figcaption>
+      </figure>
+
+      <h2>Schritt 20 — Gesamttest mit drei Fällen</h2>
+      <ol class="steps">
+        <li><h4>Normalfall testen</h4>
+          <p>Eine Zeile steht auf <code>ready</code>. Erwartung: Workflow 1 setzt <code>review</code>, du setzt
+            <code>approved</code>, Workflow 2 setzt <code>published</code>.</p></li>
+        <li><h4>Nicht-freigegebene Zeile testen</h4>
+          <p>Eine Zeile steht auf <code>idea</code> oder <code>needs_revision</code>. Erwartung: Kein Workflow verarbeitet sie.</p></li>
+        <li><h4>Fehlerfall testen</h4>
+          <p>Manipuliere testweise den Agent-Prompt so, dass kein JSON zurückkommt. Erwartung: Status
+            <code>needs_revision</code>, keine Veröffentlichung.</p></li>
+        <li><h4>Executions prüfen</h4>
+          <p>Öffne die Ausführungshistorie beider Workflows. Prüfe, wie viele Items an jedem Node ankamen.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Der wichtigste Test ist der Nicht-Lauf</b>
+        Bei Automatisierung ist nicht nur wichtig, dass der richtige Fall läuft. Genauso wichtig ist, dass unfertige,
+        fehlerhafte oder nicht freigegebene Fälle <strong>nicht</strong> laufen.
+      </div>
+
+      <h2>Sinnvolle Erweiterungen</h2>
+      <table class="btable">
+        <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
+        <tbody>
+          <tr><td>Google Docs statt Sheet-Text</td><td>Nach dem Entwurf ein Dokument erstellen und den Link ins Sheet schreiben.</td></tr>
+          <tr><td>CMS-Veröffentlichung</td><td>Slack-Publish durch WordPress, Webflow oder einen eigenen CMS-Webhook ersetzen.</td></tr>
+          <tr><td>Mehrere Formate</td><td>Aus demselben Briefing LinkedIn-Post, Newsletter-Teaser und Blog-Outline erzeugen.</td></tr>
+          <tr><td>Redaktionskalender</td><td>Spalte <code>publish_date</code> ergänzen und im Publish-Workflow prüfen.</td></tr>
+          <tr><td>Qualitätscheck</td><td>Vor dem Review einen zweiten KI-Schritt als Kritiker einsetzen, aber nie als alleinige Freigabe.</td></tr>
+          <tr><td>Sub-Workflows</td><td>Später wiederkehrende Bausteine wie Slack-Fehlermeldung auslagern.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Warum besteht die Pipeline aus zwei Workflows statt aus einem einzigen langen Ablauf?</li>
+          <li>Warum ist <code>approved</code> ein besseres Freigabesignal als eine Slack-Nachricht?</li>
+          <li>Warum wird pro Testlauf nur ein Item verarbeitet?</li>
+          <li>Warum darf <code>published</code> erst nach dem Veröffentlichungs-Node gesetzt werden?</li>
+          <li>Welche drei Fälle musst du testen, bevor ein Schedule aktiv wird?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Weil menschliche Prüfung Zeit braucht und ein Statusfeld den Prozess sauber unterbricht. ·
+        2) Weil <code>approved</code> maschinenlesbar und eindeutig ist. ·
+        3) Damit Fehler, Kosten und versehentliche Massenläufe begrenzt bleiben. ·
+        4) Weil sonst ein gescheiterter Publish-Schritt als Erfolg im Sheet steht. ·
+        5) Normalfall, nicht freigegebene Zeile, Fehlerfall.
+      </div>
+
+      <p>Du hast jetzt eine echte End-to-End-Pipeline gebaut: mit Eingang, Verarbeitung, KI-Schritt, Review-Gate,
+        Veröffentlichung und Audit-Spur. Das ist die Form, in der n8n in produktiven Prozessen stark wird: nicht als
+        magischer Ein-Klick-Automat, sondern als klar kontrollierte Kette kleiner, prüfbarer Schritte.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>
