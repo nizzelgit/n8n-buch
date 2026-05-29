@@ -44,7 +44,14 @@ n8n-buch/
 │   ├── 03-oberflaeche.html
 │   ├── 04-erster-workflow.html
 │   ├── 05-kernkonzepte.html
-│   └── 06-expressions.html
+│   ├── 06-expressions.html
+│   ├── 07-trigger.html
+│   ├── 08-http.html
+│   ├── 09-transform.html
+│   ├── 10-flow.html
+│   ├── 11-fehler.html
+│   ├── 12-credentials.html
+│   └── 13-projekt-wetter.html
 ├── assets/
 │   ├── css/
 │   │   ├── book.css            # Layout, Typografie, didaktische Bausteine, Responsiv
@@ -135,6 +142,11 @@ Beim Erstellen neuer Abbildungen diese Bausteine nutzen (keine neuen Ad-hoc-Styl
 - **Node-Detailansicht (NDV):** `.ndv` → `.ndv__bar` + `.ndv__cols` (3×) → `.ndv-panel`
   (`.ndv-params` für Mitte), Felder: `.n8n-field`/`.n8n-input`(`.is-expr`)/`.n8n-select`,
   Reiter `.ndv-fxtab` (Fest/Expression), Ausgabe: `.ndv-viewtabs` + `.n8n-table`/`.n8n-json`/`.n8n-schema`.
+- **Ausdruckseditor (Expression):** Live-Ergebnis direkt unter einem `.n8n-input.is-expr` über
+  `.n8n-expr-result` (mit `.lbl` „Ergebnis“; Fehler = `.is-error`). Größerer Editor: `.n8n-expr` →
+  `.n8n-expr__head` + `.n8n-expr__code` + `.n8n-expr__result`. Resolvable-Platzhalter im Code mit
+  `.expr-tok` umranden (Variablen `$json`/`$now` darin als `.expr-var`). Autovervollständigung:
+  `.n8n-autocomplete` mit `.ac`-Zeilen (`.nm`/`.desc`/`.ty`, aktive Zeile `.is-active`).
 - **Node-Auswahl-Panel:** `.nodes-panel` mit `.nodes-panel__search` und `.nodes-panel__item`.
 
 ### Pfeilspitzen-Marker (wichtig!)
@@ -170,16 +182,19 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 
 ## 9. Git-Konventionen
 
-- Entwickelt wird auf `claude/n-acht-n-workflows-guide-EWQxg`.
+- Entwickelt wird auf dem vom Harness zugewiesenen Feature-Branch. **Aktuell:**
+  `claude/optimistic-shannon-TJ1d8`. (Der Name kann je Session wechseln — dann hier **und** in
+  `.github/workflows/pages.yml` anpassen.)
 - **`main` und der Feature-Branch werden synchron gehalten** (beide enthalten denselben Stand),
   damit eine frisch gestartete Session den kompletten Stand vorfindet — egal welcher Branch als
   Default ausgecheckt wird. Nach dem Commit also **beide** Branches pushen:
   ```bash
   node build.js
   git add -A && git commit -m "…"
-  git push origin claude/n-acht-n-workflows-guide-EWQxg
+  git push origin claude/optimistic-shannon-TJ1d8
   git branch -f main HEAD && git push origin main
   ```
+  Hinweis: In Web-Sessions ist ein Push auf `main` ggf. erst nach ausdrücklicher Freigabe erlaubt.
 - Commit-Messages auf Deutsch, beschreibend, im Imperativ/Sachstil.
 - `node build.js` (Bundle aktualisieren) **vor** dem Commit, wenn sich Inhalt/CSS/JS geändert hat
   (reine `CLAUDE.md`-Änderungen brauchen keinen Rebuild).
@@ -198,12 +213,25 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `03-oberflaeche` — Oberflächen-Tour (visuell dicht)
 - `04-erster-workflow` — **Referenzkapitel für den Detailgrad** (47 Einzelschritte)
 - `05-kernkonzepte` — Items, JSON, Datenfluss, Expressions-Einstieg
-- `06-expressions` — Expressions vertieft: Pfade, Texte, Zahlen, Bedingungen, Datum, Debugging
+- `06-expressions` — Ausdruckseditor, Variablen-Werkzeugkasten, Text/Zahlen/Datum, Bedingungen, Fehlertabelle
+- `07-trigger` — Trigger-Nodes: Manual/Schedule/Webhook, Aktiv-Schalter, Test- vs. Production-URL
+- `08-http` — HTTP-Request-Node: Methoden, Query/Headers/Body, Import cURL, Fehlercodes, POST-Übung
+- `09-transform` — Set (Edit Fields), Filter, Code (2 Modi), weitere Transform-Nodes, Mini-Übung
+- `10-flow` — IF (2 Ausgänge), Switch, Merge (Append/Combine), Loops (selten nötig!), Verzweigungs-Übung
+- `11-fehler` — Retry On Fail, Fehlerausgang (On Error), globaler Error-Workflow (Error Trigger), Stop and Error
+- `12-credentials` — Credentials sicher anlegen, vordefiniert vs. generisch (Header Auth), OAuth, Sicherheits-Gewohnheiten
+- `13-projekt-wetter` — Projekt 1: täglicher Wetter-Report per Telegram (Schedule → HTTP → Set → Telegram)
+
+> **Teil 0, 1 und 2 sind vollständig (Kap. 00–12). Teil 3 ist gestartet (Kap. 13).**
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `07-trigger` — Trigger-Nodes (Manual, Schedule, Webhook)
-2. `13-projekt-wetter` — erstes vollständiges Projekt (großer Praxis-Sprung)
-3. danach Bausteine 08–12, weitere Projekte 14–19, KI 20–21, Betrieb 22–25, Anhänge A–D
+1. `14-projekt-form` — Formular → Sheets → Slack (zweites Praxisprojekt)
+2. weitere Projekte `15`–`19` (steigende Komplexität)
+3. danach KI 20–21, Betrieb 22–25, Anhänge A–D
+
+**Hinweis zu Projekt-Kapiteln (Teil 3):** Sie sind länger/umfangreicher als die Bausteine. Sie sollten die in
+Kap. 4 etablierte Schritt-für-Schritt-Tiefe haben und auf den fertigen Bausteinen (07–12) aufbauen, statt
+deren Grundlagen zu wiederholen (stattdessen verlinken/verweisen).
 
 **Beim Ausbau zwingend:** Detailgrad + Didaktik-Bausteine aus Abschnitt 5 einhalten, danach
 `node build.js`, dann **diese Datei (Abschnitt 10 + 11) aktualisieren**, dann committen/pushen.
@@ -212,12 +240,72 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 
 ## 11. Logbuch (neuester Eintrag oben)
 
-### 2026-05-29 — Kapitel 6 Expressions ergänzt
-- `06-expressions` angelegt und im Manifest auf `ready` gesetzt.
-- Inhalte: Ausdruckseditor, `Fest` vs. `Expression`, `$json`-Pfade, Sonderfeldnamen, Textbau,
-  Zahlen/Rundung, Bedingungen, Ersatzwerte, Datum, Zugriff auf frühere Nodes und Debugging-Methode.
-- Als Nächstes sinnvoll: `07-trigger` als Baustein-Kapitel; alternativ `13-projekt-wetter`, wenn der
-  Fokus stärker auf Praxisprojekten liegen soll.
+### 2026-05-29 — Projekt 1 Wetter-Report ergänzt
+- **Kapitel 13 „Täglicher Wetter-Report per Telegram"** (`ready`): erstes End-to-End-Projekt mit
+  Schedule-Trigger, Open-Meteo-HTTP-Request, Edit-Fields-Reporttext, Telegram-Credential, Telegram-Versand,
+  manuellem Gesamttest, Aktivierung und Varianten.
+- `node build.js` → **15 Kapitel** im Bundle.
+- Wichtiger Session-Befund: Der zuerst ausgecheckte Branch `claude/n-acht-n-workflows-guide-EWQxg` war veraltet;
+  `origin/main` enthielt bereits Kap. 06–12. Weiterarbeit wurde daher auf aktuellem `main` fortgesetzt.
+- Nächster offener Schritt: `14-projekt-form` (Formular → Sheets → Slack).
+
+### 2026-05-29 — Stand auf `main` konsolidiert, Doku aufgefrischt
+- **`main` trägt den vollständigen Stand:** `HEAD` = `origin/main` = `origin/claude/optimistic-shannon-TJ1d8`
+  (identischer Commit; Differenz 0/0). Alle **14 Kapitel (00–12)** liegen auf `main`. Es war nichts gesondert zu
+  „mergen", weil `main` nach jedem Commit gespiegelt wird (vgl. §9) — der Merge ist damit faktisch laufend erledigt.
+- Eine frisch gestartete Session findet also **egal auf welchem Branch** den kompletten Stand vor.
+- Diese CLAUDE.md auf Wunsch aktualisiert (dieser Eintrag); §10-Status und §9-Konventionen sind aktuell.
+- Nächster offener Block unverändert: **Teil 3 (Projekte) ab `13-projekt-wetter`**.
+
+### 2026-05-29 — Teil 2 abgeschlossen: Kapitel 11 (Fehler) & 12 (Credentials)
+- **Kapitel 11 „Fehlerbehandlung & Error-Workflows"** (`ready`): drei Ebenen — Retry On Fail (Settings-Reiter),
+  Fehlerausgang via „On Error → Continue (using error output)" (Canvas mit zweitem roten Ausgang, `$json.error`),
+  globaler Error-Workflow (Error Trigger + Workflow-Settings „Error Workflow"), „Stop and Error", Mini-Übung.
+- **Kapitel 12 „Credentials & Authentifizierung"** (`ready`): Credential-Konzept (verschlüsselt, getrennt vom
+  Workflow), vordefiniert vs. generisch (Header Auth), Anlegen Schritt-für-Schritt, OAuth-Klick-Login,
+  Sicherheits-Gewohnheiten, Mini-Übung (Header-Token), Selbsttest.
+- `node build.js` → **14 Kapitel** im Bundle. Tag-Balance & Escaping geprüft.
+- **Meilenstein: Teil 0+1+2 komplett (Kap. 00–12).** Nächster großer Block: Projekte (Teil 3) ab `13-projekt-wetter`.
+
+### 2026-05-29 — Kapitel 9 (Transform) & 10 (Flow-Logik)
+- **Kapitel 9 „Daten transformieren: Set, Code & Filter"** (`ready`): Rangfolge (erst no-code, dann Code),
+  Edit Fields/Set (Felder, „Include Other Input Fields"), Filter (Conditions, ein Ausgang), Code (2 Modi:
+  All Items vs. Each Item, return-Form), weitere Transform-Nodes (Sort/Limit/Remove Duplicates/Aggregate/
+  Split Out), Mini-Übung (Wetter eindampfen), Selbsttest.
+- **Kapitel 10 „Flow-Logik: IF, Switch, Merge & Loops"** (`ready`): IF (2 Ausgänge true/false, Canvas-Abb.
+  mit zwei `.ep.out`), Switch (Rules/Expression), Merge (Append/Combine, Canvas mit zwei `.ep.in`), Loops
+  (Loop Over Items mit Rücklinie — Betonung: dank „pro Item" meist unnötig), IF-Verzweigungs-Übung, Selbsttest.
+- Mehrfach-Endpunkte an Nodes per Inline-`style="top:…"` auf `.ep.out`/`.ep.in` gelöst (zwei/mehr Punkte).
+- `node build.js` → **12 Kapitel** im Bundle. Tag-Balance, `&gt;`/`&lt;`-Escaping geprüft.
+- **Teil 2 fast komplett** — es fehlen nur noch `11-fehler` und `12-credentials`.
+
+### 2026-05-29 — Teil 2 gestartet: Kapitel 7 (Trigger) & 8 (HTTP)
+- **Kapitel 7 „Trigger-Nodes: Manual, Schedule, Webhook"** (`ready`): Trigger-Form, Manual als Bau-Werkzeug,
+  Schedule (Intervalle/Cron, Zeitzone), Webhook (Test- vs. Production-URL, „Listen for test event",
+  `$json.query`/`.body`/`.headers`), der **Aktiv**-Schalter (Topbar-Toggle), Überblickstabelle, Mini-Übung
+  (Wetter-Workflow von Manual auf täglich-8-Uhr umstellen + aktivieren), Selbsttest.
+- **Kapitel 8 „Der HTTP-Request-Node"** (`ready`): Aufbau eines Requests, Methoden GET/POST/PUT/DELETE,
+  Query-Parameter als Name/Wert-Liste, Body (JSON) mit Expressions, Zahl-vs-Text-Falle, Response-Optionen
+  (Autodetect, Split Into Items), Auth-Anriss (Verweis Kap. 12), Fehlercode-Tabelle (401/404/429/400/500),
+  Import-cURL-Tipp, Mini-Übung (POST an postman-echo.com), Selbsttest.
+- `node build.js` → **10 Kapitel** im Bundle. Tag-Balance & `&gt;`-Escaping für beide geprüft.
+- Beide Kapitel halten den Referenz-Detailgrad (Kap. 4/6) ein. Weiter: `09-transform` (Outro von Kap. 8 dorthin).
+- Pages-Hinweis: Live-Deploy via `github.io` hängt noch an der Repo-Einstellung *Settings → Pages → Source:
+  „GitHub Actions"* (vom Nutzer zu setzen). Vorschau zwischenzeitlich über raw.githack.com möglich.
+
+### 2026-05-29 — Kapitel 6 (Expressions) + neue Ausdruckseditor-Komponente
+- **Kapitel 6 „Expressions & der Ausdruckseditor"** geschrieben (status `ready`): Fest/Expression-Schalter,
+  Aufbau einer Expression, Variablen-Werkzeugkasten (`$json`, `$('Node')`, `$now`, `$today`, `$input`, …),
+  Text/Zahlen/Datum (Luxon: `toFormat`, `plus`/`minus`, `toDateTime`), Entscheidungen (Ternary, `||`, `?.`),
+  Autovervollständigung + Drag-and-drop, Mini-Übung am Wetter-Workflow aus Kap. 4, Fehlertabelle, Selbsttest.
+- **Neue, wiederverwendbare UI-Komponente** in `n8n-ui.css` (in §6 dokumentiert): der Ausdruckseditor —
+  `.n8n-expr-result` (Live-Ergebnis), `.n8n-expr` (`__head`/`__code`/`__result`), `.expr-tok`/`.expr-var`
+  (Resolvable-Hervorhebung), `.n8n-autocomplete` (Vorschlagsliste).
+- `node build.js` → **8 Kapitel** im Bundle. Tag-Balance (div/figure/table/ol/ul) & `&gt;`-Escaping geprüft.
+- **Branch umgestellt:** Diese Session läuft auf `claude/optimistic-shannon-TJ1d8`. §9 und der
+  Pages-Trigger in `.github/workflows/pages.yml` wurden auf diesen Namen umgestellt (vorher
+  `claude/n-acht-n-workflows-guide-EWQxg`). `main` wurde nach Freigabe wieder synchronisiert.
+- Weiter: `07-trigger` — das Outro von Kap. 6 führt bereits dorthin.
 
 ### 2026-05-29 — main-Branch angelegt, Branches synchron, Pages-Trigger erweitert
 - Ursache „keine Commits“ in frischer Session: es gab nur den Feature-Branch, **kein `main`**.

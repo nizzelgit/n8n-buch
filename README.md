@@ -36,7 +36,14 @@ n8n-buch/
 │   ├── 03-oberflaeche.html     # Oberflächen-Tour (visuell sehr dicht)
 │   ├── 04-erster-workflow.html # erstes Projekt, klick-für-klick
 │   ├── 05-kernkonzepte.html    # Items, JSON, Datenfluss, Expressions
-│   └── 06-expressions.html     # Expressions & Ausdruckseditor
+│   ├── 06-expressions.html     # Ausdruckseditor
+│   ├── 07-trigger.html         # Trigger-Nodes
+│   ├── 08-http.html            # HTTP-Request-Node
+│   ├── 09-transform.html       # Daten transformieren
+│   ├── 10-flow.html            # IF, Switch, Merge, Loops
+│   ├── 11-fehler.html          # Fehlerbehandlung
+│   ├── 12-credentials.html     # Credentials & Authentifizierung
+│   └── 13-projekt-wetter.html  # Projekt: Wetter-Report per Telegram
 └── assets/
     ├── css/
     │   ├── book.css            # Layout, Typografie, didaktische Elemente
@@ -51,10 +58,9 @@ n8n-buch/
 Das vollständige Inhaltsverzeichnis (25+ Kapitel über 6 Teile) lebt in
 `assets/js/chapters.js`. Aktueller Ausbaustand:
 
-- **Fertig (Teil 0 & Grundlagen):** Vorwort, das 80/20-Kapitel, Was ist n8n,
-  Installation, Oberfläche im Detail, erster Workflow, Kernkonzepte, Expressions vertieft.
-- **Geplant (markiert „bald“):** alle Bausteine im Detail, sechs wachsende Praxis-Projekte,
-  KI-Agenten & RAG, Betrieb/Skalierung sowie Anhänge.
+- **Fertig:** Teil 0, Teil 1, Teil 2 sowie Projekt 1 (täglicher Wetter-Report per Telegram).
+- **Geplant (markiert „bald“):** weitere Praxis-Projekte, KI-Agenten & RAG,
+  Betrieb/Skalierung sowie Anhänge.
 
 ## Neue Kapitel hinzufügen
 

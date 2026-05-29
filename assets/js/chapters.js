@@ -24,24 +24,24 @@ window.BOOK = {
         { num: "3", slug: "03-oberflaeche",     title: "Die Oberfläche im Detail", status: "ready", mins: 22 },
         { num: "4", slug: "04-erster-workflow", title: "Dein erster Workflow — Schritt für Schritt", status: "ready", mins: 25 },
         { num: "5", slug: "05-kernkonzepte",    title: "Kernkonzepte: Nodes, Items & Datenfluss", status: "ready", mins: 24 },
-        { num: "6", slug: "06-expressions",     title: "Expressions & der Ausdruckseditor", status: "ready", mins: 26 }
+        { num: "6", slug: "06-expressions",     title: "Expressions & der Ausdruckseditor", status: "ready", mins: 20 }
       ]
     },
     {
       part: "Teil 2 · Bausteine im Detail",
       chapters: [
-        { num: "7",  slug: "07-trigger",        title: "Trigger-Nodes (Manual, Schedule, Webhook)", status: "soon", mins: 18 },
-        { num: "8",  slug: "08-http",           title: "Der HTTP-Request-Node: jede API ansprechen", status: "soon", mins: 22 },
-        { num: "9",  slug: "09-transform",      title: "Daten transformieren (Set, Code, Filter)", status: "soon", mins: 20 },
-        { num: "10", slug: "10-flow",           title: "Flow-Logik: IF, Switch, Merge, Loops", status: "soon", mins: 22 },
-        { num: "11", slug: "11-fehler",         title: "Fehlerbehandlung & Error-Workflows", status: "soon", mins: 16 },
-        { num: "12", slug: "12-credentials",    title: "Credentials & Authentifizierung", status: "soon", mins: 15 }
+        { num: "7",  slug: "07-trigger",        title: "Trigger-Nodes (Manual, Schedule, Webhook)", status: "ready", mins: 18 },
+        { num: "8",  slug: "08-http",           title: "Der HTTP-Request-Node: jede API ansprechen", status: "ready", mins: 22 },
+        { num: "9",  slug: "09-transform",      title: "Daten transformieren (Set, Code, Filter)", status: "ready", mins: 20 },
+        { num: "10", slug: "10-flow",           title: "Flow-Logik: IF, Switch, Merge, Loops", status: "ready", mins: 22 },
+        { num: "11", slug: "11-fehler",         title: "Fehlerbehandlung & Error-Workflows", status: "ready", mins: 16 },
+        { num: "12", slug: "12-credentials",    title: "Credentials & Authentifizierung", status: "ready", mins: 15 }
       ]
     },
     {
       part: "Teil 3 · Projekte (klein → groß)",
       chapters: [
-        { num: "13", slug: "13-projekt-wetter", title: "Projekt 1: Täglicher Report per Telegram", status: "soon", mins: 30 },
+        { num: "13", slug: "13-projekt-wetter", title: "Projekt 1: Täglicher Report per Telegram", status: "ready", mins: 36 },
         { num: "14", slug: "14-projekt-form",   title: "Projekt 2: Formular → Sheets → Slack", status: "soon", mins: 35 },
         { num: "15", slug: "15-projekt-news",   title: "Projekt 3: News-Aggregator mit Filter", status: "soon", mins: 35 },
         { num: "16", slug: "16-projekt-leads",  title: "Projekt 4: Lead-Routing vom Webhook ins CRM", status: "soon", mins: 40 },

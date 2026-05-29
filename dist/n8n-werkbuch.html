@@ -786,6 +786,75 @@ ol.steps > li p { font-size: 15.5px; }
 .n8n-schema .dot { width:7px;height:7px;border-radius:2px;background:#9aa0ad; }
 .n8n-schema .type { color:var(--n8n-text-faint); font-size:10.5px; margin-left:auto; }
 
+/* --------------------------------------------------------------------------
+   Ausdruckseditor (Expression editor)
+   In n8n bekommt ein Feld im Modus "Expression" eine Live-Vorschau des
+   ausgewerteten Resultats. Diese Bausteine bilden das nach – sowohl die
+   kleine Ergebniszeile unter einem Feld als auch den größeren Editor.
+   -------------------------------------------------------------------------- */
+
+/* Kleine Live-Ergebniszeile direkt unter einem .n8n-input.is-expr */
+.n8n-expr-result {
+  margin-top:6px; display:flex; gap:9px; align-items:baseline;
+  font-family:var(--n8n-mono); font-size:11.5px; color:var(--n8n-text);
+  background:#f2faf4; border:1px solid #cdeacd; border-radius:6px;
+  padding:6px 10px; word-break:break-word;
+}
+.n8n-expr-result .lbl {
+  font-family:var(--n8n-font); font-size:10px; font-weight:700; flex:none;
+  text-transform:uppercase; letter-spacing:.04em; color:var(--n8n-success);
+}
+.n8n-expr-result.is-error { background:#fdeded; border-color:#f4c0c0; }
+.n8n-expr-result.is-error .lbl { color:var(--n8n-danger); }
+
+/* Größerer Ausdruckseditor: oben der Code (mit {{ … }}-Resolvables),
+   unten die Live-Auswertung. */
+.n8n-expr {
+  border:1px solid #c7c9ee; border-radius:8px; overflow:hidden;
+  font-family:var(--n8n-mono); font-size:12.5px; background:#fff;
+}
+.n8n-expr__head {
+  display:flex; align-items:center; gap:8px; padding:7px 11px;
+  background:#f6f7ff; border-bottom:1px solid #e6e7f6;
+  font-family:var(--n8n-font); font-size:11.5px; font-weight:600; color:#5b5fae;
+}
+.n8n-expr__head .ic { font-size:13px; }
+.n8n-expr__code {
+  padding:11px 12px; background:#fbfbff; color:#3b3f8f;
+  line-height:1.75; white-space:pre-wrap; word-break:break-word;
+}
+.n8n-expr__result {
+  border-top:1px solid #edeef8; padding:9px 12px; background:#f2faf4;
+  display:flex; gap:9px; align-items:baseline; font-size:12px; color:var(--n8n-text);
+  white-space:pre-wrap; word-break:break-word;
+}
+.n8n-expr__result .lbl {
+  font-family:var(--n8n-font); font-size:10px; font-weight:700; flex:none;
+  text-transform:uppercase; letter-spacing:.04em; color:var(--n8n-success);
+}
+.n8n-expr__result.is-error { background:#fdeded; }
+.n8n-expr__result.is-error .lbl { color:var(--n8n-danger); }
+
+/* Resolvable-Token: hebt einen {{ … }}-Ausdruck im Code hervor (wie n8n) */
+.expr-tok { background:#ece9ff; border-radius:4px; padding:0 3px; }
+.expr-var { color:#7c3fae; font-weight:500; }   /* $json, $now, $('…') … */
+
+/* Autovervollständigung (erscheint im Editor beim Tippen von z. B. $json.) */
+.n8n-autocomplete {
+  width:300px; max-width:100%; background:#fff;
+  border:1px solid var(--n8n-border); border-radius:8px; overflow:hidden;
+  box-shadow:var(--n8n-shadow-lg); font-family:var(--n8n-mono); font-size:12px;
+}
+.n8n-autocomplete .ac {
+  display:flex; align-items:center; gap:10px; padding:7px 12px;
+  border-top:1px solid #f0f1f4;
+}
+.n8n-autocomplete .ac:first-child { border-top:0; }
+.n8n-autocomplete .ac.is-active { background:var(--n8n-primary-tint); }
+.n8n-autocomplete .ac .nm { color:#9b3d8a; }
+.n8n-autocomplete .ac .desc { color:var(--n8n-text-light); font-family:var(--n8n-font); font-size:11px; }
+.n8n-autocomplete .ac .ty { margin-left:auto; color:var(--n8n-text-faint); font-size:10.5px; font-family:var(--n8n-font); }
+
 /* responsiv: NDV-Spalten auf schmalen Screens stapeln */
 @media (max-width: 720px) {
   .ndv__cols { grid-template-columns: 1fr; }
@@ -861,28 +930,28 @@ ol.steps > li p { font-size: 15.5px; }
       </a><a class="sb-link" data-title="expressions & der ausdruckseditor"
       href="#06-expressions" data-slug="06-expressions">
       <span class="num">6</span><span>Expressions & der Ausdruckseditor</span>
-      </a><div class="sb-part">Teil 2 · Bausteine im Detail</div><a class="sb-link is-soon" data-title="trigger-nodes (manual, schedule, webhook)"
-      href="javascript:void(0)" data-slug="07-trigger">
+      </a><div class="sb-part">Teil 2 · Bausteine im Detail</div><a class="sb-link" data-title="trigger-nodes (manual, schedule, webhook)"
+      href="#07-trigger" data-slug="07-trigger">
       <span class="num">7</span><span>Trigger-Nodes (Manual, Schedule, Webhook)</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="der http-request-node: jede api ansprechen"
-      href="javascript:void(0)" data-slug="08-http">
+      </a><a class="sb-link" data-title="der http-request-node: jede api ansprechen"
+      href="#08-http" data-slug="08-http">
       <span class="num">8</span><span>Der HTTP-Request-Node: jede API ansprechen</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="daten transformieren (set, code, filter)"
-      href="javascript:void(0)" data-slug="09-transform">
+      </a><a class="sb-link" data-title="daten transformieren (set, code, filter)"
+      href="#09-transform" data-slug="09-transform">
       <span class="num">9</span><span>Daten transformieren (Set, Code, Filter)</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="flow-logik: if, switch, merge, loops"
-      href="javascript:void(0)" data-slug="10-flow">
+      </a><a class="sb-link" data-title="flow-logik: if, switch, merge, loops"
+      href="#10-flow" data-slug="10-flow">
       <span class="num">10</span><span>Flow-Logik: IF, Switch, Merge, Loops</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="fehlerbehandlung & error-workflows"
-      href="javascript:void(0)" data-slug="11-fehler">
+      </a><a class="sb-link" data-title="fehlerbehandlung & error-workflows"
+      href="#11-fehler" data-slug="11-fehler">
       <span class="num">11</span><span>Fehlerbehandlung & Error-Workflows</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="credentials & authentifizierung"
-      href="javascript:void(0)" data-slug="12-credentials">
+      </a><a class="sb-link" data-title="credentials & authentifizierung"
+      href="#12-credentials" data-slug="12-credentials">
       <span class="num">12</span><span>Credentials & Authentifizierung</span>
-      <span class="soon">bald</span></a><div class="sb-part">Teil 3 · Projekte (klein → groß)</div><a class="sb-link is-soon" data-title="projekt 1: täglicher report per telegram"
-      href="javascript:void(0)" data-slug="13-projekt-wetter">
+      </a><div class="sb-part">Teil 3 · Projekte (klein → groß)</div><a class="sb-link" data-title="projekt 1: täglicher report per telegram"
+      href="#13-projekt-wetter" data-slug="13-projekt-wetter">
       <span class="num">13</span><span>Projekt 1: Täglicher Report per Telegram</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="projekt 2: formular → sheets → slack"
+      </a><a class="sb-link is-soon" data-title="projekt 2: formular → sheets → slack"
       href="javascript:void(0)" data-slug="14-projekt-form">
       <span class="num">14</span><span>Projekt 2: Formular → Sheets → Slack</span>
       <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="projekt 3: news-aggregator mit filter"
@@ -964,29 +1033,29 @@ ol.steps > li p { font-size: 15.5px; }
       <span class="mins">⏱ 24 Min</span>
       <span class="pill">lesen</span></a><a class="toc-row" href="#06-expressions">
       <span class="n">6</span><span class="ti">Expressions & der Ausdruckseditor</span>
-      <span class="mins">⏱ 26 Min</span>
-      <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Teil 2 · Bausteine im Detail</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="mins">⏱ 20 Min</span>
+      <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Teil 2 · Bausteine im Detail</h3><div class="toc-list"><a class="toc-row" href="#07-trigger">
       <span class="n">7</span><span class="ti">Trigger-Nodes (Manual, Schedule, Webhook)</span>
       <span class="mins">⏱ 18 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#08-http">
       <span class="n">8</span><span class="ti">Der HTTP-Request-Node: jede API ansprechen</span>
       <span class="mins">⏱ 22 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#09-transform">
       <span class="n">9</span><span class="ti">Daten transformieren (Set, Code, Filter)</span>
       <span class="mins">⏱ 20 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#10-flow">
       <span class="n">10</span><span class="ti">Flow-Logik: IF, Switch, Merge, Loops</span>
       <span class="mins">⏱ 22 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#11-fehler">
       <span class="n">11</span><span class="ti">Fehlerbehandlung & Error-Workflows</span>
       <span class="mins">⏱ 16 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#12-credentials">
       <span class="n">12</span><span class="ti">Credentials & Authentifizierung</span>
       <span class="mins">⏱ 15 Min</span>
-      <span class="pill">bald</span></a></div></div><div class="toc-part"><h3>Teil 3 · Projekte (klein → groß)</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Teil 3 · Projekte (klein → groß)</h3><div class="toc-list"><a class="toc-row" href="#13-projekt-wetter">
       <span class="n">13</span><span class="ti">Projekt 1: Täglicher Report per Telegram</span>
-      <span class="mins">⏱ 30 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="mins">⏱ 36 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
       <span class="n">14</span><span class="ti">Projekt 2: Formular → Sheets → Slack</span>
       <span class="mins">⏱ 35 Min</span>
       <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
@@ -2647,382 +2716,2193 @@ docker run -it --rm <span class="ky">\</span>
 
       <div class="chap-eyebrow"><span class="knum">6</span> Grundlagen</div>
       <h1 class="chap-title">Expressions & der Ausdruckseditor</h1>
-      <p class="chap-lede">Expressions sind die Brücke zwischen „ich habe Daten“ und „ich brauche genau diesen Wert
-        in genau dieser Form“. In diesem Kapitel lernst du die wenigen Muster, die du ständig brauchst:
-        Felder lesen, Texte bauen, rechnen, Datum formatieren, Bedingungen schreiben und Fehler erkennen.</p>
+      <p class="chap-lede">In Kapitel 5 hast du Expressions kennengelernt — jetzt machen wir daraus dein schärfstes Werkzeug.
+        Texte zusammenbauen, Zahlen runden, mit Datum und Uhrzeit rechnen, Entscheidungen treffen: All das passiert in
+        diesen kleinen <code>{{ }}</code>-Klammern. Und du lernst den <strong>Ausdruckseditor</strong> kennen, der dir live
+        zeigt, was herauskommt.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 26 Minuten</span>
+        <span>⏱ ca. 20 Minuten</span>
         <span>🎯 Niveau: Einstieg → Mittel</span>
-        <span>🧩 Voraussetzung: Kapitel 5 (Items & JSON)</span>
+        <span>🧩 Voraussetzung: Kapitel 5 (Items &amp; <code>$json</code>)</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4>📋 Was du mitbringen solltest</h4>
         <ul>
-          <li>Du weißt, was ein Item ist und wie JSON-Felder verschachtelt sind.</li>
-          <li>Du hast den Wetter-Workflow aus Kapitel 4 oder einen ähnlichen Test-Workflow offen.</li>
-          <li>Du brauchst keine JavaScript-Vorkenntnisse. Wir verwenden nur kleine, wiederholbare Bausteine.</li>
+          <li>Das mentale Modell aus Kapitel 5: ein <strong>Item</strong>, das Fach <code>json</code> und der Zugriff über
+            <code>$json.feld</code>.</li>
+          <li>n8n geöffnet. Ideal: der <strong>Wetter-Workflow</strong> aus Kapitel 4 liegt noch da — daran probieren wir alles aus.</li>
+          <li><strong>Keine</strong> JavaScript-Kenntnisse nötig. Wir kopieren Muster und passen sie an — verstehen kommt von selbst.</li>
         </ul>
       </div>
 
-      <div class="callout callout--pareto">
-        <b class="t">⚡ Die 80/20-Regel für Expressions</b>
-        Lerne zuerst diese fünf Formen: <code>{{ $json.feld }}</code>,
-        <code>{{ $json.objekt.feld }}</code>, <code>{{ $('Node').item.json.feld }}</code>,
-        <code>{{ $json.zahl + 1 }}</code> und <code>{{ bedingung ? "ja" : "nein" }}</code>.
-        Damit löst du den Großteil realer n8n-Probleme.
-      </div>
-
-      <h2>Was eine Expression wirklich ist</h2>
-      <p>Eine Expression ist ein kurzer Ausdruck, den n8n erst zur Laufzeit auswertet. Du schreibst also nicht den
-        fertigen Wert hinein, sondern eine Anweisung, wie n8n den Wert aus den aktuellen Daten berechnen soll.</p>
-
-      <table class="btable">
-        <thead><tr><th>Du schreibst</th><th>n8n setzt beim Ausführen ein</th></tr></thead>
-        <tbody>
-          <tr><td><code>Hallo {{ $json.name }}</code></td><td><code>Hallo Anna</code></td></tr>
-          <tr><td><code>{{ $json.preis * 1.19 }}</code></td><td>Preis inklusive 19 % Steuer</td></tr>
-          <tr><td><code>{{ $json.temperatur > 25 ? "warm" : "normal" }}</code></td><td><code>warm</code> oder <code>normal</code></td></tr>
-        </tbody>
-      </table>
-
       <div class="callout callout--info">
-        <b class="t">Fest vs. Expression</b>
-        Ein Feld im Modus <strong>Fest</strong> nimmt deinen Text wörtlich. Ein Feld im Modus
-        <strong>Expression</strong> wertet <code>{{ ... }}</code> aus. Wenn im Ergebnis die Klammern sichtbar bleiben,
-        ist fast immer der falsche Modus aktiv.
+        <b class="t">Kurz aufgefrischt: Was ist eine Expression?</b>
+        Ein Stück Code in doppelten geschweiften Klammern <code>{{ … }}</code>, das n8n beim Ausführen durch einen
+        <em>echten Wert</em> ersetzt. Steht im Feld <code>{{ $json.name }}</code> und im Item ist <code>name = "Anna"</code>,
+        dann verschickt n8n „Anna“. Genau das bauen wir jetzt aus.
       </div>
 
-      <h2>Den Ausdruckseditor öffnen</h2>
-      <p>Wir üben im <strong>Edit Fields (Set)</strong>-Node, weil dort das Prinzip am saubersten sichtbar ist:
-        links kommen Daten hinein, in der Mitte formulierst du den Ausdruck, rechts siehst du sofort das Ergebnis.</p>
+      <h2>Fest oder Expression? Der eine Schalter, der alles entscheidet</h2>
+      <p>Fast jedes Eingabefeld in n8n hat zwei Modi. Du wechselst sie über zwei winzige Reiter direkt über (oder neben) dem Feld:</p>
+      <ul>
+        <li><strong>Fest</strong> (engl. <em>Fixed</em>): Was du tippst, bleibt wörtlich stehen. <code>{{ }}</code> wäre hier nur Text.</li>
+        <li><strong>Expression</strong>: Das Feld wertet <code>{{ }}</code> aus. Es wird einfarbig <strong>bläulich</strong> und in Monospace-Schrift dargestellt.</li>
+      </ul>
 
       <ol class="steps">
-        <li><h4>Workflow mit Testdaten öffnen</h4>
-          <p>Öffne den Wetter-Workflow aus Kapitel 4. Falls du ihn nicht hast, reicht jeder Workflow, bei dem ein Node
-            im Eingang mindestens ein JSON-Feld liefert.</p></li>
-        <li><h4>Edit-Fields-Node öffnen</h4>
-          <p>Doppelklicke den Node, in dem du ein Feld setzt oder umbenennst. Die große Detailansicht öffnet sich.</p></li>
-        <li><h4>Ein Wert-Feld auf Expression stellen</h4>
-          <p>Klicke über dem Wert-Feld auf <strong>Expression</strong>. Das Feld wird leicht hervorgehoben; n8n zeigt
-            meist zusätzlich eine Vorschau des ausgewerteten Ergebnisses.</p></li>
-        <li><h4>Schema links sichtbar machen</h4>
-          <p>Wechsle in der linken Spalte auf <strong>Schema</strong>. Dort stehen die Feldnamen, die du verwenden kannst.</p></li>
+        <li><h4>Ein Feld in den Expression-Modus schalten</h4>
+          <p>Klicke auf den Reiter <strong>Expression</strong> über dem Feld. Der Hintergrund wird leicht blau, die Schrift
+            wechselt zu Monospace — dein Zeichen: „Hier verstehe ich jetzt <code>{{ }}</code>.“</p></li>
+        <li><h4>Was du jetzt zusätzlich siehst</h4>
+          <p>Direkt <strong>unter dem Feld</strong> erscheint eine schmale Zeile <strong>„Ergebnis“</strong>. Sie zeigt dir
+            <em>live</em>, was deine Expression gerade ergibt — noch <em>bevor</em> du den Node ausführst. Das ist dein Sicherheitsnetz.</p></li>
       </ol>
 
       <figure class="figure">
         <div class="frame">
-          <div class="ndv">
+          <div class="ndv" style="max-width:560px; margin:0 auto;">
             <div class="ndv__bar"><span class="ndvic">✏️</span><b>Edit Fields (Set)</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
-            <div class="ndv__cols">
-              <div class="ndv-panel">
-                <div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
-                <div class="ndv-panel__body">
-                  <div class="ndv-viewtabs"><b>Tabelle</b><b>JSON</b><b class="is-active">Schema</b></div>
-                  <div class="n8n-schema" style="margin-top:10px;">
-                    <div class="field"><span class="dot"></span>city <span class="type">string</span></div>
-                    <div class="field"><span class="dot"></span>current.temperature_2m <span class="type">number</span></div>
-                    <div class="field"><span class="dot"></span>current.wind_speed_10m <span class="type">number</span></div>
-                    <div class="field"><span class="dot"></span>current.time <span class="type">string</span></div>
-                  </div>
-                </div>
-              </div>
-              <div class="ndv-panel ndv-params">
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
                 <div class="ndv-panel__body">
-                  <div class="row"><label>Feldname</label><input class="n8n-input" value="bericht"></div>
                   <div class="row">
                     <label>Wert</label>
                     <div class="ndv-fxtab"><b>Fest</b><b class="is-active">Expression</b></div>
-                    <input class="n8n-input is-expr" value="{{ $json.city }}: {{ $json.current.temperature_2m }} °C">
+                    <input class="n8n-input is-expr" value="In Berlin sind es {{ $json.current.temperature_2m }} °C.">
+                    <div class="n8n-expr-result"><span class="lbl">Ergebnis</span><span>In Berlin sind es 17.4 °C.</span></div>
                   </div>
-                </div>
-              </div>
-              <div class="ndv-panel">
-                <div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
-                <div class="ndv-panel__body">
-                  <div class="n8n-json">{
-  <span class="k">"bericht"</span>: <span class="s">"Berlin: 17.4 °C"</span>
-}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 6.1</span>Links siehst du die verfügbaren Felder, in der Mitte steht die
-          Expression, rechts das berechnete Ergebnis. Dieses Dreieck ist dein Arbeitsmodus.</figcaption>
+        <figcaption><span class="fig-tag">Abb. 6.1</span>Der Reiter steht auf <b>Expression</b> (Feld ist bläulich). Unter dem
+          Feld zeigt die <b>Ergebnis</b>-Zeile schon den fertigen Satz mit eingesetzter Temperatur.</figcaption>
       </figure>
 
-      <h2>Muster 1 — Felder sicher lesen</h2>
-      <p>Der häufigste Ausdruck ist ein Pfad durch JSON. Lies ihn immer von links nach rechts:
-        <code>$json</code> ist das aktuelle Item, danach folgt der Feldpfad.</p>
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die Ergebnis-Vorschau ist dein bester Freund</b>
+        Du musst nicht raten und nicht ständig ausführen. Tippe, schau auf „Ergebnis“, korrigiere. Steht dort der erwartete
+        Wert, stimmt deine Expression. Steht dort <code>[undefined]</code> oder ein roter Fehler, weißt du es sofort.
+      </div>
+
+      <h2>Wie eine Expression aufgebaut ist</h2>
+      <p>Eine Expression ist eine Mischung aus <strong>festem Text</strong> und <strong>Platzhaltern</strong>. Alles außerhalb
+        der <code>{{ }}</code> bleibt, wie es ist. Alles <em>innerhalb</em> wird gerechnet, ausgelesen oder umgeformt — und durch
+        das Ergebnis ersetzt. Du darfst beliebig viele Platzhalter in einem Feld mischen:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n-expr" style="max-width:620px; margin:0 auto;">
+            <div class="n8n-expr__head"><span class="ic">𝑓𝑥</span> Ausdruckseditor</div>
+            <div class="n8n-expr__code">🌤️ In Berlin sind es <span class="expr-tok">{{ <span class="expr-var">$json</span>.current.temperature_2m }}</span> °C bei <span class="expr-tok">{{ <span class="expr-var">$json</span>.current.wind_speed_10m }}</span> km/h Wind.</div>
+            <div class="n8n-expr__result"><span class="lbl">Ergebnis</span><span>🌤️ In Berlin sind es 17.4 °C bei 12.3 km/h Wind.</span></div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 6.2</span>Lila hinterlegt sind die <b>Platzhalter</b> (<code>{{ }}</code>), der Rest
+          ist fester Text. n8n ersetzt jeden Platzhalter durch seinen Wert und fügt alles zu einem Satz zusammen.</figcaption>
+      </figure>
+
+      <div class="callout callout--info">
+        <b class="t">Innendrin ist es JavaScript — aber keine Angst</b>
+        Was zwischen den Klammern steht, ist technisch JavaScript. Das heißt <em>nicht</em>, dass du programmieren lernen musst.
+        Du brauchst eine Handvoll Muster — Felder lesen, Texte verbinden, runden, ein <code>?</code> für Entscheidungen. Genau die
+        sammeln wir gleich. Den Rest schlägst du nach.
+      </div>
+
+      <h2>Dein Werkzeugkasten: die wichtigsten Variablen</h2>
+      <p>In jeder Expression stehen dir besondere Variablen zur Verfügung (sie beginnen mit <code>$</code>). Zwei kennst du schon
+        aus Kapitel 5. Hier die vollständige Liste der wirklich nützlichen:</p>
 
       <table class="btable">
-        <thead><tr><th>Datenstruktur</th><th>Expression</th><th>Ergebnis</th></tr></thead>
+        <thead><tr><th>Variable</th><th>Was sie liefert</th></tr></thead>
         <tbody>
-          <tr><td><code>{ "name": "Anna" }</code></td><td><code>{{ $json.name }}</code></td><td><code>Anna</code></td></tr>
-          <tr><td><code>{ "adresse": { "stadt": "Köln" } }</code></td><td><code>{{ $json.adresse.stadt }}</code></td><td><code>Köln</code></td></tr>
-          <tr><td><code>{ "tags": ["neu", "wichtig"] }</code></td><td><code>{{ $json.tags[0] }}</code></td><td><code>neu</code></td></tr>
+          <tr><td><code>$json</code></td><td>Die Daten des aktuellen Items aus dem <strong>vorherigen</strong> Node.</td></tr>
+          <tr><td><code>$json.feld</code></td><td>Ein bestimmtes Feld; mit Punkten in die Tiefe: <code>$json.current.temperature_2m</code>.</td></tr>
+          <tr><td><code>$('Node-Name')</code></td><td>Greift auf einen <strong>beliebigen früheren</strong> Node zu, z. B. <code>$('Webhook').item.json.email</code>.</td></tr>
+          <tr><td><code>$now</code></td><td>Der aktuelle Zeitpunkt als <strong>Datum-Objekt</strong> (damit lässt sich rechnen &amp; formatieren).</td></tr>
+          <tr><td><code>$today</code></td><td>Heute um 00:00 Uhr — praktisch für „ab heute“-Vergleiche.</td></tr>
+          <tr><td><code>$input.all()</code></td><td><strong>Alle</strong> Items, die hereinkommen, als Liste. <code>$input.first()</code> / <code>$input.last()</code> für das erste/letzte.</td></tr>
+          <tr><td><code>$itemIndex</code></td><td>Die Position des aktuellen Items: 0, 1, 2 … (Zählung beginnt bei 0).</td></tr>
+          <tr><td><code>$runIndex</code></td><td>Wie oft der Node in diesem Lauf schon lief (relevant in Schleifen, Kapitel 10).</td></tr>
+          <tr><td><code>$workflow.name</code></td><td>Name des laufenden Workflows. Auch da: <code>$execution.id</code> (ID des Laufs).</td></tr>
+          <tr><td><code>$vars.name</code></td><td>Selbst angelegte Variablen (für Werte, die du an mehreren Stellen brauchst).</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die vier, die 90 % abdecken</b>
+        <code>$json.feld</code> · <code>$('Node').item.json.feld</code> · <code>$now</code> · und ein <code>?</code> für
+        Entscheidungen. Wenn du <em>diese</em> sicher beherrschst, baust du fast jeden Workflow. Den Rest holst du dir bei Bedarf.
+      </div>
+
+      <h2>Mit Text arbeiten (das brauchst du am häufigsten)</h2>
+      <p>Texte zusammensetzen, Groß-/Kleinschreibung anpassen, Teile herausschneiden — das ist Alltag. An einen Wert hängst du
+        dafür mit einem Punkt eine <strong>Funktion</strong> an. Nimm als Beispiel ein Item mit
+        <code>name = "anna schmidt"</code> und <code>email = "Anna@Example.com "</code> (mit Leerzeichen am Ende):</p>
+
+      <table class="btable">
+        <thead><tr><th>Expression</th><th>Ergebnis</th></tr></thead>
+        <tbody>
+          <tr><td><code>{{ 'Hallo ' + $json.name }}</code></td><td>„Hallo anna schmidt“ — Texte verbindest du mit <code>+</code></td></tr>
+          <tr><td><code>{{ $json.name.toUpperCase() }}</code></td><td>„ANNA SCHMIDT“</td></tr>
+          <tr><td><code>{{ $json.name.split(' ')[0] }}</code></td><td>„anna“ — am Leerzeichen trennen, erstes Stück nehmen</td></tr>
+          <tr><td><code>{{ $json.email.trim().toLowerCase() }}</code></td><td>„anna@example.com“ — Funktionen lassen sich <strong>verketten</strong></td></tr>
+          <tr><td><code>{{ $json.name.length }}</code></td><td>12 — die Anzahl der Zeichen</td></tr>
+          <tr><td><code>{{ $json.name.toTitleCase() }}</code></td><td>„Anna Schmidt“ — <span class="hint">n8n-Helfer</span></td></tr>
+          <tr><td><code>{{ $json.email.trim().extractDomain() }}</code></td><td>„example.com“ — <span class="hint">n8n-Helfer</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Funktionen verketten — der wichtigste Trick</b>
+        Du darfst mehrere Funktionen hintereinander hängen: <code>$json.email.trim().toLowerCase()</code> entfernt erst die
+        Leerzeichen und macht <em>dann</em> alles klein. Von links nach rechts gelesen, eine Stufe nach der anderen.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Was sind „n8n-Helfer“?</b>
+        n8n bringt über das normale JavaScript hinaus eigene, praktische Funktionen mit — etwa <code>.toTitleCase()</code>,
+        <code>.extractDomain()</code>, <code>.extractEmail()</code> oder <code>.isEmpty()</code>. Die Autovervollständigung
+        (gleich mehr dazu) schlägt sie dir vor, sobald du hinter einen Text einen Punkt tippst.
+      </div>
+
+      <h2>Mit Zahlen rechnen</h2>
+      <p>Rechnen geht direkt mit <code>+ − * /</code>. Beim Runden gibt es eine wichtige Unterscheidung. Beispiel-Item:
+        <code>temperature_2m = 17.456</code>:</p>
+
+      <table class="btable">
+        <thead><tr><th>Expression</th><th>Ergebnis</th></tr></thead>
+        <tbody>
+          <tr><td><code>{{ $json.temperature_2m + 5 }}</code></td><td>22.456 — ganz normal rechnen</td></tr>
+          <tr><td><code>{{ Math.round($json.temperature_2m) }}</code></td><td>17 — auf eine ganze Zahl runden</td></tr>
+          <tr><td><code>{{ $json.temperature_2m.round(1) }}</code></td><td>17.5 — auf 1 Nachkommastelle <span class="hint">(n8n-Helfer)</span></td></tr>
+          <tr><td><code>{{ $json.temperature_2m.toFixed(1) }}</code></td><td>„17.5“ — Achtung: das Ergebnis ist <strong>Text</strong>, keine Zahl!</td></tr>
+          <tr><td><code>{{ Math.round($json.temperature_2m) + ' °C' }}</code></td><td>„17 °C“ — runden und Einheit anhängen</td></tr>
+          <tr><td><code>{{ ($json.preis * 1.19).round(2) }}</code></td><td>Bruttopreis (19 % drauf), auf 2 Stellen gerundet</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
-        <p style="margin:0 0 6px">• <strong>Ergebnis ist leer oder <code>undefined</code>?</strong> Der Pfad stimmt nicht oder das Feld fehlt in diesem Item.</p>
-        <p style="margin:0">• <strong>Liste liefert den falschen Wert?</strong> Arrays zählen ab 0. Das erste Element ist <code>[0]</code>, nicht <code>[1]</code>.</p>
+        <p style="margin:0 0 6px">• <strong><code>NaN</code> im Ergebnis</strong> (engl. „not a number“)? Dann rechnest du mit
+          etwas, das gar keine Zahl ist — oft kommt eine Zahl als Text an. Wandle sie mit <code>Number($json.feld)</code> um.</p>
+        <p style="margin:0">• <strong><code>toFixed</code> macht aus deiner Zahl Text.</strong> Willst du danach noch rechnen,
+          nimm lieber <code>.round(1)</code> oder <code>Math.round()</code>.</p>
       </div>
 
-      <h2>Muster 2 — Felder mit Sonderzeichen lesen</h2>
-      <p>Manche APIs liefern Feldnamen mit Leerzeichen, Bindestrichen oder Punkten im Namen. Dann funktioniert die
-        Punkt-Schreibweise nicht zuverlässig. Nimm eckige Klammern:</p>
-
-      <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Robuste Schreibweise für schwierige Feldnamen</div>
-<pre>{{ $json["customer-name"] }}
-{{ $json["E-Mail Adresse"] }}
-{{ $json["preis.brutto"] }}</pre>
-      </div>
-
-      <div class="callout callout--pareto">
-        <b class="t">⚡ Skeptische Faustregel</b>
-        Wenn ein Feldname nicht wie ein sauberer Variablenname aussieht, verwende
-        <code>$json["feldname"]</code>. Das ist etwas länger, aber eindeutig.
-      </div>
-
-      <h2>Muster 3 — Texte bauen</h2>
-      <p>In vielen Workflows erzeugst du Nachrichten: E-Mail-Betreff, Slack-Text, Dateiname, Log-Zeile. Dafür darfst du
-        normalen Text und Expressions mischen.</p>
-
-      <ol class="steps">
-        <li><h4>Neues Feld anlegen</h4>
-          <p>Lege im Edit-Fields-Node ein Feld <code>meldung</code> an.</p></li>
-        <li><h4>Wert auf Expression stellen</h4>
-          <p>Schalte das Wert-Feld auf <strong>Expression</strong>.</p></li>
-        <li><h4>Text mit Platzhaltern schreiben</h4>
-          <p>Trage diesen Ausdruck ein:</p></li>
-      </ol>
-
-      <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Text mit dynamischen Werten</div>
-<pre>Hallo {{ $json.name }}, dein Termin ist am {{ $json.datum }} um {{ $json.uhrzeit }} Uhr.</pre>
-      </div>
-
-      <p>Wenn du lieber alles in einer einzigen JavaScript-Zeichenkette formulierst, geht das auch. Für Einsteiger:innen
-        ist die gemischte Schreibweise oben meist lesbarer.</p>
-
-      <h2>Muster 4 — Zahlen rechnen und runden</h2>
-      <p>Expressions können rechnen. Das ist praktisch für Preise, Prozentwerte, Temperaturen, Mengen oder Scores.</p>
+      <h2>Mit Datum &amp; Uhrzeit arbeiten</h2>
+      <p>Datum ist das Thema, an dem die meisten Einsteiger:innen hängenbleiben — dabei ist es mit n8n richtig angenehm.
+        <code>$now</code> und <code>$today</code> sind keine simplen Texte, sondern <strong>Datum-Objekte</strong>. Damit kannst du
+        <em>rechnen</em> (Tage addieren) und sie in <em>jedes Format</em> bringen:</p>
 
       <table class="btable">
-        <thead><tr><th>Ziel</th><th>Expression</th></tr></thead>
+        <thead><tr><th>Expression</th><th>Ergebnis (Beispiel)</th></tr></thead>
         <tbody>
-          <tr><td>19 % Mehrwertsteuer addieren</td><td><code>{{ $json.netto * 1.19 }}</code></td></tr>
-          <tr><td>Auf zwei Nachkommastellen runden</td><td><code>{{ ($json.netto * 1.19).toFixed(2) }}</code></td></tr>
-          <tr><td>Temperatur ohne Nachkommastelle</td><td><code>{{ Math.round($json.current.temperature_2m) }}</code></td></tr>
-          <tr><td>Prozentwert berechnen</td><td><code>{{ Math.round(($json.teil / $json.gesamt) * 100) }}</code></td></tr>
+          <tr><td><code>{{ $now }}</code></td><td>2026-05-29T14:30:00.000+02:00 — das volle Datum-Objekt</td></tr>
+          <tr><td><code>{{ $now.toFormat('dd.MM.yyyy') }}</code></td><td>„29.05.2026“ — deutsches Datumsformat</td></tr>
+          <tr><td><code>{{ $now.toFormat('HH:mm') }}</code></td><td>„14:30“ — nur die Uhrzeit</td></tr>
+          <tr><td><code>{{ $now.plus({ days: 7 }).toFormat('dd.MM.yyyy') }}</code></td><td>„05.06.2026“ — in einer Woche</td></tr>
+          <tr><td><code>{{ $now.minus({ hours: 2 }).toFormat('HH:mm') }}</code></td><td>„12:30“ — vor zwei Stunden</td></tr>
+          <tr><td><code>{{ $json.current.time.toDateTime().toFormat('dd.MM.yyyy HH:mm') }}</code></td><td>einen ISO-Text (z. B. aus der Wetter-API) lesbar machen</td></tr>
         </tbody>
       </table>
+
+      <p>Die Bausteine im Format-Text bedeuten: <code>dd</code> = Tag, <code>MM</code> = Monat, <code>yyyy</code> = Jahr,
+        <code>HH</code> = Stunde (24h), <code>mm</code> = Minute. Setz sie beliebig zusammen, mit Punkten, Schrägstrichen oder
+        Leerzeichen dazwischen.</p>
 
       <div class="callout callout--warn">
-        <b class="t">Wenn Zahlen plötzlich Texte sind</b>
-        <code>toFixed(2)</code> gibt Text zurück, nicht eine echte Zahl. Für E-Mails ist das perfekt. Für weitere
-        Berechnungen ist es besser, erst ganz am Ende zu formatieren.
+        <b class="t">Wenn etwas schiefgeht — die Format-Falle</b>
+        Groß und klein sind <strong>nicht</strong> dasselbe! <code>MM</code> ist der Monat, <code>mm</code> die Minute. Und es
+        heißt <code>yyyy</code> (klein) und <code>dd</code> — nicht <code>YYYY</code> oder <code>DD</code>. Schreibt man die falsch,
+        kommt entweder Unsinn oder ein Fehler heraus.
       </div>
 
-      <h2>Muster 5 — Einfache Bedingungen</h2>
-      <p>Die Kurzform für „wenn, dann, sonst“ heißt ternärer Operator. Sie sieht am Anfang sperrig aus, ist aber
-        extrem nützlich:</p>
-
-      <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Bedingung: Frage ? Wert-wenn-ja : Wert-wenn-nein</div>
-<pre>{{ $json.current.temperature_2m > 25 ? "warm" : "normal" }}</pre>
+      <div class="callout callout--tip">
+        <b class="t">💡 Eingehende Datums-Texte „aufwecken“</b>
+        Werte aus APIs sind oft Text wie <code>"2026-05-29T10:00"</code>. Häng <code>.toDateTime()</code> an, und n8n macht daraus
+        ein echtes Datum-Objekt, das du dann mit <code>.toFormat(...)</code> hübsch darstellst oder mit <code>.plus(...)</code>
+        verrechnest.
       </div>
+
+      <h2>Entscheidungen treffen (ohne IF-Node)</h2>
+      <p>Oft willst du <em>innerhalb</em> einer Expression eine kleine Weiche stellen: „ist es wärmer als 20 Grad, dann …, sonst …“.
+        Dafür gibt es den <strong>Frage-Doppelpunkt-Operator</strong>: <code>Bedingung ? Wert-wenn-wahr : Wert-wenn-falsch</code>.</p>
 
       <table class="btable">
-        <thead><tr><th>Frage</th><th>Expression</th></tr></thead>
+        <thead><tr><th>Expression</th><th>Ergebnis</th></tr></thead>
         <tbody>
-          <tr><td>Ist die Bestellung teuer?</td><td><code>{{ $json.total > 500 ? "prüfen" : "normal" }}</code></td></tr>
-          <tr><td>Ist eine E-Mail vorhanden?</td><td><code>{{ $json.email ? $json.email : "keine E-Mail" }}</code></td></tr>
-          <tr><td>Ist Wind stark?</td><td><code>{{ $json.current.wind_speed_10m >= 40 ? "Warnung" : "OK" }}</code></td></tr>
+          <tr><td><code>{{ $json.temp &gt; 20 ? 'warm' : 'kühl' }}</code></td><td>bei temp = 17.5 → „kühl“</td></tr>
+          <tr><td><code>{{ $json.temp &gt; 25 ? '🔥 heiß' : $json.temp &gt; 15 ? '😎 mild' : '🧥 kalt' }}</code></td><td>verkettet für drei Stufen → „😎 mild“</td></tr>
+          <tr><td><code>{{ $json.name || 'Unbekannt' }}</code></td><td>nimm <code>name</code>, und falls leer/fehlt → „Unbekannt“</td></tr>
+          <tr><td><code>{{ $json.user?.email }}</code></td><td>kein Absturz, wenn <code>user</code> fehlt — liefert dann einfach nichts</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Nicht alles in Expressions pressen</b>
-        Eine kleine Bedingung im Textfeld ist gut. Sobald die Logik mehrere Fälle hat, nimm lieber einen
-        <strong>IF</strong>- oder <strong>Switch</strong>-Node. Das ist sichtbarer, testbarer und für spätere Leser:innen
-        leichter zu prüfen.
+        <b class="t">⚡ Standardwerte verhindern die meisten Fehler</b>
+        Das <code>|| 'Standard'</code> ist Gold wert: Fehlt ein Feld einmal, bricht dein Workflow nicht ab, sondern setzt einen
+        sinnvollen Ersatzwert. Genauso schützt dich das Fragezeichen <code>?.</code> vor dem Klassiker „kann Feld von undefined
+        nicht lesen“. Gewöhn dir beides früh an.
       </div>
 
-      <h2>Muster 6 — Fehlende Werte abfangen</h2>
-      <p>APIs sind unordentlich: Manche Felder fehlen, manche sind leer. Dafür ist der Nullish-Coalescing-Operator
-        <code>??</code> nützlich: „Nimm diesen Wert; falls er fehlt, nimm den Ersatz.“</p>
+      <h2>Schneller &amp; fehlerfrei: Autovervollständigung und Drag-and-drop</h2>
+      <p>Du musst Feldnamen weder auswendig wissen noch fehlerfrei abtippen. n8n hilft dir auf zwei Wegen.</p>
 
-      <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Ersatzwerte</div>
-<pre>{{ $json.name ?? "unbekannt" }}
-{{ $json.adresse?.stadt ?? "keine Stadt angegeben" }}
-{{ $json.current?.temperature_2m ?? "keine Temperatur" }}</pre>
-      </div>
-
-      <p>Das Fragezeichen in <code>adresse?.stadt</code> verhindert einen Fehler, wenn <code>adresse</code> gar nicht existiert.
-        n8n versucht dann nicht blind, in einem fehlenden Objekt weiterzusuchen.</p>
-
-      <h2>Muster 7 — Datum und Uhrzeit</h2>
-      <p>n8n stellt Datumswerte bereit, unter anderem <code>$now</code> für den aktuellen Zeitpunkt. Für viele Workflows
-        reicht es, Datum als lesbaren Text zu erzeugen oder einen Dateinamen daraus zu bauen.</p>
-
-      <table class="btable">
-        <thead><tr><th>Ziel</th><th>Expression</th></tr></thead>
-        <tbody>
-          <tr><td>Aktueller Zeitpunkt</td><td><code>{{ $now }}</code></td></tr>
-          <tr><td>ISO-Datum für Dateinamen</td><td><code>{{ $now.toFormat("yyyy-LL-dd") }}</code></td></tr>
-          <tr><td>Deutsches Datum</td><td><code>{{ $now.toFormat("dd.LL.yyyy") }}</code></td></tr>
-          <tr><td>Morgen</td><td><code>{{ $now.plus({ days: 1 }).toFormat("dd.LL.yyyy") }}</code></td></tr>
-        </tbody>
-      </table>
-
-      <div class="callout callout--info">
-        <b class="t">Zeitzonen nüchtern behandeln</b>
-        Datumswerte sind fehleranfällig, weil Server, APIs und Nutzer:innen unterschiedliche Zeitzonen haben können.
-        Wenn ein Workflow zeitkritisch ist, teste ausdrücklich mit echten Randfällen: kurz vor Mitternacht, Monatsende,
-        Sommerzeitwechsel.
-      </div>
-
-      <h2>Auf einen früheren Node zugreifen</h2>
-      <p><code>$json</code> ist bequem, aber kurzsichtig: Es meint das aktuelle Item aus dem direkten Eingang. Wenn du
-        einen Wert aus einem benannten früheren Node brauchst, verwende <code>$('Node-Name')</code>.</p>
+      <h3>1) Autovervollständigung</h3>
+      <p>Tippe in einem Expression-Feld <code>{{ $json.</code> — und n8n klappt eine Liste mit genau den Feldern auf, die gerade
+        hereinkommen, samt Datentyp. Mit den Pfeiltasten auswählen, <span class="kbd">Enter</span> übernimmt:</p>
 
       <figure class="figure">
-        <div class="frame">
-          <div class="n8n">
-            <div class="n8n-canvas">
-              <svg class="n8n-conns" viewBox="0 0 820 300" preserveAspectRatio="none">
-                <path d="M 178 140 C 245 140, 260 140, 318 140"></path>
-                <path d="M 410 140 C 480 140, 492 140, 550 140"></path>
-              </svg>
-              <div class="n8n-node n8n-node--trigger" style="left:60px; top:94px;">
-                <span class="n8n-node__icon">🔗</span><span class="ep out"></span>
-                <span class="n8n-node__label">Webhook</span><span class="items">1 Item</span></div>
-              <div class="n8n-node" style="left:318px; top:94px;">
-                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
-                <span class="n8n-node__label">Kundendaten holen</span><span class="items">1 Item</span></div>
-              <div class="n8n-node n8n-node--code" style="left:550px; top:94px;">
-                <span class="n8n-node__icon">✉️</span><span class="ep in"></span><span class="ep out"></span>
-                <span class="n8n-node__label">Nachricht bauen</span><span class="items">1 Item</span></div>
+        <div class="frame" style="display:flex; justify-content:center; padding:24px; background:#eef0f4; border-radius:12px;">
+          <div style="font-family:var(--mono,monospace);">
+            <div class="n8n-input is-expr" style="width:300px; margin-bottom:0;">{{ $json.</div>
+            <div class="n8n-autocomplete">
+              <div class="ac is-active"><span class="nm">current</span><span class="desc">temperature_2m, wind_speed_10m …</span><span class="ty">object</span></div>
+              <div class="ac"><span class="nm">latitude</span><span class="ty">number</span></div>
+              <div class="ac"><span class="nm">longitude</span><span class="ty">number</span></div>
+              <div class="ac"><span class="nm">timezone</span><span class="ty">string</span></div>
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 6.2</span>Im letzten Node ist <code>$json</code> die Ausgabe von
-          <b>Kundendaten holen</b>. Für Daten aus <b>Webhook</b> brauchst du den Node-Namen.</figcaption>
+        <figcaption><span class="fig-tag">Abb. 6.3</span>Nach <code>$json.</code> schlägt n8n die echten Felder vor (hier aus der
+          Wetter-API). Tippfehler bei Feldnamen sind damit Geschichte.</figcaption>
       </figure>
 
-      <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Zugriff auf frühere Nodes</div>
-<pre>{{ $('Webhook').item.json.email }}
-{{ $('Kundendaten holen').item.json.company.name }}</pre>
+      <h3>2) Drag-and-drop aus dem Schema</h3>
+      <p>Noch bequemer: Wechsle im <strong>Eingangspanel</strong> (linke Spalte der NDV) auf den Reiter <strong>Schema</strong>,
+        pack dir ein Feld und <strong>zieh es direkt ins Expression-Feld</strong>. n8n fügt die komplette, korrekte Expression
+        automatisch ein — inklusive <code>{{ }}</code> und richtigem Pfad.</p>
+
+      <div class="clickpath">
+        <span class="step"><span class="n">1</span> Feld auf „Expression“ schalten</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">2</span> links Reiter „Schema“</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">3</span> Feld ins Wert-Feld ziehen</span>
+        <span class="arrow">→</span>
+        <span class="step"><span class="n">4</span> fertige Expression erscheint</span>
       </div>
 
-      <div class="callout callout--warn">
-        <b class="t">Wenn der Node-Name geändert wurde</b>
-        Expressions mit <code>$('Alter Name')</code> hängen am Namen. Benenne wichtige Nodes früh sinnvoll und ändere
-        die Namen später nur bewusst. Sonst brechen Zugriffe leise oder sichtbar.
-      </div>
+      <hr>
 
-      <h2>Mini-Übung — Wettertext robuster machen</h2>
-      <p>Jetzt bauen wir aus den Mustern eine kleine, echte Verbesserung. Der Wettertext soll gerundet werden und bei
-        starkem Wind eine Warnung enthalten.</p>
+      <h2>Mini-Übung: aus rohen Daten eine richtig schöne Nachricht</h2>
+      <p>Jetzt führen wir alles zusammen. Wir nehmen den Wetter-Workflow aus Kapitel 4 und bauen den Satz im
+        <strong>Edit-Fields-Node</strong> deutlich auf: mit gerundeter Temperatur, einer Wenn-dann-Entscheidung und dem heutigen Datum.</p>
 
       <ol class="steps">
-        <li><h4>Edit-Fields-Node öffnen</h4>
-          <p>Öffne im Wetter-Workflow den Node, der das Feld <code>nachricht</code> erzeugt.</p></li>
-        <li><h4>Wert-Feld auf Expression stellen</h4>
-          <p>Falls der Reiter noch auf <strong>Fest</strong> steht, schalte auf <strong>Expression</strong>.</p></li>
-        <li><h4>Alten Text ersetzen</h4>
-          <p>Ersetze den bisherigen Wert vollständig durch diesen Ausdruck:</p></li>
+        <li><h4>Den Edit-Fields-Node öffnen</h4>
+          <p><strong>Doppelklick</strong> auf den Node „Nachricht bauen“. In der linken Spalte (Eingang) liegen die Wetterdaten
+            aus dem HTTP-Node — die brauchen wir gleich.</p></li>
+        <li><h4>Sicherstellen, dass der Wert auf „Expression“ steht</h4>
+          <p>Beim Feld <code>nachricht</code> oben den Reiter <strong>Expression</strong> wählen (bläulicher Hintergrund).</p></li>
+        <li><h4>Die erweiterte Expression eintragen</h4>
+          <p>Ersetze den alten Inhalt durch den folgenden Text. Tipp: einzelne Felder per Drag-and-drop aus dem Schema ziehen,
+            den Rest dazwischen tippen.</p></li>
       </ol>
 
       <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Robustere Wetter-Nachricht</div>
-<pre>In Berlin sind es gerade {{ Math.round($json.current.temperature_2m) }} °C. {{
-  $json.current.wind_speed_10m >= 40
-    ? "Achtung: starker Wind."
-    : "Der Wind ist unauffällig."
-}}</pre>
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Wert des Feldes „nachricht“ — Modus: Expression</div>
+<pre>🌤️ Wetter für Berlin am {{ $now.toFormat('dd.MM.yyyy') }}:
+Es sind {{ Math.round($json.current.temperature_2m) }} °C — {{ $json.current.temperature_2m &gt; 18 ? 'angenehm 😎' : 'eher frisch 🧥' }}.
+Wind: {{ Math.round($json.current.wind_speed_10m) }} km/h.</pre>
       </div>
+
+      <p>Schau auf die <strong>Ergebnis</strong>-Vorschau, während du tippst — sie setzt sofort die echten Werte ein:</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n-expr" style="max-width:620px; margin:0 auto;">
+            <div class="n8n-expr__head"><span class="ic">𝑓𝑥</span> Ausdruckseditor — Feld „nachricht“</div>
+            <div class="n8n-expr__code">🌤️ Wetter für Berlin am <span class="expr-tok">{{ <span class="expr-var">$now</span>.toFormat('dd.MM.yyyy') }}</span>:
+Es sind <span class="expr-tok">{{ Math.round(<span class="expr-var">$json</span>.current.temperature_2m) }}</span> °C — <span class="expr-tok">{{ <span class="expr-var">$json</span>.current.temperature_2m &gt; 18 ? 'angenehm 😎' : 'eher frisch 🧥' }}</span>.
+Wind: <span class="expr-tok">{{ Math.round(<span class="expr-var">$json</span>.current.wind_speed_10m) }}</span> km/h.</div>
+            <div class="n8n-expr__result"><span class="lbl">Ergebnis</span><span>🌤️ Wetter für Berlin am 29.05.2026:
+Es sind 17 °C — eher frisch 🧥.
+Wind: 12 km/h.</span></div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 6.4</span>Drei Techniken in einem Feld: Datum <b>formatieren</b>, Temperatur
+          <b>runden</b> und per <b>Entscheidung</b> einen passenden Kommentar wählen. Rechts unten das fertige Ergebnis.</figcaption>
+      </figure>
 
       <ol class="steps" style="counter-reset: st 3;">
-        <li><h4>Schritt ausführen</h4>
-          <p>Klicke auf <strong>▶ Schritt ausführen</strong>. Rechts sollte ein gut lesbarer Satz erscheinen.</p></li>
-        <li><h4>Ergebnis prüfen</h4>
-          <p>Kontrolliere, ob die Temperatur gerundet ist und ob die Wind-Bedingung zum Wert im Eingang passt.</p></li>
+        <li><h4>Ausführen und prüfen</h4>
+          <p>Klick auf <strong>„▶ Schritt ausführen“</strong>. Im Ausgang steht jetzt deine mehrzeilige, schön formatierte
+            Nachricht — bereit, um sie z. B. per Telegram oder E-Mail zu verschicken.</p></li>
+        <li><h4>Speichern</h4>
+          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Geschafft.</p></li>
       </ol>
 
-      <div class="callout callout--info">
-        <b class="t">Warum prüfen?</b>
-        Expressions sind klein, aber nicht harmlos. Eine falsche Bedingung kann später E-Mails falsch routen,
-        Warnungen unterdrücken oder Daten überschreiben. Teste die Logik mit mindestens einem Normalfall und einem
-        Grenzfall.
+      <div class="callout callout--tip">
+        <b class="t">🎉 Das war ein großer Schritt</b>
+        Du hast in <em>einem einzigen Feld</em> ein Datum formatiert, eine Zahl gerundet und eine Bedingung ausgewertet — ganz
+        ohne extra Nodes. Genau diese Verdichtung macht Expressions so mächtig.
       </div>
 
-      <h2>Fehler lesen: die vier typischen Ursachen</h2>
-      <p>Wenn eine Expression nicht funktioniert, ist selten „n8n kaputt“. Meist ist es einer dieser Fälle:</p>
-
+      <h2>Wenn etwas schiefgeht — die vier häufigsten Expression-Fehler</h2>
       <table class="btable">
-        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Prüfung</th></tr></thead>
+        <thead><tr><th>Du siehst …</th><th>Ursache</th><th>Lösung</th></tr></thead>
         <tbody>
-          <tr><td><code>undefined</code></td><td>Feldpfad falsch oder Feld fehlt</td><td>Schema-Ansicht links öffnen</td></tr>
-          <tr><td><code>{{ ... }}</code> bleibt sichtbar</td><td>Feld steht auf Fest</td><td>Reiter auf Expression stellen</td></tr>
-          <tr><td>Syntaxfehler</td><td>Klammer, Anführungszeichen oder <code>?</code>/<code>:</code> fehlt</td><td>Ausdruck stark vereinfachen</td></tr>
-          <tr><td>Falscher Wert aus altem Node</td><td>Node-Name oder Item-Bezug falsch</td><td><code>$json</code> vs. <code>$('Node')</code> prüfen</td></tr>
+          <tr><td><code>[undefined]</code> oder leer</td><td>Feldpfad falsch geschrieben oder das Feld fehlt im Item</td><td>Pfad in der <strong>Schema</strong>-Ansicht prüfen; mit <code>?.</code> und <code>|| 'Standard'</code> absichern</td></tr>
+          <tr><td><code>{{ }}</code> erscheint <em>wörtlich</em></td><td>Das Feld steht noch auf <strong>Fest</strong></td><td>Reiter über dem Feld auf <strong>Expression</strong> schalten</td></tr>
+          <tr><td>roter Fehler in der Vorschau</td><td>Tippfehler in der Syntax: fehlende <code>}</code>, falsche Anführungszeichen</td><td>Klammern paarweise prüfen; Texte immer in <code>'…'</code> setzen</td></tr>
+          <tr><td><code>NaN</code></td><td>Rechnen mit Text statt Zahl</td><td>Wert mit <code>Number($json.feld)</code> in eine Zahl wandeln</td></tr>
         </tbody>
       </table>
 
-      <div class="callout callout--pareto">
-        <b class="t">⚡ Debugging-Methode</b>
-        Reduziere die Expression auf den kleinsten prüfbaren Teil. Erst <code>{{ $json.current }}</code>,
-        dann <code>{{ $json.current.temperature_2m }}</code>, dann erst Rundung, Text und Bedingungen.
-        So findest du den Fehler ohne Raten.
+      <div class="callout callout--info">
+        <b class="t">Goldene Regel beim Fehlersuchen</b>
+        Vertrau der <strong>Ergebnis</strong>-Vorschau und der <strong>Schema</strong>-Ansicht links. 95 % aller Expression-Probleme
+        sind ein falsch geschriebener Feldname — und beides zeigt dir die Wahrheit in Sekunden.
       </div>
 
-      <h2>Was du in diesem Kapitel gelernt hast</h2>
-      <ul>
-        <li>Den Unterschied zwischen <strong>Fest</strong> und <strong>Expression</strong> sicher zu erkennen.</li>
-        <li>Felder über <code>$json</code>, verschachtelte Pfade und eckige Klammern zu lesen.</li>
-        <li>Texte, Zahlen, Rundungen, Ersatzwerte und einfache Bedingungen zu formulieren.</li>
-        <li>Mit <code>$('Node-Name').item.json...</code> auf frühere Nodes zuzugreifen.</li>
-        <li>Expression-Fehler systematisch zu verkleinern statt blind herumzuprobieren.</li>
-      </ul>
-
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4>✅ Selbsttest — sitzt das Wichtigste?</h4>
         <ul>
-          <li>Was ist der Unterschied zwischen <code>{{ $json.email }}</code> und <code>{{ $('Webhook').item.json.email }}</code>?</li>
-          <li>Wie liest du ein Feld namens <code>customer-name</code>?</li>
-          <li>Warum ist <code>{{ $json.tags[0] }}</code> das erste Element?</li>
-          <li>Wann würdest du statt einer Expression lieber einen IF-Node verwenden?</li>
+          <li>Wodurch erkennst du auf einen Blick, dass ein Feld im <em>Expression</em>-Modus ist?</li>
+          <li>Wie rundest du <code>$json.preis</code> auf zwei Nachkommastellen?</li>
+          <li>Wie schreibst du „heutiges Datum als TT.MM.JJJJ“?</li>
+          <li>Welche Expression setzt „Gast“ ein, falls das Feld <code>name</code> leer ist?</li>
+          <li>Du tippst <code>$json.</code> — was passiert, und warum ist das praktisch?</li>
         </ul>
       </div>
 
       <div class="callout callout--info">
         <b class="t">Antworten</b>
-        1) <code>$json</code> liest aus dem direkten Eingang, <code>$('Webhook')</code> aus einem benannten Node.
-        2) <code>{{ $json["customer-name"] }}</code>. 3) Arrays zählen ab 0. 4) Sobald die Logik sichtbar verzweigen,
-        mehrere Fälle unterscheiden oder später leicht geprüft werden soll.
+        1) Bläulicher Hintergrund, Monospace-Schrift, darunter die „Ergebnis“-Zeile. ·
+        2) <code>{{ $json.preis.round(2) }}</code> (oder <code>Math.round</code> für ganze Zahlen). ·
+        3) <code>{{ $now.toFormat('dd.MM.yyyy') }}</code>. ·
+        4) <code>{{ $json.name || 'Gast' }}</code>. ·
+        5) Die Autovervollständigung zeigt die echten, vorhandenen Felder — kein Raten, keine Tippfehler.
       </div>
 
-      <p>Damit ist der Grundlagenblock geschlossen: Du kannst Daten holen, lesen, umformen und dynamisch einsetzen.
-        Ab dem nächsten Teil schauen wir die wichtigsten Bausteine einzeln an — zuerst Trigger, weil sie entscheiden,
-        <em>wann</em> ein Workflow überhaupt startet.</p>
+      <p>Du hast jetzt das Werkzeug, mit dem du Daten in jede gewünschte Form bringst. Ab hier nehmen wir die einzelnen
+        <strong>Bausteine</strong> gründlich auseinander. Den Anfang macht die Frage, <em>wann</em> ein Workflow überhaupt loslegt:
+        die <strong>Trigger-Nodes</strong> — manuell, nach Zeitplan oder per Webhook.</p>
 
     </article>
       <nav class="pn-wrap" data-slug="06-expressions"></nav></section>
+<section class="page" id="07-trigger" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">7</span> Bausteine im Detail</div>
+      <h1 class="chap-title">Trigger-Nodes: Manual, Schedule, Webhook</h1>
+      <p class="chap-lede">Jeder Workflow beginnt mit einer Frage: <em>Wann</em> soll er loslegen? Die Antwort gibt der
+        <strong>Trigger</strong> — der erste Node. In diesem Kapitel lernst du die drei wichtigsten kennen: auf Knopfdruck,
+        nach Zeitplan und auf Zuruf aus dem Internet.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 18 Minuten</span>
+        <span>🎯 Niveau: Einstieg → Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 4 (erster Workflow)</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du mitbringen solltest</h4>
+        <ul>
+          <li>Du hast schon einen Workflow gebaut (Kapitel 4) und kennst den <strong>manuellen Trigger</strong> vom Testen.</li>
+          <li>n8n läuft. Für den Webhook-Teil brauchst du nichts weiter — wir rufen die URL einfach im Browser auf.</li>
+          <li>Begriffe wie <strong>Item</strong> und <code>$json</code> (Kapitel 5) sind dir vertraut.</li>
+        </ul>
+      </div>
+
+      <h2>Was ein Trigger ist — und was ihn besonders macht</h2>
+      <p>Ein Trigger ist der Node, der einen Lauf <strong>auslöst</strong>. Er steht immer ganz links und hat eine
+        charakteristische Form: die <strong>linke Seite ist abgerundet</strong>, und er hat <strong>keinen Eingang</strong> —
+        denn vor ihm kommt nichts. Pro Workflow gibt es in aller Regel genau einen Start-Trigger.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:40px;">
+                <span class="n8n-node__icon">🖐️</span><span class="ep out"></span>
+                <span class="n8n-node__label">Manual</span></div>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:150px;">
+                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__label">Schedule</span></div>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:260px;">
+                <span class="n8n-node__icon">🔗</span><span class="ep out"></span>
+                <span class="n8n-node__label">Webhook</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 7.1</span>Drei Trigger, eine gemeinsame Form: links abgerundet, nur ein
+          <b>Ausgang</b> rechts, kein Eingang. Daran erkennst du jeden Trigger auf den ersten Blick.</figcaption>
+      </figure>
+
+      <div class="callout callout--info">
+        <b class="t">Der Unterschied, der alles erklärt</b>
+        <strong>Manuelle</strong> Trigger startest <em>du</em> selbst (zum Bauen &amp; Testen). <strong>Automatische</strong>
+        Trigger (Schedule, Webhook und alle App-Trigger) feuern von allein — aber nur, wenn der Workflow auf
+        <strong>Aktiv</strong> geschaltet ist. Diesen Schalter sehen wir gleich genauer an.
+      </div>
+
+      <h2>Trigger 1 — Manual: für Bau und Test</h2>
+      <p>Den kennst du aus Kapitel 4. Im Panel heißt er <strong>„Trigger manually"</strong> (manchmal „When clicking
+        Test workflow"). Er erzeugt beim Klick auf <strong>„Test workflow"</strong> ein einzelnes, leeres Start-Item — perfekt,
+        um beim Entwickeln selbst zu bestimmen, wann es losgeht.</p>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Manual ist ein Bau-Werkzeug, kein Betriebs-Trigger</b>
+        Du nutzt ihn, <em>während</em> du baust. Für den echten Dauerbetrieb tauschst du ihn später gegen einen Schedule- oder
+        Webhook-Trigger — der Rest des Workflows bleibt dabei unverändert.
+      </div>
+
+      <h2>Trigger 2 — Schedule: nach Zeitplan</h2>
+      <p>Der <strong>Schedule Trigger</strong> startet den Workflow zu festen Zeiten: alle 15 Minuten, jeden Tag um 8 Uhr, jeden
+        Montag … Das ist der Motor für Reports, Erinnerungen und regelmäßige Abgleiche.</p>
+
+      <ol class="steps">
+        <li><h4>Den Trigger hinzufügen</h4>
+          <p>Auf einem leeren Canvas das große <span class="kbd">+</span> klicken (oder oben rechts „+"). Im Panel
+            <code>schedule</code> tippen und <strong>„Schedule Trigger"</strong> wählen.</p></li>
+        <li><h4>Das Intervall festlegen</h4>
+          <p>Doppelklick öffnet die NDV. Das wichtigste Feld ist <strong>„Trigger Interval"</strong>. Es bietet
+            <em>Seconds, Minutes, Hours, Days, Weeks, Months</em> und <em>Custom (Cron)</em>. Wähle z. B. <strong>Days</strong>.</p></li>
+        <li><h4>Die Uhrzeit eintragen</h4>
+          <p>Bei „Days" erscheinen Zusatzfelder: <strong>Days Between Triggers</strong> (z. B. 1 = täglich),
+            <strong>Trigger at Hour</strong> (z. B. 8am) und <strong>Trigger at Minute</strong> (z. B. 0). Damit läuft er
+            <em>täglich um 8:00 Uhr</em>.</p></li>
+        <li><h4>Was du jetzt siehst</h4>
+          <p>Im Ausgang erzeugt der Node beim Auslösen ein Item mit dem Auslöse-Zeitpunkt (Feld <code>timestamp</code>). Zum
+            Bauen kannst du oben rechts „▶ Schritt ausführen" drücken — dann tut er sofort so, als wäre die Zeit gekommen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:560px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">⏰</span><b>Schedule Trigger</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Trigger Interval</label><div class="n8n-select">Days <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Days Between Triggers</label><input class="n8n-input" value="1"></div>
+                  <div class="row"><label>Trigger at Hour</label><div class="n8n-select">8am <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Trigger at Minute</label><input class="n8n-input" value="0"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 7.2</span>Schedule Trigger auf „täglich um 8:00 Uhr". Für andere Rhythmen wählst
+          du oben ein anderes Intervall — oder <b>Custom (Cron)</b> für volle Kontrolle.</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Cron für Spezialfälle</b>
+        Brauchst du etwas wie „werktags alle 30 Minuten zwischen 9 und 17 Uhr", wähle <strong>Custom (Cron)</strong> und gib einen
+        Cron-Ausdruck ein, z. B. <code>*/30 9-17 * * 1-5</code>. Für 90 % reichen aber die einfachen Intervalle darüber.
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>Läuft nicht zur erwarteten Zeit?</strong> Der Schedule-Trigger feuert nur, wenn der
+          Workflow <strong>Aktiv</strong> ist (Schalter oben rechts). Im Editor per „Test workflow" läuft er auch inaktiv — im
+          Betrieb nicht.</p>
+        <p style="margin:0">• <strong>Falsche Uhrzeit?</strong> n8n nutzt die <strong>Zeitzone</strong> aus den Einstellungen.
+          Steht sie auf UTC, weicht die Auslösung von deiner Ortszeit ab. Zeitzone unter Settings prüfen.</p>
+      </div>
+
+      <h2>Trigger 3 — Webhook: auf Zuruf aus dem Internet</h2>
+      <p>Der <strong>Webhook Trigger</strong> gibt deinem Workflow eine eigene <strong>URL</strong>. Ruft jemand diese URL auf
+        (ein Formular, ein anderes Programm, ein anderer Dienst), startet der Workflow <em>sofort</em> — und bekommt die
+        mitgeschickten Daten als Item. Das ist die Brücke, über die andere Systeme deinen Workflow anstoßen.</p>
+
+      <ol class="steps">
+        <li><h4>Den Webhook-Trigger hinzufügen</h4>
+          <p>Im Start-Panel <code>webhook</code> tippen und <strong>„Webhook"</strong> wählen. Doppelklick öffnet die NDV.</p></li>
+        <li><h4>Methode &amp; Pfad ansehen</h4>
+          <p><strong>HTTP Method</strong> steht auf <strong>GET</strong> (für Tests im Browser ideal; für Formulare oft POST).
+            <strong>Path</strong> ist eine automatisch erzeugte Kennung — du darfst sie in etwas Lesbares ändern, z. B. <code>wetter</code>.</p></li>
+        <li><h4>Die zwei URLs verstehen</h4>
+          <p>Oben siehst du zwei Adressen: eine <strong>Test-URL</strong> und eine <strong>Production-URL</strong>. Das ist der
+            wichtigste Punkt am ganzen Node — siehe Kasten darunter.</p></li>
+        <li><h4>Auf ein Test-Ereignis lauschen</h4>
+          <p>Klicke <strong>„Listen for test event"</strong>. Der Node wartet jetzt auf <em>einen</em> Aufruf der Test-URL.</p></li>
+        <li><h4>Die Test-URL aufrufen</h4>
+          <p>Kopiere die <strong>Test-URL</strong> und öffne sie in einem neuen Browser-Tab (oder häng Parameter an, z. B.
+            <code>?stadt=Berlin</code>). Zurück in n8n erscheint das empfangene Item im Ausgang — inklusive deiner Parameter.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:600px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🔗</span><b>Webhook</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">⦿ Listen for test event</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>HTTP Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Path</label><input class="n8n-input" value="wetter"></div>
+                  <div class="row"><label>Test-URL <span class="hint">(zum Bauen)</span></label><input class="n8n-input" value="http://localhost:5678/webhook-test/wetter"></div>
+                  <div class="row"><label>Production-URL <span class="hint">(nur wenn Aktiv)</span></label><input class="n8n-input" value="http://localhost:5678/webhook/wetter"></div>
+                  <div class="row"><label>Respond</label><div class="n8n-select">Immediately <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 7.3</span>Der Webhook-Node mit beiden URLs. Beachte <code>/webhook-test/</code> (Test)
+          gegen <code>/webhook/</code> (Produktion) — der feine Unterschied ist die häufigste Fehlerquelle.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht — Test-URL vs. Production-URL</b>
+        <p style="margin:0 0 6px">• Die <strong>Test-URL</strong> (<code>/webhook-test/</code>) funktioniert <em>nur</em>, solange
+          du auf „Listen for test event" geklickt hast und genau <em>einen</em> Aufruf abwartest. Danach ist sie wieder „taub".</p>
+        <p style="margin:0">• Die <strong>Production-URL</strong> (<code>/webhook/</code>) funktioniert <em>nur</em>, wenn der
+          Workflow <strong>Aktiv</strong> ist. Rufst du sie bei inaktivem Workflow auf, bekommst du einen <strong>404</strong>.
+          Das ist kein Fehler — der Workflow „hört" dann einfach nicht zu.</p>
+      </div>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Auf die Daten zugreifen</b>
+        Query-Parameter (<code>?stadt=Berlin</code>) landen unter <code>$json.query.stadt</code>, ein POST-Body unter
+        <code>$json.body</code>, Header unter <code>$json.headers</code>. Schau nach dem Test-Aufruf in die Schema-Ansicht — dann
+        siehst du die genaue Struktur und ziehst dir die Felder per Drag-and-drop.
+      </div>
+
+      <h2>Der Aktiv-Schalter: das Tor zum Betrieb</h2>
+      <p>Schedule- und Webhook-Trigger (und alle App-Trigger) laufen im echten Betrieb nur, wenn der Workflow <strong>aktiviert</strong>
+        ist. Den Schalter findest du <strong>oben rechts</strong> in der Topbar.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-topbar">
+              <span class="n8n-logo">n8</span>
+              <span class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><b>Wetter-Report</b></span>
+              <span class="n8n-topbar__right">
+                <span class="n8n-saved">Gespeichert</span>
+                <span class="n8n-toggle">Inaktiv <span class="n8n-switch is-on"></span> Aktiv</span>
+                <span class="n8n-btn n8n-btn--primary n8n-btn--sm">Save</span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 7.4</span>Der <b>Aktiv</b>-Schalter oben rechts. Ist er grün/an, lauscht der
+          Workflow auf seinen Trigger — der Schedule feuert, die Production-URL des Webhooks antwortet.</figcaption>
+      </figure>
+
+      <div class="callout callout--info">
+        <b class="t">Aktiv ≠ Test</b>
+        Der Knopf <strong>„Test workflow"</strong> startet einen Lauf <em>jetzt</em>, egal ob aktiv oder nicht — ideal zum Bauen.
+        <strong>Aktiv</strong> dagegen heißt: n8n übernimmt das automatische Auslösen im Hintergrund, dauerhaft.
+      </div>
+
+      <h2>Die Trigger im Überblick</h2>
+      <table class="btable">
+        <thead><tr><th>Trigger</th><th>Feuert, wenn …</th><th>Aktiv nötig?</th><th>Typischer Einsatz</th></tr></thead>
+        <tbody>
+          <tr><td>Manual</td><td>du auf „Test workflow" klickst</td><td>nein</td><td>Bauen &amp; Testen</td></tr>
+          <tr><td>Schedule</td><td>die eingestellte Zeit erreicht ist</td><td>ja</td><td>Reports, Erinnerungen, Abgleiche</td></tr>
+          <tr><td>Webhook</td><td>jemand die URL aufruft</td><td>ja (Production-URL)</td><td>Formulare, andere Systeme, sofortige Reaktion</td></tr>
+          <tr><td>App-Trigger <span class="hint">(z. B. Telegram, Gmail)</span></td><td>im Dienst etwas passiert (neue Nachricht …)</td><td>ja</td><td>auf Ereignisse einer App reagieren</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Zwei Trigger tragen fast alles</b>
+        <strong>Schedule</strong> („mach das regelmäßig") und <strong>Webhook</strong> („reagiere, wenn etwas reinkommt") decken
+        die große Mehrheit aller Automatisierungen ab. App-Trigger sind im Grunde spezialisierte Webhooks/Poller — gleiches Muster,
+        nur fertig verpackt für einen bestimmten Dienst.
+      </div>
+
+      <hr>
+
+      <h2>Mini-Übung: vom Test-Knopf zum täglichen Report</h2>
+      <p>Wir machen aus dem Wetter-Workflow von Kapitel 4 einen echten Betriebs-Workflow: Statt auf Knopfdruck soll er
+        <strong>jeden Morgen um 8 Uhr</strong> automatisch laufen. Der Clou — wir tauschen nur den Trigger aus, der Rest bleibt.</p>
+
+      <ol class="steps">
+        <li><h4>Den alten Trigger entfernen</h4>
+          <p>Öffne den Wetter-Workflow. Klick den <strong>manuellen Trigger</strong> einmal an (er wird markiert) und drücke
+            <span class="kbd">Entf</span>. Die Verbindung zum HTTP-Node löst sich mit.</p></li>
+        <li><h4>Den Schedule-Trigger einsetzen</h4>
+          <p>Großes <span class="kbd">+</span> klicken, <code>schedule</code> suchen, <strong>„Schedule Trigger"</strong> wählen.
+            Auf <em>Days · 1 · 8am · 0</em> stellen (wie oben).</p></li>
+        <li><h4>Mit dem HTTP-Node verbinden</h4>
+          <p>Vom <strong>Ausgangspunkt rechts</strong> des Schedule-Triggers eine Linie zum Eingang des „Wetter holen"-Nodes
+            ziehen. Jetzt hängt die alte Kette wieder am neuen Trigger.</p></li>
+        <li><h4>Testen wie immer</h4>
+          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>, dann <strong>„Test workflow"</strong>. Der Ablauf läuft
+            durch wie gehabt — die Uhrzeit muss dafür nicht erreicht sein.</p></li>
+        <li><h4>Aktiv schalten</h4>
+          <p>Erst jetzt der entscheidende Schritt für den Betrieb: oben rechts den <strong>Aktiv</strong>-Schalter umlegen. Ab
+            sofort holt n8n das Wetter jeden Morgen um 8 — ganz ohne dich.</p></li>
+      </ol>
+
+      <div class="callout callout--tip">
+        <b class="t">🎉 Das ist der Sprung in den echten Betrieb</b>
+        Genau dieses Muster — Trigger austauschen, Rest behalten, aktiv schalten — verwandelt jeden „Test-Workflow" in eine
+        Automatisierung, die rund um die Uhr für dich arbeitet.
+      </div>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest — sitzt das Wichtigste?</h4>
+        <ul>
+          <li>Woran erkennst du einen Trigger-Node optisch?</li>
+          <li>Dein Schedule-Workflow feuert nachts nicht — was prüfst du zuerst?</li>
+          <li>Was ist der Unterschied zwischen der Test- und der Production-URL eines Webhooks?</li>
+          <li>Unter welchem Pfad findest du einen Query-Parameter <code>?stadt=Berlin</code> im Item?</li>
+          <li>Muss ein Workflow „Aktiv" sein, damit „Test workflow" funktioniert?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Linke Seite abgerundet, kein Eingang, nur ein Ausgang. ·
+        2) Ob der Workflow <strong>Aktiv</strong> ist — und die Zeitzone in den Settings. ·
+        3) Test-URL (<code>/webhook-test/</code>) nur beim aktiven „Listen for test event"; Production-URL (<code>/webhook/</code>)
+        nur bei aktivem Workflow. ·
+        4) <code>$json.query.stadt</code>. ·
+        5) Nein — „Test workflow" läuft immer, „Aktiv" ist nur fürs automatische Auslösen.
+      </div>
+
+      <p>Damit weißt du, <em>wann</em> ein Workflow startet. Im nächsten Kapitel kümmern wir uns darum, <em>woher</em> die Daten
+        kommen: Wir nehmen den <strong>HTTP-Request-Node</strong> gründlich auseinander und sprechen damit praktisch jede API der
+        Welt an.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="07-trigger"></nav></section>
+<section class="page" id="08-http" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">8</span> Bausteine im Detail</div>
+      <h1 class="chap-title">Der HTTP-Request-Node: jede API ansprechen</h1>
+      <p class="chap-lede">Es gibt zwar fertige Nodes für hunderte Dienste — aber der HTTP-Request-Node ist der
+        <strong>Generalschlüssel</strong>: Mit ihm sprichst du jeden Webdienst an, der eine Schnittstelle (API) hat, auch wenn
+        es keinen eigenen Node dafür gibt. Verstehst du diesen einen Node, steht dir das halbe Internet offen.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 22 Minuten</span>
+        <span>🎯 Niveau: Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 4 &amp; 5</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du mitbringen solltest</h4>
+        <ul>
+          <li>Du hast in Kapitel 4 schon einen einfachen GET-Request gebaut (Wetter holen).</li>
+          <li>JSON lesen und Pfade wie <code>$json.current.temperature_2m</code> (Kapitel 5) sind dir vertraut.</li>
+          <li>Für die Übung brauchst du <strong>keinen</strong> Account — wir nutzen einen offenen Echo-Dienst.</li>
+        </ul>
+      </div>
+
+      <h2>Was bei einem HTTP-Request passiert</h2>
+      <p>Ein HTTP-Request ist wie ein adressierter Brief an einen Server. Er besteht immer aus denselben Teilen — und genau die
+        füllst du im Node aus:</p>
+
+      <table class="btable">
+        <thead><tr><th>Teil</th><th>Wofür</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Method</strong></td><td>Die Absicht: <em>holen, senden, ändern, löschen</em> (siehe Tabelle unten).</td></tr>
+          <tr><td><strong>URL</strong></td><td>Die Adresse des Dienstes — wohin der Brief geht.</td></tr>
+          <tr><td><strong>Query-Parameter</strong></td><td>Zusätze an der URL nach dem <code>?</code>, z. B. <code>?stadt=Berlin</code>.</td></tr>
+          <tr><td><strong>Headers</strong></td><td>Metadaten, z. B. „ich erwarte JSON" oder ein Zugangsschlüssel.</td></tr>
+          <tr><td><strong>Body</strong></td><td>Der eigentliche Inhalt — nur beim <em>Senden</em> (POST/PUT), meist als JSON.</td></tr>
+          <tr><td><strong>Authentication</strong></td><td>Wer du bist — falls der Dienst einen Login verlangt (Kapitel 12).</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Die vier Methoden, die du brauchst</h2>
+      <table class="btable">
+        <thead><tr><th>Method</th><th>Bedeutung</th><th>Beispiel</th></tr></thead>
+        <tbody>
+          <tr><td><code>GET</code></td><td>Daten <strong>holen</strong> (ändert nichts)</td><td>Wetter abrufen, Liste lesen</td></tr>
+          <tr><td><code>POST</code></td><td>Etwas <strong>neu anlegen / senden</strong></td><td>Nachricht senden, Datensatz erstellen</td></tr>
+          <tr><td><code>PUT</code> / <code>PATCH</code></td><td>Etwas <strong>ändern</strong> (ganz / teilweise)</td><td>Kontakt aktualisieren</td></tr>
+          <tr><td><code>DELETE</code></td><td>Etwas <strong>löschen</strong></td><td>Eintrag entfernen</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ 80 % ist GET und POST</b>
+        Daten <em>lesen</em> = GET, Daten <em>schicken</em> = POST. Mit diesen beiden baust du die allermeisten Integrationen.
+        PUT/PATCH/DELETE brauchst du erst, wenn du fremde Datensätze gezielt pflegst.
+      </div>
+
+      <h2>Der Node im Detail</h2>
+      <p>Öffne einen frischen HTTP-Request-Node (Doppelklick). Oben stehen <strong>Method</strong> und <strong>URL</strong>,
+        darunter die <strong>Authentication</strong> und dann drei Schalter, die je einen Bereich aufklappen:
+        <strong>Send Query Parameters</strong>, <strong>Send Headers</strong> und <strong>Send Body</strong>.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:600px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request</b><span class="ndv-docs">Import cURL ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                  <div class="row"><label>URL <span class="req">*</span></label><input class="n8n-input" value="https://api.open-meteo.com/v1/forecast"></div>
+                  <div class="row"><label>Authentication</label><div class="n8n-select">None <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Send Query Parameters</label><div class="n8n-select">⦿ aus <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Send Headers</label><div class="n8n-select">⦿ aus <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Send Body</label><div class="n8n-select">⦿ aus <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 8.1</span>Das Grundgerüst: Method, URL, Authentication und die drei Send-Schalter.
+          Oben rechts der praktische <b>Import-cURL</b>-Knopf (gleich mehr dazu).</figcaption>
+      </figure>
+
+      <h2>Query-Parameter sauber setzen</h2>
+      <p>In Kapitel 4 haben wir die Parameter direkt in die URL geschrieben (<code>…/forecast?latitude=52.52&amp;longitude=13.41</code>).
+        Das geht — aber es gibt einen aufgeräumteren Weg: Schalte <strong>„Send Query Parameters"</strong> ein und trag jeden
+        Parameter als <strong>Name/Wert-Paar</strong> ein. Vorteil: übersichtlich, und jeder Wert kann eine <strong>Expression</strong> sein.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:600px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request — Query Parameters</b></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Query Parameters</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Name / Value</label><input class="n8n-input" value="latitude  =  52.52"></div>
+                  <div class="row"><label>Name / Value</label><input class="n8n-input" value="longitude  =  13.41"></div>
+                  <div class="row"><label>Name / Value</label><input class="n8n-input is-expr" value="current  =  {{ $json.felder }}"></div>
+                  <div class="row"><div class="n8n-select" style="border-style:dashed; color:var(--n8n-primary);">＋ Add Parameter</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 8.2</span>Dieselbe Abfrage als saubere Name/Wert-Liste. n8n baut daraus automatisch
+          die <code>?latitude=…&amp;longitude=…</code>-URL. Der dritte Wert ist eine Expression (bläulich).</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Import cURL — der größte Zeitsparer</b>
+        Viele API-Dokus zeigen Beispiele als <code>curl</code>-Befehl. Klick oben im Node auf <strong>„Import cURL"</strong>, füge
+        den Befehl ein — und n8n füllt Method, URL, Header und Body <em>automatisch</em> aus. Danach nur noch anpassen, fertig.
+      </div>
+
+      <h2>Daten senden: der Body bei POST</h2>
+      <p>Beim <strong>POST</strong> schickst du Inhalt mit. Stell <strong>Method</strong> auf <code>POST</code>, schalte
+        <strong>„Send Body"</strong> ein und wähle als <strong>Body Content Type</strong> meist <code>JSON</code>. Dann gibst du
+        den Body als JSON ein — und darfst überall Expressions verwenden:</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Body (JSON) — mit eingebetteter Expression</div>
+<pre>{
+  <span class="pr">"stadt"</span>: <span class="st">"Berlin"</span>,
+  <span class="pr">"temperatur"</span>: {{ $json.current.temperature_2m }},
+  <span class="pr">"gemeldet_am"</span>: <span class="st">"{{ $now.toFormat('dd.MM.yyyy HH:mm') }}"</span>
+}</pre>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht — Zahl vs. Text im Body</b>
+        Eine <strong>Zahl</strong> steht ohne Anführungszeichen (<code>"temperatur": {{ … }}</code>), ein <strong>Text</strong>
+        <em>mit</em> (<code>"gemeldet_am": "{{ … }}"</code>). Vergisst du die Quotes bei Text, wird das JSON ungültig — die
+        Vorschau zeigt dann einen roten Fehler.
+      </div>
+
+      <h2>Die Antwort lesen</h2>
+      <p>Nach „▶ Schritt ausführen" steht die Antwort im Ausgang — meist als ein Item mit JSON. Zwei nützliche Optionen findest du
+        ganz unten unter <strong>„Options"</strong>:</p>
+      <ul>
+        <li><strong>Response → Response Format:</strong> <em>Autodetect</em> reicht fast immer; für Dateien (PDF/Bild) wählst du <em>File</em>.</li>
+        <li><strong>Split Into Items:</strong> Liefert die API eine <em>Liste</em>, kannst du sie hier in <strong>ein Item pro Eintrag</strong> aufteilen — dann läuft der nächste Node automatisch pro Eintrag (Kapitel 5).</li>
+      </ul>
+
+      <div class="callout callout--info">
+        <b class="t">Authentication — kurz angerissen</b>
+        Verlangt ein Dienst Login, stell <strong>Authentication</strong> nicht auf „None". Kennt n8n den Dienst, wähle
+        <strong>„Predefined Credential Type"</strong> und such ihn aus. Sonst <strong>„Generic Credential Type" → Header Auth</strong>
+        (z. B. Header <code>Authorization</code> mit Wert <code>Bearer DEIN_TOKEN</code>). <strong>Niemals</strong> den Token offen in
+        die URL schreiben. Wie Credentials sicher gespeichert werden, ist Thema von Kapitel 12.
+      </div>
+
+      <h2>Typische Fehlercodes deuten</h2>
+      <table class="btable">
+        <thead><tr><th>Code</th><th>Bedeutung</th><th>Was tun</th></tr></thead>
+        <tbody>
+          <tr><td><code>401</code> / <code>403</code></td><td>Nicht angemeldet / keine Berechtigung</td><td>Authentication prüfen — Token fehlt, falsch oder abgelaufen</td></tr>
+          <tr><td><code>404</code></td><td>Adresse gibt es nicht</td><td>URL und Pfad kontrollieren (Tippfehler, falsche Version)</td></tr>
+          <tr><td><code>429</code></td><td>Zu viele Anfragen (Rate-Limit)</td><td>Langsamer senden — Batching/Wartezeit (Kapitel 23)</td></tr>
+          <tr><td><code>400</code></td><td>Anfrage fehlerhaft</td><td>Body/Parameter prüfen — oft ungültiges JSON oder Pflichtfeld fehlt</td></tr>
+          <tr><td><code>500</code> / <code>503</code></td><td>Fehler/Überlastung beim Server</td><td>Nicht dein Fehler — später erneut versuchen (Retry, Kapitel 11)</td></tr>
+        </tbody>
+      </table>
+
+      <hr>
+
+      <h2>Mini-Übung: einen POST senden und die Antwort lesen</h2>
+      <p>Wir schicken Daten an einen offenen <strong>Echo-Dienst</strong> (er spiegelt einfach zurück, was er bekommt) — ideal
+        zum Üben, ganz ohne Account. So siehst du genau, was du gesendet hast.</p>
+
+      <ol class="steps">
+        <li><h4>Einen HTTP-Node anlegen</h4>
+          <p>Häng an einen manuellen Trigger einen <strong>HTTP Request</strong> und öffne ihn.</p></li>
+        <li><h4>Method auf POST stellen</h4>
+          <p>Feld <strong>Method</strong> → <code>POST</code>.</p></li>
+        <li><h4>Die URL eintragen</h4>
+          <p>Ins <strong>URL</strong>-Feld: <code>https://postman-echo.com/post</code></p></li>
+        <li><h4>Body einschalten</h4>
+          <p><strong>Send Body</strong> an, <strong>Body Content Type</strong> = <code>JSON</code>, <strong>Specify Body</strong> =
+            <em>Using JSON</em>.</p></li>
+        <li><h4>Den Body eintippen</h4>
+          <p>Trag dieses JSON ein (gern mit Expression beim Zeitstempel):</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Body (JSON)</div>
+<pre>{
+  <span class="pr">"gruss"</span>: <span class="st">"Hallo aus n8n"</span>,
+  <span class="pr">"zeit"</span>: <span class="st">"{{ $now.toFormat('dd.MM.yyyy HH:mm') }}"</span>
+}</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 5;">
+        <li><h4>Ausführen</h4>
+          <p>„▶ Schritt ausführen" klicken. Rechts erscheint die Antwort.</p></li>
+        <li><h4>Die Spiegelung finden</h4>
+          <p>Such im Ergebnis das Feld <code>data</code> — der Echo-Dienst gibt dort exakt deinen Body zurück. Damit ist bewiesen,
+            dass dein POST samt JSON sauber angekommen ist.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request</b><span class="ndv-docs">Import cURL ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="ndv-empty">leeres Start-Item</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Method</label><div class="n8n-select">POST <span class="chev">▾</span></div></div>
+                  <div class="row"><label>URL <span class="req">*</span></label><input class="n8n-input" value="https://postman-echo.com/post"></div>
+                  <div class="row"><label>Body (JSON)</label><input class="n8n-input is-expr" value="{ &quot;gruss&quot;: &quot;Hallo aus n8n&quot;, … }"></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-viewtabs"><b>Tabelle</b><b class="is-active">JSON</b><b>Schema</b></div>
+                  <div class="n8n-json" style="margin-top:10px;">{
+  <span class="k">"data"</span>: {
+    <span class="k">"gruss"</span>: <span class="s">"Hallo aus n8n"</span>,
+    <span class="k">"zeit"</span>: <span class="s">"29.05.2026 14:30"</span>
+  },
+  <span class="k">"url"</span>: <span class="s">"https://postman-echo.com/post"</span>
+}</div>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 8.3</span>Der Echo-Dienst spiegelt unter <code>data</code> exakt den gesendeten
+          Body zurück — der Beweis, dass dein POST funktioniert hat.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>Roter Fehler „JSON parameter needs to be valid JSON"?</strong> Im Body fehlt ein
+          Komma, eine Klammer oder Anführungszeichen. Die Vorschau zeigt dir die Stelle.</p>
+        <p style="margin:0">• <strong>Code 405 (Method Not Allowed)?</strong> Du sendest GET an eine Adresse, die POST erwartet
+          (oder umgekehrt). Method anpassen.</p>
+      </div>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Welche Method nimmst du zum <em>Lesen</em>, welche zum <em>Senden</em>?</li>
+          <li>Was ist der Vorteil der „Send Query Parameters"-Liste gegenüber Parametern direkt in der URL?</li>
+          <li>Wie schaltest du eine API-Liste in „ein Item pro Eintrag" um?</li>
+          <li>Was bedeutet ein Antwortcode <code>401</code> — und woran liegt es meist?</li>
+          <li>Wofür ist „Import cURL" gut?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) GET zum Lesen, POST zum Senden. ·
+        2) Übersichtlich, und jeder Wert kann eine Expression sein; n8n baut die URL korrekt zusammen. ·
+        3) Unter „Options" → <strong>Split Into Items</strong>. ·
+        4) Nicht angemeldet/keine Berechtigung — meist fehlt oder stimmt das Auth-Token nicht. ·
+        5) Einen <code>curl</code>-Befehl aus einer API-Doku einfügen, n8n füllt den Node automatisch aus.
+      </div>
+
+      <p>Du kannst jetzt Daten holen <em>und</em> senden. Doch zwischen „rein" und „raus" liegt die eigentliche Arbeit: Daten
+        <strong>umformen</strong>. Im nächsten Kapitel lernst du die Werkzeuge dafür kennen — <strong>Edit Fields (Set)</strong>,
+        <strong>Code</strong> und <strong>Filter</strong>.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="08-http"></nav></section>
+<section class="page" id="09-transform" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">9</span> Bausteine im Detail</div>
+      <h1 class="chap-title">Daten transformieren: Set, Code & Filter</h1>
+      <p class="chap-lede">Daten kommen selten genau in der Form, die du brauchst. Mal sind Felder zu viel, mal fehlt eins,
+        mal soll etwas berechnet oder aussortiert werden. Dafür gibt es drei Werkzeuge — und in 90 % der Fälle reicht schon
+        das erste.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 20 Minuten</span>
+        <span>🎯 Niveau: Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 5 &amp; 6</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du mitbringen solltest</h4>
+        <ul>
+          <li><strong>Items</strong> und das „läuft pro Item"-Prinzip (Kapitel 5).</li>
+          <li><strong>Expressions</strong> (Kapitel 6) — sie sind in Set und Filter überall im Einsatz.</li>
+          <li>Den <strong>Edit-Fields-Node</strong> hast du in Kapitel 4 schon kurz benutzt.</li>
+        </ul>
+      </div>
+
+      <h2>Drei Werkzeuge, eine klare Rangfolge</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Wofür</th><th>Wann</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Edit Fields (Set)</strong></td><td>Felder setzen, umbenennen, ein sauberes Ausgabe-Objekt bauen</td><td>fast immer — dein Alltagswerkzeug</td></tr>
+          <tr><td><strong>Filter</strong></td><td>Items aussortieren, die eine Bedingung nicht erfüllen</td><td>wenn du eine Liste eindampfen willst</td></tr>
+          <tr><td><strong>Code</strong></td><td>alles, was Set/Filter nicht können (echte Logik, Schleifen)</td><td>nur als letzter Ausweg</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Erst no-code, dann Code</b>
+        Greif zum <strong>Code</strong>-Node erst, wenn es mit Set, Filter &amp; Co. wirklich nicht geht. Visuelle Nodes sind
+        leichter zu lesen, zu testen und für andere nachvollziehbar. Sehr vieles, was nach „da brauche ich Code" aussieht, löst
+        eine Expression in einem Set-Node.
+      </div>
+
+      <h2>Edit Fields (Set): das Arbeitspferd</h2>
+      <p>Der Set-Node baut ein <strong>neues, sauberes Objekt</strong> aus dem, was hereinkommt. Du legst Felder an, gibst jedem
+        einen Wert (fest oder Expression) — und entscheidest, ob die übrigen Eingangsfelder mitlaufen oder wegfallen.</p>
+
+      <ol class="steps">
+        <li><h4>Node anlegen &amp; öffnen</h4>
+          <p>Häng „Edit Fields (Set)" an und öffne ihn. <strong>Mode</strong> steht auf <em>Manual Mapping</em>.</p></li>
+        <li><h4>Felder hinzufügen</h4>
+          <p>Klick <strong>„Add Field"</strong>. Wähle links den <strong>Typ</strong> (String, Number, Boolean …), tippe den
+            <strong>Namen</strong> und setze rechts den <strong>Wert</strong> — per Reiter „Fest" oder „Expression".</p></li>
+        <li><h4>Nur gesetzte Felder behalten</h4>
+          <p>Ganz unten gibt es <strong>„Include Other Input Fields"</strong>. Lässt du es <strong>aus</strong>, enthält die
+            Ausgabe <em>nur</em> deine neuen Felder — perfekt, um Ballast loszuwerden.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:600px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">✏️</span><b>Edit Fields (Set)</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Mode</label><div class="n8n-select">Manual Mapping <span class="chev">▾</span></div></div>
+                  <div class="row"><label>String · stadt</label><input class="n8n-input" value="Berlin"></div>
+                  <div class="row"><label>Number · tempC</label><input class="n8n-input is-expr" value="{{ Math.round($json.current.temperature_2m) }}"></div>
+                  <div class="row"><label>Number · windKmh</label><input class="n8n-input is-expr" value="{{ Math.round($json.current.wind_speed_10m) }}"></div>
+                  <div class="row"><label>Include Other Input Fields</label><div class="n8n-select">⦿ aus <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 9.1</span>Aus dem großen Wetter-JSON wird ein schlankes Objekt mit genau drei
+          Feldern. „Include Other Input Fields" ist aus — alles andere fällt weg.</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Sauberes Objekt = ruhiger Workflow</b>
+        Reduziere früh auf die Felder, die du wirklich weitergibst. Das macht spätere Nodes übersichtlicher und Fehler seltener —
+        du siehst auf einen Blick, womit du arbeitest.
+      </div>
+
+      <h2>Filter: Items aussortieren</h2>
+      <p>Der <strong>Filter</strong>-Node lässt nur die Items durch, die eine Bedingung erfüllen — der Rest wird verworfen. Bekommt
+        er fünf Items und drei erfüllen die Regel, kommen drei heraus.</p>
+
+      <ol class="steps">
+        <li><h4>Node anlegen &amp; öffnen</h4>
+          <p>„Filter" anhängen und öffnen. Du siehst einen Bereich <strong>„Conditions"</strong>.</p></li>
+        <li><h4>Eine Bedingung bauen</h4>
+          <p>Links der <strong>Wert</strong> (per Expression, z. B. <code>{{ $json.tempC }}</code>), in der Mitte der
+            <strong>Operator</strong> (z. B. <em>is greater than</em>), rechts der <strong>Vergleichswert</strong> (z. B. <code>20</code>).</p></li>
+        <li><h4>Mehrere Bedingungen kombinieren</h4>
+          <p>Mit <strong>AND</strong>/<strong>OR</strong> verknüpfst du Bedingungen, z. B. „tempC &gt; 20 <em>UND</em> windKmh &lt; 15".</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 820 240" preserveAspectRatio="none">
+                <path class="is-active" d="M 178 120 C 250 120, 270 120, 340 120"></path>
+                <path class="is-active" d="M 432 120 C 510 120, 520 120, 580 120"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:74px;">
+                <span class="n8n-node__icon">📋</span><span class="ep out"></span>
+                <span class="n8n-node__label">5 Städte</span><span class="items">5 Items</span></div>
+              <div class="n8n-node" style="left:340px; top:74px;">
+                <span class="n8n-node__icon">🔎</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Filter: tempC &gt; 20</span></div>
+              <div class="n8n-node" style="left:580px; top:74px;">
+                <span class="n8n-node__icon">✅</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">weiter</span><span class="items">2 Items</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 9.2</span>Fünf Städte rein, der Filter behält nur die warmen (tempC &gt; 20) —
+          zwei Items laufen weiter. Die anderen drei werden still verworfen.</figcaption>
+      </figure>
+
+      <div class="callout callout--info">
+        <b class="t">Filter vs. IF</b>
+        <strong>Filter</strong> wirft Nicht-Treffer einfach weg (ein Ausgang). Brauchst du <em>beide</em> Gruppen — Treffer
+        <em>und</em> Nicht-Treffer in getrennten Zweigen — nimm den <strong>IF</strong>-Node (nächstes Kapitel).
+      </div>
+
+      <h2>Code: der letzte Ausweg (mit Bedacht)</h2>
+      <p>Wenn wirklich kein no-code-Node reicht, schreibst du im <strong>Code</strong>-Node ein paar Zeilen JavaScript (oder Python).
+        Wichtig ist der <strong>Modus</strong> oben:</p>
+      <ul>
+        <li><strong>Run Once for All Items:</strong> Dein Code läuft <em>einmal</em> und bekommt <em>alle</em> Items über
+          <code>$input.all()</code>. Du gibst eine <strong>Liste</strong> von Items zurück.</li>
+        <li><strong>Run Once for Each Item:</strong> Dein Code läuft <em>pro Item</em>; du arbeitest mit <code>$json</code> und gibst
+          <strong>ein</strong> Objekt zurück.</li>
+      </ul>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Modus „Run Once for Each Item"</div>
+<pre><span class="cm">// Vor- und Nachname zu einem Anzeigenamen zusammenbauen</span>
+<span class="ky">return</span> {
+  name: $json.vorname + <span class="st">' '</span> + $json.nachname,
+  initialen: ($json.vorname[<span class="nm">0</span>] + $json.nachname[<span class="nm">0</span>]).toUpperCase()
+};</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:560px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">📝</span><b>Code</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Language</label><div class="n8n-select">JavaScript <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Mode</label><div class="n8n-select">Run Once for Each Item <span class="chev">▾</span></div></div>
+                  <div class="row"><label>JavaScript</label><input class="n8n-input is-expr" value="return { name: $json.vorname + ' ' + $json.nachname };"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 9.3</span>Der Code-Node im Modus „pro Item". Beachte das <code>return</code> — es
+          bestimmt, was als neues Item herauskommt.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>„Code doesn't return items properly"?</strong> Im Modus „All Items" musst du eine
+          <em>Liste</em> zurückgeben (<code>return [...]</code>), nicht ein einzelnes Objekt.</p>
+        <p style="margin:0">• <strong>Falscher Modus.</strong> Greifst du auf <code>$json</code> zu, brauchst du „Run Once for Each
+          Item". Willst du alle Items auf einmal sehen, nimm „All Items" mit <code>$input.all()</code>.</p>
+      </div>
+
+      <h2>Noch mehr Transform-Nodes (zum Merken)</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Macht</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Sort</strong></td><td>Items nach einem Feld sortieren</td></tr>
+          <tr><td><strong>Limit</strong></td><td>nur die ersten N Items behalten</td></tr>
+          <tr><td><strong>Remove Duplicates</strong></td><td>doppelte Items entfernen</td></tr>
+          <tr><td><strong>Aggregate</strong></td><td>viele Items zu einem zusammenfassen (z. B. alle Namen in eine Liste)</td></tr>
+          <tr><td><strong>Split Out</strong></td><td>ein Feld, das eine Liste ist, in einzelne Items aufspalten</td></tr>
+        </tbody>
+      </table>
+
+      <hr>
+
+      <h2>Mini-Übung: Wetterdaten auf das Wesentliche eindampfen</h2>
+      <p>Wir nehmen wieder den Wetter-Workflow und hängen hinter „Wetter holen" einen Set-Node, der ein sauberes Objekt baut.</p>
+      <ol class="steps">
+        <li><h4>Set-Node anhängen</h4><p>Vom HTTP-Node eine Linie ziehen, „Edit Fields (Set)" wählen, öffnen.</p></li>
+        <li><h4>Drei Felder anlegen</h4>
+          <p><em>String</em> <code>stadt</code> = <code>Berlin</code> · <em>Number</em> <code>tempC</code> =
+            <code>{{ Math.round($json.current.temperature_2m) }}</code> · <em>Number</em> <code>windKmh</code> =
+            <code>{{ Math.round($json.current.wind_speed_10m) }}</code>.</p></li>
+        <li><h4>„Include Other Input Fields" ausschalten</h4>
+          <p>Damit nur deine drei Felder übrig bleiben.</p></li>
+        <li><h4>Ausführen &amp; prüfen</h4>
+          <p>„▶ Schritt ausführen": Im Ausgang steht jetzt ein knappes Objekt <code>{ stadt, tempC, windKmh }</code> — viel
+            angenehmer als das große Roh-JSON.</p></li>
+      </ol>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Welches der drei Werkzeuge nimmst du zuerst — und warum?</li>
+          <li>Wie sorgst du dafür, dass ein Set-Node <em>nur</em> deine neuen Felder ausgibt?</li>
+          <li>Du hast 8 Items, der Filter lässt 3 durch — was passiert mit den anderen 5?</li>
+          <li>Welcher Code-Modus gibt eine <em>Liste</em> zurück, welcher ein einzelnes Objekt?</li>
+          <li>Du brauchst Treffer <em>und</em> Nicht-Treffer getrennt — Filter oder IF?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Edit Fields (Set) — visuell, leicht zu testen, deckt das meiste ab. ·
+        2) „Include Other Input Fields" ausschalten. ·
+        3) Sie werden verworfen (Filter hat nur einen Ausgang). ·
+        4) „Run Once for All Items" → Liste; „Run Once for Each Item" → ein Objekt. ·
+        5) IF (zwei Ausgänge).
+      </div>
+
+      <p>Du kannst Daten jetzt holen, senden und umformen. Als Nächstes bringen wir <strong>Logik</strong> in den Ablauf:
+        verzweigen mit <strong>IF</strong> und <strong>Switch</strong>, Zweige wieder zusammenführen mit <strong>Merge</strong> —
+        und klären, wann du wirklich eine <strong>Schleife</strong> brauchst (Spoiler: seltener, als du denkst).</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="09-transform"></nav></section>
+<section class="page" id="10-flow" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">10</span> Bausteine im Detail</div>
+      <h1 class="chap-title">Flow-Logik: IF, Switch, Merge & Loops</h1>
+      <p class="chap-lede">Bisher liefen unsere Workflows schnurgerade von links nach rechts. Jetzt bringen wir
+        <strong>Entscheidungen</strong> hinein: verschiedene Wege je nach Daten, getrennte Zweige wieder zusammenführen — und die
+        Frage klären, wann du wirklich eine Schleife brauchst.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 22 Minuten</span>
+        <span>🎯 Niveau: Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 5, 6 &amp; 9</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du mitbringen solltest</h4>
+        <ul>
+          <li>Das „läuft pro Item"-Prinzip (Kapitel 5) — es erklärt, warum du Schleifen <em>selten</em> brauchst.</li>
+          <li>Bedingungen aus Kapitel 6 (<code>&gt;</code>, <code>||</code>, …) und dem Filter (Kapitel 9).</li>
+        </ul>
+      </div>
+
+      <h2>IF: die Weiche mit zwei Ausgängen</h2>
+      <p>Der <strong>IF</strong>-Node prüft eine Bedingung und schickt jedes Item in <strong>einen von zwei Ausgängen</strong>:
+        <strong>true</strong> (Bedingung erfüllt) oder <strong>false</strong> (nicht erfüllt). Anders als der Filter wirft er nichts
+        weg — beide Gruppen laufen in <em>getrennten Zweigen</em> weiter.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 820 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 152 180 C 230 180, 250 180, 320 180"></path>
+                <path class="is-active" d="M 422 160 C 510 160, 520 110, 592 110"></path>
+                <path d="M 422 205 C 510 205, 520 290, 592 290"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:134px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span></div>
+              <div class="n8n-node" style="left:330px; top:134px;">
+                <span class="n8n-node__icon">⑂</span><span class="ep in"></span>
+                <span class="ep out" style="top:26px;"></span><span class="ep out" style="top:66px;"></span>
+                <span class="n8n-node__label">IF: tempC &gt; 20</span></div>
+              <div class="n8n-node n8n-node--code" style="left:600px; top:64px;">
+                <span class="n8n-node__icon">🏖️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">dann: „warm"</span></div>
+              <div class="n8n-node n8n-node--code" style="left:600px; top:244px;">
+                <span class="n8n-node__icon">🧥</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">sonst: „kühl"</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 10.1</span>Der IF-Node hat zwei Ausgänge: oben <b>true</b> (pinke, aktive Linie),
+          unten <b>false</b>. Jedes Item geht genau einen Weg — beide Zweige existieren weiter.</figcaption>
+      </figure>
+
+      <ol class="steps">
+        <li><h4>IF anlegen &amp; öffnen</h4>
+          <p>„IF" anhängen, öffnen. Der Bereich <strong>Conditions</strong> sieht aus wie beim Filter (Kapitel 9).</p></li>
+        <li><h4>Bedingung setzen</h4>
+          <p>Wert <code>{{ $json.tempC }}</code>, Operator <em>is greater than</em>, Vergleich <code>20</code>.</p></li>
+        <li><h4>Die zwei Ausgänge verbinden</h4>
+          <p>Vom <strong>oberen</strong> Ausgang (true) ziehst du zum „warm"-Zweig, vom <strong>unteren</strong> (false) zum
+            „kühl"-Zweig. Fertig ist die Verzweigung.</p></li>
+      </ol>
+
+      <h2>Switch: die Weiche mit vielen Ausgängen</h2>
+      <p>Brauchst du mehr als zwei Wege, nimm den <strong>Switch</strong>. Du legst mehrere <strong>Routing Rules</strong> an — jede
+        bekommt einen eigenen Ausgang. So sortierst du z. B. nach Kategorie, Status oder Sprache.</p>
+
+      <table class="btable">
+        <thead><tr><th>Switch-Modus</th><th>Sortiert nach …</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Rules</strong></td><td>frei definierten Bedingungen — ein Ausgang pro Regel (wie mehrere IFs)</td></tr>
+          <tr><td><strong>Expression</strong></td><td>einem Wert/Index, den du per Expression berechnest (für Fortgeschrittene)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Switch = IF mit mehr Türen</b>
+        Denk an Switch als IF mit beliebig vielen Ausgängen. Zwei Wege → IF. Drei oder mehr → Switch. Optional gibt es einen
+        <strong>Fallback</strong>-Ausgang für alles, was zu keiner Regel passt.
+      </div>
+
+      <h2>Merge: getrennte Zweige zusammenführen</h2>
+      <p>Hast du verzweigt, willst du oft später wieder <strong>zusammenführen</strong>. Das macht der <strong>Merge</strong>-Node:
+        Er hat <strong>zwei Eingänge</strong> und einen Ausgang.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 820 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 152 110 C 250 110, 300 165, 372 165"></path>
+                <path class="is-active" d="M 152 290 C 250 290, 300 215, 372 215"></path>
+                <path class="is-active" d="M 474 190 C 540 190, 560 190, 620 190"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:64px;">
+                <span class="n8n-node__icon">🟦</span><span class="ep out"></span>
+                <span class="n8n-node__label">Quelle A</span></div>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:244px;">
+                <span class="n8n-node__icon">🟧</span><span class="ep out"></span>
+                <span class="n8n-node__label">Quelle B</span></div>
+              <div class="n8n-node" style="left:380px; top:144px;">
+                <span class="n8n-node__icon">⥒</span>
+                <span class="ep in" style="top:26px;"></span><span class="ep in" style="top:66px;"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Merge</span></div>
+              <div class="n8n-node n8n-node--code" style="left:628px; top:144px;">
+                <span class="n8n-node__icon">📦</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">weiter</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 10.2</span>Merge bringt zwei Eingänge (oben Input 1, unten Input 2) zu einem
+          Ausgang zusammen.</figcaption>
+      </figure>
+
+      <table class="btable">
+        <thead><tr><th>Merge-Modus</th><th>Macht</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Append</strong></td><td>hängt einfach beide Listen hintereinander (erst A, dann B)</td></tr>
+          <tr><td><strong>Combine</strong> (by Matching Fields)</td><td>verbindet Items, die in einem Feld übereinstimmen (z. B. gleiche <code>id</code>)</td></tr>
+          <tr><td><strong>Combine</strong> (by Position)</td><td>verbindet das 1. mit dem 1., das 2. mit dem 2. Item usw.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ IF + Merge sind die Arbeitspferde</b>
+        Verzweigen mit <strong>IF</strong>, später mit <strong>Merge</strong> wieder zusammen — dieses Paar deckt fast alle
+        „mal so, mal so"-Abläufe ab. Switch nur, wenn es wirklich mehr als zwei Wege sind.
+      </div>
+
+      <h2>Loops: meistens brauchst du sie nicht</h2>
+      <p>Der häufigste Anfänger-Reflex: „Ich habe eine Liste, ich brauche eine Schleife." Fast nie! Erinnere dich an Kapitel 5:
+        <strong>Ein Node läuft automatisch pro Item.</strong> Hast du 100 Items, läuft der nächste Node 100-mal — ganz ohne
+        Schleife.</p>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die Regel zuerst</b>
+        Willst du „für jede Zeile etwas tun", sorg einfach dafür, dass jede Zeile ein <strong>Item</strong> ist (z. B. „Split Out"
+        aus Kapitel 9). Den Rest macht n8n durch Wiederholung pro Item von selbst.
+      </div>
+
+      <p>Eine echte Schleife — den <strong>„Loop Over Items (Split in Batches)"</strong>-Node — brauchst du nur in Sonderfällen:</p>
+      <ul>
+        <li><strong>Batching:</strong> eine API erlaubt nur 10 Einträge pro Aufruf — du arbeitest sie in Häppchen ab.</li>
+        <li><strong>Rate-Limits / Pausen:</strong> du willst zwischen den Durchläufen warten (Kapitel 23).</li>
+        <li><strong>Zustand über Runden:</strong> jeder Durchlauf baut auf dem vorherigen auf.</li>
+      </ul>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 820 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 152 200 C 220 200, 240 200, 312 200"></path>
+                <path class="is-active" d="M 414 178 C 470 150, 500 120, 560 120"></path>
+                <path d="M 560 150 C 480 200, 440 235, 414 222"></path>
+                <path class="is-active" d="M 414 222 C 470 280, 520 330, 600 330"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:154px;">
+                <span class="n8n-node__icon">📋</span><span class="ep out"></span>
+                <span class="n8n-node__label">viele Items</span></div>
+              <div class="n8n-node" style="left:322px; top:154px;">
+                <span class="n8n-node__icon">🔁</span><span class="ep in"></span>
+                <span class="ep out" style="top:26px;"></span><span class="ep out" style="top:66px;"></span>
+                <span class="n8n-node__label">Loop Over Items</span></div>
+              <div class="n8n-node n8n-node--code" style="left:560px; top:74px;">
+                <span class="n8n-node__icon">⚙️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">pro Batch</span></div>
+              <div class="n8n-node n8n-node--code" style="left:600px; top:284px;">
+                <span class="n8n-node__icon">✅</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">done</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 10.3</span>„Loop Over Items" hat zwei Ausgänge: <b>loop</b> (oben, führt nach der
+          Verarbeitung zurück) und <b>done</b> (unten, wenn alle Batches durch sind). Die zurücklaufende Linie ist die Schleife.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>Endlosschleife?</strong> Der verarbeitende Zweig muss <em>zurück</em> zum
+          Loop-Node führen, sonst wird nicht weitergezählt. Prüfe, dass die Rücklinie wirklich am Loop-Node endet.</p>
+        <p style="margin:0">• <strong>Schleife, die gar nicht nötig war?</strong> Wenn jeder Node ohnehin pro Item läuft, lös den
+          Loop wieder auf — er macht den Workflow nur komplizierter.</p>
+      </div>
+
+      <hr>
+
+      <h2>Mini-Übung: zwei Antworten je nach Temperatur</h2>
+      <p>Wir verzweigen den Wetter-Workflow: bei über 20 °C eine fröhliche, sonst eine kühle Nachricht.</p>
+      <ol class="steps">
+        <li><h4>IF anhängen</h4>
+          <p>Hinter den Set-Node (mit Feld <code>tempC</code> aus Kapitel 9) einen <strong>IF</strong> setzen.</p></li>
+        <li><h4>Bedingung</h4>
+          <p>Wert <code>{{ $json.tempC }}</code> · Operator <em>is greater than</em> · <code>20</code>.</p></li>
+        <li><h4>true-Zweig</h4>
+          <p>Vom <strong>oberen</strong> Ausgang einen Set-Node: Feld <code>text</code> =
+            <code>🏖️ Heute warm: {{ $json.tempC }} °C!</code></p></li>
+        <li><h4>false-Zweig</h4>
+          <p>Vom <strong>unteren</strong> Ausgang einen Set-Node: Feld <code>text</code> =
+            <code>🧥 Eher kühl: {{ $json.tempC }} °C.</code></p></li>
+        <li><h4>Testen</h4>
+          <p>„Test workflow" — beobachte, welcher Zweig sich pink einfärbt. Das ist der Weg, den dein Item genommen hat.</p></li>
+      </ol>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Später wieder zusammenführen</b>
+        Wenn beide Zweige am Ende dasselbe tun (z. B. die Nachricht verschicken), häng einen <strong>Merge</strong> dahinter und
+        führe sie zusammen — dann brauchst du den Versand-Node nur <em>einmal</em>.
+      </div>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Was ist der Unterschied zwischen IF und Filter?</li>
+          <li>Ab wie vielen Wegen lohnt sich ein Switch statt mehrerer IFs?</li>
+          <li>Welcher Merge-Modus hängt zwei Listen einfach hintereinander?</li>
+          <li>Du willst „für jedes der 50 Items eine E-Mail" — brauchst du dafür einen Loop?</li>
+          <li>Woran erkennst du im Test, welchen Zweig ein Item genommen hat?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) IF hat zwei Ausgänge (true/false) und behält beide Gruppen; Filter wirft Nicht-Treffer weg. ·
+        2) Ab drei. ·
+        3) <strong>Append</strong>. ·
+        4) Nein — der E-Mail-Node läuft automatisch pro Item. ·
+        5) An der pink eingefärbten (aktiven) Verbindungslinie.
+      </div>
+
+      <p>Dein Werkzeugkasten für den Datenfluss ist jetzt komplett. Doch was, wenn unterwegs etwas <em>schiefgeht</em> — eine API
+        antwortet nicht, ein Feld fehlt? Im nächsten Kapitel bauen wir Workflows, die Fehler <strong>abfangen</strong> und sauber
+        darauf reagieren.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="10-flow"></nav></section>
+<section class="page" id="11-fehler" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">11</span> Bausteine im Detail</div>
+      <h1 class="chap-title">Fehlerbehandlung & Error-Workflows</h1>
+      <p class="chap-lede">Im echten Betrieb geht irgendwann etwas schief: Eine API ist kurz nicht erreichbar, ein Feld fehlt,
+        ein Limit ist erreicht. Ein guter Workflow <em>plant das ein</em> — er bricht nicht still ab, sondern versucht es erneut,
+        weicht aus oder meldet sich bei dir.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 16 Minuten</span>
+        <span>🎯 Niveau: Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 7, 8 &amp; 10</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du mitbringen solltest</h4>
+        <ul>
+          <li>Einen Workflow mit mindestens einem Node, der nach außen spricht (z. B. HTTP aus Kapitel 8).</li>
+          <li>Verzweigungen (Kapitel 10) — die Fehlerausgänge funktionieren ganz ähnlich.</li>
+        </ul>
+      </div>
+
+      <h2>Drei Ebenen der Fehlerbehandlung</h2>
+      <table class="btable">
+        <thead><tr><th>Ebene</th><th>Was sie tut</th><th>Wann</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Retry On Fail</strong></td><td>versucht denselben Node automatisch nochmal</td><td>bei wackeligen APIs (kurze Aussetzer, 429/500)</td></tr>
+          <tr><td><strong>On Error → Fehlerausgang</strong></td><td>lässt den Workflow weiterlaufen und leitet den Fehler in einen eigenen Zweig</td><td>wenn du auf den Fehler <em>reagieren</em> willst</td></tr>
+          <tr><td><strong>Error-Workflow</strong></td><td>ein separater Workflow, der bei <em>jedem</em> Absturz anspringt und dich alarmiert</td><td>als Sicherheitsnetz für alles</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Ebene 1 — Retry On Fail</h2>
+      <p>Viele Fehler sind nur ein kurzes Zucken: Der Server war eine Sekunde überlastet. Statt gleich abzubrechen, lässt du den
+        Node es einfach <strong>noch ein paar Mal</strong> versuchen. Das stellst du im <strong>Settings</strong>-Reiter des Nodes ein.</p>
+
+      <ol class="steps">
+        <li><h4>Node-Einstellungen öffnen</h4>
+          <p>Node per Doppelklick öffnen, oben auf den Reiter <strong>„Settings"</strong> (Zahnrad) wechseln.</p></li>
+        <li><h4>Retry einschalten</h4>
+          <p><strong>„Retry On Fail"</strong> aktivieren. Es erscheinen <strong>„Max Tries"</strong> (z. B. 3) und
+            <strong>„Wait Between Tries"</strong> in Millisekunden (z. B. 1000 = 1 Sekunde).</p></li>
+        <li><h4>Was du jetzt siehst</h4>
+          <p>Schlägt der Node fehl, wartet n8n kurz und probiert es erneut — bis zur eingestellten Anzahl. Erst wenn alle Versuche
+            scheitern, gilt er als fehlgeschlagen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:540px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">⚙️</span><b>HTTP Request — Settings</b></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Settings</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Retry On Fail</label><div class="n8n-select">⦿ an <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Max Tries</label><input class="n8n-input" value="3"></div>
+                  <div class="row"><label>Wait Between Tries (ms)</label><input class="n8n-input" value="1000"></div>
+                  <div class="row"><label>On Error</label><div class="n8n-select">Stop Workflow <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 11.1</span>Im <b>Settings</b>-Reiter jedes Nodes: <b>Retry On Fail</b> mit Anzahl
+          und Wartezeit. Darunter das <b>On Error</b>-Verhalten — gleich dran.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Retry kostet nichts und rettet viel</b>
+        Für jeden Node, der mit dem Internet spricht, ist <strong>Retry On Fail</strong> mit 2–3 Versuchen eine kostenlose
+        Versicherung gegen kurze Aussetzer. Das ist die wirksamste Einzelmaßnahme für stabile Workflows.
+      </div>
+
+      <h2>Ebene 2 — der Fehlerausgang („On Error")</h2>
+      <p>Manchmal soll der Workflow <em>nicht</em> stoppen, sondern den Fehler <strong>auffangen</strong> und etwas anderes tun
+        (Ersatzwert setzen, dich benachrichtigen, sauber weitermachen). Dafür stellst du in den Settings <strong>„On Error"</strong>
+        auf <strong>„Continue (using error output)"</strong>. Der Node bekommt dann einen <strong>zweiten, roten Ausgang</strong>.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 820 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 152 190 C 220 190, 250 190, 322 190"></path>
+                <path class="is-active" d="M 424 170 C 510 170, 520 110, 592 110"></path>
+                <path d="M 424 212 C 510 212, 520 300, 592 300"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:144px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span></div>
+              <div class="n8n-node" style="left:330px; top:144px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep in"></span>
+                <span class="ep out" style="top:26px;"></span><span class="ep out" style="top:66px;"></span>
+                <span class="n8n-node__label">API-Call</span></div>
+              <div class="n8n-node n8n-node--code" style="left:600px; top:64px;">
+                <span class="n8n-node__icon">✅</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Erfolg: weiter</span></div>
+              <div class="n8n-node" style="left:600px; top:254px;">
+                <span class="n8n-node__icon">🔔</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Fehler: melden</span><span class="badge badge--err">!</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 11.2</span>Mit „Continue (using error output)" bekommt der Node zwei Ausgänge:
+          oben der normale (Erfolg), unten der <b>Fehlerausgang</b>. So reagierst du gezielt auf Probleme.</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Der Fehler bringt Infos mit</b>
+        Im Fehlerzweig findest du im Item unter anderem <code>$json.error</code> mit der Meldung. Die kannst du in deine
+        Benachrichtigung schreiben — dann weißt du sofort, <em>was</em> schiefging.
+      </div>
+
+      <h2>Ebene 3 — der globale Error-Workflow</h2>
+      <p>Was, wenn ein Workflow um 3 Uhr nachts abstürzt und niemand zusieht? Dafür gibt es den <strong>Error-Workflow</strong>:
+        ein <em>eigener</em> Workflow, der automatisch startet, sobald ein anderer fehlschlägt — und dir z. B. eine Nachricht schickt.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow mit Error Trigger anlegen</h4>
+          <p>Lege einen neuen Workflow an. Als Trigger wähle <strong>„Error Trigger"</strong>. Er feuert, wenn ein überwachter
+            Workflow scheitert, und liefert die Details (Workflow-Name, fehlerhafter Node, Meldung).</p></li>
+        <li><h4>Eine Benachrichtigung anhängen</h4>
+          <p>Häng z. B. einen Telegram- oder E-Mail-Node an und baue die Nachricht aus den Fehlerdaten:
+            <code>⚠️ Workflow „{{ $json.workflow.name }}" ist gescheitert: {{ $json.execution.error.message }}</code>.</p></li>
+        <li><h4>Diesen Workflow als Error-Workflow eintragen</h4>
+          <p>Wechsle in <em>deinen eigentlichen</em> Workflow → oben „…"-Menü → <strong>Settings</strong> → Feld
+            <strong>„Error Workflow"</strong> → den eben gebauten auswählen. Speichern.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 820 240" preserveAspectRatio="none">
+                <path class="is-active" d="M 178 120 C 260 120, 300 120, 380 120"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:74px;">
+                <span class="n8n-node__icon">🚨</span><span class="ep out"></span>
+                <span class="n8n-node__label">Error Trigger</span></div>
+              <div class="n8n-node" style="left:380px; top:74px;">
+                <span class="n8n-node__icon">🔔</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Mir Bescheid geben</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 11.3</span>Ein winziger, aber mächtiger Workflow: Error Trigger → Benachrichtigung.
+          Einmal gebaut und überall als „Error Workflow" eingetragen, ist er dein Wächter über alle Abläufe.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>„Continue On Fail" versteckt Probleme.</strong> Lässt du Fehler stillschweigend
+          durchlaufen, ohne sie zu melden, merkst du nie, dass etwas hakt. Immer mit einer Benachrichtigung kombinieren.</p>
+        <p style="margin:0">• <strong>Error-Workflow feuert nicht?</strong> Er muss in den <em>Settings des überwachten</em>
+          Workflows eingetragen sein — und greift nur bei <strong>aktiven</strong> (Produktions-)Läufen, nicht bei manuellen Tests.</p>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Bewusst Fehler werfen: „Stop and Error"</b>
+        Manchmal <em>willst</em> du abbrechen — etwa wenn Pflichtdaten fehlen. Der Node <strong>„Stop and Error"</strong> wirft
+        einen klaren, selbst formulierten Fehler. So scheitert der Workflow kontrolliert statt unbemerkt mit Müll weiterzulaufen.
+      </div>
+
+      <hr>
+
+      <h2>Mini-Übung: den Wetter-Workflow absichern</h2>
+      <ol class="steps">
+        <li><h4>Retry auf den HTTP-Node</h4>
+          <p>Öffne „Wetter holen" → <strong>Settings</strong> → <strong>Retry On Fail</strong> an, Max Tries <code>3</code>,
+            Wait <code>1000</code>.</p></li>
+        <li><h4>Error-Workflow bauen</h4>
+          <p>Neuer Workflow: <strong>Error Trigger</strong> → Benachrichtigungs-Node mit
+            <code>⚠️ {{ $json.workflow.name }}: {{ $json.execution.error.message }}</code>. Speichern.</p></li>
+        <li><h4>Verknüpfen</h4>
+          <p>Im Wetter-Workflow → Settings → <strong>Error Workflow</strong> = der neue. Speichern, aktiv schalten.</p></li>
+        <li><h4>Testen, indem du etwas kaputt machst</h4>
+          <p>Tipp die URL im HTTP-Node absichtlich falsch und lass den Workflow (aktiv) laufen — die Fehlermeldung sollte bei dir
+            ankommen. Danach URL wieder korrigieren.</p></li>
+      </ol>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Welche Einzelmaßnahme bringt am meisten Stabilität für API-Nodes?</li>
+          <li>Wie bekommt ein Node einen zweiten, roten Ausgang?</li>
+          <li>Wo trägst du ein, welcher Workflow bei einem Absturz benachrichtigen soll?</li>
+          <li>Warum ist „Continue On Fail" ohne Meldung gefährlich?</li>
+          <li>Womit erzwingst du absichtlich einen sauberen Abbruch?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Retry On Fail (2–3 Versuche). ·
+        2) In den Node-Settings „On Error" → „Continue (using error output)". ·
+        3) In den <strong>Settings des überwachten Workflows</strong>, Feld „Error Workflow". ·
+        4) Probleme bleiben unbemerkt — du merkst nie, dass etwas hakt. ·
+        5) Mit dem Node „Stop and Error".
+      </div>
+
+      <p>Deine Workflows sind jetzt robust. Es fehlt noch ein Baustein, ohne den viele Dienste gar nicht erst mit dir reden: der
+        sichere Umgang mit Zugangsdaten. Das letzte Kapitel von Teil 2 widmet sich den <strong>Credentials</strong>.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="11-fehler"></nav></section>
+<section class="page" id="12-credentials" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">12</span> Bausteine im Detail</div>
+      <h1 class="chap-title">Credentials & Authentifizierung</h1>
+      <p class="chap-lede">Die meisten interessanten Dienste — Gmail, Telegram, Sheets, OpenAI — verlangen einen Login. In n8n
+        gibst du Zugangsdaten aber <em>nicht</em> mitten in den Workflow ein, sondern legst sie als sicher verschlüsselte
+        <strong>Credential</strong> an. Dieses Kapitel zeigt, wie das geht — und warum es so viel sicherer ist.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 15 Minuten</span>
+        <span>🎯 Niveau: Einstieg → Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 8 (HTTP)</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du mitbringen solltest</h4>
+        <ul>
+          <li>Du hast den HTTP-Node gesehen (Kapitel 8) und das Feld „Authentication" bemerkt.</li>
+          <li><strong>Niemals echte Tokens</strong> in dieses Buch oder in geteilte Dateien schreiben — hier nur Platzhalter.</li>
+        </ul>
+      </div>
+
+      <h2>Was eine Credential ist — und warum getrennt</h2>
+      <p>Eine <strong>Credential</strong> ist ein sicher gespeichertes Geheimnis: ein API-Schlüssel, ein Token oder ein
+        OAuth-Login. n8n speichert die Werte <strong>verschlüsselt</strong> und getrennt vom Workflow. Im Node wählst du nur den
+        <em>Namen</em> der Credential — die Geheimwerte tauchen im Workflow selbst nirgends auf.</p>
+
+      <table class="btable">
+        <thead><tr><th>Warum getrennt?</th><th>Konkret</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Sicherheit</strong></td><td>Beim Export/Teilen eines Workflows gehen die Geheimnisse <em>nicht</em> mit.</td></tr>
+          <tr><td><strong>Wiederverwendung</strong></td><td>Eine Credential nutzt du in beliebig vielen Nodes und Workflows.</td></tr>
+          <tr><td><strong>Pflege</strong></td><td>Token abgelaufen? Einmal zentral ändern — alle Nodes nutzen sofort den neuen.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die eine Regel</b>
+        Geheimnisse gehören in <strong>Credentials</strong> — nie direkt in ein Feld, eine URL oder eine Expression. Das ist die
+        wichtigste Sicherheits-Gewohnheit in n8n.
+      </div>
+
+      <h2>Zwei Wege, sich zu authentifizieren</h2>
+      <ul>
+        <li><strong>Vordefinierter Credential-Typ:</strong> Kennt n8n den Dienst (Telegram, Google, OpenAI, Slack …), gibt es einen
+          fertigen Typ. Du füllst nur die passenden Felder — n8n weiß, wie der Login funktioniert.</li>
+        <li><strong>Generisch (im HTTP-Node):</strong> Für jede beliebige API ohne eigenen Node. Wähle im HTTP-Node
+          <em>Generic Credential Type</em> → meist <strong>Header Auth</strong> (z. B. Header <code>Authorization</code> =
+          <code>Bearer DEIN_TOKEN</code>) oder <em>Basic / Query / OAuth2</em>.</li>
+      </ul>
+
+      <h2>Eine Credential anlegen (Schritt für Schritt)</h2>
+      <p>Am einfachsten legst du sie direkt aus dem Node an, der sie braucht.</p>
+      <ol class="steps">
+        <li><h4>Im Node das Credential-Feld öffnen</h4>
+          <p>Im Node steht oben <strong>„Credential to connect with"</strong>. Klick auf das Aufklappmenü →
+            <strong>„+ Create new credential"</strong>.</p></li>
+        <li><h4>Die Felder ausfüllen</h4>
+          <p>Es öffnet sich ein Formular mit genau den Feldern, die der Dienst braucht — z. B. bei Telegram nur das
+            <strong>Access Token</strong> vom BotFather.</p></li>
+        <li><h4>Speichern (und ggf. testen)</h4>
+          <p>Auf <strong>„Save"</strong> klicken. Viele Credentials prüfen die Verbindung sofort und zeigen ein grünes
+            <strong>„Connection successful"</strong>.</p></li>
+        <li><h4>Benennen</h4>
+          <p>Gib der Credential oben einen sprechenden Namen, z. B. <code>Telegram – Wetter-Bot</code>. So findest du sie später
+            in anderen Nodes wieder.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:520px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🔑</span><b>Neue Credential · Telegram API</b></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Verbindungsdaten</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Name</label><input class="n8n-input" value="Telegram – Wetter-Bot"></div>
+                  <div class="row"><label>Access Token <span class="req">*</span></label><input class="n8n-input" value="123456:ABC-DEF… (dein Token)"></div>
+                  <div class="row"><div class="n8n-btn n8n-btn--primary n8n-btn--sm">Save</div> <span class="hint" style="margin-left:10px; color:var(--n8n-success);">✓ Connection successful</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 12.1</span>Das Formular eines vordefinierten Credential-Typs (hier Telegram). Nur
+          das nötige Feld, ein Klick auf Save — und n8n prüft gleich die Verbindung.</figcaption>
+      </figure>
+
+      <h2>OAuth: Login per Klick</h2>
+      <p>Manche Dienste (Google, Microsoft …) nutzen <strong>OAuth</strong> statt eines simplen Tokens. Dann erscheint im
+        Credential-Formular ein Knopf <strong>„Sign in with …" / „Connect"</strong>. Ein Klick öffnet das Login-Fenster des
+        Anbieters, du bestätigst den Zugriff — und n8n speichert den Zugang automatisch. Kein Kopieren von Schlüsseln nötig.</p>
+
+      <div class="callout callout--info">
+        <b class="t">Eine Credential, viele Nodes</b>
+        Einmal angelegt, taucht deine Credential in jedem passenden Node im Aufklappmenü auf. Du wählst sie einfach aus — neu
+        anlegen musst du sie nie wieder. Zentral verwalten kannst du alle unter dem Menüpunkt <strong>„Credentials"</strong>.
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:520px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">✈️</span><b>Telegram — Send a text message</b></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Credential to connect with</label><div class="n8n-select">Telegram – Wetter-Bot <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Chat ID</label><input class="n8n-input" value="123456789"></div>
+                  <div class="row"><label>Text</label><input class="n8n-input is-expr" value="{{ $json.nachricht }}"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 12.2</span>Im Node wählst du die gespeicherte Credential nur noch aus dem Menü —
+          das Token selbst steht nirgendwo im Workflow.</figcaption>
+      </figure>
+
+      <h2>Sicherheits-Gewohnheiten</h2>
+      <ul>
+        <li><strong>Geheimnisse nur in Credentials</strong> — nie in URL, Feld oder Expression.</li>
+        <li><strong>Sparsam mit Rechten:</strong> Gib einem Token nur die Berechtigungen, die der Workflow wirklich braucht.</li>
+        <li><strong>Regelmäßig erneuern</strong> (Rotation) und alte/ungenutzte Tokens widerrufen.</li>
+        <li><strong>Self-hosted:</strong> Für Werte, die sich je Umgebung unterscheiden, eignen sich Umgebungsvariablen — mehr in
+          Kapitel 24.</li>
+      </ul>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>Fehler 401/403?</strong> Token fehlt, ist falsch kopiert (Leerzeichen!) oder
+          abgelaufen. Credential öffnen, Wert neu einsetzen, speichern.</p>
+        <p style="margin:0">• <strong>OAuth-Verbindung „expired"?</strong> Einfach erneut „Connect"/„Reconnect" klicken und den
+          Login wiederholen.</p>
+      </div>
+
+      <hr>
+
+      <h2>Mini-Übung: eine API mit Header-Token ansprechen</h2>
+      <p>Wir richten im HTTP-Node eine generische Header-Authentifizierung ein (mit Platzhalter-Token).</p>
+      <ol class="steps">
+        <li><h4>HTTP-Node, Authentication wählen</h4>
+          <p>Im HTTP-Node <strong>Authentication</strong> → <strong>Generic Credential Type</strong> → <strong>Header Auth</strong>.</p></li>
+        <li><h4>Credential anlegen</h4>
+          <p>„+ Create new credential". Feld <strong>Name</strong> = <code>Authorization</code>, Feld <strong>Value</strong> =
+            <code>Bearer DEIN_TOKEN</code> (echtes Token natürlich privat halten).</p></li>
+        <li><h4>Speichern &amp; benennen</h4>
+          <p>Save, Credential z. B. <code>Beispiel-API – Header</code> nennen.</p></li>
+        <li><h4>Verwenden</h4>
+          <p>Zurück im Node ist die Credential ausgewählt. Jeder Request schickt den Header nun automatisch mit — du musst ihn nie
+            wieder eintippen, und er steht nicht im Workflow.</p></li>
+      </ol>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Warum trägt man Tokens nicht direkt in ein Node-Feld ein?</li>
+          <li>Was passiert mit Credentials, wenn du einen Workflow exportierst?</li>
+          <li>Wann nimmst du „Generic Credential Type → Header Auth"?</li>
+          <li>Ein abgelaufenes Token äußert sich meist als welcher Fehlercode?</li>
+          <li>Musst du dieselbe Credential für jeden Node neu anlegen?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Sicherheit — Geheimnisse gehören verschlüsselt in Credentials, nicht in den Workflow. ·
+        2) Sie gehen <strong>nicht</strong> mit; nur der Verweis bleibt. ·
+        3) Für beliebige APIs ohne eigenen Node, die einen Token im Header erwarten. ·
+        4) 401 (bzw. 403). ·
+        5) Nein — einmal anlegen, überall aus dem Menü auswählen.
+      </div>
+
+      <p>Damit ist dein Werkzeugkasten komplett: Du kennst Trigger, HTTP, Transformationen, Flow-Logik, Fehlerbehandlung und
+        Credentials. Zeit, das alles zusammenzubringen! In <strong>Teil 3</strong> bauen wir echte Projekte — vom täglichen
+        Report bis zum KI-Assistenten. Den Anfang macht ein <strong>täglicher Wetter-Report per Telegram</strong>.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="12-credentials"></nav></section>
+<section class="page" id="13-projekt-wetter" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">13</span> Projekt 1</div>
+      <h1 class="chap-title">Täglicher Wetter-Report per Telegram</h1>
+      <p class="chap-lede">Jetzt wird aus den Bausteinen ein echter Workflow: Jeden Morgen holt n8n aktuelle Wetterdaten,
+        baut daraus eine gut lesbare Nachricht und schickt sie dir per Telegram. Das Projekt ist klein genug zum
+        Nachbauen, aber vollständig genug, um als Vorlage für viele Reports zu dienen.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 36 Minuten</span>
+        <span>🎯 Niveau: Einstieg → Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 7–12</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>n8n läuft, und du kannst einen neuen Workflow erstellen.</li>
+          <li>Einen Telegram-Account und einen Telegram-Bot. Falls du noch keinen hast: Schritt 1 führt dich durch.</li>
+          <li>Keinen Wetter-API-Schlüssel: Wir nutzen Open-Meteo, eine freie API ohne Anmeldung.</li>
+          <li>Keine echten Tokens in Notizen, Screenshots oder geteilte Dateien schreiben. Tokens gehören nur in Credentials.</li>
+        </ul>
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Der fertige Workflow hat vier Nodes. Er startet täglich um 8 Uhr, holt Wetterdaten für Berlin, formt daraus
+        einen kompakten Morgenbericht und sendet ihn an deinen Telegram-Chat.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 900 320" preserveAspectRatio="none">
+                <path class="is-active" d="M 168 150 C 230 150, 245 150, 300 150"></path>
+                <path class="is-active" d="M 392 150 C 465 150, 478 150, 532 150"></path>
+                <path class="is-active" d="M 624 150 C 700 150, 710 150, 760 150"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:50px; top:104px;">
+                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__label">Täglich 8 Uhr</span><span class="badge badge--ok">✓</span></div>
+              <div class="n8n-node" style="left:300px; top:104px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span><span class="items">1 Item</span></div>
+              <div class="n8n-node n8n-node--code" style="left:532px; top:104px;">
+                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Report bauen</span><span class="items">1 Item</span></div>
+              <div class="n8n-node" style="left:760px; top:104px;">
+                <span class="n8n-node__icon">✈️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Telegram senden</span><span class="badge badge--ok">✓</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 13.1</span>Der komplette Projekt-Workflow:
+          <b>Schedule</b> → <b>HTTP Request</b> → <b>Edit Fields</b> → <b>Telegram</b>.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Warum genau dieses Projekt?</b>
+        Es bündelt die wichtigsten Bausteine ohne Nebengeräusche: Zeitplan, API-Aufruf, Expressions, Credential,
+        Versand und Aktivierung. Dasselbe Muster verwendest du später für Tagesberichte, Kontrolllisten,
+        Monitoring-Meldungen oder Team-Updates.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 1 — Telegram-Bot vorbereiten</h2>
+      <p>Telegram verschickt Nachrichten über Bots. Der Bot ist technisch der Absender; du gibst n8n sein Token als
+        Credential und deine Chat-ID als Empfänger.</p>
+
+      <ol class="steps">
+        <li><h4>BotFather öffnen</h4>
+          <p>Öffne Telegram und suche nach <strong>@BotFather</strong>. Achte auf den verifizierten Bot von Telegram.</p></li>
+        <li><h4>Neuen Bot erstellen</h4>
+          <p>Starte den Chat und sende <code>/newbot</code>. BotFather fragt nach einem Anzeigenamen und danach nach
+            einem Benutzernamen, der auf <code>bot</code> enden muss, z. B. <code>mein_wetter_report_bot</code>.</p></li>
+        <li><h4>Token kopieren</h4>
+          <p>Am Ende bekommst du ein Bot-Token. Kopiere es, aber speichere es nicht in einer normalen Textdatei.
+            Wir tragen es gleich in eine n8n-Credential ein.</p></li>
+        <li><h4>Dem Bot einmal schreiben</h4>
+          <p>Öffne den Chat mit deinem neuen Bot und sende irgendeine Nachricht, z. B. <code>Hallo</code>.
+            Ohne diesen ersten Kontakt darf der Bot dir später nicht schreiben.</p></li>
+        <li><h4>Chat-ID herausfinden</h4>
+          <p>Suche in Telegram <strong>@userinfobot</strong> und starte ihn. Er antwortet mit deiner numerischen
+            <strong>Id</strong>. Notiere diese Zahl als <code>CHAT_ID</code>.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        Fast alle Telegram-Probleme entstehen hier: falsches Token, falsche Chat-ID oder du hast deinem eigenen Bot
+        noch nie geschrieben. Prüfe diese drei Punkte, bevor du später am Workflow zweifelst.
+      </div>
+
+      <h2>Schritt 2 — Neuen Workflow anlegen und benennen</h2>
+      <ol class="steps">
+        <li><h4>Workflow erstellen</h4>
+          <p>Gehe zur Workflow-Übersicht und klicke auf <strong>Create Workflow</strong> bzw. <strong>Neuer Workflow</strong>.</p></li>
+        <li><h4>Name setzen</h4>
+          <p>Klicke oben links auf den Workflow-Namen und schreibe: <code>Täglicher Wetter-Report</code>.</p></li>
+        <li><h4>Speichern</h4>
+          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Oben sollte <strong>Saved</strong> bzw.
+            <strong>Gespeichert</strong> erscheinen.</p></li>
+      </ol>
+
+      <h2>Schritt 3 — Schedule-Trigger setzen</h2>
+      <p>Der Workflow soll von allein starten, also nehmen wir keinen manuellen Trigger, sondern einen Zeitplan.</p>
+
+      <ol class="steps">
+        <li><h4>Start-Node hinzufügen</h4>
+          <p>Klicke auf das große <span class="kbd">+</span> in der Mitte, suche <code>schedule</code> und wähle
+            <strong>Schedule Trigger</strong>.</p></li>
+        <li><h4>Trigger öffnen</h4>
+          <p>Doppelklicke den Schedule-Node. Die Parameter-Spalte öffnet sich.</p></li>
+        <li><h4>Täglich einstellen</h4>
+          <p>Setze <strong>Trigger Interval</strong> auf <strong>Days</strong>, <strong>Days Between Triggers</strong> auf
+            <code>1</code>, <strong>Trigger at Hour</strong> auf <code>8am</code> und <strong>Trigger at Minute</strong> auf
+            <code>0</code>.</p></li>
+        <li><h4>Testlauf ermöglichen</h4>
+          <p>Klicke oben im Node auf <strong>▶ Schritt ausführen</strong>. Der Node erzeugt sofort ein Test-Item, auch wenn es
+            gerade nicht 8 Uhr ist.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:560px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">⏰</span><b>Schedule Trigger</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Trigger Interval</label><div class="n8n-select">Days <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Days Between Triggers</label><input class="n8n-input" value="1"></div>
+                  <div class="row"><label>Trigger at Hour</label><div class="n8n-select">8am <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Trigger at Minute</label><input class="n8n-input" value="0"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 13.2</span>Der Report startet täglich um 8:00 Uhr. Die tatsächliche Zeitzone
+          kommt aus deinen n8n-Einstellungen.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn die Uhrzeit nicht stimmt</b>
+        Prüfe die Zeitzone deiner n8n-Instanz. Ein Server auf UTC löst 8:00 Uhr UTC aus, nicht automatisch 8:00 Uhr Berlin.
+        Für produktive Reports ist diese Prüfung keine Kosmetik, sondern Pflicht.
+      </div>
+
+      <h2>Schritt 4 — Wetterdaten mit Open-Meteo holen</h2>
+      <p>Jetzt hängen wir einen HTTP-Request-Node an. Wir nutzen Query-Parameter als Name/Wert-Liste, weil das lesbarer ist
+        als eine lange URL.</p>
+
+      <ol class="steps">
+        <li><h4>HTTP-Node anhängen</h4>
+          <p>Schließe die Detailansicht mit <span class="kbd">Esc</span>. Ziehe vom Ausgangspunkt rechts am Schedule-Node
+            eine Verbindung ins Leere, suche <code>http</code> und wähle <strong>HTTP Request</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Klicke den Node-Namen an und benenne ihn in <code>Wetter holen</code> um. Das macht spätere Expressions lesbarer.</p></li>
+        <li><h4>Node öffnen</h4>
+          <p>Doppelklick auf <strong>Wetter holen</strong>.</p></li>
+        <li><h4>Methode und URL setzen</h4>
+          <p><strong>Method</strong> bleibt <code>GET</code>. In <strong>URL</strong> trägst du ein:
+            <code>https://api.open-meteo.com/v1/forecast</code></p></li>
+        <li><h4>Query-Parameter einschalten</h4>
+          <p>Schalte <strong>Send Query Parameters</strong> ein und füge die folgenden Name/Wert-Paare hinzu.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>Name</th><th>Wert</th><th>Bedeutung</th></tr></thead>
+        <tbody>
+          <tr><td><code>latitude</code></td><td><code>52.52</code></td><td>Breitengrad Berlin</td></tr>
+          <tr><td><code>longitude</code></td><td><code>13.41</code></td><td>Längengrad Berlin</td></tr>
+          <tr><td><code>current</code></td><td><code>temperature_2m,wind_speed_10m,weather_code</code></td><td>aktuelle Werte</td></tr>
+          <tr><td><code>daily</code></td><td><code>temperature_2m_max,temperature_2m_min,precipitation_probability_max</code></td><td>Tageswerte</td></tr>
+          <tr><td><code>timezone</code></td><td><code>Europe/Berlin</code></td><td>Zeitzone für Datum/Uhrzeit</td></tr>
+        </tbody>
+      </table>
+
+      <ol class="steps" style="counter-reset: st 5;">
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke oben auf <strong>▶ Schritt ausführen</strong>. Rechts sollte ein JSON-Ergebnis mit <code>current</code>
+            und <code>daily</code> erscheinen.</p></li>
+        <li><h4>Schema prüfen</h4>
+          <p>Wechsle rechts auf <strong>Schema</strong>. Du solltest unter anderem
+            <code>current.temperature_2m</code>, <code>current.wind_speed_10m</code> und
+            <code>daily.temperature_2m_max</code> sehen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>Wetter holen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="ndv-empty">Zeitplan-Item</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                  <div class="row"><label>URL</label><input class="n8n-input" value="https://api.open-meteo.com/v1/forecast"></div>
+                  <div class="row"><label>Query</label><input class="n8n-input" value="latitude = 52.52"></div>
+                  <div class="row"><label>Query</label><input class="n8n-input" value="current = temperature_2m,wind_speed_10m,weather_code"></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-json">{
+  <span class="k">"current"</span>: {
+    <span class="k">"temperature_2m"</span>: <span class="n">17.4</span>,
+    <span class="k">"wind_speed_10m"</span>: <span class="n">12.3</span>,
+    <span class="k">"weather_code"</span>: <span class="n">3</span>
+  },
+  <span class="k">"daily"</span>: {
+    <span class="k">"temperature_2m_max"</span>: [<span class="n">20.1</span>],
+    <span class="k">"temperature_2m_min"</span>: [<span class="n">11.8</span>],
+    <span class="k">"precipitation_probability_max"</span>: [<span class="n">35</span>]
+  }
+}</div>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 13.3</span>Open-Meteo liefert aktuelle Werte unter <code>current</code> und
+          Tageswerte als Listen unter <code>daily</code>. Für den ersten Tageswert verwenden wir gleich <code>[0]</code>.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>Keine Daten?</strong> Prüfe die Query-Namen exakt. <code>latitude</code> ist nicht <code>lat</code>.</p>
+        <p style="margin:0">• <strong>Felder fehlen?</strong> Prüfe den Wert bei <code>current</code> und <code>daily</code>.
+          Open-Meteo liefert nur die Felder zurück, die du angefordert hast.</p>
+      </div>
+
+      <h2>Schritt 5 — Report-Text bauen</h2>
+      <p>Rohes JSON ist kein Report. Der nächste Node erzeugt ein einziges Feld <code>nachricht</code>, das Telegram später
+        verschickt.</p>
+
+      <ol class="steps">
+        <li><h4>Edit-Fields-Node anhängen</h4>
+          <p>Schließe die Detailansicht. Ziehe vom HTTP-Node eine Linie ins Leere, suche <code>edit fields</code> und wähle
+            <strong>Edit Fields (Set)</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Report bauen</code>.</p></li>
+        <li><h4>Node öffnen und Feld anlegen</h4>
+          <p>Doppelklick. Klicke <strong>Add Field</strong> bzw. <strong>Add Value</strong>. Feldname:
+            <code>nachricht</code>.</p></li>
+        <li><h4>Wert auf Expression stellen</h4>
+          <p>Beim Wert-Feld auf <strong>Expression</strong> klicken.</p></li>
+        <li><h4>Nachricht einfügen</h4>
+          <p>Füge den folgenden Ausdruck vollständig ein.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Feld `nachricht` — Modus: Expression</div>
+<pre>Guten Morgen! Wetter für Berlin:
+
+Jetzt: {{ Math.round($json.current.temperature_2m) }} °C, Wind {{ Math.round($json.current.wind_speed_10m) }} km/h.
+Heute: {{ Math.round($json.daily.temperature_2m_min[0]) }}–{{ Math.round($json.daily.temperature_2m_max[0]) }} °C.
+Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unbekannt" }} %.
+
+{{ $json.current.wind_speed_10m >= 40 ? "Achtung: starker Wind." : "Keine Wetterwarnung aus diesem einfachen Check." }}</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 5;">
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Rechts sollte ein einziges Feld <code>nachricht</code> mit einem
+            lesbaren Text stehen.</p></li>
+        <li><h4>Text prüfen</h4>
+          <p>Kontrolliere kritisch: Sind Zahlen gerundet? Wirkt der Satz natürlich? Passt die Windwarnung zum Wert im Eingang?</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Arrays bewusst lesen</b>
+        Die Tageswerte von Open-Meteo sind Listen. <code>temperature_2m_max[0]</code> heißt:
+        „Nimm den ersten Tageswert“. Ohne <code>[0]</code> würdest du die ganze Liste in den Text schreiben.
+      </div>
+
+      <h2>Schritt 6 — Telegram-Credential anlegen</h2>
+      <p>Jetzt kommt das Bot-Token aus Schritt 1 ins Spiel. Es gehört in eine Credential, nicht in den Workflow-Text.</p>
+
+      <ol class="steps">
+        <li><h4>Telegram-Node anhängen</h4>
+          <p>Schließe die Detailansicht. Ziehe vom Node <strong>Report bauen</strong> eine Linie ins Leere, suche
+            <code>telegram</code> und wähle <strong>Telegram</strong>.</p></li>
+        <li><h4>Aktion wählen</h4>
+          <p>Wähle als Aktion <strong>Send a text message</strong> bzw. sinngemäß „Textnachricht senden“.</p></li>
+        <li><h4>Credential erstellen</h4>
+          <p>Beim Feld <strong>Credential to connect with</strong> auf <strong>+ Create new credential</strong> klicken.</p></li>
+        <li><h4>Token eintragen</h4>
+          <p>Füge das Bot-Token von BotFather in das Token-Feld ein. Benenne die Credential z. B.
+            <code>Telegram – Wetter-Report</code> und speichere.</p></li>
+        <li><h4>Zurück zum Node</h4>
+          <p>Die neue Credential sollte jetzt im Telegram-Node ausgewählt sein.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Sicherheitsgrenze</b>
+        Das Token bleibt in der Credential. Es gehört nicht in ein Codefeld, nicht in eine Expression und nicht in eine
+        exportierte Workflow-Beschreibung. Wenn du es versehentlich veröffentlicht hast: BotFather öffnen und Token erneuern.
+      </div>
+
+      <h2>Schritt 7 — Telegram-Nachricht senden</h2>
+
+      <ol class="steps">
+        <li><h4>Chat-ID eintragen</h4>
+          <p>Im Telegram-Node das Feld <strong>Chat ID</strong> mit deiner Zahl aus Schritt 1 füllen.</p></li>
+        <li><h4>Text-Feld auf Expression stellen</h4>
+          <p>Beim Feld <strong>Text</strong> auf <strong>Expression</strong> umschalten.</p></li>
+        <li><h4>Nachricht aus vorherigem Node übernehmen</h4>
+          <p>Trage ein: <code>{{ $json.nachricht }}</code>. Das ist das Feld aus <strong>Report bauen</strong>.</p></li>
+        <li><h4>Telegram-Node einzeln testen</h4>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Innerhalb weniger Sekunden sollte die Nachricht in Telegram erscheinen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:560px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">✈️</span><b>Telegram — Send a text message</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Credential to connect with</label><div class="n8n-select">Telegram – Wetter-Report <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Chat ID</label><input class="n8n-input" value="123456789"></div>
+                  <div class="row"><label>Text</label><div class="ndv-fxtab"><b>Fest</b><b class="is-active">Expression</b></div><input class="n8n-input is-expr" value="{{ $json.nachricht }}"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 13.4</span>Telegram bekommt nur den fertigen Report-Text aus dem vorherigen Node.
+          Das Bot-Token bleibt in der Credential.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn die Nachricht nicht ankommt</b>
+        <p style="margin:0 0 6px">• <strong>Bad Request: chat not found</strong> → Chat-ID falsch oder du hast dem Bot noch nicht geschrieben.</p>
+        <p style="margin:0 0 6px">• <strong>Unauthorized</strong> → Bot-Token falsch oder Credential nicht gespeichert.</p>
+        <p style="margin:0">• <strong>Im Text steht nichts</strong> → Prüfe im vorherigen Node, ob <code>nachricht</code> wirklich erzeugt wurde.</p>
+      </div>
+
+      <h2>Schritt 8 — Den ganzen Workflow testen</h2>
+      <ol class="steps">
+        <li><h4>Zurück zum Canvas</h4>
+          <p>Drücke <span class="kbd">Esc</span>, bis du alle vier Nodes siehst.</p></li>
+        <li><h4>Speichern</h4>
+          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Test workflow starten</h4>
+          <p>Klicke <strong>Test workflow</strong>. n8n läuft von links nach rechts durch: Schedule → Wetter holen →
+            Report bauen → Telegram senden.</p></li>
+        <li><h4>Grüne Häkchen prüfen</h4>
+          <p>Jeder Node sollte ein grünes Häkchen bekommen. Öffne bei einem Fehler genau den roten Node, nicht blind alle.</p></li>
+        <li><h4>Telegram kontrollieren</h4>
+          <p>Prüfe, ob genau eine neue Nachricht angekommen ist und ob sie fachlich plausibel klingt.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum erst manuell testen?</b>
+        Ein aktiver Workflow sendet später automatisch. Wenn du vorher nicht manuell testest, automatisierst du im Zweifel
+        einen Fehler. Bei Benachrichtigungen ist das harmlos; bei Rechnungen, CRM oder Löschaktionen wäre es riskant.
+      </div>
+
+      <h2>Schritt 9 — Aktiv schalten</h2>
+      <ol class="steps">
+        <li><h4>Letzten Stand speichern</h4>
+          <p>Speichere noch einmal. Der Status oben sollte <strong>Saved</strong> sein.</p></li>
+        <li><h4>Aktiv-Schalter umlegen</h4>
+          <p>Oben rechts den Workflow von <strong>Inactive</strong> auf <strong>Active</strong> schalten.</p></li>
+        <li><h4>Was jetzt passiert</h4>
+          <p>n8n lauscht nun auf den Schedule. Der nächste automatische Lauf passiert zur eingestellten Uhrzeit.</p></li>
+        <li><h4>Ersten automatischen Lauf prüfen</h4>
+          <p>Nach der ersten geplanten Ausführung öffnest du den Tab <strong>Executions</strong> und prüfst, ob der Lauf
+            erfolgreich war. Das ist deine Kontrolle, dass nicht nur der manuelle Test funktioniert.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Produktiv heißt: beobachten</b>
+        Aktivieren ist nicht das Ende. Prüfe nach dem ersten echten Lauf die Ausführungshistorie. Erst danach darfst du
+        annehmen, dass der Workflow im Alltag zuverlässig läuft.
+      </div>
+
+      <h2>Varianten, die du sofort bauen kannst</h2>
+      <table class="btable">
+        <thead><tr><th>Variante</th><th>Änderung</th></tr></thead>
+        <tbody>
+          <tr><td>Andere Stadt</td><td><code>latitude</code> und <code>longitude</code> austauschen.</td></tr>
+          <tr><td>Andere Uhrzeit</td><td>Schedule-Trigger ändern, z. B. 7:30 Uhr statt 8:00 Uhr.</td></tr>
+          <tr><td>Nur bei Regenwarnung senden</td><td>Vor Telegram einen IF-Node setzen: <code>precipitation_probability_max[0] &gt;= 60</code>.</td></tr>
+          <tr><td>Mehrere Empfänger</td><td>Entweder mehrere Telegram-Nodes oder später eine Empfängerliste als Items.</td></tr>
+          <tr><td>Slack statt Telegram</td><td>Letzten Node austauschen; Feld <code>nachricht</code> bleibt gleich.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Welcher Node entscheidet, wann der Report startet?</li>
+          <li>Warum stehen Open-Meteo-Parameter als Query-Liste statt in einer langen URL?</li>
+          <li>Warum braucht <code>daily.temperature_2m_max</code> den Zugriff <code>[0]</code>?</li>
+          <li>Wo gehört das Telegram-Bot-Token hin?</li>
+          <li>Was prüfst du nach dem ersten echten automatischen Lauf?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Der Schedule-Trigger. · 2) Es ist lesbarer, wartbarer und Expressions sind leichter einzusetzen. ·
+        3) Weil Open-Meteo Tageswerte als Liste liefert; <code>[0]</code> ist der erste Tag. ·
+        4) In eine Telegram-Credential. · 5) Die Execution-Historie und die tatsächlich gesendete Telegram-Nachricht.
+      </div>
+
+      <p>Du hast jetzt das erste vollständige Projekt gebaut: automatisch, mit externer API, Datenaufbereitung,
+        Credential und echtem Versand. Im nächsten Projekt nutzen wir dasselbe Grundmuster, aber mit einem anderen
+        Eingang: Formular-Daten laufen in eine Tabelle und anschließend als Team-Nachricht weiter.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="13-projekt-wetter"></nav></section>
 
   </div>
 </div>
 <script>
-var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions"];
-var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
+var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter"];
+var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
 
 function show(slug) {
   if (!slug || READY.indexOf(slug) === -1 && slug !== "home") slug = "home";

@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Der HTTP-Request-Node: jede API ansprechen — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="08-http" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">8</span> Bausteine im Detail</div>
+      <h1 class="chap-title">Der HTTP-Request-Node: jede API ansprechen</h1>
+      <p class="chap-lede">Es gibt zwar fertige Nodes für hunderte Dienste — aber der HTTP-Request-Node ist der
+        <strong>Generalschlüssel</strong>: Mit ihm sprichst du jeden Webdienst an, der eine Schnittstelle (API) hat, auch wenn
+        es keinen eigenen Node dafür gibt. Verstehst du diesen einen Node, steht dir das halbe Internet offen.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 22 Minuten</span>
+        <span>🎯 Niveau: Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 4 &amp; 5</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du mitbringen solltest</h4>
+        <ul>
+          <li>Du hast in Kapitel 4 schon einen einfachen GET-Request gebaut (Wetter holen).</li>
+          <li>JSON lesen und Pfade wie <code>$json.current.temperature_2m</code> (Kapitel 5) sind dir vertraut.</li>
+          <li>Für die Übung brauchst du <strong>keinen</strong> Account — wir nutzen einen offenen Echo-Dienst.</li>
+        </ul>
+      </div>
+
+      <h2>Was bei einem HTTP-Request passiert</h2>
+      <p>Ein HTTP-Request ist wie ein adressierter Brief an einen Server. Er besteht immer aus denselben Teilen — und genau die
+        füllst du im Node aus:</p>
+
+      <table class="btable">
+        <thead><tr><th>Teil</th><th>Wofür</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Method</strong></td><td>Die Absicht: <em>holen, senden, ändern, löschen</em> (siehe Tabelle unten).</td></tr>
+          <tr><td><strong>URL</strong></td><td>Die Adresse des Dienstes — wohin der Brief geht.</td></tr>
+          <tr><td><strong>Query-Parameter</strong></td><td>Zusätze an der URL nach dem <code>?</code>, z. B. <code>?stadt=Berlin</code>.</td></tr>
+          <tr><td><strong>Headers</strong></td><td>Metadaten, z. B. „ich erwarte JSON" oder ein Zugangsschlüssel.</td></tr>
+          <tr><td><strong>Body</strong></td><td>Der eigentliche Inhalt — nur beim <em>Senden</em> (POST/PUT), meist als JSON.</td></tr>
+          <tr><td><strong>Authentication</strong></td><td>Wer du bist — falls der Dienst einen Login verlangt (Kapitel 12).</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Die vier Methoden, die du brauchst</h2>
+      <table class="btable">
+        <thead><tr><th>Method</th><th>Bedeutung</th><th>Beispiel</th></tr></thead>
+        <tbody>
+          <tr><td><code>GET</code></td><td>Daten <strong>holen</strong> (ändert nichts)</td><td>Wetter abrufen, Liste lesen</td></tr>
+          <tr><td><code>POST</code></td><td>Etwas <strong>neu anlegen / senden</strong></td><td>Nachricht senden, Datensatz erstellen</td></tr>
+          <tr><td><code>PUT</code> / <code>PATCH</code></td><td>Etwas <strong>ändern</strong> (ganz / teilweise)</td><td>Kontakt aktualisieren</td></tr>
+          <tr><td><code>DELETE</code></td><td>Etwas <strong>löschen</strong></td><td>Eintrag entfernen</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ 80 % ist GET und POST</b>
+        Daten <em>lesen</em> = GET, Daten <em>schicken</em> = POST. Mit diesen beiden baust du die allermeisten Integrationen.
+        PUT/PATCH/DELETE brauchst du erst, wenn du fremde Datensätze gezielt pflegst.
+      </div>
+
+      <h2>Der Node im Detail</h2>
+      <p>Öffne einen frischen HTTP-Request-Node (Doppelklick). Oben stehen <strong>Method</strong> und <strong>URL</strong>,
+        darunter die <strong>Authentication</strong> und dann drei Schalter, die je einen Bereich aufklappen:
+        <strong>Send Query Parameters</strong>, <strong>Send Headers</strong> und <strong>Send Body</strong>.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:600px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request</b><span class="ndv-docs">Import cURL ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
+                  <div class="row"><label>URL <span class="req">*</span></label><input class="n8n-input" value="https://api.open-meteo.com/v1/forecast"></div>
+                  <div class="row"><label>Authentication</label><div class="n8n-select">None <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Send Query Parameters</label><div class="n8n-select">⦿ aus <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Send Headers</label><div class="n8n-select">⦿ aus <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Send Body</label><div class="n8n-select">⦿ aus <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 8.1</span>Das Grundgerüst: Method, URL, Authentication und die drei Send-Schalter.
+          Oben rechts der praktische <b>Import-cURL</b>-Knopf (gleich mehr dazu).</figcaption>
+      </figure>
+
+      <h2>Query-Parameter sauber setzen</h2>
+      <p>In Kapitel 4 haben wir die Parameter direkt in die URL geschrieben (<code>…/forecast?latitude=52.52&amp;longitude=13.41</code>).
+        Das geht — aber es gibt einen aufgeräumteren Weg: Schalte <strong>„Send Query Parameters"</strong> ein und trag jeden
+        Parameter als <strong>Name/Wert-Paar</strong> ein. Vorteil: übersichtlich, und jeder Wert kann eine <strong>Expression</strong> sein.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:600px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request — Query Parameters</b></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Query Parameters</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Name / Value</label><input class="n8n-input" value="latitude  =  52.52"></div>
+                  <div class="row"><label>Name / Value</label><input class="n8n-input" value="longitude  =  13.41"></div>
+                  <div class="row"><label>Name / Value</label><input class="n8n-input is-expr" value="current  =  {{ $json.felder }}"></div>
+                  <div class="row"><div class="n8n-select" style="border-style:dashed; color:var(--n8n-primary);">＋ Add Parameter</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 8.2</span>Dieselbe Abfrage als saubere Name/Wert-Liste. n8n baut daraus automatisch
+          die <code>?latitude=…&amp;longitude=…</code>-URL. Der dritte Wert ist eine Expression (bläulich).</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Import cURL — der größte Zeitsparer</b>
+        Viele API-Dokus zeigen Beispiele als <code>curl</code>-Befehl. Klick oben im Node auf <strong>„Import cURL"</strong>, füge
+        den Befehl ein — und n8n füllt Method, URL, Header und Body <em>automatisch</em> aus. Danach nur noch anpassen, fertig.
+      </div>
+
+      <h2>Daten senden: der Body bei POST</h2>
+      <p>Beim <strong>POST</strong> schickst du Inhalt mit. Stell <strong>Method</strong> auf <code>POST</code>, schalte
+        <strong>„Send Body"</strong> ein und wähle als <strong>Body Content Type</strong> meist <code>JSON</code>. Dann gibst du
+        den Body als JSON ein — und darfst überall Expressions verwenden:</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Body (JSON) — mit eingebetteter Expression</div>
+<pre>{
+  <span class="pr">"stadt"</span>: <span class="st">"Berlin"</span>,
+  <span class="pr">"temperatur"</span>: {{ $json.current.temperature_2m }},
+  <span class="pr">"gemeldet_am"</span>: <span class="st">"{{ $now.toFormat('dd.MM.yyyy HH:mm') }}"</span>
+}</pre>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht — Zahl vs. Text im Body</b>
+        Eine <strong>Zahl</strong> steht ohne Anführungszeichen (<code>"temperatur": {{ … }}</code>), ein <strong>Text</strong>
+        <em>mit</em> (<code>"gemeldet_am": "{{ … }}"</code>). Vergisst du die Quotes bei Text, wird das JSON ungültig — die
+        Vorschau zeigt dann einen roten Fehler.
+      </div>
+
+      <h2>Die Antwort lesen</h2>
+      <p>Nach „▶ Schritt ausführen" steht die Antwort im Ausgang — meist als ein Item mit JSON. Zwei nützliche Optionen findest du
+        ganz unten unter <strong>„Options"</strong>:</p>
+      <ul>
+        <li><strong>Response → Response Format:</strong> <em>Autodetect</em> reicht fast immer; für Dateien (PDF/Bild) wählst du <em>File</em>.</li>
+        <li><strong>Split Into Items:</strong> Liefert die API eine <em>Liste</em>, kannst du sie hier in <strong>ein Item pro Eintrag</strong> aufteilen — dann läuft der nächste Node automatisch pro Eintrag (Kapitel 5).</li>
+      </ul>
+
+      <div class="callout callout--info">
+        <b class="t">Authentication — kurz angerissen</b>
+        Verlangt ein Dienst Login, stell <strong>Authentication</strong> nicht auf „None". Kennt n8n den Dienst, wähle
+        <strong>„Predefined Credential Type"</strong> und such ihn aus. Sonst <strong>„Generic Credential Type" → Header Auth</strong>
+        (z. B. Header <code>Authorization</code> mit Wert <code>Bearer DEIN_TOKEN</code>). <strong>Niemals</strong> den Token offen in
+        die URL schreiben. Wie Credentials sicher gespeichert werden, ist Thema von Kapitel 12.
+      </div>
+
+      <h2>Typische Fehlercodes deuten</h2>
+      <table class="btable">
+        <thead><tr><th>Code</th><th>Bedeutung</th><th>Was tun</th></tr></thead>
+        <tbody>
+          <tr><td><code>401</code> / <code>403</code></td><td>Nicht angemeldet / keine Berechtigung</td><td>Authentication prüfen — Token fehlt, falsch oder abgelaufen</td></tr>
+          <tr><td><code>404</code></td><td>Adresse gibt es nicht</td><td>URL und Pfad kontrollieren (Tippfehler, falsche Version)</td></tr>
+          <tr><td><code>429</code></td><td>Zu viele Anfragen (Rate-Limit)</td><td>Langsamer senden — Batching/Wartezeit (Kapitel 23)</td></tr>
+          <tr><td><code>400</code></td><td>Anfrage fehlerhaft</td><td>Body/Parameter prüfen — oft ungültiges JSON oder Pflichtfeld fehlt</td></tr>
+          <tr><td><code>500</code> / <code>503</code></td><td>Fehler/Überlastung beim Server</td><td>Nicht dein Fehler — später erneut versuchen (Retry, Kapitel 11)</td></tr>
+        </tbody>
+      </table>
+
+      <hr>
+
+      <h2>Mini-Übung: einen POST senden und die Antwort lesen</h2>
+      <p>Wir schicken Daten an einen offenen <strong>Echo-Dienst</strong> (er spiegelt einfach zurück, was er bekommt) — ideal
+        zum Üben, ganz ohne Account. So siehst du genau, was du gesendet hast.</p>
+
+      <ol class="steps">
+        <li><h4>Einen HTTP-Node anlegen</h4>
+          <p>Häng an einen manuellen Trigger einen <strong>HTTP Request</strong> und öffne ihn.</p></li>
+        <li><h4>Method auf POST stellen</h4>
+          <p>Feld <strong>Method</strong> → <code>POST</code>.</p></li>
+        <li><h4>Die URL eintragen</h4>
+          <p>Ins <strong>URL</strong>-Feld: <code>https://postman-echo.com/post</code></p></li>
+        <li><h4>Body einschalten</h4>
+          <p><strong>Send Body</strong> an, <strong>Body Content Type</strong> = <code>JSON</code>, <strong>Specify Body</strong> =
+            <em>Using JSON</em>.</p></li>
+        <li><h4>Den Body eintippen</h4>
+          <p>Trag dieses JSON ein (gern mit Expression beim Zeitstempel):</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Body (JSON)</div>
+<pre>{
+  <span class="pr">"gruss"</span>: <span class="st">"Hallo aus n8n"</span>,
+  <span class="pr">"zeit"</span>: <span class="st">"{{ $now.toFormat('dd.MM.yyyy HH:mm') }}"</span>
+}</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 5;">
+        <li><h4>Ausführen</h4>
+          <p>„▶ Schritt ausführen" klicken. Rechts erscheint die Antwort.</p></li>
+        <li><h4>Die Spiegelung finden</h4>
+          <p>Such im Ergebnis das Feld <code>data</code> — der Echo-Dienst gibt dort exakt deinen Body zurück. Damit ist bewiesen,
+            dass dein POST samt JSON sauber angekommen ist.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request</b><span class="ndv-docs">Import cURL ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="ndv-empty">leeres Start-Item</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Method</label><div class="n8n-select">POST <span class="chev">▾</span></div></div>
+                  <div class="row"><label>URL <span class="req">*</span></label><input class="n8n-input" value="https://postman-echo.com/post"></div>
+                  <div class="row"><label>Body (JSON)</label><input class="n8n-input is-expr" value="{ &quot;gruss&quot;: &quot;Hallo aus n8n&quot;, … }"></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="ndv-viewtabs"><b>Tabelle</b><b class="is-active">JSON</b><b>Schema</b></div>
+                  <div class="n8n-json" style="margin-top:10px;">{
+  <span class="k">"data"</span>: {
+    <span class="k">"gruss"</span>: <span class="s">"Hallo aus n8n"</span>,
+    <span class="k">"zeit"</span>: <span class="s">"29.05.2026 14:30"</span>
+  },
+  <span class="k">"url"</span>: <span class="s">"https://postman-echo.com/post"</span>
+}</div>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 8.3</span>Der Echo-Dienst spiegelt unter <code>data</code> exakt den gesendeten
+          Body zurück — der Beweis, dass dein POST funktioniert hat.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>Roter Fehler „JSON parameter needs to be valid JSON"?</strong> Im Body fehlt ein
+          Komma, eine Klammer oder Anführungszeichen. Die Vorschau zeigt dir die Stelle.</p>
+        <p style="margin:0">• <strong>Code 405 (Method Not Allowed)?</strong> Du sendest GET an eine Adresse, die POST erwartet
+          (oder umgekehrt). Method anpassen.</p>
+      </div>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Welche Method nimmst du zum <em>Lesen</em>, welche zum <em>Senden</em>?</li>
+          <li>Was ist der Vorteil der „Send Query Parameters"-Liste gegenüber Parametern direkt in der URL?</li>
+          <li>Wie schaltest du eine API-Liste in „ein Item pro Eintrag" um?</li>
+          <li>Was bedeutet ein Antwortcode <code>401</code> — und woran liegt es meist?</li>
+          <li>Wofür ist „Import cURL" gut?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) GET zum Lesen, POST zum Senden. ·
+        2) Übersichtlich, und jeder Wert kann eine Expression sein; n8n baut die URL korrekt zusammen. ·
+        3) Unter „Options" → <strong>Split Into Items</strong>. ·
+        4) Nicht angemeldet/keine Berechtigung — meist fehlt oder stimmt das Auth-Token nicht. ·
+        5) Einen <code>curl</code>-Befehl aus einer API-Doku einfügen, n8n füllt den Node automatisch aus.
+      </div>
+
+      <p>Du kannst jetzt Daten holen <em>und</em> senden. Doch zwischen „rein" und „raus" liegt die eigentliche Arbeit: Daten
+        <strong>umformen</strong>. Im nächsten Kapitel lernst du die Werkzeuge dafür kennen — <strong>Edit Fields (Set)</strong>,
+        <strong>Code</strong> und <strong>Filter</strong>.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>
