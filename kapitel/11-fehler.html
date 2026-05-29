@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fehlerbehandlung & Error-Workflows — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="11-fehler" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">11</span> Bausteine im Detail</div>
+      <h1 class="chap-title">Fehlerbehandlung & Error-Workflows</h1>
+      <p class="chap-lede">Im echten Betrieb geht irgendwann etwas schief: Eine API ist kurz nicht erreichbar, ein Feld fehlt,
+        ein Limit ist erreicht. Ein guter Workflow <em>plant das ein</em> — er bricht nicht still ab, sondern versucht es erneut,
+        weicht aus oder meldet sich bei dir.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 16 Minuten</span>
+        <span>🎯 Niveau: Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 7, 8 &amp; 10</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du mitbringen solltest</h4>
+        <ul>
+          <li>Einen Workflow mit mindestens einem Node, der nach außen spricht (z. B. HTTP aus Kapitel 8).</li>
+          <li>Verzweigungen (Kapitel 10) — die Fehlerausgänge funktionieren ganz ähnlich.</li>
+        </ul>
+      </div>
+
+      <h2>Drei Ebenen der Fehlerbehandlung</h2>
+      <table class="btable">
+        <thead><tr><th>Ebene</th><th>Was sie tut</th><th>Wann</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Retry On Fail</strong></td><td>versucht denselben Node automatisch nochmal</td><td>bei wackeligen APIs (kurze Aussetzer, 429/500)</td></tr>
+          <tr><td><strong>On Error → Fehlerausgang</strong></td><td>lässt den Workflow weiterlaufen und leitet den Fehler in einen eigenen Zweig</td><td>wenn du auf den Fehler <em>reagieren</em> willst</td></tr>
+          <tr><td><strong>Error-Workflow</strong></td><td>ein separater Workflow, der bei <em>jedem</em> Absturz anspringt und dich alarmiert</td><td>als Sicherheitsnetz für alles</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Ebene 1 — Retry On Fail</h2>
+      <p>Viele Fehler sind nur ein kurzes Zucken: Der Server war eine Sekunde überlastet. Statt gleich abzubrechen, lässt du den
+        Node es einfach <strong>noch ein paar Mal</strong> versuchen. Das stellst du im <strong>Settings</strong>-Reiter des Nodes ein.</p>
+
+      <ol class="steps">
+        <li><h4>Node-Einstellungen öffnen</h4>
+          <p>Node per Doppelklick öffnen, oben auf den Reiter <strong>„Settings"</strong> (Zahnrad) wechseln.</p></li>
+        <li><h4>Retry einschalten</h4>
+          <p><strong>„Retry On Fail"</strong> aktivieren. Es erscheinen <strong>„Max Tries"</strong> (z. B. 3) und
+            <strong>„Wait Between Tries"</strong> in Millisekunden (z. B. 1000 = 1 Sekunde).</p></li>
+        <li><h4>Was du jetzt siehst</h4>
+          <p>Schlägt der Node fehl, wartet n8n kurz und probiert es erneut — bis zur eingestellten Anzahl. Erst wenn alle Versuche
+            scheitern, gilt er als fehlgeschlagen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:540px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">⚙️</span><b>HTTP Request — Settings</b></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Settings</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Retry On Fail</label><div class="n8n-select">⦿ an <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Max Tries</label><input class="n8n-input" value="3"></div>
+                  <div class="row"><label>Wait Between Tries (ms)</label><input class="n8n-input" value="1000"></div>
+                  <div class="row"><label>On Error</label><div class="n8n-select">Stop Workflow <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 11.1</span>Im <b>Settings</b>-Reiter jedes Nodes: <b>Retry On Fail</b> mit Anzahl
+          und Wartezeit. Darunter das <b>On Error</b>-Verhalten — gleich dran.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Retry kostet nichts und rettet viel</b>
+        Für jeden Node, der mit dem Internet spricht, ist <strong>Retry On Fail</strong> mit 2–3 Versuchen eine kostenlose
+        Versicherung gegen kurze Aussetzer. Das ist die wirksamste Einzelmaßnahme für stabile Workflows.
+      </div>
+
+      <h2>Ebene 2 — der Fehlerausgang („On Error")</h2>
+      <p>Manchmal soll der Workflow <em>nicht</em> stoppen, sondern den Fehler <strong>auffangen</strong> und etwas anderes tun
+        (Ersatzwert setzen, dich benachrichtigen, sauber weitermachen). Dafür stellst du in den Settings <strong>„On Error"</strong>
+        auf <strong>„Continue (using error output)"</strong>. Der Node bekommt dann einen <strong>zweiten, roten Ausgang</strong>.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 820 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 152 190 C 220 190, 250 190, 322 190"></path>
+                <path class="is-active" d="M 424 170 C 510 170, 520 110, 592 110"></path>
+                <path d="M 424 212 C 510 212, 520 300, 592 300"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:144px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span></div>
+              <div class="n8n-node" style="left:330px; top:144px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep in"></span>
+                <span class="ep out" style="top:26px;"></span><span class="ep out" style="top:66px;"></span>
+                <span class="n8n-node__label">API-Call</span></div>
+              <div class="n8n-node n8n-node--code" style="left:600px; top:64px;">
+                <span class="n8n-node__icon">✅</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Erfolg: weiter</span></div>
+              <div class="n8n-node" style="left:600px; top:254px;">
+                <span class="n8n-node__icon">🔔</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Fehler: melden</span><span class="badge badge--err">!</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 11.2</span>Mit „Continue (using error output)" bekommt der Node zwei Ausgänge:
+          oben der normale (Erfolg), unten der <b>Fehlerausgang</b>. So reagierst du gezielt auf Probleme.</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Der Fehler bringt Infos mit</b>
+        Im Fehlerzweig findest du im Item unter anderem <code>$json.error</code> mit der Meldung. Die kannst du in deine
+        Benachrichtigung schreiben — dann weißt du sofort, <em>was</em> schiefging.
+      </div>
+
+      <h2>Ebene 3 — der globale Error-Workflow</h2>
+      <p>Was, wenn ein Workflow um 3 Uhr nachts abstürzt und niemand zusieht? Dafür gibt es den <strong>Error-Workflow</strong>:
+        ein <em>eigener</em> Workflow, der automatisch startet, sobald ein anderer fehlschlägt — und dir z. B. eine Nachricht schickt.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow mit Error Trigger anlegen</h4>
+          <p>Lege einen neuen Workflow an. Als Trigger wähle <strong>„Error Trigger"</strong>. Er feuert, wenn ein überwachter
+            Workflow scheitert, und liefert die Details (Workflow-Name, fehlerhafter Node, Meldung).</p></li>
+        <li><h4>Eine Benachrichtigung anhängen</h4>
+          <p>Häng z. B. einen Telegram- oder E-Mail-Node an und baue die Nachricht aus den Fehlerdaten:
+            <code>⚠️ Workflow „{{ $json.workflow.name }}" ist gescheitert: {{ $json.execution.error.message }}</code>.</p></li>
+        <li><h4>Diesen Workflow als Error-Workflow eintragen</h4>
+          <p>Wechsle in <em>deinen eigentlichen</em> Workflow → oben „…"-Menü → <strong>Settings</strong> → Feld
+            <strong>„Error Workflow"</strong> → den eben gebauten auswählen. Speichern.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 820 240" preserveAspectRatio="none">
+                <path class="is-active" d="M 178 120 C 260 120, 300 120, 380 120"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:74px;">
+                <span class="n8n-node__icon">🚨</span><span class="ep out"></span>
+                <span class="n8n-node__label">Error Trigger</span></div>
+              <div class="n8n-node" style="left:380px; top:74px;">
+                <span class="n8n-node__icon">🔔</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Mir Bescheid geben</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 11.3</span>Ein winziger, aber mächtiger Workflow: Error Trigger → Benachrichtigung.
+          Einmal gebaut und überall als „Error Workflow" eingetragen, ist er dein Wächter über alle Abläufe.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>„Continue On Fail" versteckt Probleme.</strong> Lässt du Fehler stillschweigend
+          durchlaufen, ohne sie zu melden, merkst du nie, dass etwas hakt. Immer mit einer Benachrichtigung kombinieren.</p>
+        <p style="margin:0">• <strong>Error-Workflow feuert nicht?</strong> Er muss in den <em>Settings des überwachten</em>
+          Workflows eingetragen sein — und greift nur bei <strong>aktiven</strong> (Produktions-)Läufen, nicht bei manuellen Tests.</p>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Bewusst Fehler werfen: „Stop and Error"</b>
+        Manchmal <em>willst</em> du abbrechen — etwa wenn Pflichtdaten fehlen. Der Node <strong>„Stop and Error"</strong> wirft
+        einen klaren, selbst formulierten Fehler. So scheitert der Workflow kontrolliert statt unbemerkt mit Müll weiterzulaufen.
+      </div>
+
+      <hr>
+
+      <h2>Mini-Übung: den Wetter-Workflow absichern</h2>
+      <ol class="steps">
+        <li><h4>Retry auf den HTTP-Node</h4>
+          <p>Öffne „Wetter holen" → <strong>Settings</strong> → <strong>Retry On Fail</strong> an, Max Tries <code>3</code>,
+            Wait <code>1000</code>.</p></li>
+        <li><h4>Error-Workflow bauen</h4>
+          <p>Neuer Workflow: <strong>Error Trigger</strong> → Benachrichtigungs-Node mit
+            <code>⚠️ {{ $json.workflow.name }}: {{ $json.execution.error.message }}</code>. Speichern.</p></li>
+        <li><h4>Verknüpfen</h4>
+          <p>Im Wetter-Workflow → Settings → <strong>Error Workflow</strong> = der neue. Speichern, aktiv schalten.</p></li>
+        <li><h4>Testen, indem du etwas kaputt machst</h4>
+          <p>Tipp die URL im HTTP-Node absichtlich falsch und lass den Workflow (aktiv) laufen — die Fehlermeldung sollte bei dir
+            ankommen. Danach URL wieder korrigieren.</p></li>
+      </ol>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Welche Einzelmaßnahme bringt am meisten Stabilität für API-Nodes?</li>
+          <li>Wie bekommt ein Node einen zweiten, roten Ausgang?</li>
+          <li>Wo trägst du ein, welcher Workflow bei einem Absturz benachrichtigen soll?</li>
+          <li>Warum ist „Continue On Fail" ohne Meldung gefährlich?</li>
+          <li>Womit erzwingst du absichtlich einen sauberen Abbruch?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Retry On Fail (2–3 Versuche). ·
+        2) In den Node-Settings „On Error" → „Continue (using error output)". ·
+        3) In den <strong>Settings des überwachten Workflows</strong>, Feld „Error Workflow". ·
+        4) Probleme bleiben unbemerkt — du merkst nie, dass etwas hakt. ·
+        5) Mit dem Node „Stop and Error".
+      </div>
+
+      <p>Deine Workflows sind jetzt robust. Es fehlt noch ein Baustein, ohne den viele Dienste gar nicht erst mit dir reden: der
+        sichere Umgang mit Zugangsdaten. Das letzte Kapitel von Teil 2 widmet sich den <strong>Credentials</strong>.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

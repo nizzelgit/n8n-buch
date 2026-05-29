@@ -210,11 +210,19 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `08-http` — HTTP-Request-Node: Methoden, Query/Headers/Body, Import cURL, Fehlercodes, POST-Übung
 - `09-transform` — Set (Edit Fields), Filter, Code (2 Modi), weitere Transform-Nodes, Mini-Übung
 - `10-flow` — IF (2 Ausgänge), Switch, Merge (Append/Combine), Loops (selten nötig!), Verzweigungs-Übung
+- `11-fehler` — Retry On Fail, Fehlerausgang (On Error), globaler Error-Workflow (Error Trigger), Stop and Error
+- `12-credentials` — Credentials sicher anlegen, vordefiniert vs. generisch (Header Auth), OAuth, Sicherheits-Gewohnheiten
+
+> **Teil 0, 1 und 2 sind damit vollständig (Kap. 00–12).**
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `11-fehler` — Fehlerbehandlung & Error-Workflows; Outro von Kap. 10 leitet dorthin über
-2. `12-credentials` — Credentials & Authentifizierung (schließt Teil 2 „Bausteine" ab)
-3. danach Projekte 13–19, KI 20–21, Betrieb 22–25, Anhänge A–D
+1. `13-projekt-wetter` — **erstes vollständiges Projekt** (Teil 3): Schedule → HTTP → Set → Telegram, end-to-end
+2. weitere Projekte `14`–`19` (steigende Komplexität)
+3. danach KI 20–21, Betrieb 22–25, Anhänge A–D
+
+**Hinweis zu Projekt-Kapiteln (Teil 3):** Sie sind länger/umfangreicher als die Bausteine. Sie sollten die in
+Kap. 4 etablierte Schritt-für-Schritt-Tiefe haben und auf den fertigen Bausteinen (07–12) aufbauen, statt
+deren Grundlagen zu wiederholen (stattdessen verlinken/verweisen).
 
 **Beim Ausbau zwingend:** Detailgrad + Didaktik-Bausteine aus Abschnitt 5 einhalten, danach
 `node build.js`, dann **diese Datei (Abschnitt 10 + 11) aktualisieren**, dann committen/pushen.
@@ -222,6 +230,16 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 ---
 
 ## 11. Logbuch (neuester Eintrag oben)
+
+### 2026-05-29 — Teil 2 abgeschlossen: Kapitel 11 (Fehler) & 12 (Credentials)
+- **Kapitel 11 „Fehlerbehandlung & Error-Workflows"** (`ready`): drei Ebenen — Retry On Fail (Settings-Reiter),
+  Fehlerausgang via „On Error → Continue (using error output)" (Canvas mit zweitem roten Ausgang, `$json.error`),
+  globaler Error-Workflow (Error Trigger + Workflow-Settings „Error Workflow"), „Stop and Error", Mini-Übung.
+- **Kapitel 12 „Credentials & Authentifizierung"** (`ready`): Credential-Konzept (verschlüsselt, getrennt vom
+  Workflow), vordefiniert vs. generisch (Header Auth), Anlegen Schritt-für-Schritt, OAuth-Klick-Login,
+  Sicherheits-Gewohnheiten, Mini-Übung (Header-Token), Selbsttest.
+- `node build.js` → **14 Kapitel** im Bundle. Tag-Balance & Escaping geprüft.
+- **Meilenstein: Teil 0+1+2 komplett (Kap. 00–12).** Nächster großer Block: Projekte (Teil 3) ab `13-projekt-wetter`.
 
 ### 2026-05-29 — Kapitel 9 (Transform) & 10 (Flow-Logik)
 - **Kapitel 9 „Daten transformieren: Set, Code & Filter"** (`ready`): Rangfolge (erst no-code, dann Code),

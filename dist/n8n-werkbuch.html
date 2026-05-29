@@ -942,13 +942,13 @@ ol.steps > li p { font-size: 15.5px; }
       </a><a class="sb-link" data-title="flow-logik: if, switch, merge, loops"
       href="#10-flow" data-slug="10-flow">
       <span class="num">10</span><span>Flow-Logik: IF, Switch, Merge, Loops</span>
-      </a><a class="sb-link is-soon" data-title="fehlerbehandlung & error-workflows"
-      href="javascript:void(0)" data-slug="11-fehler">
+      </a><a class="sb-link" data-title="fehlerbehandlung & error-workflows"
+      href="#11-fehler" data-slug="11-fehler">
       <span class="num">11</span><span>Fehlerbehandlung & Error-Workflows</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="credentials & authentifizierung"
-      href="javascript:void(0)" data-slug="12-credentials">
+      </a><a class="sb-link" data-title="credentials & authentifizierung"
+      href="#12-credentials" data-slug="12-credentials">
       <span class="num">12</span><span>Credentials & Authentifizierung</span>
-      <span class="soon">bald</span></a><div class="sb-part">Teil 3 · Projekte (klein → groß)</div><a class="sb-link is-soon" data-title="projekt 1: täglicher report per telegram"
+      </a><div class="sb-part">Teil 3 · Projekte (klein → groß)</div><a class="sb-link is-soon" data-title="projekt 1: täglicher report per telegram"
       href="javascript:void(0)" data-slug="13-projekt-wetter">
       <span class="num">13</span><span>Projekt 1: Täglicher Report per Telegram</span>
       <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="projekt 2: formular → sheets → slack"
@@ -1046,13 +1046,13 @@ ol.steps > li p { font-size: 15.5px; }
       <span class="pill">lesen</span></a><a class="toc-row" href="#10-flow">
       <span class="n">10</span><span class="ti">Flow-Logik: IF, Switch, Merge, Loops</span>
       <span class="mins">⏱ 22 Min</span>
-      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#11-fehler">
       <span class="n">11</span><span class="ti">Fehlerbehandlung & Error-Workflows</span>
       <span class="mins">⏱ 16 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#12-credentials">
       <span class="n">12</span><span class="ti">Credentials & Authentifizierung</span>
       <span class="mins">⏱ 15 Min</span>
-      <span class="pill">bald</span></a></div></div><div class="toc-part"><h3>Teil 3 · Projekte (klein → groß)</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Teil 3 · Projekte (klein → groß)</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
       <span class="n">13</span><span class="ti">Projekt 1: Täglicher Report per Telegram</span>
       <span class="mins">⏱ 30 Min</span>
       <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
@@ -4100,12 +4100,395 @@ Wind: 12 km/h.</span></div>
 
     </article>
       <nav class="pn-wrap" data-slug="10-flow"></nav></section>
+<section class="page" id="11-fehler" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">11</span> Bausteine im Detail</div>
+      <h1 class="chap-title">Fehlerbehandlung & Error-Workflows</h1>
+      <p class="chap-lede">Im echten Betrieb geht irgendwann etwas schief: Eine API ist kurz nicht erreichbar, ein Feld fehlt,
+        ein Limit ist erreicht. Ein guter Workflow <em>plant das ein</em> — er bricht nicht still ab, sondern versucht es erneut,
+        weicht aus oder meldet sich bei dir.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 16 Minuten</span>
+        <span>🎯 Niveau: Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 7, 8 &amp; 10</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du mitbringen solltest</h4>
+        <ul>
+          <li>Einen Workflow mit mindestens einem Node, der nach außen spricht (z. B. HTTP aus Kapitel 8).</li>
+          <li>Verzweigungen (Kapitel 10) — die Fehlerausgänge funktionieren ganz ähnlich.</li>
+        </ul>
+      </div>
+
+      <h2>Drei Ebenen der Fehlerbehandlung</h2>
+      <table class="btable">
+        <thead><tr><th>Ebene</th><th>Was sie tut</th><th>Wann</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Retry On Fail</strong></td><td>versucht denselben Node automatisch nochmal</td><td>bei wackeligen APIs (kurze Aussetzer, 429/500)</td></tr>
+          <tr><td><strong>On Error → Fehlerausgang</strong></td><td>lässt den Workflow weiterlaufen und leitet den Fehler in einen eigenen Zweig</td><td>wenn du auf den Fehler <em>reagieren</em> willst</td></tr>
+          <tr><td><strong>Error-Workflow</strong></td><td>ein separater Workflow, der bei <em>jedem</em> Absturz anspringt und dich alarmiert</td><td>als Sicherheitsnetz für alles</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Ebene 1 — Retry On Fail</h2>
+      <p>Viele Fehler sind nur ein kurzes Zucken: Der Server war eine Sekunde überlastet. Statt gleich abzubrechen, lässt du den
+        Node es einfach <strong>noch ein paar Mal</strong> versuchen. Das stellst du im <strong>Settings</strong>-Reiter des Nodes ein.</p>
+
+      <ol class="steps">
+        <li><h4>Node-Einstellungen öffnen</h4>
+          <p>Node per Doppelklick öffnen, oben auf den Reiter <strong>„Settings"</strong> (Zahnrad) wechseln.</p></li>
+        <li><h4>Retry einschalten</h4>
+          <p><strong>„Retry On Fail"</strong> aktivieren. Es erscheinen <strong>„Max Tries"</strong> (z. B. 3) und
+            <strong>„Wait Between Tries"</strong> in Millisekunden (z. B. 1000 = 1 Sekunde).</p></li>
+        <li><h4>Was du jetzt siehst</h4>
+          <p>Schlägt der Node fehl, wartet n8n kurz und probiert es erneut — bis zur eingestellten Anzahl. Erst wenn alle Versuche
+            scheitern, gilt er als fehlgeschlagen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:540px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">⚙️</span><b>HTTP Request — Settings</b></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Settings</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Retry On Fail</label><div class="n8n-select">⦿ an <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Max Tries</label><input class="n8n-input" value="3"></div>
+                  <div class="row"><label>Wait Between Tries (ms)</label><input class="n8n-input" value="1000"></div>
+                  <div class="row"><label>On Error</label><div class="n8n-select">Stop Workflow <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 11.1</span>Im <b>Settings</b>-Reiter jedes Nodes: <b>Retry On Fail</b> mit Anzahl
+          und Wartezeit. Darunter das <b>On Error</b>-Verhalten — gleich dran.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Retry kostet nichts und rettet viel</b>
+        Für jeden Node, der mit dem Internet spricht, ist <strong>Retry On Fail</strong> mit 2–3 Versuchen eine kostenlose
+        Versicherung gegen kurze Aussetzer. Das ist die wirksamste Einzelmaßnahme für stabile Workflows.
+      </div>
+
+      <h2>Ebene 2 — der Fehlerausgang („On Error")</h2>
+      <p>Manchmal soll der Workflow <em>nicht</em> stoppen, sondern den Fehler <strong>auffangen</strong> und etwas anderes tun
+        (Ersatzwert setzen, dich benachrichtigen, sauber weitermachen). Dafür stellst du in den Settings <strong>„On Error"</strong>
+        auf <strong>„Continue (using error output)"</strong>. Der Node bekommt dann einen <strong>zweiten, roten Ausgang</strong>.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas n8n-canvas--tall">
+              <svg class="n8n-conns" viewBox="0 0 820 400" preserveAspectRatio="none">
+                <path class="is-active" d="M 152 190 C 220 190, 250 190, 322 190"></path>
+                <path class="is-active" d="M 424 170 C 510 170, 520 110, 592 110"></path>
+                <path d="M 424 212 C 510 212, 520 300, 592 300"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:144px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep out"></span>
+                <span class="n8n-node__label">Wetter holen</span></div>
+              <div class="n8n-node" style="left:330px; top:144px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep in"></span>
+                <span class="ep out" style="top:26px;"></span><span class="ep out" style="top:66px;"></span>
+                <span class="n8n-node__label">API-Call</span></div>
+              <div class="n8n-node n8n-node--code" style="left:600px; top:64px;">
+                <span class="n8n-node__icon">✅</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Erfolg: weiter</span></div>
+              <div class="n8n-node" style="left:600px; top:254px;">
+                <span class="n8n-node__icon">🔔</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Fehler: melden</span><span class="badge badge--err">!</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 11.2</span>Mit „Continue (using error output)" bekommt der Node zwei Ausgänge:
+          oben der normale (Erfolg), unten der <b>Fehlerausgang</b>. So reagierst du gezielt auf Probleme.</figcaption>
+      </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Der Fehler bringt Infos mit</b>
+        Im Fehlerzweig findest du im Item unter anderem <code>$json.error</code> mit der Meldung. Die kannst du in deine
+        Benachrichtigung schreiben — dann weißt du sofort, <em>was</em> schiefging.
+      </div>
+
+      <h2>Ebene 3 — der globale Error-Workflow</h2>
+      <p>Was, wenn ein Workflow um 3 Uhr nachts abstürzt und niemand zusieht? Dafür gibt es den <strong>Error-Workflow</strong>:
+        ein <em>eigener</em> Workflow, der automatisch startet, sobald ein anderer fehlschlägt — und dir z. B. eine Nachricht schickt.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow mit Error Trigger anlegen</h4>
+          <p>Lege einen neuen Workflow an. Als Trigger wähle <strong>„Error Trigger"</strong>. Er feuert, wenn ein überwachter
+            Workflow scheitert, und liefert die Details (Workflow-Name, fehlerhafter Node, Meldung).</p></li>
+        <li><h4>Eine Benachrichtigung anhängen</h4>
+          <p>Häng z. B. einen Telegram- oder E-Mail-Node an und baue die Nachricht aus den Fehlerdaten:
+            <code>⚠️ Workflow „{{ $json.workflow.name }}" ist gescheitert: {{ $json.execution.error.message }}</code>.</p></li>
+        <li><h4>Diesen Workflow als Error-Workflow eintragen</h4>
+          <p>Wechsle in <em>deinen eigentlichen</em> Workflow → oben „…"-Menü → <strong>Settings</strong> → Feld
+            <strong>„Error Workflow"</strong> → den eben gebauten auswählen. Speichern.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 820 240" preserveAspectRatio="none">
+                <path class="is-active" d="M 178 120 C 260 120, 300 120, 380 120"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:60px; top:74px;">
+                <span class="n8n-node__icon">🚨</span><span class="ep out"></span>
+                <span class="n8n-node__label">Error Trigger</span></div>
+              <div class="n8n-node" style="left:380px; top:74px;">
+                <span class="n8n-node__icon">🔔</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Mir Bescheid geben</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 11.3</span>Ein winziger, aber mächtiger Workflow: Error Trigger → Benachrichtigung.
+          Einmal gebaut und überall als „Error Workflow" eingetragen, ist er dein Wächter über alle Abläufe.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>„Continue On Fail" versteckt Probleme.</strong> Lässt du Fehler stillschweigend
+          durchlaufen, ohne sie zu melden, merkst du nie, dass etwas hakt. Immer mit einer Benachrichtigung kombinieren.</p>
+        <p style="margin:0">• <strong>Error-Workflow feuert nicht?</strong> Er muss in den <em>Settings des überwachten</em>
+          Workflows eingetragen sein — und greift nur bei <strong>aktiven</strong> (Produktions-)Läufen, nicht bei manuellen Tests.</p>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Bewusst Fehler werfen: „Stop and Error"</b>
+        Manchmal <em>willst</em> du abbrechen — etwa wenn Pflichtdaten fehlen. Der Node <strong>„Stop and Error"</strong> wirft
+        einen klaren, selbst formulierten Fehler. So scheitert der Workflow kontrolliert statt unbemerkt mit Müll weiterzulaufen.
+      </div>
+
+      <hr>
+
+      <h2>Mini-Übung: den Wetter-Workflow absichern</h2>
+      <ol class="steps">
+        <li><h4>Retry auf den HTTP-Node</h4>
+          <p>Öffne „Wetter holen" → <strong>Settings</strong> → <strong>Retry On Fail</strong> an, Max Tries <code>3</code>,
+            Wait <code>1000</code>.</p></li>
+        <li><h4>Error-Workflow bauen</h4>
+          <p>Neuer Workflow: <strong>Error Trigger</strong> → Benachrichtigungs-Node mit
+            <code>⚠️ {{ $json.workflow.name }}: {{ $json.execution.error.message }}</code>. Speichern.</p></li>
+        <li><h4>Verknüpfen</h4>
+          <p>Im Wetter-Workflow → Settings → <strong>Error Workflow</strong> = der neue. Speichern, aktiv schalten.</p></li>
+        <li><h4>Testen, indem du etwas kaputt machst</h4>
+          <p>Tipp die URL im HTTP-Node absichtlich falsch und lass den Workflow (aktiv) laufen — die Fehlermeldung sollte bei dir
+            ankommen. Danach URL wieder korrigieren.</p></li>
+      </ol>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Welche Einzelmaßnahme bringt am meisten Stabilität für API-Nodes?</li>
+          <li>Wie bekommt ein Node einen zweiten, roten Ausgang?</li>
+          <li>Wo trägst du ein, welcher Workflow bei einem Absturz benachrichtigen soll?</li>
+          <li>Warum ist „Continue On Fail" ohne Meldung gefährlich?</li>
+          <li>Womit erzwingst du absichtlich einen sauberen Abbruch?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Retry On Fail (2–3 Versuche). ·
+        2) In den Node-Settings „On Error" → „Continue (using error output)". ·
+        3) In den <strong>Settings des überwachten Workflows</strong>, Feld „Error Workflow". ·
+        4) Probleme bleiben unbemerkt — du merkst nie, dass etwas hakt. ·
+        5) Mit dem Node „Stop and Error".
+      </div>
+
+      <p>Deine Workflows sind jetzt robust. Es fehlt noch ein Baustein, ohne den viele Dienste gar nicht erst mit dir reden: der
+        sichere Umgang mit Zugangsdaten. Das letzte Kapitel von Teil 2 widmet sich den <strong>Credentials</strong>.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="11-fehler"></nav></section>
+<section class="page" id="12-credentials" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">12</span> Bausteine im Detail</div>
+      <h1 class="chap-title">Credentials & Authentifizierung</h1>
+      <p class="chap-lede">Die meisten interessanten Dienste — Gmail, Telegram, Sheets, OpenAI — verlangen einen Login. In n8n
+        gibst du Zugangsdaten aber <em>nicht</em> mitten in den Workflow ein, sondern legst sie als sicher verschlüsselte
+        <strong>Credential</strong> an. Dieses Kapitel zeigt, wie das geht — und warum es so viel sicherer ist.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 15 Minuten</span>
+        <span>🎯 Niveau: Einstieg → Mittel</span>
+        <span>🧩 Voraussetzung: Kapitel 8 (HTTP)</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du mitbringen solltest</h4>
+        <ul>
+          <li>Du hast den HTTP-Node gesehen (Kapitel 8) und das Feld „Authentication" bemerkt.</li>
+          <li><strong>Niemals echte Tokens</strong> in dieses Buch oder in geteilte Dateien schreiben — hier nur Platzhalter.</li>
+        </ul>
+      </div>
+
+      <h2>Was eine Credential ist — und warum getrennt</h2>
+      <p>Eine <strong>Credential</strong> ist ein sicher gespeichertes Geheimnis: ein API-Schlüssel, ein Token oder ein
+        OAuth-Login. n8n speichert die Werte <strong>verschlüsselt</strong> und getrennt vom Workflow. Im Node wählst du nur den
+        <em>Namen</em> der Credential — die Geheimwerte tauchen im Workflow selbst nirgends auf.</p>
+
+      <table class="btable">
+        <thead><tr><th>Warum getrennt?</th><th>Konkret</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Sicherheit</strong></td><td>Beim Export/Teilen eines Workflows gehen die Geheimnisse <em>nicht</em> mit.</td></tr>
+          <tr><td><strong>Wiederverwendung</strong></td><td>Eine Credential nutzt du in beliebig vielen Nodes und Workflows.</td></tr>
+          <tr><td><strong>Pflege</strong></td><td>Token abgelaufen? Einmal zentral ändern — alle Nodes nutzen sofort den neuen.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Die eine Regel</b>
+        Geheimnisse gehören in <strong>Credentials</strong> — nie direkt in ein Feld, eine URL oder eine Expression. Das ist die
+        wichtigste Sicherheits-Gewohnheit in n8n.
+      </div>
+
+      <h2>Zwei Wege, sich zu authentifizieren</h2>
+      <ul>
+        <li><strong>Vordefinierter Credential-Typ:</strong> Kennt n8n den Dienst (Telegram, Google, OpenAI, Slack …), gibt es einen
+          fertigen Typ. Du füllst nur die passenden Felder — n8n weiß, wie der Login funktioniert.</li>
+        <li><strong>Generisch (im HTTP-Node):</strong> Für jede beliebige API ohne eigenen Node. Wähle im HTTP-Node
+          <em>Generic Credential Type</em> → meist <strong>Header Auth</strong> (z. B. Header <code>Authorization</code> =
+          <code>Bearer DEIN_TOKEN</code>) oder <em>Basic / Query / OAuth2</em>.</li>
+      </ul>
+
+      <h2>Eine Credential anlegen (Schritt für Schritt)</h2>
+      <p>Am einfachsten legst du sie direkt aus dem Node an, der sie braucht.</p>
+      <ol class="steps">
+        <li><h4>Im Node das Credential-Feld öffnen</h4>
+          <p>Im Node steht oben <strong>„Credential to connect with"</strong>. Klick auf das Aufklappmenü →
+            <strong>„+ Create new credential"</strong>.</p></li>
+        <li><h4>Die Felder ausfüllen</h4>
+          <p>Es öffnet sich ein Formular mit genau den Feldern, die der Dienst braucht — z. B. bei Telegram nur das
+            <strong>Access Token</strong> vom BotFather.</p></li>
+        <li><h4>Speichern (und ggf. testen)</h4>
+          <p>Auf <strong>„Save"</strong> klicken. Viele Credentials prüfen die Verbindung sofort und zeigen ein grünes
+            <strong>„Connection successful"</strong>.</p></li>
+        <li><h4>Benennen</h4>
+          <p>Gib der Credential oben einen sprechenden Namen, z. B. <code>Telegram – Wetter-Bot</code>. So findest du sie später
+            in anderen Nodes wieder.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:520px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🔑</span><b>Neue Credential · Telegram API</b></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Verbindungsdaten</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Name</label><input class="n8n-input" value="Telegram – Wetter-Bot"></div>
+                  <div class="row"><label>Access Token <span class="req">*</span></label><input class="n8n-input" value="123456:ABC-DEF… (dein Token)"></div>
+                  <div class="row"><div class="n8n-btn n8n-btn--primary n8n-btn--sm">Save</div> <span class="hint" style="margin-left:10px; color:var(--n8n-success);">✓ Connection successful</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 12.1</span>Das Formular eines vordefinierten Credential-Typs (hier Telegram). Nur
+          das nötige Feld, ein Klick auf Save — und n8n prüft gleich die Verbindung.</figcaption>
+      </figure>
+
+      <h2>OAuth: Login per Klick</h2>
+      <p>Manche Dienste (Google, Microsoft …) nutzen <strong>OAuth</strong> statt eines simplen Tokens. Dann erscheint im
+        Credential-Formular ein Knopf <strong>„Sign in with …" / „Connect"</strong>. Ein Klick öffnet das Login-Fenster des
+        Anbieters, du bestätigst den Zugriff — und n8n speichert den Zugang automatisch. Kein Kopieren von Schlüsseln nötig.</p>
+
+      <div class="callout callout--info">
+        <b class="t">Eine Credential, viele Nodes</b>
+        Einmal angelegt, taucht deine Credential in jedem passenden Node im Aufklappmenü auf. Du wählst sie einfach aus — neu
+        anlegen musst du sie nie wieder. Zentral verwalten kannst du alle unter dem Menüpunkt <strong>„Credentials"</strong>.
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:520px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">✈️</span><b>Telegram — Send a text message</b></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Credential to connect with</label><div class="n8n-select">Telegram – Wetter-Bot <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Chat ID</label><input class="n8n-input" value="123456789"></div>
+                  <div class="row"><label>Text</label><input class="n8n-input is-expr" value="{{ $json.nachricht }}"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 12.2</span>Im Node wählst du die gespeicherte Credential nur noch aus dem Menü —
+          das Token selbst steht nirgendwo im Workflow.</figcaption>
+      </figure>
+
+      <h2>Sicherheits-Gewohnheiten</h2>
+      <ul>
+        <li><strong>Geheimnisse nur in Credentials</strong> — nie in URL, Feld oder Expression.</li>
+        <li><strong>Sparsam mit Rechten:</strong> Gib einem Token nur die Berechtigungen, die der Workflow wirklich braucht.</li>
+        <li><strong>Regelmäßig erneuern</strong> (Rotation) und alte/ungenutzte Tokens widerrufen.</li>
+        <li><strong>Self-hosted:</strong> Für Werte, die sich je Umgebung unterscheiden, eignen sich Umgebungsvariablen — mehr in
+          Kapitel 24.</li>
+      </ul>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn etwas schiefgeht</b>
+        <p style="margin:0 0 6px">• <strong>Fehler 401/403?</strong> Token fehlt, ist falsch kopiert (Leerzeichen!) oder
+          abgelaufen. Credential öffnen, Wert neu einsetzen, speichern.</p>
+        <p style="margin:0">• <strong>OAuth-Verbindung „expired"?</strong> Einfach erneut „Connect"/„Reconnect" klicken und den
+          Login wiederholen.</p>
+      </div>
+
+      <hr>
+
+      <h2>Mini-Übung: eine API mit Header-Token ansprechen</h2>
+      <p>Wir richten im HTTP-Node eine generische Header-Authentifizierung ein (mit Platzhalter-Token).</p>
+      <ol class="steps">
+        <li><h4>HTTP-Node, Authentication wählen</h4>
+          <p>Im HTTP-Node <strong>Authentication</strong> → <strong>Generic Credential Type</strong> → <strong>Header Auth</strong>.</p></li>
+        <li><h4>Credential anlegen</h4>
+          <p>„+ Create new credential". Feld <strong>Name</strong> = <code>Authorization</code>, Feld <strong>Value</strong> =
+            <code>Bearer DEIN_TOKEN</code> (echtes Token natürlich privat halten).</p></li>
+        <li><h4>Speichern &amp; benennen</h4>
+          <p>Save, Credential z. B. <code>Beispiel-API – Header</code> nennen.</p></li>
+        <li><h4>Verwenden</h4>
+          <p>Zurück im Node ist die Credential ausgewählt. Jeder Request schickt den Header nun automatisch mit — du musst ihn nie
+            wieder eintippen, und er steht nicht im Workflow.</p></li>
+      </ol>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Warum trägt man Tokens nicht direkt in ein Node-Feld ein?</li>
+          <li>Was passiert mit Credentials, wenn du einen Workflow exportierst?</li>
+          <li>Wann nimmst du „Generic Credential Type → Header Auth"?</li>
+          <li>Ein abgelaufenes Token äußert sich meist als welcher Fehlercode?</li>
+          <li>Musst du dieselbe Credential für jeden Node neu anlegen?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Sicherheit — Geheimnisse gehören verschlüsselt in Credentials, nicht in den Workflow. ·
+        2) Sie gehen <strong>nicht</strong> mit; nur der Verweis bleibt. ·
+        3) Für beliebige APIs ohne eigenen Node, die einen Token im Header erwarten. ·
+        4) 401 (bzw. 403). ·
+        5) Nein — einmal anlegen, überall aus dem Menü auswählen.
+      </div>
+
+      <p>Damit ist dein Werkzeugkasten komplett: Du kennst Trigger, HTTP, Transformationen, Flow-Logik, Fehlerbehandlung und
+        Credentials. Zeit, das alles zusammenzubringen! In <strong>Teil 3</strong> bauen wir echte Projekte — vom täglichen
+        Report bis zum KI-Assistenten. Den Anfang macht ein <strong>täglicher Wetter-Report per Telegram</strong>.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="12-credentials"></nav></section>
 
   </div>
 </div>
 <script>
-var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow"];
-var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"soon"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
+var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials"];
+var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"soon"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
 
 function show(slug) {
   if (!slug || READY.indexOf(slug) === -1 && slug !== "home") slug = "home";
