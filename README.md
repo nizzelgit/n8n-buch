@@ -65,9 +65,8 @@ n8n-buch/
 Das vollständige Inhaltsverzeichnis (25+ Kapitel über 6 Teile) lebt in
 `assets/js/chapters.js`. Aktueller Ausbaustand:
 
-- **Fertig:** Teil 0, Teil 1, Teil 2, Teil 3 sowie Kapitel 20.
-- **Geplant (markiert „bald“):** RAG,
-  Betrieb/Skalierung sowie Anhänge.
+- **Fertig:** Teil 0, Teil 1, Teil 2, Teil 3 sowie Kapitel 20–21.
+- **Geplant (markiert „bald“):** Betrieb/Skalierung sowie Anhänge.
 
 ## Neue Kapitel hinzufügen
 

@@ -985,10 +985,10 @@ ol.steps > li p { font-size: 15.5px; }
       </a><div class="sb-part">Teil 4 · KI & Agenten</div><a class="sb-link" data-title="ai-agent, chat-trigger, memory & tools"
       href="#20-ai-agent" data-slug="20-ai-agent">
       <span class="num">20</span><span>AI-Agent, Chat-Trigger, Memory & Tools</span>
-      </a><a class="sb-link is-soon" data-title="rag: vektorstores & q&a über eigene daten"
-      href="javascript:void(0)" data-slug="21-rag">
+      </a><a class="sb-link" data-title="rag: vektorstores & q&a über eigene daten"
+      href="#21-rag" data-slug="21-rag">
       <span class="num">21</span><span>RAG: Vektorstores & Q&A über eigene Daten</span>
-      <span class="soon">bald</span></a><div class="sb-part">Teil 5 · Profi & Betrieb</div><a class="sb-link is-soon" data-title="sub-workflows & modularisierung"
+      </a><div class="sb-part">Teil 5 · Profi & Betrieb</div><a class="sb-link is-soon" data-title="sub-workflows & modularisierung"
       href="javascript:void(0)" data-slug="22-subworkflows">
       <span class="num">22</span><span>Sub-Workflows & Modularisierung</span>
       <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="performance, batching & rate-limits"
@@ -1089,10 +1089,10 @@ ol.steps > li p { font-size: 15.5px; }
       <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Teil 4 · KI & Agenten</h3><div class="toc-list"><a class="toc-row" href="#20-ai-agent">
       <span class="n">20</span><span class="ti">AI-Agent, Chat-Trigger, Memory & Tools</span>
       <span class="mins">⏱ 38 Min</span>
-      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#21-rag">
       <span class="n">21</span><span class="ti">RAG: Vektorstores & Q&A über eigene Daten</span>
-      <span class="mins">⏱ 30 Min</span>
-      <span class="pill">bald</span></a></div></div><div class="toc-part"><h3>Teil 5 · Profi & Betrieb</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="mins">⏱ 45 Min</span>
+      <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Teil 5 · Profi & Betrieb</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
       <span class="n">22</span><span class="ti">Sub-Workflows & Modularisierung</span>
       <span class="mins">⏱ 18 Min</span>
       <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
@@ -8774,12 +8774,698 @@ Regeln:
 
     </article>
       <nav class="pn-wrap" data-slug="20-ai-agent"></nav></section>
+<section class="page" id="21-rag" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">21</span> KI &amp; Agenten</div>
+      <h1 class="chap-title">RAG: Vektorstores &amp; Q&amp;A über eigene Daten</h1>
+      <p class="chap-lede">In diesem Kapitel baust du ein kleines Frage-Antwort-System über eigene Dokumente.
+        Der wichtige Unterschied zu Memory aus Kapitel 20: Memory merkt sich ein Gespräch. RAG sucht in einem
+        Wissensbestand. Das ist eine andere Aufgabe und braucht eine andere Kontrolle.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 45 Minuten</span>
+        <span>🎯 Niveau: Fortgeschrittene Grundlagen</span>
+        <span>🧩 Voraussetzung: Kapitel 6, 9, 12, 20</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>Eine n8n-Instanz mit den AI-/LangChain-Nodes.</li>
+          <li>Eine Chat-Model-Credential für die Antworten.</li>
+          <li>Eine Embeddings-Credential, z. B. OpenAI Embeddings oder ein anderer unterstützter Anbieter.</li>
+          <li>Für das Beispiel keine echten internen Dateien: Wir erzeugen fiktive Teamhandbuch-Texte direkt im Workflow.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Simple Vector Store nur als Lernspeicher</b>
+        Der Simple Vector Store speichert Daten in der n8n-App-Memory. Das ist praktisch zum Lernen, aber nicht robust:
+        Neustarts, Speicherlimits und gemeinsame Memory Keys können Daten verschwinden lassen oder für andere Instanznutzer
+        sichtbar machen. Für echte Dokumente nimm später Qdrant, PGVector, Pinecone, Supabase oder einen anderen
+        persistenten Vector Store.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Wir bauen zwei Workflows. Der erste lädt vier kleine Dokumente in einen Vector Store. Der zweite nimmt eine
+        Chatfrage entgegen, sucht passende Textstellen und beantwortet die Frage nur aus diesen Textstellen.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 1120 470" preserveAspectRatio="none">
+                <path class="is-active" d="M 145 116 C 205 116, 220 116, 278 116"></path>
+                <path class="is-active" d="M 370 116 C 430 116, 450 116, 508 116"></path>
+                <path d="M 600 70 C 680 24, 760 26, 850 44"></path>
+                <path d="M 600 116 C 690 116, 760 116, 850 116"></path>
+                <path d="M 600 164 C 680 220, 760 218, 850 188"></path>
+                <path class="is-active" d="M 145 332 C 205 332, 220 332, 278 332"></path>
+                <path d="M 370 286 C 475 232, 592 232, 708 250"></path>
+                <path d="M 370 332 C 475 332, 592 332, 708 332"></path>
+                <path class="is-active" d="M 370 332 C 430 332, 450 332, 508 332"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:28px; top:70px;">
+                <span class="n8n-node__icon">🧪</span><span class="ep out"></span>
+                <span class="n8n-node__label">Manual Trigger</span></div>
+              <div class="n8n-node n8n-node--code" style="left:278px; top:70px;">
+                <span class="n8n-node__icon">📄</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Demo-Dokumente</span><span class="items">4 Items</span></div>
+              <div class="n8n-node n8n-node--ai" style="left:508px; top:70px;">
+                <span class="n8n-node__icon">🗄</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Simple Vector Store</span><span class="badge badge--ok">Insert</span></div>
+              <div class="n8n-node" style="left:850px; top:0;">
+                <span class="n8n-node__icon">🔢</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Embeddings</span></div>
+              <div class="n8n-node" style="left:850px; top:70px;">
+                <span class="n8n-node__icon">📥</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Data Loader</span></div>
+              <div class="n8n-node" style="left:850px; top:148px;">
+                <span class="n8n-node__icon">✂</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Text Splitter</span></div>
+
+              <div class="n8n-node n8n-node--trigger" style="left:28px; top:286px;">
+                <span class="n8n-node__icon">💬</span><span class="ep out"></span>
+                <span class="n8n-node__label">Chat Trigger</span></div>
+              <div class="n8n-node n8n-node--ai" style="left:278px; top:286px;">
+                <span class="n8n-node__icon">❓</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Q&amp;A Chain</span></div>
+              <div class="n8n-node" style="left:508px; top:286px;">
+                <span class="n8n-node__icon">↩</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Chatantwort</span></div>
+              <div class="n8n-node" style="left:708px; top:204px;">
+                <span class="n8n-node__icon">🔎</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Vector Retriever</span></div>
+              <div class="n8n-node" style="left:708px; top:286px;">
+                <span class="n8n-node__icon">🗄</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Simple Vector Store</span><span class="badge badge--ok">Retrieve</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 21.1</span>RAG besteht aus zwei getrennten Bewegungen: Wissen laden und
+          Wissen abfragen. Mische diese beiden Schritte am Anfang nicht.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ RAG in einem Satz</b>
+        RAG heißt: erst passende Textstellen suchen, dann das Modell mit diesen Textstellen antworten lassen.
+        Ohne Suche ist es nur ein normaler Chat. Ohne strenge Antwortregel halluziniert der Chat trotzdem.
+      </div>
+
+      <h2>Die Bausteine</h2>
+      <table class="btable">
+        <thead><tr><th>Baustein</th><th>Aufgabe</th><th>Typischer Fehler</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Document Loader</strong></td><td>macht aus Datei oder JSON ein Dokument</td><td>falsches Feld wird geladen</td></tr>
+          <tr><td><strong>Text Splitter</strong></td><td>zerlegt lange Texte in Chunks</td><td>Chunks sind zu groß oder ohne Überlappung</td></tr>
+          <tr><td><strong>Embeddings</strong></td><td>wandelt Text in Zahlenvektoren um</td><td>anderes Modell beim Laden als beim Suchen</td></tr>
+          <tr><td><strong>Vector Store</strong></td><td>speichert und findet ähnliche Chunks</td><td>alte und neue Daten werden versehentlich gemischt</td></tr>
+          <tr><td><strong>Retriever</strong></td><td>holt die besten Treffer zur Frage</td><td>zu wenige Treffer oder keine Metadaten</td></tr>
+          <tr><td><strong>Q&amp;A Chain</strong></td><td>formuliert aus Frage und Treffern eine Antwort</td><td>Antwortet auch, wenn der Kontext nichts hergibt</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Skeptische Einordnung</b>
+        RAG ist keine Wahrheitsmaschine. Es erhöht nur die Chance, dass die Antwort aus deinen Dokumenten stammt.
+        Qualität entsteht durch gute Daten, gute Chunking-Regeln, sichtbare Quellen und Tests mit Gegenfragen.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 1 — Lade-Workflow erstellen</h2>
+      <p>Der Lade-Workflow füllt den Vector Store. Er wird nicht bei jeder Nutzerfrage ausgeführt, sondern nur, wenn du
+        Dokumente neu einliest.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow anlegen</h4>
+          <p>Erstelle einen Workflow und nenne ihn <code>RAG Wissen laden</code>.</p></li>
+        <li><h4>Manual Trigger hinzufügen</h4>
+          <p>Wähle als ersten Node <strong>Trigger manually</strong>. Ein Ladeprozess soll nicht aus Versehen automatisch laufen.</p></li>
+        <li><h4>Speichern</h4>
+          <p>Speichere den Workflow. Prüfe oben, ob der Status auf <strong>Saved</strong> steht.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Warum kein Schedule?</b>
+        Ein automatischer Reload kann den Store leeren oder doppelte Chunks erzeugen. Baue erst einen manuell geprüften
+        Ladeprozess. Automatisierung kommt danach.
+      </div>
+
+      <h2>Schritt 2 — Demo-Dokumente erzeugen</h2>
+      <p>Für das Lernen nutzen wir fiktive Mini-Dokumente. Das ist didaktisch sauberer als echte interne Dateien:
+        Du siehst genau, was im Store landet.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter den Manual Trigger einen <strong>Code</strong>-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Demo-Dokumente</code>.</p></li>
+        <li><h4>Modus prüfen</h4>
+          <p>Setze den Modus auf <strong>Run Once for All Items</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge den folgenden Code ein. Er erzeugt vier Items, also vier kleine Dokumente.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Demo-Dokumente</div>
+<pre>const docs = [
+  {
+    id: 'handbuch-urlaub',
+    title: 'Urlaub beantragen',
+    topic: 'hr',
+    source: 'Teamhandbuch',
+    text: 'Urlaub wird mindestens 14 Kalendertage vorher beantragt. Die Führungskraft prüft Vertretung und Projekttermine. Notfälle werden direkt mit HR und der Führungskraft abgestimmt.'
+  },
+  {
+    id: 'handbuch-spesen',
+    title: 'Spesen und Belege',
+    topic: 'finance',
+    source: 'Teamhandbuch',
+    text: 'Belege werden innerhalb von 7 Tagen eingereicht. Ausgaben über 250 Euro brauchen vorab eine schriftliche Freigabe. Taxifahrten sind erstattbar, wenn sie nach 22 Uhr stattfinden oder schweres Kundenequipment transportiert wird.'
+  },
+  {
+    id: 'handbuch-onboarding',
+    title: 'Onboarding',
+    topic: 'people',
+    source: 'Teamhandbuch',
+    text: 'Am ersten Arbeitstag richtet IT Laptop, Passwortmanager und Zwei-Faktor-Authentifizierung ein. Jede neue Person bekommt einen Buddy. Die Security-Schulung muss in der ersten Woche abgeschlossen werden.'
+  },
+  {
+    id: 'handbuch-support',
+    title: 'Support-Eskalation',
+    topic: 'support',
+    source: 'Support-Handbuch',
+    text: 'P1 bedeutet Kundenausfall oder Datenverlust. P1 wird innerhalb von 15 Minuten im Kanal #support-p1 eskaliert. P2 wird bis zum nächsten Arbeitstag bearbeitet. Jede Eskalation braucht Kundennamen, Impact und letzten bekannten Fehler.'
+  }
+];
+
+return docs.map((doc) =&gt; ({ json: doc }));</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 4;">
+        <li><h4>Schritt ausführen</h4>
+          <p>Klicke auf <strong>Schritt ausführen</strong>. Rechts sollten vier Items erscheinen.</p></li>
+        <li><h4>Daten bewusst lesen</h4>
+          <p>Öffne die JSON-Ansicht. Prüfe, dass jedes Item <code>id</code>, <code>title</code>, <code>topic</code>,
+            <code>source</code> und <code>text</code> enthält.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">📄</span><b>Demo-Dokumente</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="ndv-empty">Der manuelle Trigger liefert nur den Startimpuls.</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Code</div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-json">return docs.map((doc) =&gt; ({
+  <span class="k">json</span>: doc
+}));</div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">4 Items</span></div>
+                <div class="ndv-panel__body">
+                  <table class="n8n-table">
+                    <thead><tr><th>id</th><th>topic</th><th>title</th></tr></thead>
+                    <tbody>
+                      <tr><td>handbuch-urlaub</td><td>hr</td><td>Urlaub beantragen</td></tr>
+                      <tr><td>handbuch-spesen</td><td>finance</td><td>Spesen und Belege</td></tr>
+                      <tr><td>handbuch-onboarding</td><td>people</td><td>Onboarding</td></tr>
+                      <tr><td>handbuch-support</td><td>support</td><td>Support-Eskalation</td></tr>
+                    </tbody>
+                  </table>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 21.2</span>Vier kleine JSON-Items reichen, um RAG kontrolliert zu lernen.</figcaption>
+      </figure>
+
+      <h2>Schritt 3 — Simple Vector Store zum Einfügen anlegen</h2>
+      <p>Jetzt speicherst du die Dokumente als Vektoren. Der Vector Store ist hier ein Root-Node mit Unter-Nodes für
+        Embeddings, Data Loader und Text Splitter.</p>
+
+      <ol class="steps">
+        <li><h4>Vector Store anhängen</h4>
+          <p>Ziehe von <strong>Demo-Dokumente</strong> eine Linie ins Leere und suche <code>simple vector store</code>.</p></li>
+        <li><h4>Operation wählen</h4>
+          <p>Wähle <strong>Insert Documents</strong>.</p></li>
+        <li><h4>Memory Key setzen</h4>
+          <p>Setze <strong>Memory Key</strong> auf <code>werkbuch-teamhandbuch-demo</code>. Nutze exakt denselben Key später
+            beim Abfragen.</p></li>
+        <li><h4>Clear Store einschalten</h4>
+          <p>Lass <strong>Clear Store</strong> beim Lernbeispiel eingeschaltet. So ersetzt jeder Testlauf den alten Demo-Store.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne den Node <code>Teamhandbuch speichern</code>.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Memory Key ist die Datenbankadresse</b>
+        Der Memory Key verbindet Laden und Abfragen. Ein Tippfehler erzeugt nicht unbedingt einen sichtbaren Fehler,
+        sondern einen leeren Suchraum.
+      </div>
+
+      <h2>Schritt 4 — Embeddings verbinden</h2>
+      <p>Embeddings übersetzen Text in Zahlen. Suche und Speicherung müssen dasselbe Embedding-Verfahren verwenden,
+        sonst vergleichst du unterschiedliche Koordinatensysteme.</p>
+
+      <ol class="steps">
+        <li><h4>Embedding-Anschluss öffnen</h4>
+          <p>Klicke am Vector-Store-Node auf den Anschluss <strong>Embeddings</strong>.</p></li>
+        <li><h4>Embedding-Node wählen</h4>
+          <p>Wähle z. B. <strong>Embeddings OpenAI</strong> oder einen anderen von dir eingerichteten Anbieter.</p></li>
+        <li><h4>Credential wählen</h4>
+          <p>Wähle deine Credential. Lege API-Keys nicht als Text in Nodes ab.</p></li>
+        <li><h4>Modell stabil halten</h4>
+          <p>Nutze für dieses Demo-Kapitel ein kleines, günstiges Embedding-Modell und ändere es nicht zwischen Laden und
+            Abfragen.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Modellwechsel heißt meist neu indexieren</b>
+        Wenn du später das Embedding-Modell wechselst, lade die Dokumente neu in den Store. Alte Vektoren und neue Vektoren
+        sollten nicht gemischt werden.
+      </div>
+
+      <h2>Schritt 5 — Data Loader konfigurieren</h2>
+      <p>Der Data Loader entscheidet, welcher Teil deiner Items überhaupt als Dokumenttext in den Store geht. Das ist
+        wichtiger als es aussieht.</p>
+
+      <ol class="steps">
+        <li><h4>Data-Loader-Anschluss öffnen</h4>
+          <p>Klicke am Vector-Store-Node auf <strong>Document</strong> oder <strong>Document Loader</strong> und wähle
+            <strong>Default Data Loader</strong>.</p></li>
+        <li><h4>Type of Data setzen</h4>
+          <p>Setze <strong>Type of Data</strong> auf <strong>JSON</strong>.</p></li>
+        <li><h4>Mode setzen</h4>
+          <p>Setze <strong>Mode</strong> auf <strong>Load Specific Data</strong>. Wir laden nicht blind das ganze JSON.</p></li>
+        <li><h4>Textvorlage eintragen</h4>
+          <p>Trage als geladene Daten die folgende Vorlage ein.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Load Specific Data</div>
+<pre>Titel: {{ $json.title }}
+Thema: {{ $json.topic }}
+Quelle: {{ $json.source }}
+
+{{ $json.text }}</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 4;">
+        <li><h4>Metadaten ergänzen</h4>
+          <p>Füge beim Data Loader Metadaten hinzu. Nutze mindestens die folgenden Felder.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>Metadata Key</th><th>Wert</th><th>Warum</th></tr></thead>
+        <tbody>
+          <tr><td><code>doc_id</code></td><td><code>{{ $json.id }}</code></td><td>eindeutige Quelle</td></tr>
+          <tr><td><code>title</code></td><td><code>{{ $json.title }}</code></td><td>lesbare Quellenangabe</td></tr>
+          <tr><td><code>topic</code></td><td><code>{{ $json.topic }}</code></td><td>später filterbar</td></tr>
+          <tr><td><code>source</code></td><td><code>{{ $json.source }}</code></td><td>Herkunft sichtbar machen</td></tr>
+        </tbody>
+      </table>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:780px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">📥</span><b>Default Data Loader</b><span class="ndv__exec-step">Sub-Node</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Type of Data</label><div class="n8n-select">JSON <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Mode</label><div class="n8n-select">Load Specific Data <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Data</label><input class="n8n-input is-expr" value="Titel: {{ $json.title }} ... {{ $json.text }}"></div>
+                  <div class="row"><label>Metadata</label><input class="n8n-input is-expr" value="doc_id={{ $json.id }}, topic={{ $json.topic }}"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 21.3</span>Der Loader bestimmt Text und Metadaten. Fehler hier werden später
+          als schlechte Antworten sichtbar.</figcaption>
+      </figure>
+
+      <h2>Schritt 6 — Text Splitter anschließen</h2>
+      <p>Unsere Demo-Texte sind kurz. Trotzdem bauen wir den Splitter bewusst ein, weil echte Dokumente selten kurz sind.</p>
+
+      <ol class="steps">
+        <li><h4>Text Splitting auf Custom setzen</h4>
+          <p>Setze im Default Data Loader <strong>Text Splitting</strong> auf <strong>Custom</strong>.</p></li>
+        <li><h4>Splitter verbinden</h4>
+          <p>Klicke auf den Text-Splitter-Anschluss und wähle <strong>Recursive Character Text Splitter</strong>.</p></li>
+        <li><h4>Chunk Size setzen</h4>
+          <p>Setze <strong>Chunk Size</strong> für das Demo auf <code>600</code>.</p></li>
+        <li><h4>Chunk Overlap setzen</h4>
+          <p>Setze <strong>Chunk Overlap</strong> auf <code>80</code>. So gehen Begriffe an Chunk-Grenzen nicht sofort verloren.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum Recursive Character?</b>
+        Der rekursive Splitter versucht Absätze, Sätze und Wörter möglichst zusammenzuhalten. Für normale Texte ist das
+        ein besserer Startpunkt als stumpfes Schneiden nach fester Zeichenlänge.
+      </div>
+
+      <h2>Schritt 7 — Dokumente in den Store laden</h2>
+      <p>Jetzt führst du den kompletten Lade-Workflow aus.</p>
+
+      <ol class="steps">
+        <li><h4>Canvas schließen</h4>
+          <p>Schließe die Detailansichten, damit du den Lade-Workflow vollständig siehst.</p></li>
+        <li><h4>Workflow speichern</h4>
+          <p>Speichere den Workflow.</p></li>
+        <li><h4>Test workflow starten</h4>
+          <p>Klicke auf <strong>Test workflow</strong>. Die Nodes sollten nacheinander grün werden.</p></li>
+        <li><h4>Output prüfen</h4>
+          <p>Öffne <strong>Teamhandbuch speichern</strong>. Prüfe, ob vier Dokumente verarbeitet wurden.</p></li>
+        <li><h4>Keine echten Geheimnisse laden</h4>
+          <p>Prüfe noch einmal: Im Demo-Store stehen nur fiktive Daten. Keine echten Kundendaten, Tokens oder Personalakten.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn der Store leer bleibt</b>
+        Prüfe drei Dinge in dieser Reihenfolge: Memory Key gesetzt? Embeddings verbunden? Data Loader lädt wirklich
+        <code>{{ $json.text }}</code>? Ohne diese drei Punkte hat die spätere Q&amp;A Chain nichts zu suchen.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 8 — Frage-Workflow erstellen</h2>
+      <p>Der zweite Workflow fragt den Store ab. Er läuft bei jeder Chatnachricht.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow anlegen</h4>
+          <p>Erstelle einen Workflow und nenne ihn <code>RAG Teamhandbuch fragen</code>.</p></li>
+        <li><h4>Chat Trigger hinzufügen</h4>
+          <p>Füge als ersten Node einen <strong>Chat Trigger</strong> hinzu.</p></li>
+        <li><h4>Chat privat lassen</h4>
+          <p>Lasse <strong>Make Chat Publicly Available</strong> zunächst ausgeschaltet.</p></li>
+        <li><h4>Initial Message setzen</h4>
+          <p>Setze den Starttext auf <code>Frag mich etwas zum fiktiven Teamhandbuch.</code></p></li>
+      </ol>
+
+      <h2>Schritt 9 — Question and Answer Chain einbauen</h2>
+      <p>Für ein reines Dokumenten-Q&amp;A ist eine Chain oft besser als ein Agent. Die Chain entscheidet nicht frei über
+        Tools. Sie bekommt eine Frage, nutzt den Retriever und formuliert eine Antwort.</p>
+
+      <ol class="steps">
+        <li><h4>Q&amp;A Chain anhängen</h4>
+          <p>Ziehe vom Chat Trigger eine Linie ins Leere, suche <code>question answer</code> und wähle
+            <strong>Question and Answer Chain</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne den Node <code>Teamhandbuch beantworten</code>.</p></li>
+        <li><h4>Query eintragen</h4>
+          <p>Setze das Query-Feld nicht nur auf die Frage, sondern auf eine kleine Antwortregel plus Frage.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Query · Q&amp;A Chain</div>
+<pre>Beantworte die Frage ausschließlich mit dem gefundenen Kontext aus dem Teamhandbuch.
+Wenn die Antwort nicht im Kontext steht, sage genau:
+"Das steht nicht in den geladenen Dokumenten."
+
+Frage:
+{{ $json.chatInput }}</pre>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Antwortregel in die Query</b>
+        Eine RAG-Antwort braucht eine klare Bremse. Sonst nutzt das Modell sein Allgemeinwissen, sobald der Retriever
+        nichts Passendes findet.
+      </div>
+
+      <h2>Schritt 10 — Chat Model verbinden</h2>
+      <p>Die Q&amp;A Chain braucht ein Chat Model, um aus den gefundenen Chunks eine Antwort zu formulieren.</p>
+
+      <ol class="steps">
+        <li><h4>Chat-Model-Anschluss öffnen</h4>
+          <p>Klicke an der Q&amp;A Chain auf <strong>Chat Model</strong>.</p></li>
+        <li><h4>Modell wählen</h4>
+          <p>Wähle dasselbe Chat-Model-System, das du schon in Kapitel 20 genutzt hast, oder ein anderes eingerichtetes
+            Chat Model.</p></li>
+        <li><h4>Temperatur niedrig setzen</h4>
+          <p>Setze die Temperatur etwa auf <code>0.1</code> bis <code>0.3</code>. Dokumenten-Q&amp;A soll präzise sein.</p></li>
+      </ol>
+
+      <h2>Schritt 11 — Retriever und Vector Store verbinden</h2>
+      <p>Jetzt bekommt die Chain Zugriff auf die gespeicherten Dokumente.</p>
+
+      <ol class="steps">
+        <li><h4>Retriever-Anschluss öffnen</h4>
+          <p>Klicke an der Q&amp;A Chain auf <strong>Retriever</strong> und wähle <strong>Vector Store Retriever</strong>.</p></li>
+        <li><h4>Vector Store anschließen</h4>
+          <p>Klicke am Retriever auf <strong>Vector Store</strong> und wähle <strong>Simple Vector Store</strong>.</p></li>
+        <li><h4>Operation wählen</h4>
+          <p>Setze den Simple Vector Store auf <strong>Retrieve Documents (As Vector Store for Chain/Tool)</strong>.</p></li>
+        <li><h4>Memory Key wiederholen</h4>
+          <p>Setze <strong>Memory Key</strong> exakt auf <code>werkbuch-teamhandbuch-demo</code>.</p></li>
+        <li><h4>Embeddings verbinden</h4>
+          <p>Verbinde auch beim abfragenden Vector Store denselben Embedding-Typ wie im Lade-Workflow.</p></li>
+        <li><h4>Limit setzen</h4>
+          <p>Setze im Retriever oder Vector Store ein kleines Limit, z. B. <code>4</code>. Für vier Demo-Dokumente reicht das.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">❓</span><b>Teamhandbuch beantworten</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="n8n-json">{
+  <span class="k">"chatInput"</span>: <span class="s">"Wie schnell muss P1 eskaliert werden?"</span>,
+  <span class="k">"sessionId"</span>: <span class="s">"chat-demo-21"</span>
+}</div></div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Chain</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Query</label><input class="n8n-input is-expr" value="Beantworte ausschließlich mit Kontext ... {{ $json.chatInput }}"></div>
+                  <div class="row"><label>Chat Model</label><div class="n8n-select">verbunden <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Retriever</label><div class="n8n-select">Vector Store Retriever verbunden <span class="chev">▾</span></div></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body"><div class="n8n-json">{
+  <span class="k">"text"</span>: <span class="s">"P1 wird innerhalb von 15 Minuten ..."</span>
+}</div></div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 21.4</span>Die Chain nutzt Modell und Retriever. Sie ist enger geführt als
+          ein Agent mit mehreren Tools.</figcaption>
+      </figure>
+
+      <h2>Schritt 12 — Erste Fragen testen</h2>
+      <p>Teste nicht nur den Erfolgsfall. Ein RAG-System muss auch sauber sagen können, dass etwas nicht in den Dokumenten
+        steht.</p>
+
+      <ol class="steps">
+        <li><h4>Chat öffnen</h4>
+          <p>Öffne den Testchat des Chat Triggers.</p></li>
+        <li><h4>P1-Frage stellen</h4>
+          <p>Schreibe: <code>Wie schnell muss P1 eskaliert werden?</code></p></li>
+        <li><h4>Antwort prüfen</h4>
+          <p>Die Antwort muss <code>15 Minuten</code> und den Kontext <code>P1</code> nennen.</p></li>
+        <li><h4>Spesenfrage stellen</h4>
+          <p>Schreibe: <code>Welche Spesen brauchen vorher eine Freigabe?</code></p></li>
+        <li><h4>Antwort prüfen</h4>
+          <p>Die Antwort muss <code>über 250 Euro</code> nennen. Wenn sie allgemeine Reiserichtlinien erfindet, ist die
+            Antwortregel zu schwach.</p></li>
+        <li><h4>Gegenfrage stellen</h4>
+          <p>Schreibe: <code>Wie lautet die Homeoffice-Regel für Freitage?</code></p></li>
+        <li><h4>Nichtwissen prüfen</h4>
+          <p>Die erwartete Antwort ist: <code>Das steht nicht in den geladenen Dokumenten.</code></p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Wenn die Gegenfrage trotzdem beantwortet wird</b>
+        Dann nutzt das Modell Allgemeinwissen. Verschärfe die Query-Regel, senke die Temperatur und prüfe, ob der
+        Retriever irrelevante Chunks liefert.
+      </div>
+
+      <h2>Schritt 13 — Execution statt nur Chat lesen</h2>
+      <p>Eine gute Antwort im Chat beweist nicht, dass RAG korrekt gearbeitet hat. Öffne die Execution und prüfe die
+        Zwischenschritte.</p>
+
+      <ol class="steps">
+        <li><h4>Execution öffnen</h4>
+          <p>Öffne nach einer Testfrage die Ausführung des Frage-Workflows.</p></li>
+        <li><h4>Q&amp;A Chain prüfen</h4>
+          <p>Prüfe die Eingabe: Kommt wirklich <code>chatInput</code> in der Query an?</p></li>
+        <li><h4>Retriever prüfen</h4>
+          <p>Öffne den Vector Store Retriever oder den angeschlossenen Vector Store. Prüfe, welche Dokumente zurückkamen.</p></li>
+        <li><h4>Metadaten prüfen</h4>
+          <p>Suche nach <code>doc_id</code>, <code>title</code>, <code>topic</code> oder <code>source</code>. Ohne Metadaten
+            kannst du Fehler später kaum debuggen.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Trefferqualität vor Antwortqualität</b>
+        Wenn der Retriever falsche Chunks liefert, kann das Modell die Antwort kaum retten. Debugge erst die Suche,
+        dann den Prompt.
+      </div>
+
+      <h2>Schritt 14 — Quellen sichtbarer machen</h2>
+      <p>Die einfache Q&amp;A Chain ist bequem, aber nicht immer transparent genug. Wenn du Quellen zwingend anzeigen willst,
+        baue eine explizitere Variante: erst suchen, dann Kontext und Quellen an das Modell geben.</p>
+
+      <table class="btable">
+        <thead><tr><th>Variante</th><th>Workflow</th><th>Vorteil</th></tr></thead>
+        <tbody>
+          <tr><td>Einfach</td><td>Chat Trigger → Q&amp;A Chain → Antwort</td><td>schnell aufgebaut, wenig Nodes</td></tr>
+          <tr><td>Transparenter</td><td>Chat Trigger → Vector Store <code>Get Many</code> → Code-Kontext → Basic LLM Chain</td><td>Quellen und Treffer lassen sich sichtbar formatieren</td></tr>
+          <tr><td>Agentisch</td><td>Chat Trigger → AI Agent → Vector Store Question Answer Tool</td><td>sinnvoll, wenn der Chat mehrere Werkzeuge braucht</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Empfehlung</b>
+        Für reine Wissensfragen: Q&amp;A Chain. Für prüfbare Quellenanzeigen: direkte Suche plus eigener Prompt. Für mehrere
+        Werkzeuge: Agent mit Vector-Store-Tool.
+      </div>
+
+      <h2>Schritt 15 — Agent-Variante einordnen</h2>
+      <p>Wenn du an den Agenten aus Kapitel 20 anknüpfst, nutzt du nicht die Q&amp;A Chain als Hauptknoten, sondern ein
+        Tool am Agenten.</p>
+
+      <ol class="steps">
+        <li><h4>AI Agent verwenden</h4>
+          <p>Nutze einen <strong>AI Agent</strong> nur dann, wenn der Chat außer RAG noch weitere Entscheidungen treffen muss.</p></li>
+        <li><h4>Vector Store Question Answer Tool anschließen</h4>
+          <p>Verbinde am Tool-Anschluss des Agenten das <strong>Vector Store Question Answer Tool</strong>.</p></li>
+        <li><h4>Beschreibung präzise setzen</h4>
+          <p>Setze <strong>Description of Data</strong> z. B. auf
+            <code>fiktive Teamhandbuch-Regeln zu Urlaub, Spesen, Onboarding und Support</code>.</p></li>
+        <li><h4>Limit setzen</h4>
+          <p>Setze <strong>Limit</strong> auf <code>4</code>.</p></li>
+        <li><h4>Vector Store verbinden</h4>
+          <p>Verbinde das Tool mit demselben Simple Vector Store und demselben Memory Key.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Tool-Namen nüchtern halten</b>
+        Nutze für Tool-Namen einfache Buchstaben, Zahlen, Leerzeichen, Bindestriche oder Unterstriche. Sonderzeichen in
+        Tool-Namen können Modell- oder Tool-Aufruffehler verursachen.
+      </div>
+
+      <h2>Schritt 16 — Chunking bewusst verbessern</h2>
+      <p>Chunking entscheidet, ob relevante Zusammenhänge gemeinsam gefunden werden. Zu kleine Chunks verlieren Kontext.
+        Zu große Chunks verwässern die Suche.</p>
+
+      <table class="btable">
+        <thead><tr><th>Dokumenttyp</th><th>Startwert</th><th>Worauf achten?</th></tr></thead>
+        <tbody>
+          <tr><td>FAQ / kurze Regeln</td><td>400–800 Zeichen, 50–100 Overlap</td><td>Frage und Antwort zusammenhalten</td></tr>
+          <tr><td>Handbuchseiten</td><td>800–1400 Zeichen, 100–200 Overlap</td><td>Abschnitte nicht mitten in Listen trennen</td></tr>
+          <tr><td>Technische Doku</td><td>700–1200 Zeichen, 100–200 Overlap</td><td>Codeblöcke und Überschriften zusammenhalten</td></tr>
+          <tr><td>Verträge / Richtlinien</td><td>kleiner starten, Metadaten stark nutzen</td><td>Paragraf, Version und Gültigkeit als Metadata speichern</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Mathematische Sicht</b>
+        Ein Chunk ist ein Informationsvektor. Wenn ein Chunk mehrere Themen mischt, wird sein Vektor unscharf. Wenn ein
+        Thema über zu viele Chunks zerfällt, fehlt beim Antworten Kontext. Chunking ist also eine Bias-Varianz-Abwägung,
+        keine kosmetische Einstellung.
+      </div>
+
+      <h2>Schritt 17 — Produktionsspeicher auswählen</h2>
+      <p>Für echte Daten brauchst du meist einen persistenten Vector Store. Die Entscheidung ist weniger glamourös als
+        wichtig: Wer darf lesen? Wie wird gelöscht? Wie wird neu indexiert?</p>
+
+      <table class="btable">
+        <thead><tr><th>Store</th><th>Geeignet für</th><th>Skeptische Frage</th></tr></thead>
+        <tbody>
+          <tr><td>Simple Vector Store</td><td>Lernen, Prototypen, Demos</td><td>Was passiert nach Neustart oder bei mehreren Nutzern?</td></tr>
+          <tr><td>PGVector</td><td>Teams mit bestehender Postgres-Infrastruktur</td><td>Wer betreibt Backups, Migrationen und Zugriffskontrolle?</td></tr>
+          <tr><td>Qdrant</td><td>dedizierte Vektorsuche, lokal oder Cloud</td><td>Wie werden Collections versioniert und gelöscht?</td></tr>
+          <tr><td>Pinecone / Supabase</td><td>verwaltete Dienste</td><td>Welche Daten verlassen dein System und welche Kosten entstehen?</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">Löschen mitdenken</b>
+        RAG-Systeme vergessen nicht automatisch. Wenn ein Dokument veraltet oder rechtlich zu löschen ist, brauchst du
+        eine Strategie für Löschung, Neuindexierung und Versionierung.
+      </div>
+
+      <h2>Schritt 18 — Testmatrix anlegen</h2>
+      <p>RAG ohne Testfragen ist Bauchgefühl. Lege eine kleine Testmatrix an und prüfe sie nach jedem Daten- oder
+        Promptwechsel.</p>
+
+      <table class="btable">
+        <thead><tr><th>Testfrage</th><th>Erwartung</th><th>Warum</th></tr></thead>
+        <tbody>
+          <tr><td><code>Wie schnell muss P1 eskaliert werden?</code></td><td>15 Minuten, #support-p1</td><td>klarer Treffer</td></tr>
+          <tr><td><code>Welche Spesen brauchen Freigabe?</code></td><td>über 250 Euro</td><td>semantische Suche</td></tr>
+          <tr><td><code>Was passiert am ersten Arbeitstag?</code></td><td>IT, Passwortmanager, 2FA, Buddy</td><td>mehrere Details</td></tr>
+          <tr><td><code>Wie ist Homeoffice am Freitag geregelt?</code></td><td>Nichtwissen</td><td>Halluzinationsbremse</td></tr>
+          <tr><td><code>Was gilt bei Datenverlust?</code></td><td>P1, Eskalation mit Impact</td><td>indirekte Formulierung</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Teste auch Nichtwissen</b>
+        Ein RAG-System, das alles beantwortet, ist nicht hilfreich. Es ist gefährlich plausibel. Die beste Schutzfrage ist
+        oft eine Frage, deren Antwort absichtlich nicht im Store steht.
+      </div>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>jede Antwort sagt „nicht in den Dokumenten“</td><td>falscher Memory Key oder leerer Store</td><td>Lade-Workflow erneut ausführen, Key vergleichen</td></tr>
+          <tr><td>Antwort ist plausibel, aber nicht aus dem Text</td><td>Antwortregel zu weich</td><td>Query schärfen, Temperatur senken, Gegenfragen testen</td></tr>
+          <tr><td>falsches Dokument wird gefunden</td><td>Chunks zu groß, Metadaten fehlen, Frage zu vage</td><td>Chunking ändern, Metadata Filter nutzen, Testfrage präzisieren</td></tr>
+          <tr><td>Embedding-Fehler</td><td>Credential, Modell oder Rate-Limit</td><td>Credential prüfen, kleineres Modell wählen, später erneut ausführen</td></tr>
+          <tr><td>doppelte oder alte Antworten</td><td>Store wurde nicht geleert oder Dokumente doppelt geladen</td><td>Clear Store im Demo aktivieren oder produktiv Upsert/Löschstrategie bauen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Sinnvolle Erweiterungen</h2>
+      <table class="btable">
+        <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
+        <tbody>
+          <tr><td>PDFs laden</td><td>Input-Dateien mit Default Data Loader als Binary einlesen und Metadaten pro Datei setzen.</td></tr>
+          <tr><td>Google Drive anbinden</td><td>Drive-Trigger oder regelmäßiger Lade-Workflow, aber mit Versions- und Löschstrategie.</td></tr>
+          <tr><td>Quellen ausgeben</td><td>Direkte Vector-Store-Suche verwenden und <code>title</code>/<code>source</code> in die Antwort schreiben.</td></tr>
+          <tr><td>Metadata Filter</td><td>Nur bestimmte Themen, Versionen oder Kundensegmente suchen lassen.</td></tr>
+          <tr><td>Reranking</td><td>Bei vielen ähnlichen Treffern einen Reranker ergänzen, wenn dein n8n-Setup das unterstützt.</td></tr>
+          <tr><td>Human Review</td><td>Antworten mit niedriger Sicherheit an Slack oder ein Ticket-System schicken statt automatisch zu senden.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Warum ist Memory kein Ersatz für RAG?</li>
+          <li>Warum braucht der Frage-Workflow denselben Memory Key wie der Lade-Workflow?</li>
+          <li>Welche drei Dinge prüfst du zuerst, wenn der Retriever nichts findet?</li>
+          <li>Warum ist der Simple Vector Store für echte interne Dokumente problematisch?</li>
+          <li>Warum muss ein RAG-Test auch Fragen enthalten, deren Antwort nicht im Store steht?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Memory speichert Gesprächsverlauf, RAG sucht in einem Dokumentenbestand. ·
+        2) Weil der Key den gespeicherten Vektorraum adressiert. ·
+        3) Store geladen, Memory Key gleich, Embeddings verbunden. ·
+        4) Weil Daten nicht dauerhaft garantiert sind und Keys instanzweit zugänglich sein können. ·
+        5) Weil Nichtwissen der wichtigste Test gegen Halluzination ist.
+      </div>
+
+      <p>Du hast jetzt ein minimales RAG-System gebaut: kontrolliert geladen, abgefragt und mit Gegenfragen getestet.
+        Der nächste große Schritt ist nicht „mehr KI“, sondern bessere Betriebsstruktur: wiederverwendbare
+        Sub-Workflows, saubere Grenzen und weniger Kopieren.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="21-rag"></nav></section>
 
   </div>
 </div>
 <script>
-var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter","14-projekt-form","15-projekt-news","16-projekt-leads","17-projekt-ai","18-projekt-pdf","19-grossprojekt","20-ai-agent"];
-var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"soon"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
+var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter","14-projekt-form","15-projekt-news","16-projekt-leads","17-projekt-ai","18-projekt-pdf","19-grossprojekt","20-ai-agent","21-rag"];
+var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
 
 function show(slug) {
   if (!slug || READY.indexOf(slug) === -1 && slug !== "home") slug = "home";

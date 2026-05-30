@@ -54,7 +54,7 @@ window.BOOK = {
       part: "Teil 4 · KI & Agenten",
       chapters: [
         { num: "20", slug: "20-ai-agent",       title: "AI-Agent, Chat-Trigger, Memory & Tools", status: "ready", mins: 38 },
-        { num: "21", slug: "21-rag",            title: "RAG: Vektorstores & Q&A über eigene Daten", status: "soon", mins: 30 }
+        { num: "21", slug: "21-rag",            title: "RAG: Vektorstores & Q&A über eigene Daten", status: "ready", mins: 45 }
       ]
     },
     {

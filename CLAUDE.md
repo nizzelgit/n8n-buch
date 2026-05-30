@@ -235,12 +235,13 @@ Caption beginnt mit `<span class="fig-tag">Abb. X.Y</span>`.
 - `18-projekt-pdf` — Projekt 6: PDF-/Rechnungs-Extraktion (PDF-Text, Regel-Extraktion, KI-Fallback, Review)
 - `19-grossprojekt` — Großprojekt: Content-Pipeline end-to-end (Backlog-Sheet, Recherche, KI-Entwurf, Review-Gate, Publish-Workflow)
 - `20-ai-agent` — AI-Agent, Chat-Trigger, Memory & Tools (Chat Trigger, Tool-Agent, Simple Memory, HTTP-Tools, sichere Veröffentlichung)
+- `21-rag` — RAG: Vektorstores & Q&A über eigene Daten (Lade-Workflow, Simple Vector Store, Embeddings, Data Loader, Retriever, Q&A Chain)
 
-> **Teil 0, 1 und 2 sind vollständig (Kap. 00–12). Teil 3 ist vollständig (Kap. 13–19). Teil 4 ist gestartet (Kap. 20).**
+> **Teil 0, 1 und 2 sind vollständig (Kap. 00–12). Teil 3 ist vollständig (Kap. 13–19). Teil 4 ist gestartet (Kap. 20–21).**
 
 **🔜 Als Nächstes (`status: "soon"`), empfohlene Reihenfolge:**
-1. `21-rag` — RAG: Vektorstores & Q&A über eigene Daten
-2. danach Betrieb 22–25, Anhänge A–D
+1. `22-subworkflows` — Sub-Workflows & Modularisierung
+2. danach Betrieb 23–25, Anhänge A–D
 
 **Hinweis zu Projekt-Kapiteln (Teil 3):** Sie sind länger/umfangreicher als die Bausteine. Sie sollten die in
 Kap. 4 etablierte Schritt-für-Schritt-Tiefe haben und auf den fertigen Bausteinen (07–12) aufbauen, statt
@@ -253,6 +254,14 @@ deren Grundlagen zu wiederholen (stattdessen verlinken/verweisen).
 
 ## 11. Logbuch (neuester Eintrag oben)
 
+### 2026-05-30 — Kapitel 21 RAG ergänzt
+- **Kapitel 21 „RAG: Vektorstores & Q&A über eigene Daten"** (`ready`): zwei Workflow-Muster
+  für Wissen laden und Wissen abfragen, Simple Vector Store mit klaren Sicherheitsgrenzen,
+  Embeddings, Default Data Loader, Recursive Character Text Splitter, Vector Store Retriever,
+  Question and Answer Chain, Testmatrix inklusive Nichtwissensfragen und Einordnung der Agent-Variante.
+- `assets/js/chapters.js` auf `ready` gesetzt; README aktualisiert.
+- Nächster offener Schritt: `22-subworkflows` (Sub-Workflows & Modularisierung).
+
 ### 2026-05-30 — Canvas-Diagramme und Arbeitsstand bereinigt
 - Canvas-Abbildungen stabilisiert: Kapitel-Diagramme erhalten feste ViewBox-Maße mit horizontaler Scrollfläche,
   Verbindungen werden an echte Node-Endpunkte geschnappt, und Rück-/Hinweislinien können per `no-arrow` ohne
@@ -260,7 +269,7 @@ deren Grundlagen zu wiederholen (stattdessen verlinken/verweisen).
 - Korrigierte Diagramme in `10-flow`, `18-projekt-pdf` und `19-grossprojekt`; Startseite lädt `book.js` nicht mehr,
   damit die Demo-Canvas mobil keinen Seitenüberlauf erzeugt.
 - `.gitignore` ergänzt (`output/`), `dist/n8n-werkbuch.html` neu gebaut und Desktop-/Mobilprüfung per Browserlauf
-  durchgeführt. Nächster offener Schritt bleibt `21-rag`.
+  durchgeführt. Nächster offener Schritt war `21-rag`.
 
 ### 2026-05-29 — Kapitel 20 AI-Agent ergänzt
 - **Kapitel 20 „AI-Agent, Chat-Trigger, Memory & Tools"** (`ready`): Chat-Trigger-Workflow mit AI Agent,
