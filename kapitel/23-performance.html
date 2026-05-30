@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Performance, Batching &amp; Rate-Limits — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="23-performance" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">23</span> Profi &amp; Betrieb</div>
+      <h1 class="chap-title">Performance, Batching &amp; Rate-Limits</h1>
+      <p class="chap-lede">In diesem Kapitel lernst du, Workflows nicht nur korrekt, sondern berechenbar laufen zu
+        lassen. Der Kern ist einfach: n8n verarbeitet Items meistens automatisch. Batching brauchst du dann, wenn ein
+        Dienst langsam ist, Limits setzt oder große Datenmengen sonst unkontrolliert durch den Workflow laufen.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 18 Minuten</span>
+        <span>🎯 Niveau: Fortgeschrittene Grundlagen</span>
+        <span>🧩 Voraussetzung: Kapitel 5, 8, 10, 22</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>Eine n8n-Instanz, lokal oder in der Cloud.</li>
+          <li>Keine API-Credentials: Wir simulieren eine externe API mit Code-Nodes.</li>
+          <li>Grundverständnis für Items, IF und Schleifen.</li>
+          <li>Ein bewusst kleines Testsetup. Performance-Fragen werden mit echten Massen schnell unübersichtlich.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Mehr parallel ist nicht automatisch schneller</b>
+        Ein Workflow kann an API-Limits, Datenbankverbindungen, Speicher, Dateigrößen oder Modellkosten scheitern.
+        Performance heißt daher nicht „alles gleichzeitig“, sondern kontrollierter Durchsatz.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Du baust einen Workflow, der 23 fiktive API-Aufträge in kleinen Gruppen verarbeitet. Der Workflow nutzt
+        <strong>Loop Over Items</strong> zum Batching, einen simulierten API-Schritt, einen <strong>Wait</strong>-Node als
+        Bremse und am Ende eine Zusammenfassung. So lernst du das Muster ohne echte Fremddienste und ohne Kosten.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 1120 470" preserveAspectRatio="none">
+                <path class="is-active" d="M 145 164 C 205 164, 226 164, 288 164"></path>
+                <path class="is-active" d="M 380 164 C 445 164, 470 164, 532 164"></path>
+                <path class="is-active" d="M 624 116 C 684 88, 706 86, 768 86"></path>
+                <path class="is-active" d="M 860 86 C 920 86, 946 86, 1008 86"></path>
+                <path d="M 1052 132 C 1052 250, 640 282, 596 206"></path>
+                <path d="M 624 212 C 694 286, 760 318, 846 318"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:28px; top:118px;">
+                <span class="n8n-node__icon">🧪</span><span class="ep out"></span>
+                <span class="n8n-node__label">Manual Trigger</span></div>
+              <div class="n8n-node n8n-node--code" style="left:288px; top:118px;">
+                <span class="n8n-node__icon">📦</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Demo-Aufträge</span><span class="items">23 Items</span></div>
+              <div class="n8n-node" style="left:532px; top:118px;">
+                <span class="n8n-node__icon">🔁</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Loop Over Items</span><span class="badge badge--ok">5er Batches</span></div>
+              <div class="n8n-node n8n-node--code" style="left:768px; top:40px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">API simulieren</span></div>
+              <div class="n8n-node" style="left:1008px; top:40px;">
+                <span class="n8n-node__icon">⏱</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">1 Sekunde warten</span></div>
+              <div class="n8n-node" style="left:846px; top:272px;">
+                <span class="n8n-node__icon">📊</span><span class="ep in"></span>
+                <span class="n8n-node__label">Zusammenfassung</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 23.1</span>Der Loop-Ausgang verarbeitet Batches. Der Done-Ausgang läuft
+          erst weiter, wenn alle Items verarbeitet wurden.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Performance in einem Satz</b>
+        Miss erst, bremse dann gezielt. Ohne Messpunkt weißt du nicht, ob dein Problem CPU, Speicher, API-Limit,
+        Dateigröße, Netzwerk oder schlechte Workflow-Struktur ist.
+      </div>
+
+      <h2>Die drei Hebel</h2>
+      <table class="btable">
+        <thead><tr><th>Hebel</th><th>Wirkung</th><th>Risiko</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Batchgröße</strong></td><td>bestimmt, wie viele Items pro Runde verarbeitet werden</td><td>zu groß: Limits, Speicher, Timeouts</td></tr>
+          <tr><td><strong>Wartezeit</strong></td><td>senkt Anfragefrequenz und glättet Last</td><td>zu lang: Workflow dauert unnötig</td></tr>
+          <tr><td><strong>Fehlerstrategie</strong></td><td>entscheidet, ob ein Fehler alles stoppt oder markiert wird</td><td>zu weich: echte Fehler werden übersehen</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Skeptische Einordnung</b>
+        Viele n8n-Nodes verarbeiten mehrere Items automatisch. Ein Loop ist daher nicht der Normalfall. Du nutzt ihn,
+        wenn du eine äußere Grenze brauchst: Rate-Limit, Pagination, Batchgröße, Pause oder kontrollierte Reihenfolge.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 1 — Workflow anlegen</h2>
+      <p>Wir starten mit einem künstlichen Datenstrom. Das ist didaktisch sauberer als ein echter Dienst, weil du
+        Batchgröße und Fehlerbild kontrollierst.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen Workflow und nenne ihn <code>Batching und Rate-Limits lernen</code>.</p></li>
+        <li><h4>Manual Trigger hinzufügen</h4>
+          <p>Füge einen <strong>Manual Trigger</strong> als ersten Node hinzu.</p></li>
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge einen <strong>Code</strong>-Node an und nenne ihn <code>Demo-Aufträge</code>.</p></li>
+        <li><h4>Modus setzen</h4>
+          <p>Setze den Code-Node auf <strong>Run Once for All Items</strong>.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Demo-Aufträge</div>
+<pre>const jobs = Array.from({ length: 23 }, (_, index) =&gt; {
+  const id = index + 1;
+  return {
+    json: {
+      job_id: `job-${String(id).padStart(3, '0')}`,
+      customer: `Demo-Kunde ${id}`,
+      amount_eur: 20 + id * 3,
+      priority: id % 7 === 0 ? 'hoch' : 'normal'
+    }
+  };
+});
+
+return jobs;</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 4;">
+        <li><h4>Node ausführen</h4>
+          <p>Klicke auf <strong>Schritt ausführen</strong>. Rechts sollten 23 Items sichtbar sein.</p></li>
+      </ol>
+
+      <h2>Schritt 2 — Loop Over Items hinzufügen</h2>
+      <p>Der Loop-Node teilt die 23 Items in kleinere Gruppen. Bei Batchgröße 5 entstehen vier volle Batches und ein
+        Rest-Batch mit drei Items.</p>
+
+      <ol class="steps">
+        <li><h4>Loop-Node anhängen</h4>
+          <p>Ziehe von <code>Demo-Aufträge</code> eine Verbindung ins Leere und suche <code>Loop Over Items</code>.</p></li>
+        <li><h4>Batchgröße setzen</h4>
+          <p>Setze <strong>Batch Size</strong> auf <code>5</code>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>5er Batches</code>.</p></li>
+        <li><h4>Ausgänge beachten</h4>
+          <p>Der obere Ausgang verarbeitet den aktuellen Batch. Der Done-Ausgang läuft erst nach allen Batches weiter.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:780px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">🔁</span><b>5er Batches</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Batch Size</label><input class="n8n-input" value="5"></div>
+                  <div class="row"><label>Reset</label><div class="n8n-select">aus <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Ausgang oben</label><div class="n8n-select">aktueller Batch <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Ausgang unten</label><div class="n8n-select">Done nach allen Items <span class="chev">▾</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 23.2</span>Batchgröße 5 heißt nicht fünf parallele Workflows. Es heißt:
+          fünf Items pro Schleifenrunde.</figcaption>
+      </figure>
+
+      <div class="callout callout--warn">
+        <b class="t">Kein zusätzlicher IF-Node für „alle Items fertig“</b>
+        Für den Standardfall beendet <strong>Loop Over Items</strong> die Verarbeitung selbst und nutzt danach den
+        Done-Ausgang. Einen Abbruch-IF brauchst du nur bei selbstgebauten Schleifen, etwa bei unbekannter Pagination.
+      </div>
+
+      <h2>Schritt 3 — API-Aufruf simulieren</h2>
+      <p>Statt eine echte API aufzurufen, simuliert ein Code-Node eine Antwort. So siehst du, wie aus Roh-Items
+        verarbeitete Items werden.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node am Loop-Ausgang anhängen</h4>
+          <p>Verbinde den oberen Ausgang von <code>5er Batches</code> mit einem neuen <strong>Code</strong>-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>API simulieren</code>.</p></li>
+        <li><h4>Modus setzen</h4>
+          <p>Setze den Node auf <strong>Run Once for All Items</strong>, damit ein Batch gemeinsam verarbeitet wird.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge diesen Code ein:</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · API simulieren</div>
+<pre>const batch = $input.all();
+const batchSize = batch.length;
+const now = new Date().toISOString();
+
+return batch.map((item, index) =&gt; {
+  const job = item.json;
+  const simulatedStatus = batchSize &gt; 5 ? 429 : 200;
+
+  return {
+    json: {
+      ...job,
+      batch_size: batchSize,
+      batch_position: index + 1,
+      api_status: simulatedStatus,
+      api_message: simulatedStatus === 200
+        ? 'verarbeitet'
+        : 'zu viele Anfragen in diesem Batch',
+      processed_at: now
+    }
+  };
+});</pre>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Warum hier Batchgröße 5?</b>
+        Im Beispiel ist 5 der erlaubte Grenzwert. In der echten Welt liest du diesen Wert in der API-Dokumentation:
+        Anfragen pro Sekunde, pro Minute, pro Tag oder maximale Datengröße pro Anfrage.
+      </div>
+
+      <h2>Schritt 4 — Wartezeit einbauen</h2>
+      <p>Eine Pause nach jedem Batch senkt die Anfragefrequenz. Das ist das einfachste Muster gegen Rate-Limits:
+        Batch verarbeiten, warten, nächsten Batch holen.</p>
+
+      <ol class="steps">
+        <li><h4>Wait-Node anhängen</h4>
+          <p>Hänge hinter <code>API simulieren</code> einen <strong>Wait</strong>-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>1 Sekunde warten</code>.</p></li>
+        <li><h4>Wartezeit setzen</h4>
+          <p>Setze die Wartezeit auf <code>1 second</code>.</p></li>
+        <li><h4>Zurück zum Loop verbinden</h4>
+          <p>Verbinde den Ausgang des Wait-Nodes zurück mit <code>5er Batches</code>. Dadurch startet die nächste Runde.</p></li>
+        <li><h4>Workflow ausführen</h4>
+          <p>Führe den Workflow aus. Bei 23 Items und Batchgröße 5 siehst du fünf Schleifenrunden.</p></li>
+      </ol>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Überschlagsrechnung</b>
+        Durchsatz ≈ <code>Batchgröße / Wartezeit</code>. Bei 5 Items und 1 Sekunde Pause sind das grob 5 Items pro
+        Sekunde, ohne Node-Laufzeit mitzuzählen.
+      </div>
+
+      <h2>Schritt 5 — Zusammenfassung am Done-Ausgang</h2>
+      <p>Die fertigen Items kommen am Done-Ausgang des Loop-Nodes zusammen. Dort ergänzt du eine kleine Auswertung:
+        Anzahl, Statuscodes, Dauerhinweis.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node am Done-Ausgang anhängen</h4>
+          <p>Verbinde den unteren Done-Ausgang von <code>5er Batches</code> mit einem neuen <strong>Code</strong>-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Zusammenfassung</code>.</p></li>
+        <li><h4>Modus setzen</h4>
+          <p>Setze den Node auf <strong>Run Once for All Items</strong>.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge diesen Code ein:</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Zusammenfassung</div>
+<pre>const items = $input.all();
+
+const ok = items.filter((item) =&gt; item.json.api_status === 200).length;
+const limited = items.filter((item) =&gt; item.json.api_status === 429).length;
+const batchSizes = [...new Set(items.map((item) =&gt; item.json.batch_size))];
+
+return [{
+  json: {
+    total_items: items.length,
+    ok,
+    rate_limited: limited,
+    batch_sizes_seen: batchSizes,
+    recommendation: limited === 0
+      ? 'Batchgröße und Wartezeit sind für diesen Test stabil.'
+      : 'Batchgröße senken oder Wartezeit erhöhen.'
+  }
+}];</pre>
+      </div>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">📊</span><b>Zusammenfassung</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">23 Items</span></div>
+                <div class="ndv-panel__body">
+                  <table class="n8n-table">
+                    <thead><tr><th>job_id</th><th>batch_size</th><th>api_status</th></tr></thead>
+                    <tbody>
+                      <tr><td>job-001</td><td>5</td><td>200</td></tr>
+                      <tr><td>job-002</td><td>5</td><td>200</td></tr>
+                      <tr><td>...</td><td>...</td><td>...</td></tr>
+                      <tr><td>job-023</td><td>3</td><td>200</td></tr>
+                    </tbody>
+                  </table>
+                </div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Code</div>
+                <div class="ndv-panel__body"><div class="n8n-json"><span class="k">ok</span>: <span class="n">23</span>,
+<span class="k">rate_limited</span>: <span class="n">0</span>,
+<span class="k">batch_sizes_seen</span>: [<span class="n">5</span>, <span class="n">3</span>]</div></div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
+                <div class="ndv-panel__body">
+                  <div class="n8n-json">{
+  <span class="k">"total_items"</span>: <span class="n">23</span>,
+  <span class="k">"ok"</span>: <span class="n">23</span>,
+  <span class="k">"rate_limited"</span>: <span class="n">0</span>,
+  <span class="k">"recommendation"</span>: <span class="s">"Batchgröße und Wartezeit sind für diesen Test stabil."</span>
+}</div>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 23.3</span>Der Done-Ausgang ist der richtige Ort für eine globale
+          Zusammenfassung über alle verarbeiteten Items.</figcaption>
+      </figure>
+
+      <h2>Schritt 6 — Grenzwert absichtlich brechen</h2>
+      <p>Ein Test ohne Fehlerfall ist zu schwach. Erhöhe die Batchgröße kurz, um zu sehen, ob dein Workflow die
+        simulierte Grenze erkennt.</p>
+
+      <ol class="steps">
+        <li><h4>Batchgröße ändern</h4>
+          <p>Setze im Loop-Node <strong>Batch Size</strong> testweise auf <code>8</code>.</p></li>
+        <li><h4>Workflow erneut ausführen</h4>
+          <p>Starte den Workflow erneut. Der Code-Node <code>API simulieren</code> erzeugt jetzt Status <code>429</code>.</p></li>
+        <li><h4>Zusammenfassung prüfen</h4>
+          <p>In der Zusammenfassung muss <code>rate_limited</code> größer als <code>0</code> sein.</p></li>
+        <li><h4>Batchgröße zurücksetzen</h4>
+          <p>Setze <strong>Batch Size</strong> wieder auf <code>5</code>.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">429 ist kein „nochmal sofort“</b>
+        Ein Rate-Limit-Fehler bedeutet fast immer: warten, weniger senden oder API-Regel lesen. Sofortiges Wiederholen
+        kann das Limit verschärfen.
+      </div>
+
+      <h2>HTTP Request: eingebautes Batching</h2>
+      <p>Wenn du später den echten <strong>HTTP Request</strong>-Node nutzt, musst du nicht immer Loop und Wait bauen.
+        Der HTTP-Node hat eigene Batching-Optionen. Für einfache API-Listen ist das oft kürzer.</p>
+
+      <table class="btable">
+        <thead><tr><th>Variante</th><th>Nutze sie, wenn...</th><th>Skeptische Frage</th></tr></thead>
+        <tbody>
+          <tr><td>HTTP Request mit Batching</td><td>ein einzelner API-Node gebremst werden soll</td><td>Reicht eine Pause zwischen Requests?</td></tr>
+          <tr><td>Loop Over Items + Wait</td><td>mehrere Nodes pro Batch laufen oder die Logik sichtbar sein soll</td><td>Wo ist der Rücksprung, wo ist Done?</td></tr>
+          <tr><td>Retry On Fail</td><td>kurze, sporadische Fehler abgefangen werden sollen</td><td>Ist Wiederholen erlaubt oder erzeugt es Duplikate?</td></tr>
+          <tr><td>Queue Mode</td><td>viele Workflows/Executions parallel betrieben werden</td><td>Ist die Infrastruktur dafür ausgelegt?</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Pragmatische Reihenfolge</b>
+        Erst Node-Einstellungen prüfen. Dann Batchgröße und Wait ergänzen. Erst danach über Queue Mode, Worker und
+        Infrastruktur sprechen. Sonst löst du ein Workflow-Designproblem mit Betriebstechnik.
+      </div>
+
+      <h2>Execution-Daten klein halten</h2>
+      <p>Performance ist nicht nur Laufzeit. Jede Execution kann Daten speichern. Große JSON-Objekte, PDFs, Bilder oder
+        vollständige API-Antworten machen Debugging bequem, aber Datenbank und Browser schwerfällig.</p>
+
+      <table class="btable">
+        <thead><tr><th>Problem</th><th>Gegenmaßnahme</th><th>Begründung</th></tr></thead>
+        <tbody>
+          <tr><td>riesige API-Antwort</td><td>früh mit Edit Fields oder Code reduzieren</td><td>nur benötigte Felder weitertragen</td></tr>
+          <tr><td>Binärdaten im Workflow</td><td>Dateien nicht unnötig durch alle Nodes schleppen</td><td>Speicher und Execution-Größe sinken</td></tr>
+          <tr><td>Debug-Daten bleiben produktiv aktiv</td><td>Testfelder nach dem Aufbau entfernen</td><td>weniger Rauschen, kleinere Historie</td></tr>
+          <tr><td>zu viele gespeicherte Executions</td><td>Pruning und Speichereinstellungen prüfen</td><td>Datenbank bleibt schneller</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Frühes Reduzieren schlägt spätes Aufräumen</b>
+        Wenn ein Workflow 10 MB pro Item durch zehn Nodes trägt, hast du kein Anzeigeproblem. Du hast ein Datenmodellproblem.
+      </div>
+
+      <h2>Testmatrix</h2>
+      <p>Nutze kleine Zahlen, aber teste die entscheidenden Fälle. Das Muster ist wichtiger als die absolute Menge.</p>
+
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Einstellung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Normalfall</td><td>23 Items, Batchgröße 5, 1 Sekunde Wait</td><td>23 ok, 0 rate-limited</td></tr>
+          <tr><td>Grenzwert verletzt</td><td>Batchgröße 8</td><td>Status 429 sichtbar, Empfehlung zum Senken</td></tr>
+          <tr><td>Rest-Batch</td><td>23 Items, Batchgröße 5</td><td>letzter Batch hat Größe 3</td></tr>
+          <tr><td>Keine Pause</td><td>Wait entfernen</td><td>höherer Durchsatz, aber bei echten APIs riskant</td></tr>
+          <tr><td>Sehr kleine Batchgröße</td><td>Batchgröße 1</td><td>maximale Kontrolle, langsamster Durchsatz</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>Workflow läuft endlos</td><td>Rücksprung falsch oder selbstgebaute Schleife ohne Abbruch</td><td>Loop-Verbindungen prüfen, klare Abbruchbedingung setzen</td></tr>
+          <tr><td>Done-Ausgang liefert nichts</td><td>Loop wurde nicht vollständig durchlaufen</td><td>Wait-Ausgang zurück zum Loop verbinden</td></tr>
+          <tr><td>API meldet 429</td><td>zu viele Anfragen in zu kurzer Zeit</td><td>Batchgröße senken, Wait erhöhen, Retry prüfen</td></tr>
+          <tr><td>Workflow wird langsam im Browser</td><td>zu große Execution-Daten</td><td>Felder früh reduzieren, Binärdaten sparsamer weitergeben</td></tr>
+          <tr><td>ein Fehler stoppt alle Items</td><td>Node wirft technischen Fehler statt Fehlerdaten auszugeben</td><td>Continue On Fail oder explizite Fehlerausgabe bewusst einsetzen</td></tr>
+          <tr><td>Doppelte Datensätze entstehen</td><td>Retry wiederholt schreibende Aktion</td><td>Idempotenzschlüssel nutzen, vor dem Schreiben prüfen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Sinnvolle Erweiterungen</h2>
+      <table class="btable">
+        <thead><tr><th>Erweiterung</th><th>Wie?</th><th>Warum?</th></tr></thead>
+        <tbody>
+          <tr><td>echter HTTP Request</td><td>API mit Test-Endpunkt anschließen und Batching-Option nutzen</td><td>näher am Produktivfall</td></tr>
+          <tr><td>dynamische Wartezeit</td><td>Wait aus Antwort-Headern wie <code>Retry-After</code> ableiten</td><td>respektiert API-Vorgaben</td></tr>
+          <tr><td>Fehlerliste</td><td>429-Items in separaten Zweig schicken</td><td>später erneut versuchen</td></tr>
+          <tr><td>Sub-Workflow</td><td>API-Aufruf und Rate-Limit-Logik auslagern</td><td>wiederverwendbar für mehrere Import-Workflows</td></tr>
+          <tr><td>Produktivbetrieb</td><td>Queue Mode, Worker, Pruning und Datenbanklast prüfen</td><td>erst relevant bei echter Last</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Warum brauchst du in n8n nicht für jede Item-Liste einen Loop?</li>
+          <li>Was ist der Unterschied zwischen Loop-Ausgang und Done-Ausgang?</li>
+          <li>Welche zwei Einstellungen reduzierst oder erhöhst du bei Status <code>429</code>?</li>
+          <li>Warum kann Retry On Fail bei schreibenden Aktionen gefährlich sein?</li>
+          <li>Welche Daten solltest du möglichst früh aus einer großen API-Antwort entfernen?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Viele Nodes verarbeiten Items automatisch. ·
+        2) Der Loop-Ausgang verarbeitet den aktuellen Batch, Done läuft nach allen Batches weiter. ·
+        3) Batchgröße senken oder Wartezeit erhöhen. ·
+        4) Weil Wiederholungen doppelte Datensätze, Zahlungen oder Nachrichten erzeugen können. ·
+        5) Alles, was spätere Nodes nicht brauchen: Rohtexte, große Arrays, Debugfelder, Binärdaten.
+      </div>
+
+      <p>Du hast jetzt ein kontrolliertes Batching-Muster gebaut. Damit ist die Workflow-Logik robuster. Der nächste
+        Schritt ist Betrieb: Deployment, Umgebungsvariablen und Git, damit Workflows zwischen Test und Produktion
+        nachvollziehbar bleiben.</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

@@ -50,7 +50,11 @@ n8n-buch/
 │   ├── 17-projekt-ai.html      # Projekt: KI-E-Mail-Assistent
 │   ├── 18-projekt-pdf.html     # Projekt: PDF-/Rechnungs-Extraktion
 │   ├── 19-grossprojekt.html    # Großprojekt: Content-Pipeline end-to-end
-│   └── 20-ai-agent.html        # AI-Agent, Chat-Trigger, Memory & Tools
+│   ├── 20-ai-agent.html        # AI-Agent, Chat-Trigger, Memory & Tools
+│   ├── 21-rag.html             # RAG: Vektorstores & Q&A über eigene Daten
+│   ├── 22-subworkflows.html    # Sub-Workflows & Modularisierung
+│   ├── 23-performance.html     # Performance, Batching & Rate-Limits
+│   └── 24-deployment.html      # Deployment, Env-Variablen & Git
 └── assets/
     ├── css/
     │   ├── book.css            # Layout, Typografie, didaktische Elemente
@@ -65,8 +69,8 @@ n8n-buch/
 Das vollständige Inhaltsverzeichnis (25+ Kapitel über 6 Teile) lebt in
 `assets/js/chapters.js`. Aktueller Ausbaustand:
 
-- **Fertig:** Teil 0, Teil 1, Teil 2, Teil 3 sowie Kapitel 20–21.
-- **Geplant (markiert „bald“):** Betrieb/Skalierung sowie Anhänge.
+- **Fertig:** Teil 0, Teil 1, Teil 2, Teil 3 sowie Kapitel 20–24.
+- **Geplant (markiert „bald“):** Skalierung sowie Anhänge.
 
 ## Neue Kapitel hinzufügen
 

@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sub-Workflows &amp; Modularisierung — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="22-subworkflows" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">22</span> Profi &amp; Betrieb</div>
+      <h1 class="chap-title">Sub-Workflows &amp; Modularisierung</h1>
+      <p class="chap-lede">In diesem Kapitel zerlegst du einen Workflow in einen Haupt-Workflow und einen
+        wiederverwendbaren Sub-Workflow. Das Ziel ist nicht „mehr Architektur“, sondern weniger Kopieren:
+        gleiche Logik an einer Stelle, klare Eingaben, klare Rückgaben.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 18 Minuten</span>
+        <span>🎯 Niveau: Fortgeschrittene Grundlagen</span>
+        <span>🧩 Voraussetzung: Kapitel 4, 5, 9, 10</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>Eine n8n-Instanz, lokal oder in der Cloud.</li>
+          <li>Keine externen Credentials: Das Beispiel arbeitet mit Demo-Daten im Code-Node.</li>
+          <li>Ein Verständnis für Items und JSON-Felder aus Kapitel 5.</li>
+          <li>Etwa 20 Minuten Ruhe, weil du zwei Workflows anlegst und beide testest.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Sub-Workflow ist keine Ausrede für Unklarheit</b>
+        Wenn du Daten nicht sauber übergibst, verschiebst du das Chaos nur in einen zweiten Workflow.
+        Ein guter Sub-Workflow hat einen kleinen Vertrag: Diese Felder kommen rein, diese Felder gehen raus.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Wir bauen einen kleinen Baustein für Lead-Daten. Der Haupt-Workflow erzeugt drei Demo-Leads und ruft einen
+        Sub-Workflow auf. Der Sub-Workflow normalisiert Name, E-Mail, Firma und Quelle, berechnet eine einfache
+        Qualitätsbewertung und gibt das Ergebnis an den Haupt-Workflow zurück.</p>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="n8n">
+            <div class="n8n-canvas">
+              <svg class="n8n-conns" viewBox="0 0 1120 520" preserveAspectRatio="none">
+                <path class="is-active" d="M 145 112 C 205 112, 218 112, 278 112"></path>
+                <path class="is-active" d="M 370 112 C 435 112, 455 112, 520 112"></path>
+                <path class="is-active" d="M 612 112 C 682 112, 708 112, 780 112"></path>
+                <path d="M 872 84 C 925 44, 980 42, 1030 52"></path>
+                <path d="M 872 140 C 925 192, 980 198, 1030 188"></path>
+                <path class="is-active" d="M 150 356 C 215 356, 238 356, 306 356"></path>
+                <path class="is-active" d="M 398 356 C 462 356, 488 356, 552 356"></path>
+              </svg>
+              <div class="n8n-node n8n-node--trigger" style="left:28px; top:66px;">
+                <span class="n8n-node__icon">🧪</span><span class="ep out"></span>
+                <span class="n8n-node__label">Manual Trigger</span></div>
+              <div class="n8n-node n8n-node--code" style="left:278px; top:66px;">
+                <span class="n8n-node__icon">👥</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Demo-Leads</span><span class="items">3 Items</span></div>
+              <div class="n8n-node" style="left:520px; top:66px;">
+                <span class="n8n-node__icon">↪</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Lead normalisieren</span><span class="badge badge--ok">Sub</span></div>
+              <div class="n8n-node" style="left:780px; top:66px;">
+                <span class="n8n-node__icon">🔀</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">E-Mail gültig?</span></div>
+              <div class="n8n-node" style="left:1030px; top:0;">
+                <span class="n8n-node__icon">✅</span><span class="ep in"></span>
+                <span class="n8n-node__label">gute Leads</span></div>
+              <div class="n8n-node" style="left:1030px; top:146px;">
+                <span class="n8n-node__icon">⚠</span><span class="ep in"></span>
+                <span class="n8n-node__label">prüfen</span></div>
+
+              <div class="n8n-node n8n-node--trigger" style="left:28px; top:310px;">
+                <span class="n8n-node__icon">📥</span><span class="ep out"></span>
+                <span class="n8n-node__label">Execute Sub-workflow Trigger</span></div>
+              <div class="n8n-node n8n-node--code" style="left:306px; top:310px;">
+                <span class="n8n-node__icon">🧹</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Felder normalisieren</span></div>
+              <div class="n8n-node" style="left:552px; top:310px;">
+                <span class="n8n-node__icon">📤</span><span class="ep in"></span>
+                <span class="n8n-node__label">Rückgabe</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 22.1</span>Oben ruft der Haupt-Workflow den Sub-Workflow auf. Unten liegt
+          der wiederverwendbare Baustein mit klarer Eingabe und Rückgabe.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ 80/20-Regel für Modularisierung</b>
+        Erstelle einen Sub-Workflow erst, wenn dieselbe Logik mindestens ein zweites Mal gebraucht wird oder wenn sie
+        im Haupt-Workflow das Verständnis stört. Ein einzelner kurzer Node braucht keine Architektur.
+      </div>
+
+      <h2>Wann lohnt sich ein Sub-Workflow?</h2>
+      <table class="btable">
+        <thead><tr><th>Situation</th><th>Sub-Workflow?</th><th>Begründung</th></tr></thead>
+        <tbody>
+          <tr><td>Feldnamen vereinheitlichen</td><td>ja</td><td>kommt in Formularen, CRM, Importen und Webhooks wieder vor</td></tr>
+          <tr><td>E-Mail oder Telefonnummer validieren</td><td>ja</td><td>kleiner, testbarer Vertrag mit klarer Rückgabe</td></tr>
+          <tr><td>ein einzelner Slack-Node</td><td>meist nein</td><td>zu wenig Logik, zusätzlicher Sprung macht es eher schwerer</td></tr>
+          <tr><td>mehrstufige API-Abfrage mit Fehlerbehandlung</td><td>oft ja</td><td>Haupt-Workflow bleibt lesbar, Fehlerlogik liegt an einer Stelle</td></tr>
+          <tr><td>Geheimnisse verstecken</td><td>nein</td><td>Credentials löst du über n8n-Credentials und Berechtigungen, nicht über Verstecken</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Skeptische Faustregel</b>
+        Ein Sub-Workflow ist gut, wenn du ihn unabhängig testen kannst. Wenn du erst den ganzen Haupt-Workflow starten
+        musst, um den Baustein zu verstehen, ist die Grenze wahrscheinlich falsch gesetzt.
+      </div>
+
+      <hr>
+
+      <h2>Schritt 1 — Sub-Workflow anlegen</h2>
+      <p>Wir beginnen mit dem wiederverwendbaren Teil. Der Sub-Workflow soll später von anderen Workflows aufgerufen
+        werden, aber zunächst testest du ihn isoliert.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen neuen Workflow und nenne ihn <code>Baustein · Lead normalisieren</code>.</p></li>
+        <li><h4>Execute Sub-workflow Trigger hinzufügen</h4>
+          <p>Klicke auf <strong>Add first step</strong>, suche <code>execute sub-workflow trigger</code> und wähle
+            <strong>Execute Sub-workflow Trigger</strong>.</p></li>
+        <li><h4>Eingaben definieren</h4>
+          <p>Stelle die Eingabe so ein, dass die Felder explizit definiert werden. Lege diese Felder an:
+            <code>name</code>, <code>email</code>, <code>company</code>, <code>source</code>.</p></li>
+        <li><h4>Workflow speichern</h4>
+          <p>Speichere den Workflow. Erst gespeicherte Workflows lassen sich sauber aus dem Haupt-Workflow auswählen.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv" style="max-width:760px; margin:0 auto;">
+            <div class="ndv__bar"><span class="ndvic">📥</span><b>Execute Sub-workflow Trigger</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols" style="grid-template-columns:1fr;">
+              <div class="ndv-panel ndv-params" style="border-right:none;">
+                <div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Input data mode</label><div class="n8n-select">Define using fields below <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Field 1</label><input class="n8n-input" value="name"></div>
+                  <div class="row"><label>Field 2</label><input class="n8n-input" value="email"></div>
+                  <div class="row"><label>Field 3</label><input class="n8n-input" value="company"></div>
+                  <div class="row"><label>Field 4</label><input class="n8n-input" value="source"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 22.2</span>Explizite Eingabefelder sind langweilig, aber nützlich:
+          Der Aufrufer sieht sofort, was der Baustein erwartet.</figcaption>
+      </figure>
+
+      <h2>Schritt 2 — Normalisierung einbauen</h2>
+      <p>Der Sub-Workflow soll alle eingehenden Items bearbeiten. Deshalb bleibt die Logik klein und deterministisch:
+        Leerzeichen entfernen, E-Mail kleinschreiben, Pflichtfelder prüfen, Score berechnen.</p>
+
+      <ol class="steps">
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge hinter den Trigger einen <strong>Code</strong>-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Felder normalisieren</code>.</p></li>
+        <li><h4>Modus wählen</h4>
+          <p>Setze den Modus auf <strong>Run Once for All Items</strong>. Der Code verarbeitet dann die komplette Item-Liste.</p></li>
+        <li><h4>Code einfügen</h4>
+          <p>Füge diesen Code ein:</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Felder normalisieren</div>
+<pre>const inputItems = $input.all();
+
+function clean(value) {
+  return String(value ?? '').trim().replace(/\s+/g, ' ');
+}
+
+function normalizeEmail(value) {
+  return clean(value).toLowerCase();
+}
+
+function emailIsValid(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+return inputItems.map((item) =&gt; {
+  const input = item.json;
+  const name = clean(input.name);
+  const email = normalizeEmail(input.email);
+  const company = clean(input.company);
+  const source = clean(input.source || 'unbekannt').toLowerCase();
+
+  const errors = [];
+  if (!name) errors.push('name fehlt');
+  if (!email) errors.push('email fehlt');
+  if (email &amp;&amp; !emailIsValid(email)) errors.push('email ungültig');
+  if (!company) errors.push('company fehlt');
+
+  let qualityScore = 0;
+  qualityScore += name ? 1 : 0;
+  qualityScore += emailIsValid(email) ? 2 : 0;
+  qualityScore += company ? 1 : 0;
+
+  return {
+    json: {
+      ...input,
+      name,
+      email,
+      company,
+      source,
+      is_valid_email: emailIsValid(email),
+      quality_score: qualityScore,
+      errors,
+      normalized_at: new Date().toISOString()
+    }
+  };
+});</pre>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Keine Fehler werfen, wenn der Aufrufer weiterarbeiten soll</b>
+        Für Datenqualität ist es oft besser, Fehler als Daten zurückzugeben: <code>errors</code>,
+        <code>is_valid_email</code>, <code>quality_score</code>. Ein geworfener Fehler stoppt den aufrufenden Workflow.
+      </div>
+
+      <h2>Schritt 3 — Rückgabe sichtbar machen</h2>
+      <p>Der aufrufende Workflow erhält die Ausgabe des letzten ausgeführten Nodes im Sub-Workflow. Du könntest den
+        Code-Node direkt als letzten Node lassen. Für Anfänger ist ein eigener Rückgabe-Node aber lesbarer.</p>
+
+      <ol class="steps">
+        <li><h4>Edit-Fields-Node anhängen</h4>
+          <p>Hänge einen <strong>Edit Fields</strong>-Node hinter den Code-Node.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Rückgabe</code>.</p></li>
+        <li><h4>Alle Felder behalten</h4>
+          <p>Stelle sicher, dass vorhandene Felder nicht gelöscht werden. Der Node dient hier als lesbarer Endpunkt.</p></li>
+        <li><h4>Testdaten manuell ausführen</h4>
+          <p>Führe den Sub-Workflow mit einem Test-Item aus, zum Beispiel:
+            <code>{ "name": "  Ada Lovelace  ", "email": "ADA@EXAMPLE.COM ", "company": "Analytical Machines", "source": "Webform" }</code>.</p></li>
+      </ol>
+
+      <table class="btable">
+        <thead><tr><th>Feld</th><th>Erwartete Rückgabe</th><th>Warum wichtig?</th></tr></thead>
+        <tbody>
+          <tr><td><code>name</code></td><td><code>Ada Lovelace</code></td><td>keine doppelten oder äußeren Leerzeichen</td></tr>
+          <tr><td><code>email</code></td><td><code>ada@example.com</code></td><td>einheitlich für Abgleich und Deduplizierung</td></tr>
+          <tr><td><code>is_valid_email</code></td><td><code>true</code></td><td>Haupt-Workflow kann danach verzweigen</td></tr>
+          <tr><td><code>quality_score</code></td><td><code>4</code></td><td>kleines, prüfbares Qualitätsmaß</td></tr>
+          <tr><td><code>errors</code></td><td><code>[]</code></td><td>Fehlerliste statt stiller Annahmen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Schritt 4 — Sub-Workflow berechtigen</h2>
+      <p>Ein Sub-Workflow ist nur dann sinnvoll wiederverwendbar, wenn klar ist, wer ihn aufrufen darf. Das ist eine
+        Betriebsfrage, keine Kosmetik.</p>
+
+      <ol class="steps">
+        <li><h4>Workflow-Einstellungen öffnen</h4>
+          <p>Öffne im Sub-Workflow die Workflow-Einstellungen.</p></li>
+        <li><h4>Aufrufrechte prüfen</h4>
+          <p>Suche die Einstellung, welche Workflows diesen Workflow aufrufen dürfen.</p></li>
+        <li><h4>Für das Lernen offen lassen</h4>
+          <p>Für dieses Kapitel reicht die allgemeine Aufrufbarkeit in deiner Testumgebung.</p></li>
+        <li><h4>Produktiv einschränken</h4>
+          <p>In produktiven Projekten wählst du gezielt die Workflows aus, die diesen Baustein aufrufen dürfen.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Warum das wichtig ist</b>
+        Ein Sub-Workflow ist ein internes Werkzeug. Wenn er schreibt, löscht, bezahlt, verschickt oder sensible Daten
+        liest, darf er nicht beliebig aufrufbar sein.
+      </div>
+
+      <h2>Schritt 5 — Haupt-Workflow anlegen</h2>
+      <p>Jetzt baust du den Aufrufer. Er erzeugt drei Leads, ruft den Baustein auf und verzweigt danach nach
+        <code>is_valid_email</code>.</p>
+
+      <ol class="steps">
+        <li><h4>Neuen Workflow erstellen</h4>
+          <p>Erstelle einen Workflow und nenne ihn <code>Lead-Import mit Baustein</code>.</p></li>
+        <li><h4>Manual Trigger hinzufügen</h4>
+          <p>Füge als ersten Node einen <strong>Manual Trigger</strong> hinzu.</p></li>
+        <li><h4>Code-Node anhängen</h4>
+          <p>Hänge einen <strong>Code</strong>-Node an und nenne ihn <code>Demo-Leads</code>.</p></li>
+        <li><h4>Modus setzen</h4>
+          <p>Setze den Code-Node auf <strong>Run Once for All Items</strong>.</p></li>
+      </ol>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Demo-Leads</div>
+<pre>return [
+  {
+    json: {
+      name: '  Ada Lovelace ',
+      email: 'ADA@EXAMPLE.COM ',
+      company: 'Analytical Machines GmbH',
+      source: 'Webform'
+    }
+  },
+  {
+    json: {
+      name: 'Grace Hopper',
+      email: 'grace.hopper',
+      company: 'Compiler Labs',
+      source: ' Messe '
+    }
+  },
+  {
+    json: {
+      name: '  Katherine Johnson  ',
+      email: 'katherine@example.org',
+      company: '',
+      source: 'Partner'
+    }
+  }
+];</pre>
+      </div>
+
+      <ol class="steps" style="counter-reset: st 4;">
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Code-Node aus. Du solltest drei Items sehen.</p></li>
+      </ol>
+
+      <h2>Schritt 6 — Sub-Workflow aufrufen</h2>
+      <p>Der Execute-Node ist die Brücke. Er nimmt die Items aus dem Haupt-Workflow, übergibt sie an den Baustein und
+        wartet auf die Rückgabe.</p>
+
+      <ol class="steps">
+        <li><h4>Execute Sub-workflow anhängen</h4>
+          <p>Ziehe vom Node <code>Demo-Leads</code> eine Verbindung ins Leere und suche
+            <code>execute sub-workflow</code>.</p></li>
+        <li><h4>Workflow auswählen</h4>
+          <p>Wähle <code>Baustein · Lead normalisieren</code>.</p></li>
+        <li><h4>Auf Abschluss warten</h4>
+          <p>Lasse die Option aktiv, dass der Haupt-Workflow auf das Ergebnis wartet. Sonst könntest du danach nicht
+            nach <code>is_valid_email</code> verzweigen.</p></li>
+        <li><h4>Alle Items gemeinsam übergeben</h4>
+          <p>Nutze für dieses Beispiel den Modus <strong>Run once with all items</strong>. So verarbeitet der Baustein
+            die komplette Liste und gibt wieder eine Liste zurück.</p></li>
+        <li><h4>Felder zuordnen</h4>
+          <p>Ordne die vier Eingaben zu:
+            <code>name = {{$json.name}}</code>,
+            <code>email = {{$json.email}}</code>,
+            <code>company = {{$json.company}}</code>,
+            <code>source = {{$json.source}}</code>.</p></li>
+      </ol>
+
+      <figure class="figure">
+        <div class="frame">
+          <div class="ndv">
+            <div class="ndv__bar"><span class="ndvic">↪</span><b>Lead normalisieren</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__cols">
+              <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">3 Items</span></div>
+                <div class="ndv-panel__body">
+                  <table class="n8n-table">
+                    <thead><tr><th>name</th><th>email</th><th>company</th></tr></thead>
+                    <tbody>
+                      <tr><td>Ada Lovelace</td><td>ADA@EXAMPLE.COM</td><td>Analytical Machines GmbH</td></tr>
+                      <tr><td>Grace Hopper</td><td>grace.hopper</td><td>Compiler Labs</td></tr>
+                      <tr><td>Katherine Johnson</td><td>katherine@example.org</td><td></td></tr>
+                    </tbody>
+                  </table>
+                </div></div>
+              <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
+                <div class="ndv-panel__body">
+                  <div class="row"><label>Workflow</label><div class="n8n-select">Baustein · Lead normalisieren <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Mode</label><div class="n8n-select">Run once with all items <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Wait for completion</label><div class="n8n-select">ein <span class="chev">▾</span></div></div>
+                  <div class="row"><label>email</label><input class="n8n-input" value="{{$json.email}}"></div>
+                </div></div>
+              <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">3 Items</span></div>
+                <div class="ndv-panel__body">
+                  <table class="n8n-table">
+                    <thead><tr><th>email</th><th>gültig</th><th>score</th><th>errors</th></tr></thead>
+                    <tbody>
+                      <tr><td>ada@example.com</td><td>true</td><td>4</td><td>[]</td></tr>
+                      <tr><td>grace.hopper</td><td>false</td><td>2</td><td>email ungültig</td></tr>
+                      <tr><td>katherine@example.org</td><td>true</td><td>3</td><td>company fehlt</td></tr>
+                    </tbody>
+                  </table>
+                </div></div>
+            </div>
+          </div>
+        </div>
+        <figcaption><span class="fig-tag">Abb. 22.3</span>Der Haupt-Workflow sieht nur den Vertrag: vier Felder hinein,
+          normalisierte Items hinaus.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Der wichtigste Test</b>
+        Prüfe nach dem Execute-Node nicht nur, ob Items zurückkommen. Prüfe, ob ein absichtlich kaputtes Item
+        kontrolliert als fehlerhaft markiert wird.
+      </div>
+
+      <h2>Schritt 7 — Nach Rückgabe verzweigen</h2>
+      <p>Jetzt nutzt der Haupt-Workflow das Ergebnis. Gute Leads laufen weiter, fehlerhafte Leads gehen in eine
+        Prüfschleife.</p>
+
+      <ol class="steps">
+        <li><h4>IF-Node anhängen</h4>
+          <p>Hänge hinter den Execute-Node einen <strong>IF</strong>-Node und nenne ihn
+            <code>E-Mail gültig?</code>.</p></li>
+        <li><h4>Bedingung setzen</h4>
+          <p>Setze die Bedingung auf <code>is_valid_email</code> ist <code>true</code>.</p></li>
+        <li><h4>True-Ausgang beschriften</h4>
+          <p>Hänge an den True-Ausgang zunächst einen <strong>No Operation, do nothing</strong>-Node und nenne ihn
+            <code>gute Leads</code>.</p></li>
+        <li><h4>False-Ausgang beschriften</h4>
+          <p>Hänge an den False-Ausgang ebenfalls einen No-Op-Node und nenne ihn <code>prüfen</code>.</p></li>
+        <li><h4>Workflow ausführen</h4>
+          <p>Führe den Haupt-Workflow aus. Zwei Items sollten zum True-Ausgang laufen, ein Item zum False-Ausgang.</p></li>
+      </ol>
+
+      <div class="callout callout--warn">
+        <b class="t">Score ist nicht Wahrheit</b>
+        Der Score ist nur eine Arbeitsmarkierung. Eine gültige E-Mail beweist nicht, dass die Person existiert oder dass
+        der Lead wertvoll ist. Nutze solche Scores als Filterhilfe, nicht als automatisches Urteil.
+      </div>
+
+      <h2>Schritt 8 — Vertrag dokumentieren</h2>
+      <p>Sub-Workflows werden schnell gefährlich, wenn niemand mehr weiß, welche Felder erwartet werden. Dokumentiere
+        den Vertrag direkt im Workflow-Namen, in Node-Namen oder in einer kurzen Notiz.</p>
+
+      <table class="btable">
+        <thead><tr><th>Teil des Vertrags</th><th>In diesem Beispiel</th></tr></thead>
+        <tbody>
+          <tr><td>Eingabe</td><td><code>name</code>, <code>email</code>, <code>company</code>, <code>source</code></td></tr>
+          <tr><td>Ausgabe zusätzlich</td><td><code>is_valid_email</code>, <code>quality_score</code>, <code>errors</code>, <code>normalized_at</code></td></tr>
+          <tr><td>Fehlerstrategie</td><td>Datenfehler werden als <code>errors</code> zurückgegeben, nicht geworfen</td></tr>
+          <tr><td>Seiteneffekt</td><td>keiner: Der Baustein schreibt nicht in CRM, Slack oder Datenbanken</td></tr>
+          <tr><td>Geeignete Nutzung</td><td>vor CRM-Importen, Listenabgleich, Formularverarbeitung</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Mathematische Sicht</b>
+        Ein guter Sub-Workflow ist eine Funktion: gleiche Eingabe, gleiche Ausgabe, möglichst wenige Seiteneffekte.
+        Sobald der Baustein gleichzeitig normalisiert, schreibt, benachrichtigt und entscheidet, ist er keine Funktion
+        mehr, sondern ein schwer prüfbarer Prozess.
+      </div>
+
+      <h2>Schritt 9 — Execute-Modi unterscheiden</h2>
+      <p>Der Aufrufmodus entscheidet, wie Items an den Sub-Workflow übergeben werden. Für Anfänger wirkt das klein,
+        aber es verändert Debugging, Performance und Fehlerbild.</p>
+
+      <table class="btable">
+        <thead><tr><th>Modus</th><th>Was passiert?</th><th>Wann sinnvoll?</th></tr></thead>
+        <tbody>
+          <tr><td>Run once with all items</td><td>Ein Aufruf mit der ganzen Item-Liste</td><td>Batch-Normalisierung, CSV-Importe, gemeinsame Berechnungen</td></tr>
+          <tr><td>Run once for each item</td><td>Ein Aufruf pro Item</td><td>isolierte Einzelverarbeitung, wenn ein Itemfehler nicht alle betreffen soll</td></tr>
+          <tr><td>Wait for completion aus</td><td>Haupt-Workflow läuft weiter, ohne Rückgabe zu nutzen</td><td>Logging, Benachrichtigung, Hintergrundaufgaben</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">Fire-and-forget sparsam nutzen</b>
+        Wenn der Haupt-Workflow nicht wartet, darf er keine Entscheidung aus der Rückgabe brauchen. Sonst baust du eine
+        Race Condition in ein No-Code-Werkzeug ein.
+      </div>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>Sub-Workflow erscheint nicht in der Auswahl</td><td>nicht gespeichert oder falscher Trigger</td><td>Sub-Workflow speichern, Execute Sub-workflow Trigger prüfen</td></tr>
+          <tr><td>Aufruf schlägt mit fehlenden Feldern fehl</td><td>Eingabevertrag passt nicht zur Zuordnung</td><td>Feldnamen im Trigger und Execute-Node vergleichen</td></tr>
+          <tr><td>Es kommt nur ein Item zurück</td><td>Code verarbeitet nicht alle Items</td><td>Code-Node auf All Items stellen und <code>$input.all()</code> nutzen</td></tr>
+          <tr><td>Haupt-Workflow kann nicht verzweigen</td><td>er wartet nicht auf die Rückgabe</td><td>Wait for completion einschalten</td></tr>
+          <tr><td>Fehler stoppt den ganzen Haupt-Workflow</td><td>Sub-Workflow wirft einen technischen Fehler</td><td>Datenfehler als <code>errors</code> zurückgeben oder Fehlerbehandlung ergänzen</td></tr>
+          <tr><td>Andere Workflows nutzen den Baustein falsch</td><td>Vertrag ist nicht dokumentiert</td><td>Eingaben explizit definieren und Beispiele im Workflow hinterlegen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Sinnvolle Erweiterungen</h2>
+      <table class="btable">
+        <thead><tr><th>Erweiterung</th><th>Wie?</th><th>Skeptische Frage</th></tr></thead>
+        <tbody>
+          <tr><td>Telefonnummer normalisieren</td><td>Feld <code>phone</code> ergänzen und Ländercode prüfen</td><td>Welche Länderformate willst du wirklich unterstützen?</td></tr>
+          <tr><td>Deduplizierung</td><td>normalisierte E-Mail als Schlüssel nutzen</td><td>Was passiert bei geteilten Postfächern?</td></tr>
+          <tr><td>CRM-Schreiblogik</td><td>eigenen Sub-Workflow <code>Lead in CRM upserten</code> bauen</td><td>Ist Schreiben noch Teil der Normalisierung oder ein separater Seiteneffekt?</td></tr>
+          <tr><td>Versionierung</td><td>Baustein im Namen versionieren, z. B. <code>v1</code></td><td>Welche Haupt-Workflows dürfen beim Umbau brechen?</td></tr>
+          <tr><td>Fehlerkanal</td><td>fehlerhafte Items an Slack, E-Mail oder Ticket-System schicken</td><td>Willst du informieren oder nur Lärm erzeugen?</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Welche vier Eingabefelder erwartet der Sub-Workflow?</li>
+          <li>Warum geben wir Datenfehler als <code>errors</code> zurück, statt sofort den Workflow zu stoppen?</li>
+          <li>Wann ist <strong>Run once with all items</strong> besser als ein Aufruf pro Item?</li>
+          <li>Warum sollte ein normalisierender Sub-Workflow nicht nebenbei ins CRM schreiben?</li>
+          <li>Welche Berechtigungsfrage musst du vor produktiver Nutzung klären?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) <code>name</code>, <code>email</code>, <code>company</code>, <code>source</code>. ·
+        2) Weil der Haupt-Workflow dann kontrolliert verzweigen kann. ·
+        3) Wenn die Item-Liste gemeinsam verarbeitet werden soll und ein einzelner Aufruf reicht. ·
+        4) Weil Normalisierung eine reine Funktion bleiben soll; CRM-Schreiben ist ein Seiteneffekt. ·
+        5) Welche Workflows den Baustein aufrufen dürfen und welche Daten sie dadurch verarbeiten.
+      </div>
+
+      <p>Du hast jetzt einen wiederverwendbaren Baustein gebaut. Der nächste Betriebsschritt ist Performance:
+        Was passiert, wenn nicht drei, sondern 30.000 Items durch Workflows laufen?</p>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>
