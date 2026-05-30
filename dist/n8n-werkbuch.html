@@ -997,10 +997,10 @@ ol.steps > li p { font-size: 15.5px; }
       </a><a class="sb-link" data-title="deployment, env-variablen & git"
       href="#24-deployment" data-slug="24-deployment">
       <span class="num">24</span><span>Deployment, Env-Variablen & Git</span>
-      </a><a class="sb-link is-soon" data-title="sicherheit, queue-mode & skalierung"
-      href="javascript:void(0)" data-slug="25-skalierung">
+      </a><a class="sb-link" data-title="sicherheit, queue-mode & skalierung"
+      href="#25-skalierung" data-slug="25-skalierung">
       <span class="num">25</span><span>Sicherheit, Queue-Mode & Skalierung</span>
-      <span class="soon">bald</span></a><div class="sb-part">Anhang</div><a class="sb-link is-soon" data-title="tastenkürzel-referenz"
+      </a><div class="sb-part">Anhang</div><a class="sb-link is-soon" data-title="tastenkürzel-referenz"
       href="javascript:void(0)" data-slug="A-shortcuts">
       <span class="num">A</span><span>Tastenkürzel-Referenz</span>
       <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="spickzettel: die wichtigsten nodes"
@@ -1101,10 +1101,10 @@ ol.steps > li p { font-size: 15.5px; }
       <span class="pill">lesen</span></a><a class="toc-row" href="#24-deployment">
       <span class="n">24</span><span class="ti">Deployment, Env-Variablen & Git</span>
       <span class="mins">⏱ 22 Min</span>
-      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#25-skalierung">
       <span class="n">25</span><span class="ti">Sicherheit, Queue-Mode & Skalierung</span>
-      <span class="mins">⏱ 20 Min</span>
-      <span class="pill">bald</span></a></div></div><div class="toc-part"><h3>Anhang</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="mins">⏱ 24 Min</span>
+      <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Anhang</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
       <span class="n">A</span><span class="ti">Tastenkürzel-Referenz</span>
       <span class="mins">⏱ 5 Min</span>
       <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
@@ -10865,12 +10865,335 @@ volumes:
 
     </article>
       <nav class="pn-wrap" data-slug="24-deployment"></nav></section>
+<section class="page" id="25-skalierung" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">25</span> Profi &amp; Betrieb</div>
+      <h1 class="chap-title">Sicherheit, Queue-Mode &amp; Skalierung</h1>
+      <p class="chap-lede">Ein Workflow ist nicht produktionsreif, nur weil er einmal grün durchgelaufen ist.
+        Produktiv heißt: Zugriffe sind begrenzt, Secrets bleiben geschützt, Jobs überstehen Lastspitzen, und du weißt,
+        was passiert, wenn ein Teil der Instanz ausfällt.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 24 Minuten</span>
+        <span>🎯 Niveau: Betrieb verstehen</span>
+        <span>🧩 Voraussetzung: Kapitel 12, 23, 24</span>
+      </div>
+
+      <div class="prereq">
+        <h4>📋 Was du brauchst</h4>
+        <ul>
+          <li>Eine n8n-Testinstanz. Für Queue-Mode brauchst du eine Self-hosted-Umgebung.</li>
+          <li>Grundverständnis für Credentials, Env-Variablen und Deployment aus Kapitel 12 und 24.</li>
+          <li>Ein Gefühl für lange Läufe, Batching und Rate-Limits aus Kapitel 23.</li>
+          <li>Keine echten API-Schlüssel. Alle Werte in diesem Kapitel sind Platzhalter.</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--warn">
+        <b class="t">Skalierung löst keine schlechten Workflows</b>
+        Mehr Worker machen einen unklaren Workflow nicht sicherer. Wenn ein Workflow Dubletten erzeugt, Secrets in
+        Klartext enthält oder externe APIs ohne Limit beschießt, verteilt Queue-Mode das Problem nur auf mehrere
+        Prozesse.
+      </div>
+
+      <h2>Das Ziel</h2>
+      <p>Du baust in diesem Kapitel keinen vollständigen Produktionsserver. Du lernst das Betriebsmodell hinter n8n:
+        Eine kleine Instanz kann alles alleine machen. Bei mehr Last trennt man Eingänge, Warteschlange und Ausführung.
+        Dazwischen liegen Sicherheitsentscheidungen, die vor dem ersten echten Kundendatum sitzen müssen.</p>
+
+      <figure class="figure">
+        <div class="frame has-canvas-scroll">
+          <div class="n8n" style="min-width:1120px;">
+            <div class="n8n-canvas" style="min-height:520px;">
+              <svg class="n8n-conns" viewBox="0 0 1120 520" preserveAspectRatio="none">
+                <path class="is-active" d="M 158 128 C 218 128, 240 128, 302 128"></path>
+                <path class="is-active" d="M 410 128 C 482 128, 510 128, 584 128"></path>
+                <path d="M 704 128 C 778 128, 806 128, 880 128"></path>
+                <path class="is-active" d="M 180 338 C 256 338, 286 338, 366 338"></path>
+                <path class="is-active" d="M 486 338 C 562 338, 590 276, 670 238"></path>
+                <path class="is-active" d="M 486 338 C 562 338, 590 338, 670 338"></path>
+                <path class="is-active" d="M 486 338 C 562 338, 590 400, 670 438"></path>
+                <path d="M 790 238 C 862 238, 894 288, 964 318"></path>
+                <path d="M 790 338 C 862 338, 894 338, 964 338"></path>
+                <path d="M 790 438 C 862 438, 894 388, 964 358"></path>
+              </svg>
+
+              <div class="n8n-node n8n-node--trigger" style="left:34px; top:82px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep out"></span>
+                <span class="n8n-node__label">Webhook</span></div>
+              <div class="n8n-node n8n-node--code" style="left:302px; top:82px;">
+                <span class="n8n-node__icon">🧠</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Eine n8n-Instanz</span><span class="badge badge--ok">einfach</span></div>
+              <div class="n8n-node" style="left:584px; top:82px;">
+                <span class="n8n-node__icon">🗄</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Datenbank</span></div>
+              <div class="n8n-node" style="left:880px; top:82px;">
+                <span class="n8n-node__icon">📊</span><span class="ep in"></span>
+                <span class="n8n-node__label">Ausführungen</span></div>
+
+              <div class="n8n-sticky" style="left:34px; top:178px; max-width:470px;">
+                <b>Single-Instance</b><br>
+                Editor, Trigger und Ausführung liegen in einem Prozess. Das ist gut zum Lernen und für kleine Setups.
+                Bei langen Jobs blockiert dieselbe Instanz aber schnell mehrere Rollen zugleich.
+              </div>
+
+              <div class="n8n-node n8n-node--trigger" style="left:34px; top:292px;">
+                <span class="n8n-node__icon">🌐</span><span class="ep out"></span>
+                <span class="n8n-node__label">Trigger / Webhook</span></div>
+              <div class="n8n-node" style="left:366px; top:292px;">
+                <span class="n8n-node__icon">📬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Redis Queue</span><span class="badge badge--ok">Puffer</span></div>
+              <div class="n8n-node n8n-node--code" style="left:670px; top:192px;">
+                <span class="n8n-node__icon">⚙️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Worker 1</span></div>
+              <div class="n8n-node n8n-node--code" style="left:670px; top:292px;">
+                <span class="n8n-node__icon">⚙️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Worker 2</span></div>
+              <div class="n8n-node n8n-node--code" style="left:670px; top:392px;">
+                <span class="n8n-node__icon">⚙️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__label">Worker 3</span></div>
+              <div class="n8n-node" style="left:964px; top:292px;">
+                <span class="n8n-node__icon">🗄</span><span class="ep in"></span>
+                <span class="n8n-node__label">Postgres</span></div>
+
+              <div class="n8n-sticky" style="left:34px; top:420px; max-width:470px;">
+                <b>Queue-Mode</b><br>
+                Der Main-Prozess nimmt Ereignisse an und legt Jobs in Redis. Worker holen Jobs ab, lesen die Workflow-
+                Daten aus der Datenbank und schreiben Ergebnisse zurück.
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption><b>Abb. 25.1:</b> Skalierung bedeutet Rollen trennen: Eingang, Warteschlange, Ausführung und
+          persistente Daten.</figcaption>
+      </figure>
+
+      <div class="callout callout--pareto">
+        <b class="t">80/20 für Betrieb</b>
+        Wenn du nur fünf Dinge sauber machst, dann diese: HTTPS und korrekte Webhook-URL, keine Secrets im Workflow,
+        fester <code>N8N_ENCRYPTION_KEY</code>, Datenbank-Backups, und erst bei echter Last Queue-Mode mit Redis und
+        Workern.
+      </div>
+
+      <h2>Erst Sicherheit, dann Skalierung</h2>
+      <p>Viele Teams skalieren zu früh. Das ist verständlich, aber verdächtig: Wenn noch unklar ist, wer Zugriff hat,
+        welche Daten gespeichert werden und wie ein Restore funktioniert, ist ein zweiter Worker nur eine weitere
+        Stelle, an der etwas falsch konfiguriert sein kann.</p>
+
+      <table class="btable">
+        <thead><tr><th>Bereich</th><th>Minimum</th><th>Warum?</th></tr></thead>
+        <tbody>
+          <tr><td>Zugriff</td><td>starke Konten, keine geteilten Logins</td><td>du musst Aktionen Personen zuordnen können</td></tr>
+          <tr><td>Transport</td><td>öffentliche Instanz nur über HTTPS</td><td>Credentials und Webhook-Daten dürfen nicht lesbar übertragen werden</td></tr>
+          <tr><td>Secrets</td><td>Tokens in Credentials oder Secret-Verwaltung</td><td>Workflow-JSON und Git-Historie bleiben sauber</td></tr>
+          <tr><td>Encryption Key</td><td><code>N8N_ENCRYPTION_KEY</code> fest setzen und sichern</td><td>ohne passenden Schlüssel sind gespeicherte Credentials nicht nutzbar</td></tr>
+          <tr><td>Backups</td><td>Datenbank plus Encryption Key getrennt sichern</td><td>ein Datenbank-Backup allein reicht nicht</td></tr>
+          <tr><td>Updates</td><td>regelmäßig testen und einspielen</td><td>veraltete Instanzen sammeln Sicherheits- und Kompatibilitätsrisiken</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Der einfache Betrieb</h2>
+      <p>Eine einzelne n8n-Instanz ist nicht falsch. Für kleine interne Automationen ist sie oft die vernünftige Wahl:
+        weniger Teile, weniger Konfiguration, weniger Fehlerquellen. Sie wird problematisch, wenn dieselbe Instanz
+        gleichzeitig Editor, Webhook-Eingang, Trigger-Verwaltung und lange Ausführungen tragen muss.</p>
+
+      <ol class="steps">
+        <li><h4>Lastbild beschreiben</h4>
+          <p>Schreibe auf: Wie viele Ausführungen pro Stunde erwartest du? Gibt es Spitzen, z. B. nach Formularaktionen
+            oder Newsletter-Versand? Gibt es Workflows, die länger als eine Minute laufen?</p></li>
+        <li><h4>Schreibende Aktionen markieren</h4>
+          <p>Markiere alle Nodes, die Daten verändern: CRM-Einträge, E-Mails, Tickets, Dateien, Datenbank-Schreibzugriffe.
+            Diese Nodes brauchen Dublettenprüfung, bevor du mehr Parallelität erlaubst.</p></li>
+        <li><h4>Secrets aus der Logik entfernen</h4>
+          <p>Öffne HTTP-, Code- und AI-Nodes und suche nach Tokens, Passwörtern und privaten URLs. Verschiebe sie in
+            Credentials oder Env-Variablen. Ein Workflow-Export darf keine echten Geheimnisse enthalten.</p></li>
+        <li><h4>Ausführungsdaten begrenzen</h4>
+          <p>Prüfe, wie lange erfolgreiche und fehlgeschlagene Ausführungen gespeichert werden. Viele gespeicherte
+            große Outputs belasten die Datenbank stärker als die Workflow-Logik selbst.</p></li>
+        <li><h4>Erst messen, dann umbauen</h4>
+          <p>Skaliere nicht aus Bauchgefühl. Notiere: Wo wartet der Workflow? CPU, Datenbank, externe API, große Dateien
+            oder zu viele gleichzeitige Webhooks? Die Ursache entscheidet über die Lösung.</p></li>
+      </ol>
+
+      <div class="callout callout--info">
+        <b class="t">Cloud und Self-hosted unterscheiden</b>
+        In n8n Cloud sind viele Betriebsdetails verwaltet. Queue-Mode ist vor allem ein Self-hosted-Thema. Trotzdem
+        bleiben die Denkfragen gleich: Zugriff, Secrets, Limits, Backups, Testdaten und sauberes Fehlverhalten.
+      </div>
+
+      <h2>Was Queue-Mode wirklich macht</h2>
+      <p>Queue-Mode trennt das Annehmen einer Ausführung vom Abarbeiten. Der Main-Prozess erzeugt eine Ausführung und
+        legt sie in eine Redis-Warteschlange. Ein freier Worker nimmt den Job, lädt die Workflow-Daten aus der
+        Datenbank, führt den Workflow aus und schreibt das Ergebnis zurück.</p>
+
+      <table class="btable">
+        <thead><tr><th>Baustein</th><th>Aufgabe</th><th>Merksatz</th></tr></thead>
+        <tbody>
+          <tr><td>Main-Prozess</td><td>UI, API, Trigger-Verwaltung, Job-Erzeugung</td><td>nimmt Arbeit an</td></tr>
+          <tr><td>Redis</td><td>Warteschlange für offene Ausführungen</td><td>merkt sich, was als Nächstes dran ist</td></tr>
+          <tr><td>Worker</td><td>führt Workflows parallel aus</td><td>macht die Arbeit</td></tr>
+          <tr><td>Datenbank</td><td>Workflows, Credentials, Ausführungen, Status</td><td>ist die gemeinsame Wahrheit</td></tr>
+          <tr><td>Webhook-Prozessor</td><td>optional: nimmt viele Webhook-Anfragen entgegen</td><td>entlastet den Main-Prozess bei Eingangslast</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--danger">
+        <b class="t">SQLite ist hier die falsche Unterlage</b>
+        Queue-Mode ist ein verteiltes Setup. Dafür brauchst du eine zentrale Datenbank, typischerweise Postgres, und
+        Redis als Message Broker. Eine lokale SQLite-Datei passt nicht zu mehreren Prozessen auf mehreren Maschinen.
+      </div>
+
+      <h2>Queue-Mode gedanklich konfigurieren</h2>
+      <p>Die genauen Befehle hängen von Docker, Server, Orchestrierung und Lizenz ab. Für das Verständnis reichen die
+        folgenden Rollen und Umgebungswerte. Entscheidend ist: Alle beteiligten n8n-Prozesse müssen zur gleichen
+        Datenbank, zu Redis und zum gleichen Encryption Key passen.</p>
+
+      <ol class="steps">
+        <li><h4>Gemeinsame Datenbank festlegen</h4>
+          <p>Nutze für ein produktives Queue-Setup eine zentrale Datenbank, z. B. Postgres. Main und Worker greifen auf
+            dieselben Workflow- und Credential-Daten zu.</p></li>
+        <li><h4>Redis bereitstellen</h4>
+          <p>Redis hält die Warteschlange. In n8n werden die Redis-Verbindungsdaten über Queue-Mode-Variablen wie
+            <code>QUEUE_BULL_REDIS_HOST</code>, <code>QUEUE_BULL_REDIS_PORT</code> und bei Bedarf Passwort/TLS gesetzt.</p></li>
+        <li><h4>Queue-Mode einschalten</h4>
+          <p>Setze auf Main, Workern und optionalen Webhook-Prozessoren <code>EXECUTIONS_MODE=queue</code>. Sonst
+            sprechen die Prozesse nicht dasselbe Ausführungsmodell.</p></li>
+        <li><h4>Encryption Key überall gleich setzen</h4>
+          <p>Setze <code>N8N_ENCRYPTION_KEY</code> auf allen n8n-Prozessen identisch. Ein Worker mit anderem Schlüssel
+            kann gespeicherte Credentials nicht korrekt verwenden.</p></li>
+        <li><h4>Worker starten</h4>
+          <p>Worker werden separat gestartet, z. B. mit <code>n8n worker</code>. Die Parallelität pro Worker wird über
+            Concurrency gesteuert, etwa <code>n8n worker --concurrency=5</code>.</p></li>
+        <li><h4>Webhook-Routing prüfen</h4>
+          <p>Wenn du zusätzliche Webhook-Prozessoren nutzt, leite produktive Pfade wie <code>/webhook/*</code> und
+            <code>/webhook-waiting/*</code> dorthin. Manuelle Test-Webhooks wie <code>/webhook-test/*</code> gehören zum
+            Main-Prozess.</p></li>
+      </ol>
+
+      <h2>Die wichtigsten Env-Variablen</h2>
+      <table class="btable">
+        <thead><tr><th>Variable</th><th>Beispiel</th><th>Wofür?</th></tr></thead>
+        <tbody>
+          <tr><td><code>EXECUTIONS_MODE</code></td><td><code>queue</code></td><td>aktiviert das Warteschlangenmodell</td></tr>
+          <tr><td><code>N8N_ENCRYPTION_KEY</code></td><td><code>lange-zufaellige-zeichenfolge</code></td><td>entschlüsselt Credentials auf Main und Workern</td></tr>
+          <tr><td><code>QUEUE_BULL_REDIS_HOST</code></td><td><code>redis</code></td><td>Adresse des Redis-Servers</td></tr>
+          <tr><td><code>QUEUE_BULL_REDIS_PORT</code></td><td><code>6379</code></td><td>Port des Redis-Servers</td></tr>
+          <tr><td><code>WEBHOOK_URL</code></td><td><code>https://n8n.example.com/</code></td><td>öffentliche Basis-URL für produktive Webhooks</td></tr>
+          <tr><td><code>N8N_PROXY_HOPS</code></td><td><code>1</code></td><td>hilft n8n, Proxy-Header korrekt zu interpretieren</td></tr>
+          <tr><td><code>OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS</code></td><td><code>true</code></td><td>optional: auch manuelle Ausführungen auf Worker verschieben</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">Concurrency ist kein Wunschzettel</b>
+        Mehr parallele Jobs erhöhen auch Datenbankverbindungen, API-Aufrufe und Speicherverbrauch. Viele Worker mit sehr
+        niedriger Concurrency können die Datenbank stärker belasten als wenige gut dimensionierte Worker.
+      </div>
+
+      <h2>Skalieren: hoch, breit oder gar nicht?</h2>
+      <p>Skalierung hat drei typische Richtungen. Jede hat einen Preis. Die beste Lösung ist oft nicht die größte,
+        sondern diejenige, die den tatsächlichen Engpass trifft.</p>
+
+      <table class="btable">
+        <thead><tr><th>Situation</th><th>Sinnvolle Reaktion</th><th>Nicht zuerst tun</th></tr></thead>
+        <tbody>
+          <tr><td>Ein Workflow läuft lange wegen externer API</td><td>Batching, Wait, Rate-Limit, Retry-Regeln</td><td>blind Worker verdoppeln</td></tr>
+          <tr><td>Viele Webhooks kommen gleichzeitig</td><td>Queue-Mode und ggf. Webhook-Prozessoren prüfen</td><td>Main-Prozess in jeden Load-Balancer-Pool werfen</td></tr>
+          <tr><td>Datenbank wird langsam</td><td>Execution-Daten begrenzen, Pruning, Datenbank messen</td><td>noch mehr parallele Jobs starten</td></tr>
+          <tr><td>Große Dateien verursachen Speicherprobleme</td><td>Binary-Data-Speicherung prüfen</td><td>Dateien dauerhaft im Speicher halten</td></tr>
+          <tr><td>Editor reagiert zäh</td><td>Ausführungen auf Worker verlagern, Main entlasten</td><td>Editor und schwere Jobs im selben Prozess lassen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Binary Data im Queue-Mode</h2>
+      <p>Dateien sind ein Sonderfall. Wenn ein Worker eine Datei erzeugt und ein anderer Prozess später darauf zugreifen
+        soll, darf die Datei nicht nur auf einer lokalen Festplatte liegen, die nur dieser eine Worker sieht. Für
+        Queue-Mode brauchst du eine Speicherung, die alle beteiligten Prozesse erreichen können, z. B. Datenbank oder
+        externe Objektspeicherung.</p>
+
+      <div class="callout callout--info">
+        <b class="t">Pragmatische Regel</b>
+        Sobald ein Workflow PDFs, Bilder, Exporte oder Anhänge verarbeitet, prüfst du die Binary-Data-Einstellung vor
+        dem Queue-Mode. Sonst wirken Fehler zufällig: Mal findet ein Prozess die Datei, mal nicht.
+      </div>
+
+      <h2>Produktions-Checkliste</h2>
+      <table class="btable">
+        <thead><tr><th>Prüfung</th><th>Bestanden, wenn ...</th><th>Wenn nicht</th></tr></thead>
+        <tbody>
+          <tr><td>Öffentliche URL</td><td><code>WEBHOOK_URL</code> zeigt auf HTTPS und echte Domain</td><td>Reverse Proxy und Env-Variablen korrigieren</td></tr>
+          <tr><td>Credentials</td><td>keine Tokens in Node-Parametern oder Code stehen</td><td>in Credentials/Secrets verschieben</td></tr>
+          <tr><td>Encryption Key</td><td>Main und alle Worker denselben Schlüssel nutzen</td><td>Deployment stoppen, Schlüssel vereinheitlichen</td></tr>
+          <tr><td>Datenbank</td><td>Backup und Restore einmal getestet wurden</td><td>nicht produktiv gehen</td></tr>
+          <tr><td>Redis</td><td>Worker Jobs aufnehmen und abschließen</td><td>Redis-Verbindung, Passwort, TLS, Netzwerk prüfen</td></tr>
+          <tr><td>Dubletten</td><td>schreibende Workflows idempotent oder vorab prüfend sind</td><td>Schlüssel, Suche oder Merge-Prüfung ergänzen</td></tr>
+          <tr><td>Monitoring</td><td>Fehler, Queue-Rückstau und lange Ausführungen auffallen</td><td>Benachrichtigung oder Dashboard ergänzen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>Worker startet, kann aber keine Credentials nutzen</td><td><code>N8N_ENCRYPTION_KEY</code> fehlt oder unterscheidet sich</td><td>denselben Schlüssel auf Main und Worker setzen, dann neu starten</td></tr>
+          <tr><td>Jobs bleiben in der Warteschlange</td><td>Worker erreicht Redis oder Datenbank nicht</td><td>Netzwerk, Host, Port, Passwort und Logs prüfen</td></tr>
+          <tr><td>Webhook ist extern nicht erreichbar</td><td><code>WEBHOOK_URL</code>, Proxy oder Load-Balancer-Routing falsch</td><td>öffentliche URL, Proxy-Header und Pfade prüfen</td></tr>
+          <tr><td>Editor wird langsam, obwohl Worker laufen</td><td>Main verarbeitet weiterhin zu viel Eingangslast</td><td>Webhook-Prozessoren prüfen und Main aus dem Webhook-Pool nehmen</td></tr>
+          <tr><td>Dubletten in CRM oder Ticketsystem</td><td>Retry oder parallele Ausführungen schreiben mehrfach</td><td>Idempotenzschlüssel und Suche-vor-Schreiben ergänzen</td></tr>
+          <tr><td>Datenbank meldet zu viele Verbindungen</td><td>zu viele Worker oder ungünstige Concurrency</td><td>Parallelität reduzieren, Pooling und Datenbanklimits prüfen</td></tr>
+          <tr><td>Dateianhänge verschwinden scheinbar</td><td>lokale Binary-Data-Speicherung passt nicht zum verteilten Setup</td><td>gemeinsame Speicherung für Binary Data wählen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Secret-Test</td><td>Workflow exportieren und nach <code>token</code>, <code>secret</code>, <code>password</code> suchen</td><td>keine echten Werte im Export</td></tr>
+          <tr><td>Webhook-Test</td><td>Produktions-Webhook mit ungefährlicher Test-Payload von außen aufrufen</td><td>Ausführung wird erzeugt und korrekt abgeschlossen</td></tr>
+          <tr><td>Worker-Test</td><td>langen Testworkflow starten und Worker-Logs beobachten</td><td>ein Worker nimmt den Job an</td></tr>
+          <tr><td>Redis-Ausfallprobe</td><td>in einer Testumgebung Redis kurz unerreichbar machen</td><td>Fehler ist sichtbar; System erholt sich nach Wiederherstellung</td></tr>
+          <tr><td>Dublettenprobe</td><td>dieselbe Payload zweimal senden</td><td>Workflow erkennt vorhandenen Datensatz oder schreibt kontrolliert nur einmal</td></tr>
+          <tr><td>Restore-Probe</td><td>Datenbank-Backup und gesicherten Encryption Key in Testumgebung verwenden</td><td>Workflows und Credentials sind lesbar</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Wann Queue-Mode noch nicht lohnt</h2>
+      <p>Queue-Mode ist ein gutes Werkzeug, aber kein Pflichtabzeichen. Wenn du fünf interne Workflows hast, die wenige
+        Male am Tag laufen, ist ein sauberes Single-Instance-Setup meist besser. Der zusätzliche Betrieb von Redis,
+        zentraler Datenbank, Worker-Deployments, Logs und Netzwerkregeln ist echter Aufwand.</p>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Warum muss <code>N8N_ENCRYPTION_KEY</code> auf allen Workern gleich sein?</li>
+          <li>Welche Rolle spielt Redis im Queue-Mode?</li>
+          <li>Warum ist eine lokale SQLite-Datei für ein verteiltes Queue-Setup ungeeignet?</li>
+          <li>Was prüfst du, bevor du die Worker-Anzahl erhöhst?</li>
+          <li>Warum können parallele Ausführungen Dubletten erzeugen?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Weil Credentials mit diesem Schlüssel entschlüsselt werden. ·
+        2) Redis hält die Warteschlange offener Ausführungen. ·
+        3) Mehrere Prozesse brauchen eine gemeinsame, zentrale Datenbank. ·
+        4) Den echten Engpass: API-Limit, Datenbank, Speicher, große Dateien oder Workflow-Logik. ·
+        5) Weil Retries und parallele Jobs dieselbe schreibende Aktion mehrfach auslösen können.
+      </div>
+
+      <p>Du hast damit den Betriebsrahmen des Werkbuchs: Workflows modularisieren, Last begrenzen, Deployments
+        nachvollziehbar machen und erst dann skalieren. Gute Automatisierung ist nicht die, die am meisten parallel
+        läuft, sondern die, die unter realen Bedingungen kontrollierbar bleibt.</p>
+
+    </article>
+      <nav class="pn-wrap" data-slug="25-skalierung"></nav></section>
 
   </div>
 </div>
 <script>
-var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter","14-projekt-form","15-projekt-news","16-projekt-leads","17-projekt-ai","18-projekt-pdf","19-grossprojekt","20-ai-agent","21-rag","22-subworkflows","23-performance","24-deployment"];
-var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"soon"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
+var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter","14-projekt-form","15-projekt-news","16-projekt-leads","17-projekt-ai","18-projekt-pdf","19-grossprojekt","20-ai-agent","21-rag","22-subworkflows","23-performance","24-deployment","25-skalierung"];
+var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
 
 function show(slug) {
   if (!slug || READY.indexOf(slug) === -1 && slug !== "home") slug = "home";

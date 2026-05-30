@@ -63,7 +63,7 @@ window.BOOK = {
         { num: "22", slug: "22-subworkflows",   title: "Sub-Workflows & Modularisierung", status: "ready", mins: 18 },
         { num: "23", slug: "23-performance",    title: "Performance, Batching & Rate-Limits", status: "ready", mins: 18 },
         { num: "24", slug: "24-deployment",     title: "Deployment, Env-Variablen & Git", status: "ready", mins: 22 },
-        { num: "25", slug: "25-skalierung",     title: "Sicherheit, Queue-Mode & Skalierung", status: "soon", mins: 20 }
+        { num: "25", slug: "25-skalierung",     title: "Sicherheit, Queue-Mode & Skalierung", status: "ready", mins: 24 }
       ]
     },
     {
