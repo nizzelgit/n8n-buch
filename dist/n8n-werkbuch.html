@@ -1000,10 +1000,10 @@ ol.steps > li p { font-size: 15.5px; }
       </a><a class="sb-link" data-title="sicherheit, queue-mode & skalierung"
       href="#25-skalierung" data-slug="25-skalierung">
       <span class="num">25</span><span>Sicherheit, Queue-Mode & Skalierung</span>
-      </a><div class="sb-part">Anhang</div><a class="sb-link is-soon" data-title="tastenkürzel-referenz"
-      href="javascript:void(0)" data-slug="A-shortcuts">
+      </a><div class="sb-part">Anhang</div><a class="sb-link" data-title="tastenkürzel-referenz"
+      href="#A-shortcuts" data-slug="A-shortcuts">
       <span class="num">A</span><span>Tastenkürzel-Referenz</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="spickzettel: die wichtigsten nodes"
+      </a><a class="sb-link is-soon" data-title="spickzettel: die wichtigsten nodes"
       href="javascript:void(0)" data-slug="B-nodes">
       <span class="num">B</span><span>Spickzettel: die wichtigsten Nodes</span>
       <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="expression-cheatsheet"
@@ -1104,10 +1104,10 @@ ol.steps > li p { font-size: 15.5px; }
       <span class="pill">lesen</span></a><a class="toc-row" href="#25-skalierung">
       <span class="n">25</span><span class="ti">Sicherheit, Queue-Mode & Skalierung</span>
       <span class="mins">⏱ 24 Min</span>
-      <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Anhang</h3><div class="toc-list"><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Anhang</h3><div class="toc-list"><a class="toc-row" href="#A-shortcuts">
       <span class="n">A</span><span class="ti">Tastenkürzel-Referenz</span>
-      <span class="mins">⏱ 5 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="mins">⏱ 7 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
       <span class="n">B</span><span class="ti">Spickzettel: die wichtigsten Nodes</span>
       <span class="mins">⏱ 6 Min</span>
       <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
@@ -11188,12 +11188,182 @@ volumes:
 
     </article>
       <nav class="pn-wrap" data-slug="25-skalierung"></nav></section>
+<section class="page" id="A-shortcuts" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">A</span> Anhang</div>
+      <h1 class="chap-title">Tastenkürzel-Referenz</h1>
+      <p class="chap-lede">Tastenkürzel sparen in n8n vor allem Such- und Mauswege. Für Einsteiger:innen sind sie
+        kein Pflichtwissen, aber ein guter Hebel, sobald du öfter Workflows baust oder bestehende Workflows prüfst.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 7 Minuten</span>
+        <span>🎯 Niveau: Nachschlagen</span>
+        <span>🧩 Voraussetzung: Kapitel 3</span>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">80/20 für Tastenkürzel</b>
+        Wenn du nur fünf Kürzel nutzt, dann diese: <span class="kbd">N</span> für die Node-Suche,
+        <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span> zum Speichern, <span class="kbd">Esc</span>
+        zum Schließen, <span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span> zum Testen und
+        <span class="kbd">Entf</span> zum Löschen ausgewählter Nodes.
+      </div>
+
+      <h2>Windows, Linux und macOS</h2>
+      <p>Dieses Werkbuch schreibt häufig <span class="kbd">Strg/⌘</span>. Gemeint ist: unter Windows und Linux
+        <span class="kbd">Strg</span>, unter macOS <span class="kbd">⌘</span>. Wenn ein Browser oder dein
+        Betriebssystem ein Kürzel bereits belegt, gewinnt manchmal diese Ebene. Dann nutze die sichtbare Schaltfläche
+        in n8n als Ausweichweg.</p>
+
+      <div class="callout callout--info">
+        <b class="t">Versionen prüfen</b>
+        Tastenkürzel können sich zwischen n8n-Versionen ändern. Diese Referenz folgt der aktuellen n8n-Dokumentation:
+        Das Node-Panel öffnest du mit <span class="kbd">N</span>. Falls deine Instanz ein anderes Verhalten zeigt,
+        orientiere dich an den Hilfetexten in deiner Oberfläche.
+      </div>
+
+      <table class="btable">
+        <thead><tr><th>Notation</th><th>Windows / Linux</th><th>macOS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Strg/⌘</span></td><td><span class="kbd">Strg</span></td><td><span class="kbd">⌘</span></td></tr>
+          <tr><td><span class="kbd">Alt/⌥</span></td><td><span class="kbd">Alt</span></td><td><span class="kbd">⌥</span></td></tr>
+          <tr><td><span class="kbd">Entf</span></td><td><span class="kbd">Entf</span> oder <span class="kbd">Backspace</span></td><td><span class="kbd">Backspace</span></td></tr>
+        </tbody>
+      </table>
+
+      <h2>Canvas und Workflow</h2>
+      <table class="btable">
+        <thead><tr><th>Aktion</th><th>Tastenkürzel</th><th>Wofür?</th></tr></thead>
+        <tbody>
+          <tr><td>Neuen Workflow erstellen</td><td><span class="kbd">Strg</span> + <span class="kbd">Alt</span> + <span class="kbd">N</span></td><td>schnell mit leerem Workflow starten</td></tr>
+          <tr><td>Workflow öffnen</td><td><span class="kbd">Strg</span> + <span class="kbd">O</span></td><td>zu einem vorhandenen Workflow wechseln</td></tr>
+          <tr><td>Node-Panel öffnen</td><td><span class="kbd">N</span></td><td>neuen Node suchen, ohne das Plus zu treffen</td></tr>
+          <tr><td>Workflow speichern</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></td><td>Änderungen sichern</td></tr>
+          <tr><td>Workflow testen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span></td><td>manuellen Testlauf starten</td></tr>
+          <tr><td>Alles auswählen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">A</span></td><td>alle sichtbaren Nodes markieren</td></tr>
+          <tr><td>Auswahl löschen</td><td><span class="kbd">Entf</span> oder <span class="kbd">Backspace</span></td><td>markierte Nodes entfernen</td></tr>
+          <tr><td>Kopieren</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">C</span></td><td>Nodes in die Zwischenablage legen</td></tr>
+          <tr><td>Ausschneiden</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">X</span></td><td>markierte Nodes verschieben</td></tr>
+          <tr><td>Einfügen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">V</span></td><td>Nodes im selben oder einem anderen Workflow einsetzen</td></tr>
+          <tr><td>Rückgängig</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Z</span></td><td>letzte Änderung zurücknehmen</td></tr>
+          <tr><td>Wiederholen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Shift</span> + <span class="kbd">Z</span></td><td>zurückgenommene Änderung erneut anwenden</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">Erst auswählen, dann löschen</b>
+        <span class="kbd">Entf</span> löscht nicht „irgendetwas“, sondern die aktuelle Auswahl. Prüfe auf dem Canvas
+        kurz, welcher Node markiert ist. Bei Unsicherheit: abbrechen, neu auswählen, dann löschen.
+      </div>
+
+      <h2>Zoom und Orientierung</h2>
+      <table class="btable">
+        <thead><tr><th>Aktion</th><th>Tastenkürzel</th><th>Wofür?</th></tr></thead>
+        <tbody>
+          <tr><td>Zoom zurücksetzen</td><td><span class="kbd">0</span></td><td>normale Zoomstufe herstellen</td></tr>
+          <tr><td>Workflow einpassen</td><td><span class="kbd">1</span></td><td>den gesamten Workflow wiederfinden</td></tr>
+          <tr><td>Vergrößern</td><td><span class="kbd">+</span> oder <span class="kbd">=</span></td><td>näher an Nodes und Verbindungen heran</td></tr>
+          <tr><td>Verkleinern</td><td><span class="kbd">-</span> oder <span class="kbd">_</span></td><td>mehr vom Canvas sehen</td></tr>
+          <tr><td>Vergrößern / verkleinern</td><td><span class="kbd">Strg/⌘</span> + Mausrad</td><td>stufenlos zoomen</td></tr>
+          <tr><td>Canvas verschieben</td><td><span class="kbd">Space</span> halten und ziehen</td><td>größere Workflows erkunden</td></tr>
+          <tr><td>Alternative Bewegung</td><td><span class="kbd">Strg</span> + Ziehen oder mittlere Maustaste</td><td>Canvas bewegen, wenn Space nicht passt</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Node-Detailansicht</h2>
+      <table class="btable">
+        <thead><tr><th>Aktion</th><th>Tastenkürzel</th><th>Wofür?</th></tr></thead>
+        <tbody>
+          <tr><td>Detailansicht schließen</td><td><span class="kbd">Esc</span></td><td>zurück auf den Canvas</td></tr>
+          <tr><td>Expression-Modus starten</td><td><span class="kbd">=</span> in leerem Parameterfeld</td><td>direkt mit einem Ausdruck beginnen</td></tr>
+          <tr><td>Feldinhalt markieren</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">A</span></td><td>Parameter schnell ersetzen</td></tr>
+          <tr><td>Wert kopieren</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">C</span></td><td>URLs, Expressions oder Testwerte übernehmen</td></tr>
+          <tr><td>Wert einfügen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">V</span></td><td>vorbereitete Werte eintragen</td></tr>
+          <tr><td>Dialog abbrechen</td><td><span class="kbd">Esc</span></td><td>Auswahlmenüs oder Suchfelder schließen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Suchen und Navigieren</h2>
+      <table class="btable">
+        <thead><tr><th>Aktion</th><th>Tastenkürzel</th><th>Wofür?</th></tr></thead>
+        <tbody>
+          <tr><td>Node suchen</td><td><span class="kbd">N</span>, dann tippen</td><td>HTTP, IF, Set, Code und andere Nodes schneller finden</td></tr>
+          <tr><td>Suchergebnis wählen</td><td><span class="kbd">↑</span> / <span class="kbd">↓</span>, dann <span class="kbd">Enter</span></td><td>ohne Maus einfügen</td></tr>
+          <tr><td>Command Bar öffnen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">K</span></td><td>Aktionen, Navigation und Ressourcen suchen</td></tr>
+          <tr><td>Browser-Suche</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">F</span></td><td>Text im geöffneten Buchkapitel oder Browserfenster finden</td></tr>
+          <tr><td>Seitentab wechseln</td><td><span class="kbd">Strg</span> + <span class="kbd">Tab</span></td><td>zwischen n8n, Dokumentation und Testseiten springen</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Nicht jedes Kürzel ist n8n-spezifisch</b>
+        Viele nützliche Tastenkürzel kommen vom Browser oder Betriebssystem. Das ist kein Nachteil: Für den Alltag zählt,
+        ob du den Workflow schneller und kontrollierter bearbeiten kannst.
+      </div>
+
+      <h2>Typische Arbeitsfolge ohne Maus</h2>
+      <ol class="steps">
+        <li><h4>Node suchen</h4><p><span class="kbd">N</span> drücken, Suchbegriff tippen, mit <span class="kbd">↑</span> /
+          <span class="kbd">↓</span> auswählen und mit <span class="kbd">Enter</span> einfügen.</p></li>
+        <li><h4>Parameter setzen</h4><p>In der Detailansicht Werte eintragen. Bestehenden Text mit
+          <span class="kbd">Strg/⌘</span> + <span class="kbd">A</span> markieren und ersetzen.</p></li>
+        <li><h4>Ansicht schließen</h4><p><span class="kbd">Esc</span> drücken, bis du wieder den Canvas siehst.</p></li>
+        <li><h4>Workflow sichern</h4><p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span> drücken.</p></li>
+        <li><h4>Testlauf starten</h4><p><span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span> nutzen oder sichtbar auf
+          <strong>Test workflow</strong> klicken, wenn dein Browser das Kürzel abfängt.</p></li>
+      </ol>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>Kürzel reagiert nicht</td><td>Fokus liegt im falschen Bereich</td><td>einmal auf Canvas oder Eingabefeld klicken und erneut versuchen</td></tr>
+          <tr><td>Browser öffnet eigenen Dialog</td><td>Kürzel ist vom Browser belegt</td><td>n8n-Schaltfläche verwenden oder anderes Kürzel nutzen</td></tr>
+          <tr><td>Node wurde gelöscht</td><td>falsche Auswahl war aktiv</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Z</span> nutzen</td></tr>
+          <tr><td>Text wird statt Node gelöscht</td><td>Cursor steht in einem Eingabefeld</td><td>erst mit <span class="kbd">Esc</span> zurück auf den Canvas</td></tr>
+          <tr><td>macOS-Kürzel passt nicht</td><td><span class="kbd">Strg</span> und <span class="kbd">⌘</span> verwechselt</td><td>bei Buchnotation <span class="kbd">Strg/⌘</span> auf macOS <span class="kbd">⌘</span> verwenden</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Node-Suche</td><td><span class="kbd">N</span> drücken, <code>set</code> tippen, <span class="kbd">Enter</span></td><td>ein Set-Node wird eingefügt</td></tr>
+          <tr><td>Speichern</td><td>Node bewegen, dann <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></td><td>Status zeigt gespeichert</td></tr>
+          <tr><td>Schließen</td><td>Node öffnen, dann <span class="kbd">Esc</span></td><td>Detailansicht schließt sich</td></tr>
+          <tr><td>Zoom</td><td><span class="kbd">1</span> drücken</td><td>der Workflow wird eingepasst</td></tr>
+          <tr><td>Rückgängig</td><td>Test-Node löschen, dann <span class="kbd">Strg/⌘</span> + <span class="kbd">Z</span></td><td>Node erscheint wieder</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Welches Kürzel öffnet das Node-Panel?</li>
+          <li>Was bedeutet <span class="kbd">Strg/⌘</span> auf macOS?</li>
+          <li>Warum ist <span class="kbd">Esc</span> beim Arbeiten in der Detailansicht nützlich?</li>
+          <li>Was prüfst du, bevor du einen Node mit <span class="kbd">Entf</span> löschst?</li>
+          <li>Welche sichtbare Alternative nutzt du, wenn der Browser ein Kürzel abfängt?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) <span class="kbd">N</span>. ·
+        2) <span class="kbd">⌘</span>. ·
+        3) Du kommst aus Menüs und Detailansichten zurück zum Canvas. ·
+        4) Welche Auswahl aktiv ist. ·
+        5) Die entsprechende Schaltfläche in n8n, z. B. <strong>Save</strong> oder <strong>Test workflow</strong>.
+      </div>
+
+    </article>
+      <nav class="pn-wrap" data-slug="A-shortcuts"></nav></section>
 
   </div>
 </div>
 <script>
-var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter","14-projekt-form","15-projekt-news","16-projekt-leads","17-projekt-ai","18-projekt-pdf","19-grossprojekt","20-ai-agent","21-rag","22-subworkflows","23-performance","24-deployment","25-skalierung"];
-var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"soon"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
+var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter","14-projekt-form","15-projekt-news","16-projekt-leads","17-projekt-ai","18-projekt-pdf","19-grossprojekt","20-ai-agent","21-rag","22-subworkflows","23-performance","24-deployment","25-skalierung","A-shortcuts"];
+var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"ready"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
 
 function show(slug) {
   if (!slug || READY.indexOf(slug) === -1 && slug !== "home") slug = "home";
