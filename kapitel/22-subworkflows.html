@@ -133,8 +133,8 @@
         <li><h4>Eingaben definieren</h4>
           <p>Stelle die Eingabe so ein, dass die Felder explizit definiert werden. Lege diese Felder an:
             <code>name</code>, <code>email</code>, <code>company</code>, <code>source</code>.</p></li>
-        <li><h4>Workflow speichern</h4>
-          <p>Speichere den Workflow. Erst gespeicherte Workflows lassen sich sauber aus dem Haupt-Workflow auswählen.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist. Erst gespeicherte Workflows lassen sich sauber aus dem Haupt-Workflow auswählen.</p></li>
       </ol>
 
       <figure class="figure">
@@ -469,7 +469,7 @@ return inputItems.map((item) =&gt; {
       <table class="btable">
         <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
         <tbody>
-          <tr><td>Sub-Workflow erscheint nicht in der Auswahl</td><td>nicht gespeichert oder falscher Trigger</td><td>Sub-Workflow speichern, Execute Sub-workflow Trigger prüfen</td></tr>
+          <tr><td>Sub-Workflow erscheint nicht in der Auswahl</td><td>Draft noch nicht gespeichert oder falscher Trigger</td><td>Auto-Save abwarten, Execute Sub-workflow Trigger prüfen</td></tr>
           <tr><td>Aufruf schlägt mit fehlenden Feldern fehl</td><td>Eingabevertrag passt nicht zur Zuordnung</td><td>Feldnamen im Trigger und Execute-Node vergleichen</td></tr>
           <tr><td>Es kommt nur ein Item zurück</td><td>Code verarbeitet nicht alle Items</td><td>Code-Node auf All Items stellen und <code>$input.all()</code> nutzen</td></tr>
           <tr><td>Haupt-Workflow kann nicht verzweigen</td><td>er wartet nicht auf die Rückgabe</td><td>Wait for completion einschalten</td></tr>

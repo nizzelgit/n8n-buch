@@ -236,6 +236,28 @@
         niedriger Concurrency können die Datenbank stärker belasten als wenige gut dimensionierte Worker.
       </div>
 
+      <h2>Task Runner für Code-Nodes</h2>
+      <p>Task Runner führen Code-Node-Aufgaben getrennt vom n8n-Hauptprozess aus. Das ist kein Ersatz für Queue-Mode:
+        Queue-Mode verteilt Workflow-Ausführungen, Task Runner isolieren JavaScript- und Python-Code innerhalb einer
+        Ausführung. Für Produktion ist der externe Modus die skeptischere Wahl, weil der Runner als eigener Prozess oder
+        Sidecar läuft.</p>
+
+      <table class="btable">
+        <thead><tr><th>Variable</th><th>Beispiel</th><th>Wofür?</th></tr></thead>
+        <tbody>
+          <tr><td><code>N8N_RUNNERS_ENABLED</code></td><td><code>true</code></td><td>Task Runner einschalten</td></tr>
+          <tr><td><code>N8N_RUNNERS_MODE</code></td><td><code>external</code></td><td>Runner außerhalb des n8n-Prozesses betreiben</td></tr>
+          <tr><td><code>N8N_RUNNERS_AUTH_TOKEN</code></td><td><code>lange-zufaellige-zeichenfolge</code></td><td>Runner und Broker gegenseitig absichern</td></tr>
+          <tr><td><code>N8N_RUNNERS_BROKER_LISTEN_ADDRESS</code></td><td><code>0.0.0.0</code></td><td>Broker für Sidecar/Container erreichbar machen</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">Queue-Mode plus Task Runner sauber kombinieren</b>
+        Wenn Worker Code-Nodes ausführen, brauchen auch diese Worker passende Runner-Sidecars. Sonst skaliert der Workflow,
+        aber der Code-Schritt bleibt falsch isoliert oder läuft nicht wie erwartet.
+      </div>
+
       <h2>Skalieren: hoch, breit oder gar nicht?</h2>
       <p>Skalierung hat drei typische Richtungen. Jede hat einen Preis. Die beste Lösung ist oft nicht die größte,
         sondern diejenige, die den tatsächlichen Engpass trifft.</p>
@@ -272,6 +294,7 @@
           <tr><td>Encryption Key</td><td>Main und alle Worker denselben Schlüssel nutzen</td><td>Deployment stoppen, Schlüssel vereinheitlichen</td></tr>
           <tr><td>Datenbank</td><td>Backup und Restore einmal getestet wurden</td><td>nicht produktiv gehen</td></tr>
           <tr><td>Redis</td><td>Worker Jobs aufnehmen und abschließen</td><td>Redis-Verbindung, Passwort, TLS, Netzwerk prüfen</td></tr>
+          <tr><td>Task Runner</td><td>Code-Nodes in externer Runner-Umgebung laufen</td><td>Runner-Sidecar, Auth-Token und Broker-Adresse prüfen</td></tr>
           <tr><td>Dubletten</td><td>schreibende Workflows idempotent oder vorab prüfend sind</td><td>Schlüssel, Suche oder Merge-Prüfung ergänzen</td></tr>
           <tr><td>Monitoring</td><td>Fehler, Queue-Rückstau und lange Ausführungen auffallen</td><td>Benachrichtigung oder Dashboard ergänzen</td></tr>
         </tbody>

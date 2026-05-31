@@ -65,7 +65,7 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 4.0</span>Dein Ziel: <b>Manueller Test</b> → <b>Wetter holen</b> (HTTP) →
+        <figcaption><span class="fig-tag">Abb. 4.1</span>Dein Ziel: <b>Manueller Test</b> → <b>Wetter holen</b> (HTTP) →
           <b>Nachricht bauen</b> (Edit Fields). Die grünen Häkchen erscheinen erst, nachdem du ausgeführt hast.</figcaption>
       </figure>
 
@@ -103,19 +103,18 @@
           <p>Drücke <span class="kbd">Enter</span> oder klicke irgendwo auf die leere Fläche. Der Name oben steht jetzt fest.</p></li>
       </ol>
 
-      <h2>Schritt 3 — Speichern (und den Speichern-Status verstehen)</h2>
+      <h2>Schritt 3 — Auto-Save und Draft verstehen</h2>
       <ol class="steps">
-        <li><h4>Speichern auslösen</h4>
-          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Alternativ ist <strong>oben rechts</strong> ein
-            pinkfarbener Knopf <strong>„Save“</strong> — auch der speichert.</p></li>
-        <li><h4>Den Status kontrollieren</h4>
-          <p>Direkt neben/unter dem Speichern-Bereich oben rechts steht jetzt <strong>„Saved“</strong> (Gespeichert). Sobald du
-            etwas änderst, wechselt es zu <strong>„Unsaved“</strong> — dein Signal, wieder <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span> zu drücken.</p></li>
+        <li><h4>Auto-Save abwarten</h4>
+          <p>n8n speichert deine Bearbeitungen automatisch als Draft. Warte nach dem Umbenennen kurz, bis oben der gespeicherte
+            Draft angezeigt wird.</p></li>
+        <li><h4>Publish noch nicht klicken</h4>
+          <p>In diesem Kapitel bauen und testen wir nur. <strong>Publish</strong> brauchst du erst, wenn ein Trigger später
+            automatisch produktiv laufen soll.</p></li>
       </ol>
       <div class="callout callout--tip">
-        <b class="t">⚡ Angewohnheit fürs Leben</b>
-        n8n speichert <strong>nicht</strong> automatisch. Drück nach jedem größeren Schritt reflexartig
-        <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Das erspart dir verlorene Arbeit.
+        <b class="t">⚡ Gespeichert ist nicht veröffentlicht</b>
+        Auto-Save schützt deine Arbeit. Publish ist ein anderer Schritt: Er macht eine getestete Version produktiv.
       </div>
 
       <hr>
@@ -153,7 +152,7 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 4.1</span>Das Trigger-Panel. Wir nehmen den obersten Eintrag „Trigger manually“.</figcaption>
+        <figcaption><span class="fig-tag">Abb. 4.2</span>Das Trigger-Panel. Wir nehmen den obersten Eintrag „Trigger manually“.</figcaption>
       </figure>
 
       <ol class="steps" style="counter-reset: st 3;">
@@ -258,7 +257,7 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 4.2</span>So sieht der Node jetzt aus: Method <b>GET</b>, URL eingefügt,
+        <figcaption><span class="fig-tag">Abb. 4.3</span>So sieht der Node jetzt aus: Method <b>GET</b>, URL eingefügt,
           Authentication <b>None</b>. Den Reiter über dem URL-Feld lassen wir auf <b>Fest</b>.</figcaption>
       </figure>
 
@@ -301,7 +300,7 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 4.3</span>Echte Daten! Beachte die Verschachtelung: <code>temperature_2m</code>
+        <figcaption><span class="fig-tag">Abb. 4.4</span>Echte Daten! Beachte die Verschachtelung: <code>temperature_2m</code>
           steckt <em>innerhalb</em> von <code>current</code>. Deshalb lautet der Pfad <code>current.temperature_2m</code>.</figcaption>
       </figure>
 
@@ -324,8 +323,8 @@
         <li><h4>Zurück zum Canvas</h4>
           <p>Drücke <span class="kbd">Esc</span> oder klicke auf das <strong>×</strong> oben rechts in der NDV. Du siehst wieder
             den ganzen Canvas — jetzt mit zwei verbundenen Nodes.</p></li>
-        <li><h4>Speichern nicht vergessen</h4>
-          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte kurz, bis der Draft gespeichert ist.</p></li>
       </ol>
 
       <hr>
@@ -409,7 +408,7 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 4.4</span>Sobald du tippst, wertet n8n die Expression live aus: Rechts steht
+        <figcaption><span class="fig-tag">Abb. 4.5</span>Sobald du tippst, wertet n8n die Expression live aus: Rechts steht
           schon der fertige Satz <em>mit den echten Werten</em> eingesetzt.</figcaption>
       </figure>
 
@@ -442,7 +441,7 @@
       <p>Bisher haben wir Node für Node einzeln getestet. Jetzt lassen wir den kompletten Ablauf von vorne durchlaufen.</p>
       <ol class="steps">
         <li><h4>NDV schließen</h4><p><span class="kbd">Esc</span> drücken. Du siehst alle drei Nodes auf dem Canvas.</p></li>
-        <li><h4>Speichern</h4><p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4><p>Warte kurz, bis der Draft gespeichert ist.</p></li>
         <li><h4>Test starten</h4>
           <p>Klicke auf den großen Knopf <strong>„Test workflow“</strong> (meist unten mittig, manchmal oben). Alternativ
             <span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span>.</p></li>
@@ -493,7 +492,7 @@
           <p>Beim Feld <strong>„Text“</strong> oben auf <strong>Expression</strong> schalten und eintippen:
             <code>{{ $json.nachricht }}</code> — das ist genau der Satz aus dem vorherigen Node.</p></li>
         <li><h4>Ausführen</h4>
-          <p>Workflow speichern und <strong>„Test workflow“</strong> klicken. Sekunden später ploppt deine Wetter-Nachricht im
+          <p>Auto-Save abwarten und <strong>„Test workflow“</strong> klicken. Sekunden später ploppt deine Wetter-Nachricht im
             Telegram-Chat auf. 🎉</p></li>
       </ol>
 
@@ -516,7 +515,7 @@
 
       <h2>Was du in diesem Kapitel gelernt hast</h2>
       <ul>
-        <li>Einen Workflow <strong>anlegen, benennen und speichern</strong> — und den Speichern-Status lesen.</li>
+        <li>Einen Workflow <strong>anlegen, benennen und als Draft speichern lassen</strong> — ohne ihn zu publishen.</li>
         <li>Einen <strong>Trigger</strong> setzen und Nodes durch <strong>Ziehen vom Ausgangspunkt</strong> verbinden.</li>
         <li>Mit dem <strong>HTTP-Request-Node</strong> echte Daten aus einer API holen und das JSON-Ergebnis lesen.</li>
         <li>Mit <strong>Edit Fields</strong> Daten umformen und deine erste <strong>Expression</strong> (<code>{{ $json… }}</code>) schreiben.</li>

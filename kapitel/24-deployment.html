@@ -73,7 +73,7 @@
                 <span class="n8n-node__label">Pull in Produktion</span></div>
               <div class="n8n-node" style="left:1028px; top:96px;">
                 <span class="n8n-node__icon">🚀</span><span class="ep in"></span>
-                <span class="n8n-node__label">Aktiver Workflow</span></div>
+                <span class="n8n-node__label">Published Workflow</span></div>
 
               <div class="n8n-node" style="left:180px; top:256px;">
                 <span class="n8n-node__icon">🔐</span><span class="ep in"></span>
@@ -104,7 +104,7 @@
           <tr><td><strong>Workflow-Logik</strong></td><td>Nodes, Verbindungen, Expressions, Fehlerzweige</td><td>Kann ich diese Version später wiederherstellen?</td></tr>
           <tr><td><strong>Credentials</strong></td><td>Tokens, API-Keys, OAuth-Zugänge in n8n-Credentials</td><td>Steht irgendwo ein echtes Secret im JSON?</td></tr>
           <tr><td><strong>Umgebung</strong></td><td>Domain, Webhook-URL, Zeitzone, Datenbank, Feature-Flags</td><td>Ist Test absichtlich anders als Produktion?</td></tr>
-          <tr><td><strong>Aktivierung</strong></td><td>Workflow wird eingeschaltet und empfängt echte Ereignisse</td><td>Wurde vorher ein Testlauf mit produktionsnahen Daten gemacht?</td></tr>
+          <tr><td><strong>Publish</strong></td><td>Eine getestete Workflow-Version wird produktiv und empfängt echte Ereignisse</td><td>Wurde vorher ein Testlauf mit produktionsnahen Daten gemacht?</td></tr>
         </tbody>
       </table>
 
@@ -269,7 +269,7 @@ volumes:
         <li><h4>Test-URL öffnen</h4>
           <p>Starte den Testmodus und öffne die angezeigte Test-URL im Browser.</p></li>
         <li><h4>Produktions-URL prüfen</h4>
-          <p>Aktiviere den Workflow kurz in einer Testumgebung und prüfe, ob die Produktions-URL die richtige Domain
+          <p>Publishe den Workflow kurz in einer Testumgebung und prüfe, ob die Produktions-URL die richtige Domain
             zeigt.</p></li>
         <li><h4>Falsche Domain korrigieren</h4>
           <p>Wenn n8n eine interne Adresse oder <code>localhost</code> anzeigt, korrigiere <code>WEBHOOK_URL</code> und
@@ -321,7 +321,7 @@ volumes:
 
       <h2>Schritt 6 — Source Control in n8n nutzen</h2>
       <p>Falls deine n8n-Edition Source Control unterstützt, läuft der Ablauf grob so: Git-Zugang verbinden, Änderungen
-        aus der Entwicklungsinstanz pushen, in Produktion pullen und danach erst aktivieren.</p>
+        aus der Entwicklungsinstanz pushen, in Produktion pullen und danach erst publishen.</p>
 
       <ol class="steps">
         <li><h4>Einstellungen öffnen</h4>
@@ -330,11 +330,11 @@ volumes:
           <p>Verbinde ein Git-Repository über die angebotene Authentifizierung. Nutze ein separates Repo oder einen klar
             getrennten Ordner für n8n-Workflows.</p></li>
         <li><h4>Entwicklungsänderung pushen</h4>
-          <p>Push aus <code>dev</code> nur dann, wenn der Workflow gespeichert, getestet und verständlich benannt ist.</p></li>
+          <p>Push aus <code>dev</code> nur dann, wenn der Draft gespeichert, getestet und verständlich benannt ist.</p></li>
         <li><h4>Produktionsinstanz pullen</h4>
-          <p>Ziehe die Änderung in <code>prod</code>. Prüfe danach Credentials und Variablen, bevor du aktivierst.</p></li>
-        <li><h4>Aktivierung bewusst durchführen</h4>
-          <p>Aktiviere den Workflow erst nach einem Testlauf mit ungefährlichen Daten.</p></li>
+          <p>Ziehe die Änderung in <code>prod</code>. Prüfe danach Credentials und Variablen, bevor du publishst.</p></li>
+        <li><h4>Publish bewusst durchführen</h4>
+          <p>Publishe den Workflow erst nach einem Testlauf mit ungefährlichen Daten.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -396,10 +396,10 @@ volumes:
         <thead><tr><th>Prüfung</th><th>Erwartung</th><th>Wenn nicht erfüllt</th></tr></thead>
         <tbody>
           <tr><td>Workflow-Version</td><td>Git-Commit oder exportierte JSON-Version ist bekannt</td><td>Version festhalten, dann deployen</td></tr>
-          <tr><td>Credentials</td><td>prod-Credentials sind gesetzt und getestet</td><td>nicht aktivieren</td></tr>
+          <tr><td>Credentials</td><td>prod-Credentials sind gesetzt und getestet</td><td>nicht publishen</td></tr>
           <tr><td>Webhook-URL</td><td>zeigt auf die externe HTTPS-Domain</td><td><code>WEBHOOK_URL</code> und Proxy prüfen</td></tr>
           <tr><td>Variablen</td><td>prod-Werte sind nicht aus dev kopiert</td><td>Werte bewusst setzen</td></tr>
-          <tr><td>Testlauf</td><td>ungefährliche Daten laufen durch den produktiven Workflow</td><td>Fehler beheben, erst danach einschalten</td></tr>
+          <tr><td>Testlauf</td><td>ungefährliche Daten laufen durch den produktiven Workflow</td><td>Fehler beheben, erst danach publishen</td></tr>
           <tr><td>Rollback</td><td>alte Version ist auffindbar</td><td>kein Deployment ohne Rückweg</td></tr>
         </tbody>
       </table>
@@ -432,7 +432,7 @@ volumes:
           <tr><td>Workflow läuft in dev, aber nicht in prod</td><td>Variable, Credential oder Domain unterscheidet sich</td><td>Deployment-Checkliste Punkt für Punkt prüfen</td></tr>
           <tr><td>Git-Export enthält sensible Werte</td><td>Secret wurde in Node-Parameter geschrieben</td><td>Workflow bereinigen, Secret in Credential verschieben</td></tr>
           <tr><td>Pull überschreibt produktive Änderung</td><td>Änderungen wurden direkt in prod gemacht</td><td>klare Regel setzen: Logik nur in dev ändern</td></tr>
-          <tr><td>Nach Aktivierung entstehen Dubletten</td><td>Retry, manueller Test oder doppelter Trigger schreibt erneut</td><td>Idempotenzschlüssel und Vorabprüfung ergänzen</td></tr>
+          <tr><td>Nach Publish entstehen Dubletten</td><td>Retry, manueller Test oder doppelter Trigger schreibt erneut</td><td>Idempotenzschlüssel und Vorabprüfung ergänzen</td></tr>
         </tbody>
       </table>
 
@@ -469,7 +469,7 @@ volumes:
       </div>
 
       <p>Du hast jetzt ein Deployment-Modell: Logik versionieren, Secrets trennen, Umgebungswerte prüfen und erst dann
-        aktivieren. Im nächsten Kapitel wird daraus Betrieb unter Last: Sicherheit, Queue Mode, Worker und Skalierung.</p>
+        publishen. Im nächsten Kapitel wird daraus Betrieb unter Last: Sicherheit, Queue Mode, Worker und Skalierung.</p>
 
     </article>
     <nav id="prevnext"></nav>

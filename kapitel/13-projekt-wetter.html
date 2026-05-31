@@ -70,7 +70,7 @@
       <div class="callout callout--pareto">
         <b class="t">⚡ Warum genau dieses Projekt?</b>
         Es bündelt die wichtigsten Bausteine ohne Nebengeräusche: Zeitplan, API-Aufruf, Expressions, Credential,
-        Versand und Aktivierung. Dasselbe Muster verwendest du später für Tagesberichte, Kontrolllisten,
+        Versand und Publish. Dasselbe Muster verwendest du später für Tagesberichte, Kontrolllisten,
         Monitoring-Meldungen oder Team-Updates.
       </div>
 
@@ -109,9 +109,8 @@
           <p>Gehe zur Workflow-Übersicht und klicke auf <strong>Create Workflow</strong> bzw. <strong>Neuer Workflow</strong>.</p></li>
         <li><h4>Name setzen</h4>
           <p>Klicke oben links auf den Workflow-Namen und schreibe: <code>Täglicher Wetter-Report</code>.</p></li>
-        <li><h4>Speichern</h4>
-          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Oben sollte <strong>Saved</strong> bzw.
-            <strong>Gespeichert</strong> erscheinen.</p></li>
+        <li><h4>Auto-Save abwarten</h4>
+          <p>Warte kurz, bis oben der gespeicherte Draft angezeigt wird. Veröffentlicht wird der Workflow erst am Ende.</p></li>
       </ol>
 
       <h2>Schritt 3 — Schedule-Trigger setzen</h2>
@@ -354,8 +353,8 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
       <ol class="steps">
         <li><h4>Zurück zum Canvas</h4>
           <p>Drücke <span class="kbd">Esc</span>, bis du alle vier Nodes siehst.</p></li>
-        <li><h4>Speichern</h4>
-          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Test workflow starten</h4>
           <p>Klicke <strong>Test workflow</strong>. n8n läuft von links nach rechts durch: Schedule → Wetter holen →
             Report bauen → Telegram senden.</p></li>
@@ -367,16 +366,16 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
 
       <div class="callout callout--info">
         <b class="t">Warum erst manuell testen?</b>
-        Ein aktiver Workflow sendet später automatisch. Wenn du vorher nicht manuell testest, automatisierst du im Zweifel
+        Ein veröffentlichter Workflow sendet später automatisch. Wenn du vorher nicht manuell testest, automatisierst du im Zweifel
         einen Fehler. Bei Benachrichtigungen ist das harmlos; bei Rechnungen, CRM oder Löschaktionen wäre es riskant.
       </div>
 
-      <h2>Schritt 9 — Aktiv schalten</h2>
+      <h2>Schritt 9 — Publish klicken</h2>
       <ol class="steps">
-        <li><h4>Letzten Stand speichern</h4>
-          <p>Speichere noch einmal. Der Status oben sollte <strong>Saved</strong> sein.</p></li>
-        <li><h4>Aktiv-Schalter umlegen</h4>
-          <p>Oben rechts den Workflow von <strong>Inactive</strong> auf <strong>Active</strong> schalten.</p></li>
+        <li><h4>Draft prüfen</h4>
+          <p>Warte, bis der Auto-Save-Status keine offenen Änderungen mehr zeigt.</p></li>
+        <li><h4>Publish klicken</h4>
+          <p>Oben rechts <strong>Publish</strong> klicken. Damit wird genau diese getestete Version produktiv.</p></li>
         <li><h4>Was jetzt passiert</h4>
           <p>n8n lauscht nun auf den Schedule. Der nächste automatische Lauf passiert zur eingestellten Uhrzeit.</p></li>
         <li><h4>Ersten automatischen Lauf prüfen</h4>
@@ -386,7 +385,7 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
 
       <div class="callout callout--pareto">
         <b class="t">⚡ Produktiv heißt: beobachten</b>
-        Aktivieren ist nicht das Ende. Prüfe nach dem ersten echten Lauf die Ausführungshistorie. Erst danach darfst du
+        Publish ist nicht das Ende. Prüfe nach dem ersten echten Lauf die Ausführungshistorie. Erst danach darfst du
         annehmen, dass der Workflow im Alltag zuverlässig läuft.
       </div>
 
@@ -398,7 +397,7 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
           <tr><td>HTTP-Daten prüfen</td><td>HTTP-Node öffnen und Output lesen</td><td><code>daily.temperature_2m_max[0]</code> ist vorhanden</td></tr>
           <tr><td>Textfeld prüfen</td><td>Node <strong>Report bauen</strong> ausführen</td><td><code>nachricht</code> enthält Ort, Temperatur und Regenwahrscheinlichkeit</td></tr>
           <tr><td>Telegram-Fehler</td><td>Testweise falsche Chat-ID verwenden</td><td>Fehler ist im Telegram-Node sichtbar</td></tr>
-          <tr><td>Automatischer Lauf</td><td>Nach Aktivierung die erste Execution öffnen</td><td>geplanter Lauf ist grün und Nachricht ist angekommen</td></tr>
+          <tr><td>Automatischer Lauf</td><td>Nach Publish die erste Execution öffnen</td><td>geplanter Lauf ist grün und Nachricht ist angekommen</td></tr>
         </tbody>
       </table>
 

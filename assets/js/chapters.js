@@ -45,7 +45,7 @@ window.BOOK = {
         { num: "14", slug: "14-projekt-form",   title: "Projekt 2: Formular → Sheets → Slack", status: "ready", mins: 42 },
         { num: "15", slug: "15-projekt-news",   title: "Projekt 3: News-Aggregator mit Filter", status: "ready", mins: 40 },
         { num: "16", slug: "16-projekt-leads",  title: "Projekt 4: Lead-Routing vom Webhook ins CRM", status: "ready", mins: 45 },
-        { num: "17", slug: "17-projekt-ai",     title: "Projekt 5: KI-E-Mail-Assistent (AI Agent)", status: "ready", mins: 50 },
+        { num: "17", slug: "17-projekt-ai",     title: "Projekt 5: KI-E-Mail-Assistent (Basic LLM Chain)", status: "ready", mins: 50 },
         { num: "18", slug: "18-projekt-pdf",    title: "Projekt 6: PDF-/Rechnungs-Extraktion", status: "ready", mins: 55 },
         { num: "19", slug: "19-grossprojekt",   title: "Großprojekt: Content-Pipeline end-to-end", status: "ready", mins: 70 }
       ]

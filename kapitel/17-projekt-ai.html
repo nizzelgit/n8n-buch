@@ -16,7 +16,7 @@
 
       <div class="chap-eyebrow"><span class="knum">17</span> Projekt 5</div>
       <h1 class="chap-title">KI-E-Mail-Assistent</h1>
-      <p class="chap-lede">In diesem Projekt liest n8n neue E-Mails, lässt einen AI Agent die Nachricht klassifizieren,
+      <p class="chap-lede">In diesem Projekt liest n8n neue E-Mails, lässt eine Basic LLM Chain die Nachricht klassifizieren,
         erzeugt einen Antwortentwurf und meldet dringende Fälle an dein Team. Wichtig: Der Workflow sendet keine Antwort
         automatisch. KI schlägt vor, der Mensch entscheidet.</p>
       <div class="chap-meta">
@@ -30,7 +30,7 @@
         <ul>
           <li>Ein Test-Postfach, idealerweise Gmail. IMAP funktioniert ähnlich, aber die Node-Namen unterscheiden sich.</li>
           <li>Eine Gmail-Credential mit Zugriff auf Lesen, Labels und Entwürfe.</li>
-          <li>Eine OpenAI- oder andere Chat-Model-Credential für den AI Agent.</li>
+          <li>Eine OpenAI- oder andere Chat-Model-Credential für die Basic LLM Chain.</li>
           <li>Eine Slack-Credential oder einen anderen Benachrichtigungskanal für dringende Fälle.</li>
           <li>Test-E-Mails. Keine produktiven Kundenmails, bevor du die Klassifikation geprüft hast.</li>
         </ul>
@@ -45,7 +45,7 @@
 
       <h2>Das Ziel</h2>
       <p>Der Workflow reagiert auf neue ungelesene E-Mails. Er holt den vollständigen Inhalt, kürzt ihn auf das Nötige,
-        fragt einen AI Agent nach Kategorie, Dringlichkeit und Antwortentwurf, verarbeitet die strukturierte Ausgabe und
+        fragt eine Basic LLM Chain nach Kategorie, Dringlichkeit und Antwortentwurf, verarbeitet die strukturierte Ausgabe und
         legt einen Gmail-Entwurf an. Sehr dringende E-Mails werden zusätzlich in Slack gemeldet.</p>
 
       <figure class="figure">
@@ -71,7 +71,7 @@
               <div class="n8n-node n8n-node--ai" style="left:738px; top:124px;">
                 <span class="n8n-node__icon">🤖</span><span class="ep in"></span>
                 <span class="ep out" style="top:46px;"></span>
-                <span class="n8n-node__label">AI Agent</span></div>
+                <span class="n8n-node__label">Basic LLM Chain</span></div>
               <div class="n8n-node" style="left:958px; top:59px;">
                 <span class="n8n-node__icon">📝</span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Entwurf</span><span class="badge badge--ok">✓</span></div>
@@ -81,7 +81,7 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 17.1</span>Der AI Agent entscheidet nicht allein: Er erzeugt strukturierte
+        <figcaption><span class="fig-tag">Abb. 17.1</span>Die LLM Chain entscheidet nicht allein: Sie erzeugt strukturierte
           Vorschläge, n8n macht daraus Entwurf, Label und Team-Hinweis.</figcaption>
       </figure>
 
@@ -207,7 +207,7 @@
 
       <h2>Schritt 4 — E-Mail-Text vorbereiten</h2>
       <p>KI-Modelle brauchen nicht jede Signatur, jedes Tracking-Bild und jede alte Antwortkette. Wir bauen ein kompaktes
-        Objekt, das der AI Agent lesen soll.</p>
+        Objekt, das die Basic LLM Chain lesen soll.</p>
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
@@ -250,18 +250,19 @@
         Alte Zitate und Signaturen erhöhen Kosten und Fehlerwahrscheinlichkeit.
       </div>
 
-      <h2>Schritt 5 — AI Agent hinzufügen</h2>
-      <p>Jetzt kommt der Agent. Er soll keine Tools aufrufen und keine E-Mail senden. Seine Aufgabe ist enger:
-        klassifizieren, begründen, Entwurf formulieren.</p>
+      <h2>Schritt 5 — Basic LLM Chain hinzufügen</h2>
+      <p>Jetzt kommt der KI-Schritt. Kritischer Punkt für Mai 2026: Der aktuelle AI Agent ist ein Tool-Agent und erwartet
+        mindestens ein Tool. Für diese reine Klassifikations- und Entwurfsaufgabe ist eine <strong>Basic LLM Chain</strong>
+        sauberer als ein Agent ohne Werkzeuge.</p>
 
       <ol class="steps">
-        <li><h4>AI Agent anhängen</h4>
-          <p>Ziehe von <strong>E-Mail vorbereiten</strong> eine Linie ins Leere, suche <code>ai agent</code> und wähle
-            <strong>AI Agent</strong>.</p></li>
-        <li><h4>Agent-Typ schlicht halten</h4>
-          <p>Nutze den Standard-Agenten bzw. eine einfache Konfiguration ohne externe Tools.</p></li>
+        <li><h4>Basic LLM Chain anhängen</h4>
+          <p>Ziehe von <strong>E-Mail vorbereiten</strong> eine Linie ins Leere, suche <code>basic llm chain</code> und wähle
+            <strong>Basic LLM Chain</strong>.</p></li>
+        <li><h4>Keine Tools erzwingen</h4>
+          <p>Diese Chain bekommt nur den vorbereiteten E-Mail-Text und gibt strukturiertes JSON zurück.</p></li>
         <li><h4>Chat Model verbinden</h4>
-          <p>Klicke am AI-Agent-Node auf den Anschluss für <strong>Chat Model</strong> und wähle z. B.
+          <p>Klicke am Chain-Node auf den Anschluss für <strong>Chat Model</strong> und wähle z. B.
             <strong>OpenAI Chat Model</strong>. Wähle deine Credential und ein günstiges, zuverlässiges Modell.</p></li>
         <li><h4>Prompt-Modus setzen</h4>
           <p>Setze <strong>Prompt</strong> auf <strong>Define below</strong>.</p></li>
@@ -270,7 +271,7 @@
       </ol>
 
       <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Prompt für den AI Agent</div>
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Prompt für die Basic LLM Chain</div>
 <pre>Du bist ein vorsichtiger E-Mail-Assistent.
 Analysiere die E-Mail und antworte ausschließlich als gültiges JSON.
 
@@ -302,26 +303,25 @@ Text: {{ $json.email_text }}</pre>
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:720px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">🤖</span><b>AI Agent</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic">🤖</span><b>Basic LLM Chain</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
-                <div class="ndv-panel__head">Agent</div>
+                <div class="ndv-panel__head">Chain</div>
                 <div class="ndv-panel__body">
                   <div class="row"><label>Prompt</label><div class="n8n-select">Define below <span class="chev">▾</span></div></div>
                   <div class="row"><label>User Message</label><input class="n8n-input is-expr" value="Analysiere die E-Mail und antworte ausschließlich als gültiges JSON ..."></div>
                   <div class="row"><label>Chat Model</label><div class="n8n-select">OpenAI Chat Model verbunden <span class="chev">▾</span></div></div>
-                  <div class="row"><label>Tools</label><div class="n8n-select">keine Tools verbunden <span class="chev">▾</span></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 17.4</span>Für diesen Workflow braucht der Agent keine Werkzeuge. Er soll nur
-          strukturiert antworten.</figcaption>
+        <figcaption><span class="fig-tag">Abb. 17.4</span>Für diesen Workflow braucht der KI-Schritt keine Werkzeuge. Deshalb ist
+          die Chain passender als ein AI Agent.</figcaption>
       </figure>
 
       <div class="callout callout--warn">
-        <b class="t">Wenn der Agent kein JSON liefert</b>
+        <b class="t">Wenn die Chain kein JSON liefert</b>
         Prüfe, ob dein Prompt wirklich „ausschließlich gültiges JSON“ verlangt. Falls deine n8n-Version einen Output Parser
         oder „Require Specific Output Format“ anbietet, nutze ihn. Trotzdem solltest du den nächsten Prüfschritt behalten.
       </div>
@@ -332,11 +332,11 @@ Text: {{ $json.email_text }}</pre>
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
-          <p>Hänge hinter den AI Agent einen Code-Node und nenne ihn <code>KI-Ausgabe prüfen</code>.</p></li>
+          <p>Hänge hinter die Basic LLM Chain einen Code-Node und nenne ihn <code>KI-Ausgabe prüfen</code>.</p></li>
         <li><h4>Modus wählen</h4>
           <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
         <li><h4>Code einfügen</h4>
-          <p>Füge diesen robusten Parser ein. Je nach n8n-Version heißt das Agent-Ausgabefeld <code>output</code>,
+          <p>Füge diesen robusten Parser ein. Je nach n8n-Version heißt das KI-Ausgabefeld <code>output</code>,
             <code>text</code> oder ähnlich; passe die erste Zeile bei Bedarf an.</p></li>
       </ol>
 
@@ -378,7 +378,7 @@ Text: {{ $json.email_text }}</pre>
 
       <div class="callout callout--pareto">
         <b class="t">⚡ KI-Ausgaben sind Eingaben</b>
-        Behandle Agent-Antworten wie Daten von außen: parsen, validieren, Defaults setzen. Erst danach darf der Workflow
+        Behandle KI-Antworten wie Daten von außen: parsen, validieren, Defaults setzen. Erst danach darf der Workflow
         Entscheidungen treffen.
       </div>
 
@@ -488,7 +488,7 @@ Zusammenfassung:
         absichtlich konservativ.
       </div>
 
-      <h2>Schritt 10 — Gesamttest</h2>
+      <h2>Konkrete Testfälle</h2>
       <ol class="steps">
         <li><h4>Normale Testmail senden</h4>
           <p>Sende eine harmlose Anfrage mit dem Testlabel. Erwartung: Entwurf entsteht, keine Slack-Meldung.</p></li>
@@ -500,8 +500,8 @@ Zusammenfassung:
         <li><h4>Executions prüfen</h4>
           <p>Öffne jede Ausführung. Prüfe besonders die Felder <code>category</code>, <code>urgency</code>,
             <code>summary</code> und <code>draft_body</code>.</p></li>
-        <li><h4>Workflow aktivieren</h4>
-          <p>Erst wenn alle drei Fälle passen, speichere und aktiviere den Workflow. Lasse das Testlabel zunächst bestehen.</p></li>
+        <li><h4>Workflow publishen</h4>
+          <p>Erst wenn alle drei Fälle passen, warte auf Auto-Save und klicke <strong>Publish</strong>. Lasse das Testlabel zunächst bestehen.</p></li>
       </ol>
 
       <div class="callout callout--pareto">
@@ -527,7 +527,7 @@ Zusammenfassung:
         <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
         <tbody>
           <tr><td>Human approval</td><td>Slack- oder Gmail-Schritt mit Freigabe einbauen, bevor eine Antwort gesendet wird.</td></tr>
-          <tr><td>CRM-Kontext</td><td>Vor dem Agenten Kontakt im CRM suchen und Kundentyp oder offene Tickets ergänzen.</td></tr>
+          <tr><td>CRM-Kontext</td><td>Vor der Chain Kontakt im CRM suchen und Kundentyp oder offene Tickets ergänzen.</td></tr>
           <tr><td>Mehrere Labels</td><td>Nach <code>category</code> unterschiedliche Gmail-Labels setzen.</td></tr>
           <tr><td>Kostenkontrolle</td><td>Nur Mails über einer Mindestlänge an KI senden; Newsletter vorher filtern.</td></tr>
           <tr><td>Output Parser</td><td>Falls verfügbar, Structured Output Parser nutzen und den Code-Parser trotzdem als Sicherheitsnetz behalten.</td></tr>
@@ -540,7 +540,7 @@ Zusammenfassung:
           <li>Warum triggert der Workflow zuerst nur auf ein Testlabel?</li>
           <li>Warum erstellt der Workflow einen Entwurf statt direkt zu senden?</li>
           <li>Warum wird die KI-Ausgabe noch einmal geparst und validiert?</li>
-          <li>Welche drei Testfälle brauchst du vor dem Aktivieren?</li>
+          <li>Welche drei Testfälle brauchst du vor dem Publish?</li>
           <li>Warum markieren wir die Mail erst am Ende als gelesen?</li>
         </ul>
       </div>

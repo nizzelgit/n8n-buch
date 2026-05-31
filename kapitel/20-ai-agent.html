@@ -157,7 +157,9 @@
 
       <h2>Schritt 2 — AI Agent hinzufügen</h2>
       <p>Der Agent bekommt die Chatnachricht vom Trigger. In aktuellen n8n-Versionen arbeitet der AI Agent als Tool-Agent:
-        Er erwartet ein Chat Model und mindestens ein Tool. Für reine Textantworten wäre eine Basic LLM Chain schlichter.</p>
+        Er erwartet ein Chat Model und mindestens ein Tool. Stand Mai 2026 ist der AI Agent auf Version 3.x; die alte
+        Auswahl verschiedener Agent-Typen ist nicht mehr das Grundmodell. Für reine Textantworten wäre eine Basic LLM
+        Chain schlichter.</p>
 
       <ol class="steps">
         <li><h4>AI Agent anhängen</h4>
@@ -268,7 +270,8 @@ Regeln:
 
       <ol class="steps">
         <li><h4>Tool-Anschluss öffnen</h4>
-          <p>Klicke am AI-Agent-Node auf <strong>Tool</strong> und wähle <strong>HTTP Request Tool</strong>.</p></li>
+          <p>Klicke am AI-Agent-Node auf <strong>Tool</strong> und wähle den normalen <strong>HTTP Request</strong>-Node
+            als Tool. Verwende nicht den legacy <strong>HTTP Request Tool</strong>-Node.</p></li>
         <li><h4>Tool benennen</h4>
           <p>Nenne das Tool <code>Ort suchen</code>.</p></li>
         <li><h4>Beschreibung eintragen</h4>
@@ -290,7 +293,7 @@ Regeln:
             <div class="ndv__bar"><span class="ndvic">🌍</span><b>Ort suchen</b><span class="ndv__exec-step">Tool</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
-                <div class="ndv-panel__head">HTTP Request Tool</div>
+                <div class="ndv-panel__head">HTTP Request als Tool</div>
                 <div class="ndv-panel__body">
                   <div class="row"><label>Description</label><input class="n8n-input" value="Sucht zu einem Ortsnamen die wahrscheinlichsten Koordinaten."></div>
                   <div class="row"><label>Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
@@ -316,8 +319,8 @@ Regeln:
         Koordinaten das Wetter holen.</p>
 
       <ol class="steps">
-        <li><h4>Zweites HTTP Request Tool hinzufügen</h4>
-          <p>Füge am Tool-Anschluss des AI Agent ein weiteres <strong>HTTP Request Tool</strong> hinzu.</p></li>
+        <li><h4>Zweites HTTP-Request-Tool hinzufügen</h4>
+          <p>Füge am Tool-Anschluss des AI Agent einen weiteren normalen <strong>HTTP Request</strong>-Node als Tool hinzu.</p></li>
         <li><h4>Tool benennen</h4>
           <p>Nenne es <code>Wetter holen</code>.</p></li>
         <li><h4>Beschreibung eintragen</h4>
@@ -500,8 +503,8 @@ Regeln:
         <li><h4>Load Previous Session prüfen</h4>
           <p>Wenn Nutzer frühere Chatnachrichten laden sollen, setze <strong>Load Previous Session</strong> auf
             <strong>From Memory</strong> und nutze denselben Memory-Node wie am Agenten.</p></li>
-        <li><h4>Workflow aktivieren</h4>
-          <p>Speichere den Workflow und schalte ihn erst dann aktiv.</p></li>
+        <li><h4>Workflow publishen</h4>
+          <p>Warte auf Auto-Save und klicke erst dann <strong>Publish</strong>.</p></li>
       </ol>
 
       <div class="callout callout--warn">

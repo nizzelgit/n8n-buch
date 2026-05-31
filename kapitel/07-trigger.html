@@ -62,8 +62,8 @@
       <div class="callout callout--info">
         <b class="t">Der Unterschied, der alles erklärt</b>
         <strong>Manuelle</strong> Trigger startest <em>du</em> selbst (zum Bauen &amp; Testen). <strong>Automatische</strong>
-        Trigger (Schedule, Webhook und alle App-Trigger) feuern von allein — aber nur, wenn der Workflow auf
-        <strong>Aktiv</strong> geschaltet ist. Diesen Schalter sehen wir gleich genauer an.
+        Trigger (Schedule, Webhook und alle App-Trigger) feuern von allein — aber nur, wenn eine Workflow-Version
+        <strong>published</strong> ist. Diesen Publish-Schritt sehen wir gleich genauer an.
       </div>
 
       <h2>Trigger 1 — Manual: für Bau und Test</h2>
@@ -127,8 +127,7 @@
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
         <p style="margin:0 0 6px">• <strong>Läuft nicht zur erwarteten Zeit?</strong> Der Schedule-Trigger feuert nur, wenn der
-          Workflow <strong>Aktiv</strong> ist (Schalter oben rechts). Im Editor per „Test workflow" läuft er auch inaktiv — im
-          Betrieb nicht.</p>
+          Workflow <strong>published</strong> ist. Im Editor per „Test workflow" läuft er auch als Draft — im Betrieb nicht.</p>
         <p style="margin:0">• <strong>Falsche Uhrzeit?</strong> n8n nutzt die <strong>Zeitzone</strong> aus den Einstellungen.
           Steht sie auf UTC, weicht die Auslösung von deiner Ortszeit ab. Zeitzone unter Settings prüfen.</p>
       </div>
@@ -165,7 +164,7 @@
                   <div class="row"><label>HTTP Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
                   <div class="row"><label>Path</label><input class="n8n-input" value="wetter"></div>
                   <div class="row"><label>Test-URL <span class="hint">(zum Bauen)</span></label><input class="n8n-input" value="http://localhost:5678/webhook-test/wetter"></div>
-                  <div class="row"><label>Production-URL <span class="hint">(nur wenn Aktiv)</span></label><input class="n8n-input" value="http://localhost:5678/webhook/wetter"></div>
+                  <div class="row"><label>Production-URL <span class="hint">(nur wenn Published)</span></label><input class="n8n-input" value="http://localhost:5678/webhook/wetter"></div>
                   <div class="row"><label>Respond</label><div class="n8n-select">Immediately <span class="chev">▾</span></div></div>
                 </div>
               </div>
@@ -181,8 +180,8 @@
         <p style="margin:0 0 6px">• Die <strong>Test-URL</strong> (<code>/webhook-test/</code>) funktioniert <em>nur</em>, solange
           du auf „Listen for test event" geklickt hast und genau <em>einen</em> Aufruf abwartest. Danach ist sie wieder „taub".</p>
         <p style="margin:0">• Die <strong>Production-URL</strong> (<code>/webhook/</code>) funktioniert <em>nur</em>, wenn der
-          Workflow <strong>Aktiv</strong> ist. Rufst du sie bei inaktivem Workflow auf, bekommst du einen <strong>404</strong>.
-          Das ist kein Fehler — der Workflow „hört" dann einfach nicht zu.</p>
+          Workflow <strong>published</strong> ist. Rufst du sie bei unveröffentlichtem Workflow auf, bekommst du meist einen
+          <strong>404</strong>. Das ist kein Fehler — es gibt dann keine produktive Version, die zuhört.</p>
       </div>
 
       <div class="callout callout--tip">
@@ -192,9 +191,10 @@
         siehst du die genaue Struktur und ziehst dir die Felder per Drag-and-drop.
       </div>
 
-      <h2>Der Aktiv-Schalter: das Tor zum Betrieb</h2>
-      <p>Schedule- und Webhook-Trigger (und alle App-Trigger) laufen im echten Betrieb nur, wenn der Workflow <strong>aktiviert</strong>
-        ist. Den Schalter findest du <strong>oben rechts</strong> in der Topbar.</p>
+      <h2>Publish: das Tor zum Betrieb</h2>
+      <p>Schedule- und Webhook-Trigger (und alle App-Trigger) laufen im echten Betrieb nur, wenn der Workflow
+        <strong>published</strong> ist. Den Button findest du <strong>oben rechts</strong> in der Topbar. Änderungen danach
+        bleiben zunächst Draft, bis du erneut veröffentlichst.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -203,26 +203,27 @@
               <span class="n8n-logo">n8</span>
               <span class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><b>Wetter-Report</b></span>
               <span class="n8n-topbar__right">
-                <span class="n8n-saved">Gespeichert</span>
-                <span class="n8n-toggle">Inaktiv <span class="n8n-switch is-on"></span> Aktiv</span>
-                <span class="n8n-btn n8n-btn--primary n8n-btn--sm">Save</span>
+                <span class="n8n-saved">Draft automatisch gespeichert</span>
+                <span class="n8n-tag">Published</span>
+                <span class="n8n-btn n8n-btn--primary n8n-btn--sm">Publish</span>
               </span>
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 7.4</span>Der <b>Aktiv</b>-Schalter oben rechts. Ist er grün/an, lauscht der
-          Workflow auf seinen Trigger — der Schedule feuert, die Production-URL des Webhooks antwortet.</figcaption>
+        <figcaption><span class="fig-tag">Abb. 7.4</span>Der <b>Publish</b>-Status oben rechts. Ist eine Version veröffentlicht,
+          lauscht der Workflow auf seinen Trigger — der Schedule feuert, die Production-URL des Webhooks antwortet.</figcaption>
       </figure>
 
       <div class="callout callout--info">
-        <b class="t">Aktiv ≠ Test</b>
-        Der Knopf <strong>„Test workflow"</strong> startet einen Lauf <em>jetzt</em>, egal ob aktiv oder nicht — ideal zum Bauen.
-        <strong>Aktiv</strong> dagegen heißt: n8n übernimmt das automatische Auslösen im Hintergrund, dauerhaft.
+        <b class="t">Published ≠ Test</b>
+        Der Knopf <strong>„Test workflow"</strong> startet einen Lauf <em>jetzt</em>, egal ob published oder nicht — ideal zum Bauen.
+        <strong>Published</strong> dagegen heißt: n8n übernimmt das automatische Auslösen im Hintergrund, dauerhaft.
+        <strong>Unpublish</strong> nimmt die produktive Version wieder aus dem Betrieb.
       </div>
 
       <h2>Die Trigger im Überblick</h2>
       <table class="btable">
-        <thead><tr><th>Trigger</th><th>Feuert, wenn …</th><th>Aktiv nötig?</th><th>Typischer Einsatz</th></tr></thead>
+        <thead><tr><th>Trigger</th><th>Feuert, wenn …</th><th>Publish nötig?</th><th>Typischer Einsatz</th></tr></thead>
         <tbody>
           <tr><td>Manual</td><td>du auf „Test workflow" klickst</td><td>nein</td><td>Bauen &amp; Testen</td></tr>
           <tr><td>Schedule</td><td>die eingestellte Zeit erreicht ist</td><td>ja</td><td>Reports, Erinnerungen, Abgleiche</td></tr>
@@ -255,16 +256,16 @@
           <p>Vom <strong>Ausgangspunkt rechts</strong> des Schedule-Triggers eine Linie zum Eingang des „Wetter holen"-Nodes
             ziehen. Jetzt hängt die alte Kette wieder am neuen Trigger.</p></li>
         <li><h4>Testen wie immer</h4>
-          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>, dann <strong>„Test workflow"</strong>. Der Ablauf läuft
-            durch wie gehabt — die Uhrzeit muss dafür nicht erreicht sein.</p></li>
-        <li><h4>Aktiv schalten</h4>
-          <p>Erst jetzt der entscheidende Schritt für den Betrieb: oben rechts den <strong>Aktiv</strong>-Schalter umlegen. Ab
-            sofort holt n8n das Wetter jeden Morgen um 8 — ganz ohne dich.</p></li>
+          <p>Warte kurz auf den Auto-Save-Status, dann <strong>„Test workflow"</strong>. Der Ablauf läuft durch wie gehabt —
+            die Uhrzeit muss dafür nicht erreicht sein.</p></li>
+        <li><h4>Publish klicken</h4>
+          <p>Erst jetzt der entscheidende Schritt für den Betrieb: oben rechts <strong>Publish</strong> klicken. Ab sofort holt
+            n8n das Wetter jeden Morgen um 8 — ganz ohne dich.</p></li>
       </ol>
 
       <div class="callout callout--tip">
         <b class="t">🎉 Das ist der Sprung in den echten Betrieb</b>
-        Genau dieses Muster — Trigger austauschen, Rest behalten, aktiv schalten — verwandelt jeden „Test-Workflow" in eine
+        Genau dieses Muster — Trigger austauschen, Rest behalten, publishen — verwandelt jeden „Test-Workflow" in eine
         Automatisierung, die rund um die Uhr für dich arbeitet.
       </div>
 
@@ -274,7 +275,7 @@
         <tbody>
           <tr><td>Manual</td><td><strong>Test workflow</strong> klicken</td><td>Workflow läuft sofort</td></tr>
           <tr><td>Schedule</td><td>Schedule-Trigger einsetzen und manuell testen</td><td>Workflow läuft auch vor der geplanten Uhrzeit</td></tr>
-          <tr><td>Aktivierung</td><td>Workflow speichern und aktiv schalten</td><td>Schedule ist für echte Läufe bereit</td></tr>
+          <tr><td>Publish</td><td>Workflow veröffentlichen</td><td>Schedule ist für echte Läufe bereit</td></tr>
           <tr><td>Webhook-Unterschied</td><td>Test-URL und Production-URL vergleichen</td><td><code>/webhook-test/</code> und <code>/webhook/</code> sind unterscheidbar</td></tr>
         </tbody>
       </table>
@@ -286,18 +287,18 @@
           <li>Dein Schedule-Workflow feuert nachts nicht — was prüfst du zuerst?</li>
           <li>Was ist der Unterschied zwischen der Test- und der Production-URL eines Webhooks?</li>
           <li>Unter welchem Pfad findest du einen Query-Parameter <code>?stadt=Berlin</code> im Item?</li>
-          <li>Muss ein Workflow „Aktiv" sein, damit „Test workflow" funktioniert?</li>
+          <li>Muss ein Workflow published sein, damit „Test workflow" funktioniert?</li>
         </ul>
       </div>
 
       <div class="callout callout--info">
         <b class="t">Antworten</b>
         1) Linke Seite abgerundet, kein Eingang, nur ein Ausgang. ·
-        2) Ob der Workflow <strong>Aktiv</strong> ist — und die Zeitzone in den Settings. ·
+        2) Ob der Workflow <strong>published</strong> ist — und die Zeitzone in den Settings. ·
         3) Test-URL (<code>/webhook-test/</code>) nur beim aktiven „Listen for test event"; Production-URL (<code>/webhook/</code>)
-        nur bei aktivem Workflow. ·
+        nur bei published Workflow. ·
         4) <code>$json.query.stadt</code>. ·
-        5) Nein — „Test workflow" läuft immer, „Aktiv" ist nur fürs automatische Auslösen.
+        5) Nein — „Test workflow" läuft auch im Draft, Published ist nur fürs automatische Auslösen.
       </div>
 
       <p>Damit weißt du, <em>wann</em> ein Workflow startet. Im nächsten Kapitel kümmern wir uns darum, <em>woher</em> die Daten

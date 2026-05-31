@@ -2,7 +2,7 @@
 
 Ein praktisches, reich bebildertes Lehrbuch, mit dem man **n8n-Workflows Schritt für Schritt nachbauen**
 kann — vom ersten Klick bis zum KI-Agenten. Die Besonderheit: Die gezeigten „Screenshots“ sind
-**detailgetreue HTML/CSS-Nachbildungen der echten n8n-Oberfläche** (Stand 2025) und damit gestochen
+**detailgetreue HTML/CSS-Nachbildungen der echten n8n-Oberfläche** (Stand Mai 2026) und damit gestochen
 scharf, konsistent und barrierearm.
 
 > „n8n“ ist eine Marke der n8n GmbH. Dieses Buch ist ein **unabhängiges Lernprojekt** und kein
@@ -47,7 +47,7 @@ n8n-buch/
 │   ├── 14-projekt-form.html    # Projekt: Formular → Sheets → Slack
 │   ├── 15-projekt-news.html    # Projekt: News-Aggregator mit Filter
 │   ├── 16-projekt-leads.html   # Projekt: Lead-Routing ins CRM
-│   ├── 17-projekt-ai.html      # Projekt: KI-E-Mail-Assistent
+│   ├── 17-projekt-ai.html      # Projekt: KI-E-Mail-Assistent mit Basic LLM Chain
 │   ├── 18-projekt-pdf.html     # Projekt: PDF-/Rechnungs-Extraktion
 │   ├── 19-grossprojekt.html    # Großprojekt: Content-Pipeline end-to-end
 │   ├── 20-ai-agent.html        # AI-Agent, Chat-Trigger, Memory & Tools
@@ -88,7 +88,7 @@ Die Navigation (Sidebar, Vor/Zurück, Übersicht) aktualisiert sich daraus autom
 
 ## Wiederverwendbare UI-Komponenten
 
-`assets/css/n8n-ui.css` enthält u. a.: Editor-Topbar, Aktiv-Schalter, Canvas mit
+`assets/css/n8n-ui.css` enthält u. a.: Editor-Topbar, Publish-/Statusanzeige, Canvas mit
 Punktraster, Nodes (inkl. Trigger-Form, Status-Badges, Werkzeugleiste),
 Verbindungslinien (SVG), das Node-Auswahl-Panel und die komplette
 Node-Detailansicht (NDV) mit Input/Parameter/Output, Tabellen-, JSON- und

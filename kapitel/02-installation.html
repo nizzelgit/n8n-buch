@@ -28,7 +28,7 @@
       <table class="btable">
         <thead><tr><th>Weg</th><th>Aufwand</th><th>Für wen?</th></tr></thead>
         <tbody>
-          <tr><td>① n8n Cloud</td><td>Null Installation, 14 Tage Test</td><td>⚡ Empfohlen zum Starten & für dieses Buch</td></tr>
+          <tr><td>① n8n Cloud</td><td>Null Installation, Testphase</td><td>⚡ Empfohlen zum Starten & für dieses Buch</td></tr>
           <tr><td>② Lokal mit <code>npx</code></td><td>Ein Befehl, läuft auf deinem Rechner</td><td>Wer Node.js hat und nichts in der Cloud will</td></tr>
           <tr><td>③ Docker</td><td>Ein Befehl, dauerhaft & sauber isoliert</td><td>Wer es ernsthaft selbst hosten will</td></tr>
         </tbody>
@@ -67,10 +67,9 @@
               <div class="n8n-logo">n8</div>
               <div class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><span class="n8n-wfname">Mein Workflow</span></div>
               <div class="n8n-topbar__right">
-                <span class="n8n-saved">Noch nicht gespeichert</span>
-                <div class="n8n-toggle"><span>Inaktiv</span><span class="n8n-switch"></span></div>
+                <span class="n8n-saved">Draft automatisch gespeichert</span>
                 <button class="n8n-btn n8n-btn--sm">Teilen</button>
-                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Speichern</button>
+                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Publish</button>
               </div>
             </div>
             <div class="n8n-tabs"><span class="n8n-tab is-active">Editor</span><span class="n8n-tab">Ausführungen</span></div>
@@ -87,8 +86,8 @@
       </figure>
 
       <h2>Weg ② — Lokal mit npx</h2>
-      <p>Wenn auf deinem Rechner <strong>Node.js</strong> (Version 18 oder neuer) installiert ist, startest du n8n mit einem
-        einzigen Befehl. Öffne ein Terminal und tippe:</p>
+      <p>Wenn auf deinem Rechner <strong>Node.js</strong> installiert ist, startest du n8n mit einem
+        einzigen Befehl. Stand Mai 2026 verlangt n8n Node.js <strong>20.19 bis 24.x</strong>. Öffne ein Terminal und tippe:</p>
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Terminal</div>
@@ -148,6 +147,12 @@ docker run -it --rm <span class="ky">\</span>
         eine feste Domain, HTTPS und Umgebungsvariablen dazu — das vertiefen wir in <strong>Kapitel 24 (Deployment)</strong>.</p>
 
       <div class="callout callout--info">
+        <b class="t">Task Runner erst im Betriebsthema</b>
+        Für die Lernkapitel reicht eine normale Einzelinstanz. Wenn du Code-Nodes produktiv self-hosted ausführst,
+        gehören Task Runner zur Betriebsarchitektur; das ordnen wir in Kapitel 25 ein.
+      </div>
+
+      <div class="callout callout--info">
         <b class="t">Cloud vs. Self-Hosting — der eine echte Unterschied</b>
         In der Cloud funktionieren <strong>Webhooks</strong> sofort (du bekommst eine öffentlich erreichbare Adresse).
         Lokal ist dein <code>localhost</code> von außen nicht erreichbar — für Webhook-Tests brauchst du dann ein
@@ -164,7 +169,7 @@ docker run -it --rm <span class="ky">\</span>
         <ul>
           <li>n8n läuft (Cloud-URL oder <code>localhost:5678</code> öffnet sich).</li>
           <li>Du siehst den Editor mit dem leeren Canvas.</li>
-          <li>Oben rechts erkennst du den <em>Speichern</em>-Button und den <em>Aktiv/Inaktiv</em>-Schalter.</li>
+          <li>Oben rechts erkennst du den Auto-Save-Status und den <em>Publish</em>-Button.</li>
         </ul>
       </div>
 

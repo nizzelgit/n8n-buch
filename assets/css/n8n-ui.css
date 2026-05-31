@@ -104,7 +104,7 @@
 .n8n-topbar__right { margin-left:auto; display:flex; align-items:center; gap:10px; }
 .n8n-saved { font-size: 12px; color: var(--n8n-text-faint); }
 
-/* Aktiv/Inaktiv-Schalter */
+/* Status-Schalter für ältere UI-Nachbauten */
 .n8n-toggle { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--n8n-text-light); }
 .n8n-switch {
   width: 34px; height: 18px; border-radius: 20px; background: #c8ccd6;

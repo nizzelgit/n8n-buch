@@ -131,8 +131,8 @@
           <p>Gehe in n8n zur Workflow-Übersicht und klicke auf <strong>Create Workflow</strong>.</p></li>
         <li><h4>Workflow benennen</h4>
           <p>Klicke oben links auf den Namen und schreibe: <code>Formular zu Sheets und Slack</code>.</p></li>
-        <li><h4>Speichern</h4>
-          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
       </ol>
 
       <h2>Schritt 3 — Formular-Trigger hinzufügen</h2>
@@ -403,8 +403,8 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
       <ol class="steps">
         <li><h4>Zurück zum Canvas</h4>
           <p>Drücke <span class="kbd">Esc</span>, bis du den gesamten Workflow siehst.</p></li>
-        <li><h4>Workflow speichern</h4>
-          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Auf Test-Einsendung warten</h4>
           <p>Klicke beim Form-Trigger erneut auf <strong>Listen for test event</strong>.</p></li>
         <li><h4>Formular erneut absenden</h4>
@@ -419,12 +419,12 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         du immer jede dauerhafte Wirkung, nicht nur den grünen Haken im letzten Node.
       </div>
 
-      <h2>Schritt 9 — Aktivieren und Production-URL verwenden</h2>
+      <h2>Schritt 9 — Publish und Production-URL verwenden</h2>
       <ol class="steps">
-        <li><h4>Letzten Stand speichern</h4>
-          <p>Speichere den Workflow.</p></li>
-        <li><h4>Workflow aktivieren</h4>
-          <p>Schalte oben rechts auf <strong>Active</strong>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
+        <li><h4>Workflow publishen</h4>
+          <p>Klicke oben rechts auf <strong>Publish</strong>. Erst diese veröffentlichte Version nutzt die Production-URL.</p></li>
         <li><h4>Production-Formular-URL kopieren</h4>
           <p>Öffne den Form-Trigger und kopiere die produktive Formular-URL. Die Test-URL ist nur fürs Bauen gedacht.</p></li>
         <li><h4>Produktions-Test mit Testdaten</h4>
@@ -437,7 +437,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
       <div class="callout callout--pareto">
         <b class="t">⚡ Test-URL ist nicht Produktion</b>
         Wie beim Webhook gilt: Test-Links sind temporär. Für echte Nutzer:innen brauchst du die Production-URL und einen
-        aktiven Workflow.
+        published Workflow.
       </div>
 
       <h2>Wenn etwas schiefgeht</h2>
@@ -447,7 +447,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
           <tr><td>Formular löst nicht aus</td><td>Test-Listener läuft nicht oder falsche URL geöffnet</td><td>Form-Trigger erneut auf <strong>Listen for test event</strong> stellen</td></tr>
           <tr><td>Sheets-Zeile bleibt leer</td><td>Spaltennamen passen nicht zum Mapping</td><td>Tabellenkopf und Feldzuordnung vergleichen</td></tr>
           <tr><td>Slack sendet nichts</td><td>App fehlt im Kanal oder Credential ist falsch</td><td>Slack-App einladen, Credential testen, Testkanal nutzen</td></tr>
-          <tr><td>Production-URL reagiert nicht</td><td>Workflow ist nicht aktiv</td><td>speichern, aktivieren und Production-URL neu kopieren</td></tr>
+          <tr><td>Production-URL reagiert nicht</td><td>Workflow ist nicht published</td><td>Publish klicken und Production-URL neu kopieren</td></tr>
           <tr><td>Doppelte Einträge entstehen</td><td>Test mehrfach abgesendet oder Retry wiederholt Schreiben</td><td>Testdaten markieren und später Dublettenprüfung ergänzen</td></tr>
         </tbody>
       </table>
@@ -459,7 +459,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
           <tr><td>Normale Anfrage</td><td>alle Formularfelder mit plausiblen Testdaten füllen</td><td>eine Sheet-Zeile und eine Slack-Nachricht entstehen</td></tr>
           <tr><td>Hohe Priorität</td><td><code>Priorität = hoch</code> absenden</td><td>Slack-Text zeigt die Priorität sichtbar an</td></tr>
           <tr><td>Lange Nachricht</td><td>mehrzeiligen Text ins Nachrichtenfeld schreiben</td><td>Zeilenumbrüche bleiben in Slack lesbar</td></tr>
-          <tr><td>Production-Test</td><td>Production-URL in privatem Fenster öffnen</td><td>aktiver Workflow erzeugt eine Execution</td></tr>
+          <tr><td>Production-Test</td><td>Production-URL in privatem Fenster öffnen</td><td>published Workflow erzeugt eine Execution</td></tr>
           <tr><td>Mapping-Prüfung</td><td>Sheet-Zeile mit Slack-Nachricht vergleichen</td><td>Name, E-Mail, Thema und Nachricht stimmen überein</td></tr>
         </tbody>
       </table>
@@ -492,7 +492,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         1) Der Sheets-Node braucht stabile Spaltenüberschriften für die Zuordnung. ·
         2) Damit Formularlogik, Tabellenmapping und Slack-Text entkoppelt bleiben. ·
         3) In Credentials. ·
-        4) Test ist temporär fürs Bauen, Production läuft nur bei aktivem Workflow. ·
+        4) Test ist temporär fürs Bauen, Production läuft nur bei published Workflow. ·
         5) Neue Tabellenzeile und neue Slack-Nachricht.
       </div>
 

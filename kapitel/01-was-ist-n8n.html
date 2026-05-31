@@ -17,7 +17,8 @@
       <div class="chap-eyebrow"><span class="knum">1</span> Grundlagen</div>
       <h1 class="chap-title">Was ist n8n? Konzept & Einsatzgebiete</h1>
       <p class="chap-lede">n8n (gesprochen „n-eight-n“, kurz für <em>nodemation</em>) ist ein Werkzeug, mit dem du
-        Software-Bausteine per Drag-and-drop zu automatischen Abläufen verbindest — ohne (oder mit nur wenig) Code.</p>
+        Software-Bausteine per Drag-and-drop zu automatischen Abläufen verbindest — ohne (oder mit nur wenig) Code.
+        Stand dieses Buchs: Mai 2026.</p>
       <div class="chap-meta">
         <span>⏱ ca. 14 Minuten</span>
         <span>🎯 Niveau: Einstieg</span>
@@ -32,6 +33,11 @@
 
       <p>Jeder Kasten in diesem Diagramm heißt <strong>Node</strong> und macht genau eine Sache. Die Linien dazwischen
         sind der Weg, den die Daten nehmen. Diese Kombination aus Nodes und Verbindungen ist ein <strong>Workflow</strong>.</p>
+
+      <p>Ein Workflow ist beim Bauen zunächst ein <strong>Draft</strong>. n8n speichert Änderungen automatisch. Erst wenn du
+        <strong>Publish</strong> klickst, wird eine bestimmte Version produktiv: Schedules laufen, Production-Webhooks
+        antworten und App-Trigger nehmen echte Ereignisse an. <strong>Unpublish</strong> nimmt diese produktive Version
+        wieder aus dem Betrieb.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -119,10 +125,14 @@
           <tr><td>Node</td><td>Ein einzelner Baustein, der eine Aufgabe erledigt (z. B. „E-Mail senden“).</td></tr>
           <tr><td>Workflow</td><td>Mehrere verbundene Nodes, die zusammen einen Ablauf bilden.</td></tr>
           <tr><td>Trigger</td><td>Der erste Node — er bestimmt, wann der Workflow startet.</td></tr>
-          <tr><td>Execution</td><td>Ein einzelner Durchlauf des Workflows („Ausführung“).</td></tr>
+          <tr><td>Draft</td><td>Automatisch gespeicherter Arbeitsstand, der noch nicht produktiv läuft.</td></tr>
+          <tr><td>Publish</td><td>Veröffentlicht eine Workflow-Version für den Betrieb.</td></tr>
+          <tr><td>Unpublish</td><td>Nimmt die veröffentlichte Version wieder aus dem Betrieb.</td></tr>
+          <tr><td>Execution</td><td>Ein einzelner Durchlauf des Workflows („Ausführung“), manuell oder produktiv.</td></tr>
           <tr><td>Item</td><td>Ein einzelnes Datenpaket, das durch den Workflow fließt.</td></tr>
           <tr><td>Credential</td><td>Ein gespeicherter, sicher abgelegter Zugang (Passwort/API-Schlüssel) zu einem Dienst.</td></tr>
           <tr><td>Canvas</td><td>Die Arbeitsfläche, auf der du Nodes anordnest und verbindest.</td></tr>
+          <tr><td>Task Runner</td><td>Separater Ausführungsmechanismus für Code-Nodes; im Self-hosted-Betrieb relevant für Sicherheit und Skalierung.</td></tr>
         </tbody>
       </table>
 

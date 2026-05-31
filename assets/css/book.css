@@ -150,6 +150,7 @@ article hr { border:0; border-top:1px solid var(--book-line); margin: 38px 0; }
 article code {
   font-family: var(--mono); font-size: .86em; background: #eef0f4;
   padding: 2px 6px; border-radius: 5px; color: #b03060;
+  overflow-wrap: anywhere;
 }
 blockquote {
   margin: 22px 0; padding: 4px 0 4px 20px; border-left:3px solid var(--book-line);
@@ -186,7 +187,8 @@ blockquote {
 .figure { margin: 26px 0 30px; }
 .figure .frame { position: relative; }
 .figure .frame.has-canvas-scroll,
-.figure .frame:has(.n8n-canvas) {
+.figure .frame:has(.n8n-canvas),
+.figure .frame:has(.n8n-table) {
   max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;

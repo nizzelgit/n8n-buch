@@ -91,8 +91,8 @@
           <p>Gehe zur Workflow-Übersicht und klicke auf <strong>Create Workflow</strong>.</p></li>
         <li><h4>Name setzen</h4>
           <p>Klicke oben links auf den Workflow-Namen und schreibe: <code>News-Aggregator</code>.</p></li>
-        <li><h4>Speichern</h4>
-          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
       </ol>
 
       <h2>Schritt 2 — Schedule-Trigger setzen</h2>
@@ -112,7 +112,7 @@
       <div class="callout callout--warn">
         <b class="t">Zeitzone prüfen</b>
         Wie bei Projekt 1 gilt: 9 Uhr ist nur dann deine lokale 9 Uhr, wenn die n8n-Zeitzone stimmt.
-        Prüfe das spätestens vor dem Aktivieren.
+        Prüfe das spätestens vor dem Publish.
       </div>
 
       <h2>Schritt 3 — RSS-Feed lesen</h2>
@@ -342,18 +342,18 @@
         muss hinter <strong>Digest bauen</strong> stehen, und dessen Ausgang muss <strong>1 Item</strong> zeigen.
       </div>
 
-      <h2>Schritt 8 — Gesamttest und Aktivierung</h2>
+      <h2>Schritt 8 — Gesamttest und Publish</h2>
       <ol class="steps">
         <li><h4>Zurück zum Canvas</h4>
           <p>Drücke <span class="kbd">Esc</span>, bis du alle Nodes siehst.</p></li>
-        <li><h4>Speichern</h4>
-          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Test workflow starten</h4>
           <p>Klicke <strong>Test workflow</strong>. Prüfe, dass die Kette von links nach rechts grün durchläuft.</p></li>
         <li><h4>Slack prüfen</h4>
           <p>Kontrolliere den Testkanal. Es sollte eine einzige Nachricht mit höchstens fünf Links stehen.</p></li>
-        <li><h4>Aktiv schalten</h4>
-          <p>Wenn der Test passt, schalte den Workflow oben rechts auf <strong>Active</strong>.</p></li>
+        <li><h4>Publish klicken</h4>
+          <p>Wenn der Test passt, klicke oben rechts auf <strong>Publish</strong>.</p></li>
         <li><h4>Ersten echten Lauf prüfen</h4>
           <p>Nach dem ersten geplanten Lauf öffnest du <strong>Executions</strong> und prüfst, ob der automatische Lauf sauber war.</p></li>
       </ol>
@@ -384,7 +384,7 @@
           <tr><td>Keine Treffer</td><td>Keyword absichtlich sehr eng setzen</td><td>Digest meldet „Heute keine Treffer“</td></tr>
           <tr><td>Limit-Prüfung</td><td>mehr als fünf passende Items erzeugen</td><td>nach dem Limit laufen höchstens fünf Items weiter</td></tr>
           <tr><td>Duplikat-Risiko</td><td>Workflow zweimal direkt nacheinander starten</td><td>du erkennst, ob dieselben Links erneut gesendet würden</td></tr>
-          <tr><td>Erster Schedule-Lauf</td><td>nach Aktivierung die nächste Execution öffnen</td><td>automatischer Lauf ist grün und fachlich plausibel</td></tr>
+          <tr><td>Erster Schedule-Lauf</td><td>nach Publish die nächste Execution öffnen</td><td>automatischer Lauf ist grün und fachlich plausibel</td></tr>
         </tbody>
       </table>
 

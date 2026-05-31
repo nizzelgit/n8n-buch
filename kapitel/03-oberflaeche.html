@@ -37,9 +37,10 @@
               <div class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><span class="n8n-wfname">Newsletter-Versand</span></div>
               <span class="n8n-tag">marketing</span>
               <div class="n8n-topbar__right">
-                <span class="n8n-saved">Gespeichert</span>
-                <div class="n8n-toggle"><span>Aktiv</span><span class="n8n-switch is-on"></span></div>
+                <span class="n8n-saved">Draft automatisch gespeichert</span>
+                <span class="n8n-tag">Published</span>
                 <button class="n8n-btn n8n-btn--sm">Teilen</button>
+                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Publish</button>
                 <button class="n8n-btn n8n-btn--sm">⋯</button>
               </div>
             </div>
@@ -83,10 +84,10 @@
               <div class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><span class="n8n-wfname">Newsletter-Versand</span></div>
               <span class="n8n-tag">marketing</span>
               <div class="n8n-topbar__right">
-                <span class="n8n-saved">Gespeichert</span>
-                <div class="n8n-toggle"><span>Aktiv</span><span class="n8n-switch is-on"></span></div>
+                <span class="n8n-saved">Draft automatisch gespeichert</span>
+                <span class="n8n-tag">Published</span>
                 <button class="n8n-btn n8n-btn--sm">Teilen</button>
-                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Speichern</button>
+                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Publish</button>
                 <button class="n8n-btn n8n-btn--sm">⋯</button>
               </div>
             </div>
@@ -101,22 +102,25 @@
           <tr><td>Persönlich / Projekt</td><td>In welchem Bereich (Projekt) der Workflow liegt. Allein arbeitest du in „Persönlich“.</td></tr>
           <tr><td>Workflow-Name</td><td>Klick darauf, um umzubenennen. <strong>Tipp: Benenne früh sinnvoll</strong> — „Unbenannt“ × 20 ist die Hölle.</td></tr>
           <tr><td>Tags</td><td>Frei vergebbare Etiketten zum Sortieren vieler Workflows.</td></tr>
-          <tr><td>Speichern-Status</td><td>„Gespeichert“ / „Nicht gespeichert“. ⚡ <strong>n8n speichert nicht automatisch.</strong></td></tr>
-          <tr><td>Aktiv-Schalter</td><td>Schaltet den Workflow scharf, sodass Trigger automatisch feuern (siehe unten).</td></tr>
-          <tr><td>Teilen / ⋯-Menü</td><td>Workflow teilen, exportieren, importieren, duplizieren, löschen.</td></tr>
+          <tr><td>Auto-Save-Status</td><td>Zeigt, ob dein Draft gespeichert ist. n8n speichert Bearbeitungen automatisch.</td></tr>
+          <tr><td>Publish</td><td>Veröffentlicht die getestete Workflow-Version für Production-Trigger.</td></tr>
+          <tr><td>Status / Versionen</td><td>Zeigt u. a. Published, Draft-Änderungen und Versionshistorie.</td></tr>
+          <tr><td>Teilen / ⋯-Menü</td><td>Workflow teilen, exportieren, importieren, duplizieren, löschen oder unpublishen.</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--warn">
-        <b class="t">⚡ Der wichtigste Schalter überhaupt: Aktiv vs. Inaktiv</b>
-        <p style="margin:0 0 8px"><strong>Inaktiv (grau):</strong> Der Workflow läuft nur, wenn du ihn von Hand testest. Zum Bauen genau richtig.</p>
-        <p style="margin:0"><strong>Aktiv (grün):</strong> Trigger feuern automatisch — der Zeitplan läuft wirklich, der Webhook nimmt
-        echte Anfragen an. Erst <em>einschalten</em>, wenn der Workflow fertig getestet ist.</p>
+        <b class="t">⚡ Der wichtigste Unterschied: Draft vs. Published</b>
+        <p style="margin:0 0 8px"><strong>Draft:</strong> Deine Änderungen sind gespeichert, aber noch nicht produktiv. Zum Bauen genau richtig.</p>
+        <p style="margin:0"><strong>Published:</strong> Diese Version läuft in Produktion. Schedules feuern, Production-Webhooks antworten
+        und App-Trigger nehmen echte Ereignisse an. Erst veröffentlichen, wenn der Workflow getestet ist.</p>
       </div>
 
-      <h2>Speichern: <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></h2>
-      <p>Weil n8n nicht automatisch speichert, wird diese Tastenkombi dein bester Freund. Eine ungespeicherte
-        Änderung erkennst du am Status „Nicht gespeichert“ oben rechts.</p>
+      <h2>Autosave, Publish und Unpublish</h2>
+      <p>n8n speichert Änderungen im Editor automatisch als Draft. Das ist bequem, aber didaktisch gefährlich:
+        <strong>gespeichert</strong> heißt noch nicht <strong>produktiv</strong>. Produktiv wird erst die veröffentlichte
+        Version. Wenn du einen Workflow wieder aus dem Betrieb nehmen willst, nutzt du <strong>Unpublish</strong> über das
+        Publish-Menü, die Workflow-Liste oder die Versionshistorie.</p>
 
       <hr>
 
@@ -345,7 +349,7 @@
         <thead><tr><th>Kürzel</th><th>Wirkung</th></tr></thead>
         <tbody>
           <tr><td><span class="kbd">Tab</span></td><td>Node-Auswahl-Panel öffnen</td></tr>
-          <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></td><td>Workflow speichern</td></tr>
+          <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></td><td>je nach Version: Version benennen oder Publish-Menü öffnen</td></tr>
           <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span> oder Klick auf „Test“</td><td>Ganzen Workflow ausführen</td></tr>
           <tr><td><span class="kbd">Entf</span></td><td>Ausgewählten Node löschen</td></tr>
           <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">A</span></td><td>Alle Nodes auswählen</td></tr>
@@ -358,7 +362,7 @@
         <h4>✅ Bevor du weiterblätterst</h4>
         <ul>
           <li>Du kannst die fünf Bereiche (Toolbar, Tabs, Canvas, Nodes, Zoom) benennen.</li>
-          <li>Du weißt, was „Aktiv“ bedeutet und warum du es beim Bauen <em>aus</em> lässt.</li>
+          <li>Du weißt, was „Published“ bedeutet und warum ein Draft noch nicht produktiv läuft.</li>
           <li>Du kannst das Node-Panel mit <span class="kbd">Tab</span> öffnen und eine NDV per Doppelklick.</li>
         </ul>
       </div>

@@ -184,11 +184,11 @@
             Wait <code>1000</code>.</p></li>
         <li><h4>Error-Workflow bauen</h4>
           <p>Neuer Workflow: <strong>Error Trigger</strong> → Benachrichtigungs-Node mit
-            <code>⚠️ {{ $json.workflow.name }}: {{ $json.execution.error.message }}</code>. Speichern.</p></li>
+            <code>⚠️ {{ $json.workflow.name }}: {{ $json.execution.error.message }}</code>. Auto-Save abwarten.</p></li>
         <li><h4>Verknüpfen</h4>
-          <p>Im Wetter-Workflow → Settings → <strong>Error Workflow</strong> = der neue. Speichern, aktiv schalten.</p></li>
+          <p>Im Wetter-Workflow → Settings → <strong>Error Workflow</strong> = der neue. Auto-Save abwarten und publishen.</p></li>
         <li><h4>Testen, indem du etwas kaputt machst</h4>
-          <p>Tipp die URL im HTTP-Node absichtlich falsch und lass den Workflow (aktiv) laufen — die Fehlermeldung sollte bei dir
+          <p>Tipp die URL im HTTP-Node absichtlich falsch und lass den Workflow published laufen — die Fehlermeldung sollte bei dir
             ankommen. Danach URL wieder korrigieren.</p></li>
       </ol>
 

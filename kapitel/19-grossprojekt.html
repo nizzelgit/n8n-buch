@@ -162,9 +162,8 @@
         <li><h4>Manual Trigger hinzufügen</h4>
           <p>Klicke auf das große <span class="kbd">+</span>, suche <code>manual</code> und wähle <strong>Trigger manually</strong>.
             Für den Aufbau starten wir bewusst von Hand.</p></li>
-        <li><h4>Speichern</h4>
-          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Prüfe oben, ob der Speichern-Status auf
-            <strong>Saved</strong> steht.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist. Publish kommt erst nach dem End-to-End-Test.</p></li>
       </ol>
 
       <div class="callout callout--info">
@@ -372,23 +371,24 @@ return {
         späteren Fehlerfall lesbarer.
       </div>
 
-      <h2>Schritt 8 — Entwurf mit dem AI Agent erzeugen</h2>
-      <p>Der Agent bekommt ein klares Briefing und muss strukturiertes JSON zurückgeben. Er darf Quellen nicht abschreiben
-        und soll Unsicherheiten offen markieren.</p>
+      <h2>Schritt 8 — Entwurf mit einer Basic LLM Chain erzeugen</h2>
+      <p>Die Chain bekommt ein klares Briefing und muss strukturiertes JSON zurückgeben. Sie darf Quellen nicht abschreiben
+        und soll Unsicherheiten offen markieren. Ein AI Agent wäre hier überdimensioniert, weil die Recherche bereits vorher
+        geholt wurde und keine Tool-Entscheidung nötig ist.</p>
 
       <ol class="steps">
-        <li><h4>AI-Agent-Node anhängen</h4>
-          <p>Hänge hinter <strong>Recherche verdichten</strong> einen <strong>AI Agent</strong>-Node.</p></li>
+        <li><h4>Basic-LLM-Chain-Node anhängen</h4>
+          <p>Hänge hinter <strong>Recherche verdichten</strong> einen <strong>Basic LLM Chain</strong>-Node.</p></li>
         <li><h4>Chat Model verbinden</h4>
           <p>Verbinde ein Chat Model, z. B. OpenAI Chat Model, und wähle deine Credential.</p></li>
-        <li><h4>Keine Tools verbinden</h4>
-          <p>Für diesen Workflow braucht der Agent keine externen Tools. Die Recherche wurde bereits vorher geholt.</p></li>
+        <li><h4>Keine Tools erzwingen</h4>
+          <p>Für diesen Workflow braucht der KI-Schritt keine externen Tools. Die Recherche wurde bereits vorher geholt.</p></li>
         <li><h4>Prompt definieren</h4>
           <p>Setze <strong>Prompt</strong> auf <strong>Define below</strong> und füge den folgenden Text ein.</p></li>
       </ol>
 
       <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Prompt für den AI Agent</div>
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Prompt für die Basic LLM Chain</div>
 <pre>Du bist ein vorsichtiger Content-Editor.
 Erstelle einen Entwurf und antworte ausschließlich als gültiges JSON.
 
@@ -424,18 +424,17 @@ Regeln:
             <div class="ndv__bar"><span class="ndvic">🤖</span><b>Entwurf bauen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
-                <div class="ndv-panel__head">Agent</div>
+                <div class="ndv-panel__head">Chain</div>
                 <div class="ndv-panel__body">
                   <div class="row"><label>Prompt</label><div class="n8n-select">Define below <span class="chev">▾</span></div></div>
                   <div class="row"><label>User Message</label><input class="n8n-input is-expr" value="Erstelle einen Entwurf und antworte ausschließlich als gültiges JSON ..."></div>
                   <div class="row"><label>Chat Model</label><div class="n8n-select">verbunden <span class="chev">▾</span></div></div>
-                  <div class="row"><label>Tools</label><div class="n8n-select">keine Tools verbunden <span class="chev">▾</span></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 19.4</span>Der Agent arbeitet als Editor. Er veröffentlicht nichts und
+        <figcaption><span class="fig-tag">Abb. 19.4</span>Die Chain arbeitet als Editor. Sie veröffentlicht nichts und
           verändert keine externen Systeme.</figcaption>
       </figure>
 
@@ -445,13 +444,13 @@ Regeln:
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
-          <p>Hänge hinter den AI Agent einen <strong>Code</strong>-Node.</p></li>
+          <p>Hänge hinter die Basic LLM Chain einen <strong>Code</strong>-Node.</p></li>
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>Entwurf prüfen</code>.</p></li>
         <li><h4>Modus setzen</h4>
           <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
         <li><h4>Code einfügen</h4>
-          <p>Füge den folgenden Parser ein. Falls dein Agent-Ausgabefeld anders heißt, passe die erste Zeile an.</p></li>
+          <p>Füge den folgenden Parser ein. Falls dein KI-Ausgabefeld anders heißt, passe die erste Zeile an.</p></li>
       </ol>
 
       <div class="code">
@@ -558,8 +557,8 @@ Bitte im Sheet prüfen und status auf approved setzen, wenn der Entwurf veröffe
       <ol class="steps">
         <li><h4>Canvas schließen</h4>
           <p>Schließe die Node-Detailansicht, damit du den kompletten Workflow siehst.</p></li>
-        <li><h4>Speichern</h4>
-          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Test workflow starten</h4>
           <p>Klicke auf <strong>Test workflow</strong>. Beobachte, ob alle Nodes nacheinander grün werden.</p></li>
         <li><h4>Sheet prüfen</h4>
@@ -750,8 +749,8 @@ return {
             bei <code>1</code>.</p></li>
         <li><h4>Workflow 2 auf Schedule umstellen</h4>
           <p>Starte den Publish-Workflow später, z. B. werktags um 15:00 Uhr. So bleibt Zeit für Review.</p></li>
-        <li><h4>Aktivieren</h4>
-          <p>Speichere beide Workflows und schalte sie erst aktiv, wenn der manuelle Test vollständig war.</p></li>
+        <li><h4>Publish</h4>
+          <p>Veröffentliche beide Workflows erst, wenn der manuelle Test vollständig war.</p></li>
       </ol>
 
       <figure class="figure">
@@ -782,7 +781,7 @@ return {
         <li><h4>Nicht-freigegebene Zeile testen</h4>
           <p>Eine Zeile steht auf <code>idea</code> oder <code>needs_revision</code>. Erwartung: Kein Workflow verarbeitet sie.</p></li>
         <li><h4>Fehlerfall testen</h4>
-          <p>Manipuliere testweise den Agent-Prompt so, dass kein JSON zurückkommt. Erwartung: Status
+          <p>Manipuliere testweise den Chain-Prompt so, dass kein JSON zurückkommt. Erwartung: Status
             <code>needs_revision</code>, keine Veröffentlichung.</p></li>
         <li><h4>Executions prüfen</h4>
           <p>Öffne die Ausführungshistorie beider Workflows. Prüfe, wie viele Items an jedem Node ankamen.</p></li>
@@ -814,7 +813,7 @@ return {
           <li>Warum ist <code>approved</code> ein besseres Freigabesignal als eine Slack-Nachricht?</li>
           <li>Warum wird pro Testlauf nur ein Item verarbeitet?</li>
           <li>Warum darf <code>published</code> erst nach dem Veröffentlichungs-Node gesetzt werden?</li>
-          <li>Welche drei Fälle musst du testen, bevor ein Schedule aktiv wird?</li>
+          <li>Welche drei Fälle musst du testen, bevor ein Schedule published wird?</li>
         </ul>
       </div>
 

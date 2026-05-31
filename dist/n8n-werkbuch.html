@@ -157,6 +157,7 @@ article hr { border:0; border-top:1px solid var(--book-line); margin: 38px 0; }
 article code {
   font-family: var(--mono); font-size: .86em; background: #eef0f4;
   padding: 2px 6px; border-radius: 5px; color: #b03060;
+  overflow-wrap: anywhere;
 }
 blockquote {
   margin: 22px 0; padding: 4px 0 4px 20px; border-left:3px solid var(--book-line);
@@ -193,7 +194,8 @@ blockquote {
 .figure { margin: 26px 0 30px; }
 .figure .frame { position: relative; }
 .figure .frame.has-canvas-scroll,
-.figure .frame:has(.n8n-canvas) {
+.figure .frame:has(.n8n-canvas),
+.figure .frame:has(.n8n-table) {
   max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -506,7 +508,7 @@ ol.steps > li p { font-size: 15.5px; }
 .n8n-topbar__right { margin-left:auto; display:flex; align-items:center; gap:10px; }
 .n8n-saved { font-size: 12px; color: var(--n8n-text-faint); }
 
-/* Aktiv/Inaktiv-Schalter */
+/* Status-Schalter für ältere UI-Nachbauten */
 .n8n-toggle { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--n8n-text-light); }
 .n8n-switch {
   width: 34px; height: 18px; border-radius: 20px; background: #c8ccd6;
@@ -973,9 +975,9 @@ ol.steps > li p { font-size: 15.5px; }
       </a><a class="sb-link" data-title="projekt 4: lead-routing vom webhook ins crm"
       href="#16-projekt-leads" data-slug="16-projekt-leads">
       <span class="num">16</span><span>Projekt 4: Lead-Routing vom Webhook ins CRM</span>
-      </a><a class="sb-link" data-title="projekt 5: ki-e-mail-assistent (ai agent)"
+      </a><a class="sb-link" data-title="projekt 5: ki-e-mail-assistent (basic llm chain)"
       href="#17-projekt-ai" data-slug="17-projekt-ai">
-      <span class="num">17</span><span>Projekt 5: KI-E-Mail-Assistent (AI Agent)</span>
+      <span class="num">17</span><span>Projekt 5: KI-E-Mail-Assistent (Basic LLM Chain)</span>
       </a><a class="sb-link" data-title="projekt 6: pdf-/rechnungs-extraktion"
       href="#18-projekt-pdf" data-slug="18-projekt-pdf">
       <span class="num">18</span><span>Projekt 6: PDF-/Rechnungs-Extraktion</span>
@@ -1078,7 +1080,7 @@ ol.steps > li p { font-size: 15.5px; }
       <span class="n">16</span><span class="ti">Projekt 4: Lead-Routing vom Webhook ins CRM</span>
       <span class="mins">⏱ 45 Min</span>
       <span class="pill">lesen</span></a><a class="toc-row" href="#17-projekt-ai">
-      <span class="n">17</span><span class="ti">Projekt 5: KI-E-Mail-Assistent (AI Agent)</span>
+      <span class="n">17</span><span class="ti">Projekt 5: KI-E-Mail-Assistent (Basic LLM Chain)</span>
       <span class="mins">⏱ 50 Min</span>
       <span class="pill">lesen</span></a><a class="toc-row" href="#18-projekt-pdf">
       <span class="n">18</span><span class="ti">Projekt 6: PDF-/Rechnungs-Extraktion</span>
@@ -1359,7 +1361,8 @@ ol.steps > li p { font-size: 15.5px; }
       <div class="chap-eyebrow"><span class="knum">1</span> Grundlagen</div>
       <h1 class="chap-title">Was ist n8n? Konzept & Einsatzgebiete</h1>
       <p class="chap-lede">n8n (gesprochen „n-eight-n“, kurz für <em>nodemation</em>) ist ein Werkzeug, mit dem du
-        Software-Bausteine per Drag-and-drop zu automatischen Abläufen verbindest — ohne (oder mit nur wenig) Code.</p>
+        Software-Bausteine per Drag-and-drop zu automatischen Abläufen verbindest — ohne (oder mit nur wenig) Code.
+        Stand dieses Buchs: Mai 2026.</p>
       <div class="chap-meta">
         <span>⏱ ca. 14 Minuten</span>
         <span>🎯 Niveau: Einstieg</span>
@@ -1374,6 +1377,11 @@ ol.steps > li p { font-size: 15.5px; }
 
       <p>Jeder Kasten in diesem Diagramm heißt <strong>Node</strong> und macht genau eine Sache. Die Linien dazwischen
         sind der Weg, den die Daten nehmen. Diese Kombination aus Nodes und Verbindungen ist ein <strong>Workflow</strong>.</p>
+
+      <p>Ein Workflow ist beim Bauen zunächst ein <strong>Draft</strong>. n8n speichert Änderungen automatisch. Erst wenn du
+        <strong>Publish</strong> klickst, wird eine bestimmte Version produktiv: Schedules laufen, Production-Webhooks
+        antworten und App-Trigger nehmen echte Ereignisse an. <strong>Unpublish</strong> nimmt diese produktive Version
+        wieder aus dem Betrieb.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -1461,10 +1469,14 @@ ol.steps > li p { font-size: 15.5px; }
           <tr><td>Node</td><td>Ein einzelner Baustein, der eine Aufgabe erledigt (z. B. „E-Mail senden“).</td></tr>
           <tr><td>Workflow</td><td>Mehrere verbundene Nodes, die zusammen einen Ablauf bilden.</td></tr>
           <tr><td>Trigger</td><td>Der erste Node — er bestimmt, wann der Workflow startet.</td></tr>
-          <tr><td>Execution</td><td>Ein einzelner Durchlauf des Workflows („Ausführung“).</td></tr>
+          <tr><td>Draft</td><td>Automatisch gespeicherter Arbeitsstand, der noch nicht produktiv läuft.</td></tr>
+          <tr><td>Publish</td><td>Veröffentlicht eine Workflow-Version für den Betrieb.</td></tr>
+          <tr><td>Unpublish</td><td>Nimmt die veröffentlichte Version wieder aus dem Betrieb.</td></tr>
+          <tr><td>Execution</td><td>Ein einzelner Durchlauf des Workflows („Ausführung“), manuell oder produktiv.</td></tr>
           <tr><td>Item</td><td>Ein einzelnes Datenpaket, das durch den Workflow fließt.</td></tr>
           <tr><td>Credential</td><td>Ein gespeicherter, sicher abgelegter Zugang (Passwort/API-Schlüssel) zu einem Dienst.</td></tr>
           <tr><td>Canvas</td><td>Die Arbeitsfläche, auf der du Nodes anordnest und verbindest.</td></tr>
+          <tr><td>Task Runner</td><td>Separater Ausführungsmechanismus für Code-Nodes; im Self-hosted-Betrieb relevant für Sicherheit und Skalierung.</td></tr>
         </tbody>
       </table>
 
@@ -1495,7 +1507,7 @@ ol.steps > li p { font-size: 15.5px; }
       <table class="btable">
         <thead><tr><th>Weg</th><th>Aufwand</th><th>Für wen?</th></tr></thead>
         <tbody>
-          <tr><td>① n8n Cloud</td><td>Null Installation, 14 Tage Test</td><td>⚡ Empfohlen zum Starten & für dieses Buch</td></tr>
+          <tr><td>① n8n Cloud</td><td>Null Installation, Testphase</td><td>⚡ Empfohlen zum Starten & für dieses Buch</td></tr>
           <tr><td>② Lokal mit <code>npx</code></td><td>Ein Befehl, läuft auf deinem Rechner</td><td>Wer Node.js hat und nichts in der Cloud will</td></tr>
           <tr><td>③ Docker</td><td>Ein Befehl, dauerhaft & sauber isoliert</td><td>Wer es ernsthaft selbst hosten will</td></tr>
         </tbody>
@@ -1534,10 +1546,9 @@ ol.steps > li p { font-size: 15.5px; }
               <div class="n8n-logo">n8</div>
               <div class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><span class="n8n-wfname">Mein Workflow</span></div>
               <div class="n8n-topbar__right">
-                <span class="n8n-saved">Noch nicht gespeichert</span>
-                <div class="n8n-toggle"><span>Inaktiv</span><span class="n8n-switch"></span></div>
+                <span class="n8n-saved">Draft automatisch gespeichert</span>
                 <button class="n8n-btn n8n-btn--sm">Teilen</button>
-                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Speichern</button>
+                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Publish</button>
               </div>
             </div>
             <div class="n8n-tabs"><span class="n8n-tab is-active">Editor</span><span class="n8n-tab">Ausführungen</span></div>
@@ -1554,8 +1565,8 @@ ol.steps > li p { font-size: 15.5px; }
       </figure>
 
       <h2>Weg ② — Lokal mit npx</h2>
-      <p>Wenn auf deinem Rechner <strong>Node.js</strong> (Version 18 oder neuer) installiert ist, startest du n8n mit einem
-        einzigen Befehl. Öffne ein Terminal und tippe:</p>
+      <p>Wenn auf deinem Rechner <strong>Node.js</strong> installiert ist, startest du n8n mit einem
+        einzigen Befehl. Stand Mai 2026 verlangt n8n Node.js <strong>20.19 bis 24.x</strong>. Öffne ein Terminal und tippe:</p>
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Terminal</div>
@@ -1615,6 +1626,12 @@ docker run -it --rm <span class="ky">\</span>
         eine feste Domain, HTTPS und Umgebungsvariablen dazu — das vertiefen wir in <strong>Kapitel 24 (Deployment)</strong>.</p>
 
       <div class="callout callout--info">
+        <b class="t">Task Runner erst im Betriebsthema</b>
+        Für die Lernkapitel reicht eine normale Einzelinstanz. Wenn du Code-Nodes produktiv self-hosted ausführst,
+        gehören Task Runner zur Betriebsarchitektur; das ordnen wir in Kapitel 25 ein.
+      </div>
+
+      <div class="callout callout--info">
         <b class="t">Cloud vs. Self-Hosting — der eine echte Unterschied</b>
         In der Cloud funktionieren <strong>Webhooks</strong> sofort (du bekommst eine öffentlich erreichbare Adresse).
         Lokal ist dein <code>localhost</code> von außen nicht erreichbar — für Webhook-Tests brauchst du dann ein
@@ -1631,7 +1648,7 @@ docker run -it --rm <span class="ky">\</span>
         <ul>
           <li>n8n läuft (Cloud-URL oder <code>localhost:5678</code> öffnet sich).</li>
           <li>Du siehst den Editor mit dem leeren Canvas.</li>
-          <li>Oben rechts erkennst du den <em>Speichern</em>-Button und den <em>Aktiv/Inaktiv</em>-Schalter.</li>
+          <li>Oben rechts erkennst du den Auto-Save-Status und den <em>Publish</em>-Button.</li>
         </ul>
       </div>
 
@@ -1665,9 +1682,10 @@ docker run -it --rm <span class="ky">\</span>
               <div class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><span class="n8n-wfname">Newsletter-Versand</span></div>
               <span class="n8n-tag">marketing</span>
               <div class="n8n-topbar__right">
-                <span class="n8n-saved">Gespeichert</span>
-                <div class="n8n-toggle"><span>Aktiv</span><span class="n8n-switch is-on"></span></div>
+                <span class="n8n-saved">Draft automatisch gespeichert</span>
+                <span class="n8n-tag">Published</span>
                 <button class="n8n-btn n8n-btn--sm">Teilen</button>
+                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Publish</button>
                 <button class="n8n-btn n8n-btn--sm">⋯</button>
               </div>
             </div>
@@ -1711,10 +1729,10 @@ docker run -it --rm <span class="ky">\</span>
               <div class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><span class="n8n-wfname">Newsletter-Versand</span></div>
               <span class="n8n-tag">marketing</span>
               <div class="n8n-topbar__right">
-                <span class="n8n-saved">Gespeichert</span>
-                <div class="n8n-toggle"><span>Aktiv</span><span class="n8n-switch is-on"></span></div>
+                <span class="n8n-saved">Draft automatisch gespeichert</span>
+                <span class="n8n-tag">Published</span>
                 <button class="n8n-btn n8n-btn--sm">Teilen</button>
-                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Speichern</button>
+                <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Publish</button>
                 <button class="n8n-btn n8n-btn--sm">⋯</button>
               </div>
             </div>
@@ -1729,22 +1747,25 @@ docker run -it --rm <span class="ky">\</span>
           <tr><td>Persönlich / Projekt</td><td>In welchem Bereich (Projekt) der Workflow liegt. Allein arbeitest du in „Persönlich“.</td></tr>
           <tr><td>Workflow-Name</td><td>Klick darauf, um umzubenennen. <strong>Tipp: Benenne früh sinnvoll</strong> — „Unbenannt“ × 20 ist die Hölle.</td></tr>
           <tr><td>Tags</td><td>Frei vergebbare Etiketten zum Sortieren vieler Workflows.</td></tr>
-          <tr><td>Speichern-Status</td><td>„Gespeichert“ / „Nicht gespeichert“. ⚡ <strong>n8n speichert nicht automatisch.</strong></td></tr>
-          <tr><td>Aktiv-Schalter</td><td>Schaltet den Workflow scharf, sodass Trigger automatisch feuern (siehe unten).</td></tr>
-          <tr><td>Teilen / ⋯-Menü</td><td>Workflow teilen, exportieren, importieren, duplizieren, löschen.</td></tr>
+          <tr><td>Auto-Save-Status</td><td>Zeigt, ob dein Draft gespeichert ist. n8n speichert Bearbeitungen automatisch.</td></tr>
+          <tr><td>Publish</td><td>Veröffentlicht die getestete Workflow-Version für Production-Trigger.</td></tr>
+          <tr><td>Status / Versionen</td><td>Zeigt u. a. Published, Draft-Änderungen und Versionshistorie.</td></tr>
+          <tr><td>Teilen / ⋯-Menü</td><td>Workflow teilen, exportieren, importieren, duplizieren, löschen oder unpublishen.</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--warn">
-        <b class="t">⚡ Der wichtigste Schalter überhaupt: Aktiv vs. Inaktiv</b>
-        <p style="margin:0 0 8px"><strong>Inaktiv (grau):</strong> Der Workflow läuft nur, wenn du ihn von Hand testest. Zum Bauen genau richtig.</p>
-        <p style="margin:0"><strong>Aktiv (grün):</strong> Trigger feuern automatisch — der Zeitplan läuft wirklich, der Webhook nimmt
-        echte Anfragen an. Erst <em>einschalten</em>, wenn der Workflow fertig getestet ist.</p>
+        <b class="t">⚡ Der wichtigste Unterschied: Draft vs. Published</b>
+        <p style="margin:0 0 8px"><strong>Draft:</strong> Deine Änderungen sind gespeichert, aber noch nicht produktiv. Zum Bauen genau richtig.</p>
+        <p style="margin:0"><strong>Published:</strong> Diese Version läuft in Produktion. Schedules feuern, Production-Webhooks antworten
+        und App-Trigger nehmen echte Ereignisse an. Erst veröffentlichen, wenn der Workflow getestet ist.</p>
       </div>
 
-      <h2>Speichern: <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></h2>
-      <p>Weil n8n nicht automatisch speichert, wird diese Tastenkombi dein bester Freund. Eine ungespeicherte
-        Änderung erkennst du am Status „Nicht gespeichert“ oben rechts.</p>
+      <h2>Autosave, Publish und Unpublish</h2>
+      <p>n8n speichert Änderungen im Editor automatisch als Draft. Das ist bequem, aber didaktisch gefährlich:
+        <strong>gespeichert</strong> heißt noch nicht <strong>produktiv</strong>. Produktiv wird erst die veröffentlichte
+        Version. Wenn du einen Workflow wieder aus dem Betrieb nehmen willst, nutzt du <strong>Unpublish</strong> über das
+        Publish-Menü, die Workflow-Liste oder die Versionshistorie.</p>
 
       <hr>
 
@@ -1973,7 +1994,7 @@ docker run -it --rm <span class="ky">\</span>
         <thead><tr><th>Kürzel</th><th>Wirkung</th></tr></thead>
         <tbody>
           <tr><td><span class="kbd">Tab</span></td><td>Node-Auswahl-Panel öffnen</td></tr>
-          <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></td><td>Workflow speichern</td></tr>
+          <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></td><td>je nach Version: Version benennen oder Publish-Menü öffnen</td></tr>
           <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span> oder Klick auf „Test“</td><td>Ganzen Workflow ausführen</td></tr>
           <tr><td><span class="kbd">Entf</span></td><td>Ausgewählten Node löschen</td></tr>
           <tr><td><span class="kbd">Strg/⌘</span> + <span class="kbd">A</span></td><td>Alle Nodes auswählen</td></tr>
@@ -1986,7 +2007,7 @@ docker run -it --rm <span class="ky">\</span>
         <h4>✅ Bevor du weiterblätterst</h4>
         <ul>
           <li>Du kannst die fünf Bereiche (Toolbar, Tabs, Canvas, Nodes, Zoom) benennen.</li>
-          <li>Du weißt, was „Aktiv“ bedeutet und warum du es beim Bauen <em>aus</em> lässt.</li>
+          <li>Du weißt, was „Published“ bedeutet und warum ein Draft noch nicht produktiv läuft.</li>
           <li>Du kannst das Node-Panel mit <span class="kbd">Tab</span> öffnen und eine NDV per Doppelklick.</li>
         </ul>
       </div>
@@ -2049,7 +2070,7 @@ docker run -it --rm <span class="ky">\</span>
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 4.0</span>Dein Ziel: <b>Manueller Test</b> → <b>Wetter holen</b> (HTTP) →
+        <figcaption><span class="fig-tag">Abb. 4.1</span>Dein Ziel: <b>Manueller Test</b> → <b>Wetter holen</b> (HTTP) →
           <b>Nachricht bauen</b> (Edit Fields). Die grünen Häkchen erscheinen erst, nachdem du ausgeführt hast.</figcaption>
       </figure>
 
@@ -2087,19 +2108,18 @@ docker run -it --rm <span class="ky">\</span>
           <p>Drücke <span class="kbd">Enter</span> oder klicke irgendwo auf die leere Fläche. Der Name oben steht jetzt fest.</p></li>
       </ol>
 
-      <h2>Schritt 3 — Speichern (und den Speichern-Status verstehen)</h2>
+      <h2>Schritt 3 — Auto-Save und Draft verstehen</h2>
       <ol class="steps">
-        <li><h4>Speichern auslösen</h4>
-          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Alternativ ist <strong>oben rechts</strong> ein
-            pinkfarbener Knopf <strong>„Save“</strong> — auch der speichert.</p></li>
-        <li><h4>Den Status kontrollieren</h4>
-          <p>Direkt neben/unter dem Speichern-Bereich oben rechts steht jetzt <strong>„Saved“</strong> (Gespeichert). Sobald du
-            etwas änderst, wechselt es zu <strong>„Unsaved“</strong> — dein Signal, wieder <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span> zu drücken.</p></li>
+        <li><h4>Auto-Save abwarten</h4>
+          <p>n8n speichert deine Bearbeitungen automatisch als Draft. Warte nach dem Umbenennen kurz, bis oben der gespeicherte
+            Draft angezeigt wird.</p></li>
+        <li><h4>Publish noch nicht klicken</h4>
+          <p>In diesem Kapitel bauen und testen wir nur. <strong>Publish</strong> brauchst du erst, wenn ein Trigger später
+            automatisch produktiv laufen soll.</p></li>
       </ol>
       <div class="callout callout--tip">
-        <b class="t">⚡ Angewohnheit fürs Leben</b>
-        n8n speichert <strong>nicht</strong> automatisch. Drück nach jedem größeren Schritt reflexartig
-        <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Das erspart dir verlorene Arbeit.
+        <b class="t">⚡ Gespeichert ist nicht veröffentlicht</b>
+        Auto-Save schützt deine Arbeit. Publish ist ein anderer Schritt: Er macht eine getestete Version produktiv.
       </div>
 
       <hr>
@@ -2137,7 +2157,7 @@ docker run -it --rm <span class="ky">\</span>
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 4.1</span>Das Trigger-Panel. Wir nehmen den obersten Eintrag „Trigger manually“.</figcaption>
+        <figcaption><span class="fig-tag">Abb. 4.2</span>Das Trigger-Panel. Wir nehmen den obersten Eintrag „Trigger manually“.</figcaption>
       </figure>
 
       <ol class="steps" style="counter-reset: st 3;">
@@ -2242,7 +2262,7 @@ docker run -it --rm <span class="ky">\</span>
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 4.2</span>So sieht der Node jetzt aus: Method <b>GET</b>, URL eingefügt,
+        <figcaption><span class="fig-tag">Abb. 4.3</span>So sieht der Node jetzt aus: Method <b>GET</b>, URL eingefügt,
           Authentication <b>None</b>. Den Reiter über dem URL-Feld lassen wir auf <b>Fest</b>.</figcaption>
       </figure>
 
@@ -2285,7 +2305,7 @@ docker run -it --rm <span class="ky">\</span>
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 4.3</span>Echte Daten! Beachte die Verschachtelung: <code>temperature_2m</code>
+        <figcaption><span class="fig-tag">Abb. 4.4</span>Echte Daten! Beachte die Verschachtelung: <code>temperature_2m</code>
           steckt <em>innerhalb</em> von <code>current</code>. Deshalb lautet der Pfad <code>current.temperature_2m</code>.</figcaption>
       </figure>
 
@@ -2308,8 +2328,8 @@ docker run -it --rm <span class="ky">\</span>
         <li><h4>Zurück zum Canvas</h4>
           <p>Drücke <span class="kbd">Esc</span> oder klicke auf das <strong>×</strong> oben rechts in der NDV. Du siehst wieder
             den ganzen Canvas — jetzt mit zwei verbundenen Nodes.</p></li>
-        <li><h4>Speichern nicht vergessen</h4>
-          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte kurz, bis der Draft gespeichert ist.</p></li>
       </ol>
 
       <hr>
@@ -2393,7 +2413,7 @@ docker run -it --rm <span class="ky">\</span>
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 4.4</span>Sobald du tippst, wertet n8n die Expression live aus: Rechts steht
+        <figcaption><span class="fig-tag">Abb. 4.5</span>Sobald du tippst, wertet n8n die Expression live aus: Rechts steht
           schon der fertige Satz <em>mit den echten Werten</em> eingesetzt.</figcaption>
       </figure>
 
@@ -2426,7 +2446,7 @@ docker run -it --rm <span class="ky">\</span>
       <p>Bisher haben wir Node für Node einzeln getestet. Jetzt lassen wir den kompletten Ablauf von vorne durchlaufen.</p>
       <ol class="steps">
         <li><h4>NDV schließen</h4><p><span class="kbd">Esc</span> drücken. Du siehst alle drei Nodes auf dem Canvas.</p></li>
-        <li><h4>Speichern</h4><p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4><p>Warte kurz, bis der Draft gespeichert ist.</p></li>
         <li><h4>Test starten</h4>
           <p>Klicke auf den großen Knopf <strong>„Test workflow“</strong> (meist unten mittig, manchmal oben). Alternativ
             <span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span>.</p></li>
@@ -2477,7 +2497,7 @@ docker run -it --rm <span class="ky">\</span>
           <p>Beim Feld <strong>„Text“</strong> oben auf <strong>Expression</strong> schalten und eintippen:
             <code>{{ $json.nachricht }}</code> — das ist genau der Satz aus dem vorherigen Node.</p></li>
         <li><h4>Ausführen</h4>
-          <p>Workflow speichern und <strong>„Test workflow“</strong> klicken. Sekunden später ploppt deine Wetter-Nachricht im
+          <p>Auto-Save abwarten und <strong>„Test workflow“</strong> klicken. Sekunden später ploppt deine Wetter-Nachricht im
             Telegram-Chat auf. 🎉</p></li>
       </ol>
 
@@ -2500,7 +2520,7 @@ docker run -it --rm <span class="ky">\</span>
 
       <h2>Was du in diesem Kapitel gelernt hast</h2>
       <ul>
-        <li>Einen Workflow <strong>anlegen, benennen und speichern</strong> — und den Speichern-Status lesen.</li>
+        <li>Einen Workflow <strong>anlegen, benennen und als Draft speichern lassen</strong> — ohne ihn zu publishen.</li>
         <li>Einen <strong>Trigger</strong> setzen und Nodes durch <strong>Ziehen vom Ausgangspunkt</strong> verbinden.</li>
         <li>Mit dem <strong>HTTP-Request-Node</strong> echte Daten aus einer API holen und das JSON-Ergebnis lesen.</li>
         <li>Mit <strong>Edit Fields</strong> Daten umformen und deine erste <strong>Expression</strong> (<code>{{ $json… }}</code>) schreiben.</li>
@@ -3171,8 +3191,8 @@ Wind: 12 km/h.</span></div>
       <div class="callout callout--info">
         <b class="t">Der Unterschied, der alles erklärt</b>
         <strong>Manuelle</strong> Trigger startest <em>du</em> selbst (zum Bauen &amp; Testen). <strong>Automatische</strong>
-        Trigger (Schedule, Webhook und alle App-Trigger) feuern von allein — aber nur, wenn der Workflow auf
-        <strong>Aktiv</strong> geschaltet ist. Diesen Schalter sehen wir gleich genauer an.
+        Trigger (Schedule, Webhook und alle App-Trigger) feuern von allein — aber nur, wenn eine Workflow-Version
+        <strong>published</strong> ist. Diesen Publish-Schritt sehen wir gleich genauer an.
       </div>
 
       <h2>Trigger 1 — Manual: für Bau und Test</h2>
@@ -3236,8 +3256,7 @@ Wind: 12 km/h.</span></div>
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
         <p style="margin:0 0 6px">• <strong>Läuft nicht zur erwarteten Zeit?</strong> Der Schedule-Trigger feuert nur, wenn der
-          Workflow <strong>Aktiv</strong> ist (Schalter oben rechts). Im Editor per „Test workflow" läuft er auch inaktiv — im
-          Betrieb nicht.</p>
+          Workflow <strong>published</strong> ist. Im Editor per „Test workflow" läuft er auch als Draft — im Betrieb nicht.</p>
         <p style="margin:0">• <strong>Falsche Uhrzeit?</strong> n8n nutzt die <strong>Zeitzone</strong> aus den Einstellungen.
           Steht sie auf UTC, weicht die Auslösung von deiner Ortszeit ab. Zeitzone unter Settings prüfen.</p>
       </div>
@@ -3274,7 +3293,7 @@ Wind: 12 km/h.</span></div>
                   <div class="row"><label>HTTP Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
                   <div class="row"><label>Path</label><input class="n8n-input" value="wetter"></div>
                   <div class="row"><label>Test-URL <span class="hint">(zum Bauen)</span></label><input class="n8n-input" value="http://localhost:5678/webhook-test/wetter"></div>
-                  <div class="row"><label>Production-URL <span class="hint">(nur wenn Aktiv)</span></label><input class="n8n-input" value="http://localhost:5678/webhook/wetter"></div>
+                  <div class="row"><label>Production-URL <span class="hint">(nur wenn Published)</span></label><input class="n8n-input" value="http://localhost:5678/webhook/wetter"></div>
                   <div class="row"><label>Respond</label><div class="n8n-select">Immediately <span class="chev">▾</span></div></div>
                 </div>
               </div>
@@ -3290,8 +3309,8 @@ Wind: 12 km/h.</span></div>
         <p style="margin:0 0 6px">• Die <strong>Test-URL</strong> (<code>/webhook-test/</code>) funktioniert <em>nur</em>, solange
           du auf „Listen for test event" geklickt hast und genau <em>einen</em> Aufruf abwartest. Danach ist sie wieder „taub".</p>
         <p style="margin:0">• Die <strong>Production-URL</strong> (<code>/webhook/</code>) funktioniert <em>nur</em>, wenn der
-          Workflow <strong>Aktiv</strong> ist. Rufst du sie bei inaktivem Workflow auf, bekommst du einen <strong>404</strong>.
-          Das ist kein Fehler — der Workflow „hört" dann einfach nicht zu.</p>
+          Workflow <strong>published</strong> ist. Rufst du sie bei unveröffentlichtem Workflow auf, bekommst du meist einen
+          <strong>404</strong>. Das ist kein Fehler — es gibt dann keine produktive Version, die zuhört.</p>
       </div>
 
       <div class="callout callout--tip">
@@ -3301,9 +3320,10 @@ Wind: 12 km/h.</span></div>
         siehst du die genaue Struktur und ziehst dir die Felder per Drag-and-drop.
       </div>
 
-      <h2>Der Aktiv-Schalter: das Tor zum Betrieb</h2>
-      <p>Schedule- und Webhook-Trigger (und alle App-Trigger) laufen im echten Betrieb nur, wenn der Workflow <strong>aktiviert</strong>
-        ist. Den Schalter findest du <strong>oben rechts</strong> in der Topbar.</p>
+      <h2>Publish: das Tor zum Betrieb</h2>
+      <p>Schedule- und Webhook-Trigger (und alle App-Trigger) laufen im echten Betrieb nur, wenn der Workflow
+        <strong>published</strong> ist. Den Button findest du <strong>oben rechts</strong> in der Topbar. Änderungen danach
+        bleiben zunächst Draft, bis du erneut veröffentlichst.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -3312,26 +3332,27 @@ Wind: 12 km/h.</span></div>
               <span class="n8n-logo">n8</span>
               <span class="n8n-breadcrumb"><span>Persönlich</span><span class="sep">/</span><b>Wetter-Report</b></span>
               <span class="n8n-topbar__right">
-                <span class="n8n-saved">Gespeichert</span>
-                <span class="n8n-toggle">Inaktiv <span class="n8n-switch is-on"></span> Aktiv</span>
-                <span class="n8n-btn n8n-btn--primary n8n-btn--sm">Save</span>
+                <span class="n8n-saved">Draft automatisch gespeichert</span>
+                <span class="n8n-tag">Published</span>
+                <span class="n8n-btn n8n-btn--primary n8n-btn--sm">Publish</span>
               </span>
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 7.4</span>Der <b>Aktiv</b>-Schalter oben rechts. Ist er grün/an, lauscht der
-          Workflow auf seinen Trigger — der Schedule feuert, die Production-URL des Webhooks antwortet.</figcaption>
+        <figcaption><span class="fig-tag">Abb. 7.4</span>Der <b>Publish</b>-Status oben rechts. Ist eine Version veröffentlicht,
+          lauscht der Workflow auf seinen Trigger — der Schedule feuert, die Production-URL des Webhooks antwortet.</figcaption>
       </figure>
 
       <div class="callout callout--info">
-        <b class="t">Aktiv ≠ Test</b>
-        Der Knopf <strong>„Test workflow"</strong> startet einen Lauf <em>jetzt</em>, egal ob aktiv oder nicht — ideal zum Bauen.
-        <strong>Aktiv</strong> dagegen heißt: n8n übernimmt das automatische Auslösen im Hintergrund, dauerhaft.
+        <b class="t">Published ≠ Test</b>
+        Der Knopf <strong>„Test workflow"</strong> startet einen Lauf <em>jetzt</em>, egal ob published oder nicht — ideal zum Bauen.
+        <strong>Published</strong> dagegen heißt: n8n übernimmt das automatische Auslösen im Hintergrund, dauerhaft.
+        <strong>Unpublish</strong> nimmt die produktive Version wieder aus dem Betrieb.
       </div>
 
       <h2>Die Trigger im Überblick</h2>
       <table class="btable">
-        <thead><tr><th>Trigger</th><th>Feuert, wenn …</th><th>Aktiv nötig?</th><th>Typischer Einsatz</th></tr></thead>
+        <thead><tr><th>Trigger</th><th>Feuert, wenn …</th><th>Publish nötig?</th><th>Typischer Einsatz</th></tr></thead>
         <tbody>
           <tr><td>Manual</td><td>du auf „Test workflow" klickst</td><td>nein</td><td>Bauen &amp; Testen</td></tr>
           <tr><td>Schedule</td><td>die eingestellte Zeit erreicht ist</td><td>ja</td><td>Reports, Erinnerungen, Abgleiche</td></tr>
@@ -3364,16 +3385,16 @@ Wind: 12 km/h.</span></div>
           <p>Vom <strong>Ausgangspunkt rechts</strong> des Schedule-Triggers eine Linie zum Eingang des „Wetter holen"-Nodes
             ziehen. Jetzt hängt die alte Kette wieder am neuen Trigger.</p></li>
         <li><h4>Testen wie immer</h4>
-          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>, dann <strong>„Test workflow"</strong>. Der Ablauf läuft
-            durch wie gehabt — die Uhrzeit muss dafür nicht erreicht sein.</p></li>
-        <li><h4>Aktiv schalten</h4>
-          <p>Erst jetzt der entscheidende Schritt für den Betrieb: oben rechts den <strong>Aktiv</strong>-Schalter umlegen. Ab
-            sofort holt n8n das Wetter jeden Morgen um 8 — ganz ohne dich.</p></li>
+          <p>Warte kurz auf den Auto-Save-Status, dann <strong>„Test workflow"</strong>. Der Ablauf läuft durch wie gehabt —
+            die Uhrzeit muss dafür nicht erreicht sein.</p></li>
+        <li><h4>Publish klicken</h4>
+          <p>Erst jetzt der entscheidende Schritt für den Betrieb: oben rechts <strong>Publish</strong> klicken. Ab sofort holt
+            n8n das Wetter jeden Morgen um 8 — ganz ohne dich.</p></li>
       </ol>
 
       <div class="callout callout--tip">
         <b class="t">🎉 Das ist der Sprung in den echten Betrieb</b>
-        Genau dieses Muster — Trigger austauschen, Rest behalten, aktiv schalten — verwandelt jeden „Test-Workflow" in eine
+        Genau dieses Muster — Trigger austauschen, Rest behalten, publishen — verwandelt jeden „Test-Workflow" in eine
         Automatisierung, die rund um die Uhr für dich arbeitet.
       </div>
 
@@ -3383,7 +3404,7 @@ Wind: 12 km/h.</span></div>
         <tbody>
           <tr><td>Manual</td><td><strong>Test workflow</strong> klicken</td><td>Workflow läuft sofort</td></tr>
           <tr><td>Schedule</td><td>Schedule-Trigger einsetzen und manuell testen</td><td>Workflow läuft auch vor der geplanten Uhrzeit</td></tr>
-          <tr><td>Aktivierung</td><td>Workflow speichern und aktiv schalten</td><td>Schedule ist für echte Läufe bereit</td></tr>
+          <tr><td>Publish</td><td>Workflow veröffentlichen</td><td>Schedule ist für echte Läufe bereit</td></tr>
           <tr><td>Webhook-Unterschied</td><td>Test-URL und Production-URL vergleichen</td><td><code>/webhook-test/</code> und <code>/webhook/</code> sind unterscheidbar</td></tr>
         </tbody>
       </table>
@@ -3395,18 +3416,18 @@ Wind: 12 km/h.</span></div>
           <li>Dein Schedule-Workflow feuert nachts nicht — was prüfst du zuerst?</li>
           <li>Was ist der Unterschied zwischen der Test- und der Production-URL eines Webhooks?</li>
           <li>Unter welchem Pfad findest du einen Query-Parameter <code>?stadt=Berlin</code> im Item?</li>
-          <li>Muss ein Workflow „Aktiv" sein, damit „Test workflow" funktioniert?</li>
+          <li>Muss ein Workflow published sein, damit „Test workflow" funktioniert?</li>
         </ul>
       </div>
 
       <div class="callout callout--info">
         <b class="t">Antworten</b>
         1) Linke Seite abgerundet, kein Eingang, nur ein Ausgang. ·
-        2) Ob der Workflow <strong>Aktiv</strong> ist — und die Zeitzone in den Settings. ·
+        2) Ob der Workflow <strong>published</strong> ist — und die Zeitzone in den Settings. ·
         3) Test-URL (<code>/webhook-test/</code>) nur beim aktiven „Listen for test event"; Production-URL (<code>/webhook/</code>)
-        nur bei aktivem Workflow. ·
+        nur bei published Workflow. ·
         4) <code>$json.query.stadt</code>. ·
-        5) Nein — „Test workflow" läuft immer, „Aktiv" ist nur fürs automatische Auslösen.
+        5) Nein — „Test workflow" läuft auch im Draft, Published ist nur fürs automatische Auslösen.
       </div>
 
       <p>Damit weißt du, <em>wann</em> ein Workflow startet. Im nächsten Kapitel kümmern wir uns darum, <em>woher</em> die Daten
@@ -4351,11 +4372,11 @@ Wind: 12 km/h.</span></div>
             Wait <code>1000</code>.</p></li>
         <li><h4>Error-Workflow bauen</h4>
           <p>Neuer Workflow: <strong>Error Trigger</strong> → Benachrichtigungs-Node mit
-            <code>⚠️ {{ $json.workflow.name }}: {{ $json.execution.error.message }}</code>. Speichern.</p></li>
+            <code>⚠️ {{ $json.workflow.name }}: {{ $json.execution.error.message }}</code>. Auto-Save abwarten.</p></li>
         <li><h4>Verknüpfen</h4>
-          <p>Im Wetter-Workflow → Settings → <strong>Error Workflow</strong> = der neue. Speichern, aktiv schalten.</p></li>
+          <p>Im Wetter-Workflow → Settings → <strong>Error Workflow</strong> = der neue. Auto-Save abwarten und publishen.</p></li>
         <li><h4>Testen, indem du etwas kaputt machst</h4>
-          <p>Tipp die URL im HTTP-Node absichtlich falsch und lass den Workflow (aktiv) laufen — die Fehlermeldung sollte bei dir
+          <p>Tipp die URL im HTTP-Node absichtlich falsch und lass den Workflow published laufen — die Fehlermeldung sollte bei dir
             ankommen. Danach URL wieder korrigieren.</p></li>
       </ol>
 
@@ -4642,7 +4663,7 @@ Wind: 12 km/h.</span></div>
       <div class="callout callout--pareto">
         <b class="t">⚡ Warum genau dieses Projekt?</b>
         Es bündelt die wichtigsten Bausteine ohne Nebengeräusche: Zeitplan, API-Aufruf, Expressions, Credential,
-        Versand und Aktivierung. Dasselbe Muster verwendest du später für Tagesberichte, Kontrolllisten,
+        Versand und Publish. Dasselbe Muster verwendest du später für Tagesberichte, Kontrolllisten,
         Monitoring-Meldungen oder Team-Updates.
       </div>
 
@@ -4681,9 +4702,8 @@ Wind: 12 km/h.</span></div>
           <p>Gehe zur Workflow-Übersicht und klicke auf <strong>Create Workflow</strong> bzw. <strong>Neuer Workflow</strong>.</p></li>
         <li><h4>Name setzen</h4>
           <p>Klicke oben links auf den Workflow-Namen und schreibe: <code>Täglicher Wetter-Report</code>.</p></li>
-        <li><h4>Speichern</h4>
-          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Oben sollte <strong>Saved</strong> bzw.
-            <strong>Gespeichert</strong> erscheinen.</p></li>
+        <li><h4>Auto-Save abwarten</h4>
+          <p>Warte kurz, bis oben der gespeicherte Draft angezeigt wird. Veröffentlicht wird der Workflow erst am Ende.</p></li>
       </ol>
 
       <h2>Schritt 3 — Schedule-Trigger setzen</h2>
@@ -4926,8 +4946,8 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
       <ol class="steps">
         <li><h4>Zurück zum Canvas</h4>
           <p>Drücke <span class="kbd">Esc</span>, bis du alle vier Nodes siehst.</p></li>
-        <li><h4>Speichern</h4>
-          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Test workflow starten</h4>
           <p>Klicke <strong>Test workflow</strong>. n8n läuft von links nach rechts durch: Schedule → Wetter holen →
             Report bauen → Telegram senden.</p></li>
@@ -4939,16 +4959,16 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
 
       <div class="callout callout--info">
         <b class="t">Warum erst manuell testen?</b>
-        Ein aktiver Workflow sendet später automatisch. Wenn du vorher nicht manuell testest, automatisierst du im Zweifel
+        Ein veröffentlichter Workflow sendet später automatisch. Wenn du vorher nicht manuell testest, automatisierst du im Zweifel
         einen Fehler. Bei Benachrichtigungen ist das harmlos; bei Rechnungen, CRM oder Löschaktionen wäre es riskant.
       </div>
 
-      <h2>Schritt 9 — Aktiv schalten</h2>
+      <h2>Schritt 9 — Publish klicken</h2>
       <ol class="steps">
-        <li><h4>Letzten Stand speichern</h4>
-          <p>Speichere noch einmal. Der Status oben sollte <strong>Saved</strong> sein.</p></li>
-        <li><h4>Aktiv-Schalter umlegen</h4>
-          <p>Oben rechts den Workflow von <strong>Inactive</strong> auf <strong>Active</strong> schalten.</p></li>
+        <li><h4>Draft prüfen</h4>
+          <p>Warte, bis der Auto-Save-Status keine offenen Änderungen mehr zeigt.</p></li>
+        <li><h4>Publish klicken</h4>
+          <p>Oben rechts <strong>Publish</strong> klicken. Damit wird genau diese getestete Version produktiv.</p></li>
         <li><h4>Was jetzt passiert</h4>
           <p>n8n lauscht nun auf den Schedule. Der nächste automatische Lauf passiert zur eingestellten Uhrzeit.</p></li>
         <li><h4>Ersten automatischen Lauf prüfen</h4>
@@ -4958,7 +4978,7 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
 
       <div class="callout callout--pareto">
         <b class="t">⚡ Produktiv heißt: beobachten</b>
-        Aktivieren ist nicht das Ende. Prüfe nach dem ersten echten Lauf die Ausführungshistorie. Erst danach darfst du
+        Publish ist nicht das Ende. Prüfe nach dem ersten echten Lauf die Ausführungshistorie. Erst danach darfst du
         annehmen, dass der Workflow im Alltag zuverlässig läuft.
       </div>
 
@@ -4970,7 +4990,7 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
           <tr><td>HTTP-Daten prüfen</td><td>HTTP-Node öffnen und Output lesen</td><td><code>daily.temperature_2m_max[0]</code> ist vorhanden</td></tr>
           <tr><td>Textfeld prüfen</td><td>Node <strong>Report bauen</strong> ausführen</td><td><code>nachricht</code> enthält Ort, Temperatur und Regenwahrscheinlichkeit</td></tr>
           <tr><td>Telegram-Fehler</td><td>Testweise falsche Chat-ID verwenden</td><td>Fehler ist im Telegram-Node sichtbar</td></tr>
-          <tr><td>Automatischer Lauf</td><td>Nach Aktivierung die erste Execution öffnen</td><td>geplanter Lauf ist grün und Nachricht ist angekommen</td></tr>
+          <tr><td>Automatischer Lauf</td><td>Nach Publish die erste Execution öffnen</td><td>geplanter Lauf ist grün und Nachricht ist angekommen</td></tr>
         </tbody>
       </table>
 
@@ -5129,8 +5149,8 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
           <p>Gehe in n8n zur Workflow-Übersicht und klicke auf <strong>Create Workflow</strong>.</p></li>
         <li><h4>Workflow benennen</h4>
           <p>Klicke oben links auf den Namen und schreibe: <code>Formular zu Sheets und Slack</code>.</p></li>
-        <li><h4>Speichern</h4>
-          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
       </ol>
 
       <h2>Schritt 3 — Formular-Trigger hinzufügen</h2>
@@ -5401,8 +5421,8 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
       <ol class="steps">
         <li><h4>Zurück zum Canvas</h4>
           <p>Drücke <span class="kbd">Esc</span>, bis du den gesamten Workflow siehst.</p></li>
-        <li><h4>Workflow speichern</h4>
-          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Auf Test-Einsendung warten</h4>
           <p>Klicke beim Form-Trigger erneut auf <strong>Listen for test event</strong>.</p></li>
         <li><h4>Formular erneut absenden</h4>
@@ -5417,12 +5437,12 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         du immer jede dauerhafte Wirkung, nicht nur den grünen Haken im letzten Node.
       </div>
 
-      <h2>Schritt 9 — Aktivieren und Production-URL verwenden</h2>
+      <h2>Schritt 9 — Publish und Production-URL verwenden</h2>
       <ol class="steps">
-        <li><h4>Letzten Stand speichern</h4>
-          <p>Speichere den Workflow.</p></li>
-        <li><h4>Workflow aktivieren</h4>
-          <p>Schalte oben rechts auf <strong>Active</strong>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
+        <li><h4>Workflow publishen</h4>
+          <p>Klicke oben rechts auf <strong>Publish</strong>. Erst diese veröffentlichte Version nutzt die Production-URL.</p></li>
         <li><h4>Production-Formular-URL kopieren</h4>
           <p>Öffne den Form-Trigger und kopiere die produktive Formular-URL. Die Test-URL ist nur fürs Bauen gedacht.</p></li>
         <li><h4>Produktions-Test mit Testdaten</h4>
@@ -5435,7 +5455,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
       <div class="callout callout--pareto">
         <b class="t">⚡ Test-URL ist nicht Produktion</b>
         Wie beim Webhook gilt: Test-Links sind temporär. Für echte Nutzer:innen brauchst du die Production-URL und einen
-        aktiven Workflow.
+        published Workflow.
       </div>
 
       <h2>Wenn etwas schiefgeht</h2>
@@ -5445,7 +5465,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
           <tr><td>Formular löst nicht aus</td><td>Test-Listener läuft nicht oder falsche URL geöffnet</td><td>Form-Trigger erneut auf <strong>Listen for test event</strong> stellen</td></tr>
           <tr><td>Sheets-Zeile bleibt leer</td><td>Spaltennamen passen nicht zum Mapping</td><td>Tabellenkopf und Feldzuordnung vergleichen</td></tr>
           <tr><td>Slack sendet nichts</td><td>App fehlt im Kanal oder Credential ist falsch</td><td>Slack-App einladen, Credential testen, Testkanal nutzen</td></tr>
-          <tr><td>Production-URL reagiert nicht</td><td>Workflow ist nicht aktiv</td><td>speichern, aktivieren und Production-URL neu kopieren</td></tr>
+          <tr><td>Production-URL reagiert nicht</td><td>Workflow ist nicht published</td><td>Publish klicken und Production-URL neu kopieren</td></tr>
           <tr><td>Doppelte Einträge entstehen</td><td>Test mehrfach abgesendet oder Retry wiederholt Schreiben</td><td>Testdaten markieren und später Dublettenprüfung ergänzen</td></tr>
         </tbody>
       </table>
@@ -5457,7 +5477,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
           <tr><td>Normale Anfrage</td><td>alle Formularfelder mit plausiblen Testdaten füllen</td><td>eine Sheet-Zeile und eine Slack-Nachricht entstehen</td></tr>
           <tr><td>Hohe Priorität</td><td><code>Priorität = hoch</code> absenden</td><td>Slack-Text zeigt die Priorität sichtbar an</td></tr>
           <tr><td>Lange Nachricht</td><td>mehrzeiligen Text ins Nachrichtenfeld schreiben</td><td>Zeilenumbrüche bleiben in Slack lesbar</td></tr>
-          <tr><td>Production-Test</td><td>Production-URL in privatem Fenster öffnen</td><td>aktiver Workflow erzeugt eine Execution</td></tr>
+          <tr><td>Production-Test</td><td>Production-URL in privatem Fenster öffnen</td><td>published Workflow erzeugt eine Execution</td></tr>
           <tr><td>Mapping-Prüfung</td><td>Sheet-Zeile mit Slack-Nachricht vergleichen</td><td>Name, E-Mail, Thema und Nachricht stimmen überein</td></tr>
         </tbody>
       </table>
@@ -5490,7 +5510,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         1) Der Sheets-Node braucht stabile Spaltenüberschriften für die Zuordnung. ·
         2) Damit Formularlogik, Tabellenmapping und Slack-Text entkoppelt bleiben. ·
         3) In Credentials. ·
-        4) Test ist temporär fürs Bauen, Production läuft nur bei aktivem Workflow. ·
+        4) Test ist temporär fürs Bauen, Production läuft nur bei published Workflow. ·
         5) Neue Tabellenzeile und neue Slack-Nachricht.
       </div>
 
@@ -5579,8 +5599,8 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
           <p>Gehe zur Workflow-Übersicht und klicke auf <strong>Create Workflow</strong>.</p></li>
         <li><h4>Name setzen</h4>
           <p>Klicke oben links auf den Workflow-Namen und schreibe: <code>News-Aggregator</code>.</p></li>
-        <li><h4>Speichern</h4>
-          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
       </ol>
 
       <h2>Schritt 2 — Schedule-Trigger setzen</h2>
@@ -5600,7 +5620,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
       <div class="callout callout--warn">
         <b class="t">Zeitzone prüfen</b>
         Wie bei Projekt 1 gilt: 9 Uhr ist nur dann deine lokale 9 Uhr, wenn die n8n-Zeitzone stimmt.
-        Prüfe das spätestens vor dem Aktivieren.
+        Prüfe das spätestens vor dem Publish.
       </div>
 
       <h2>Schritt 3 — RSS-Feed lesen</h2>
@@ -5830,18 +5850,18 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         muss hinter <strong>Digest bauen</strong> stehen, und dessen Ausgang muss <strong>1 Item</strong> zeigen.
       </div>
 
-      <h2>Schritt 8 — Gesamttest und Aktivierung</h2>
+      <h2>Schritt 8 — Gesamttest und Publish</h2>
       <ol class="steps">
         <li><h4>Zurück zum Canvas</h4>
           <p>Drücke <span class="kbd">Esc</span>, bis du alle Nodes siehst.</p></li>
-        <li><h4>Speichern</h4>
-          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Test workflow starten</h4>
           <p>Klicke <strong>Test workflow</strong>. Prüfe, dass die Kette von links nach rechts grün durchläuft.</p></li>
         <li><h4>Slack prüfen</h4>
           <p>Kontrolliere den Testkanal. Es sollte eine einzige Nachricht mit höchstens fünf Links stehen.</p></li>
-        <li><h4>Aktiv schalten</h4>
-          <p>Wenn der Test passt, schalte den Workflow oben rechts auf <strong>Active</strong>.</p></li>
+        <li><h4>Publish klicken</h4>
+          <p>Wenn der Test passt, klicke oben rechts auf <strong>Publish</strong>.</p></li>
         <li><h4>Ersten echten Lauf prüfen</h4>
           <p>Nach dem ersten geplanten Lauf öffnest du <strong>Executions</strong> und prüfst, ob der automatische Lauf sauber war.</p></li>
       </ol>
@@ -5872,7 +5892,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
           <tr><td>Keine Treffer</td><td>Keyword absichtlich sehr eng setzen</td><td>Digest meldet „Heute keine Treffer“</td></tr>
           <tr><td>Limit-Prüfung</td><td>mehr als fünf passende Items erzeugen</td><td>nach dem Limit laufen höchstens fünf Items weiter</td></tr>
           <tr><td>Duplikat-Risiko</td><td>Workflow zweimal direkt nacheinander starten</td><td>du erkennst, ob dieselben Links erneut gesendet würden</td></tr>
-          <tr><td>Erster Schedule-Lauf</td><td>nach Aktivierung die nächste Execution öffnen</td><td>automatischer Lauf ist grün und fachlich plausibel</td></tr>
+          <tr><td>Erster Schedule-Lauf</td><td>nach Publish die nächste Execution öffnen</td><td>automatischer Lauf ist grün und fachlich plausibel</td></tr>
         </tbody>
       </table>
 
@@ -6075,8 +6095,8 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
 
       <div class="callout callout--warn">
         <b class="t">Wenn der Webhook nichts empfängt</b>
-        Prüfe Methode und URL. Ein POST an die GET-URL oder ein Aufruf der Production-URL bei inaktivem Workflow führt
-        typischerweise zu 404 oder keinem Test-Item.
+        Prüfe Methode und URL. Ein POST an die GET-URL oder ein Aufruf der Production-URL bei unveröffentlichtem Workflow
+        führt typischerweise zu 404 oder keinem Test-Item.
       </div>
 
       <h2>Schritt 4 — Lead normalisieren</h2>
@@ -6304,14 +6324,25 @@ Budget: {{ $json.budget }} €
           <p>Sende einen Testlead ohne <code>email</code>. Er muss in diesen Fehlerzweig laufen und darf keinen CRM-Kontakt erzeugen.</p></li>
       </ol>
 
-      <h2>Schritt 11 — Production-URL aktivieren</h2>
+      <h2>Konkrete Testfälle</h2>
+      <p>Vor dem Publish testest du nicht nur den Idealfall. Du brauchst mindestens diese drei Fälle:</p>
+      <table class="btable">
+        <thead><tr><th>Fall</th><th>Eingabe</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Sales-Lead</td><td><code>topic: sales</code> mit gültiger E-Mail</td><td>Sales-Kontakt im CRM, Meldung im Sales-Kanal</td></tr>
+          <tr><td>Support-Anfrage</td><td><code>topic: support</code> mit gültiger E-Mail</td><td>Support-Zweig läuft, keine falsche Sales-Meldung</td></tr>
+          <tr><td>Ungültiger Lead</td><td>Lead ohne <code>email</code></td><td>Fehlerzweig läuft, kein CRM-Kontakt entsteht</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Schritt 11 — Production-URL veröffentlichen</h2>
       <ol class="steps">
-        <li><h4>Gesamttest durchführen</h4>
-          <p>Teste Sales, Support und fehlende E-Mail. Prüfe jedes Mal CRM, Slack und Executions.</p></li>
-        <li><h4>Workflow speichern</h4>
-          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
-        <li><h4>Aktiv schalten</h4>
-          <p>Schalte den Workflow oben rechts auf <strong>Active</strong>.</p></li>
+        <li><h4>Testergebnisse prüfen</h4>
+          <p>Prüfe für alle drei Testfälle CRM, Slack und Executions. Erst danach arbeitest du mit der Production-URL.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
+        <li><h4>Publish klicken</h4>
+          <p>Klicke oben rechts auf <strong>Publish</strong>.</p></li>
         <li><h4>Production-URL kopieren</h4>
           <p>Kopiere aus dem Webhook-Node die URL mit <code>/webhook/lead-routing</code>, nicht die Test-URL.</p></li>
         <li><h4>Externes Formular verbinden</h4>
@@ -6366,7 +6397,7 @@ Budget: {{ $json.budget }} €
 
       <div class="chap-eyebrow"><span class="knum">17</span> Projekt 5</div>
       <h1 class="chap-title">KI-E-Mail-Assistent</h1>
-      <p class="chap-lede">In diesem Projekt liest n8n neue E-Mails, lässt einen AI Agent die Nachricht klassifizieren,
+      <p class="chap-lede">In diesem Projekt liest n8n neue E-Mails, lässt eine Basic LLM Chain die Nachricht klassifizieren,
         erzeugt einen Antwortentwurf und meldet dringende Fälle an dein Team. Wichtig: Der Workflow sendet keine Antwort
         automatisch. KI schlägt vor, der Mensch entscheidet.</p>
       <div class="chap-meta">
@@ -6380,7 +6411,7 @@ Budget: {{ $json.budget }} €
         <ul>
           <li>Ein Test-Postfach, idealerweise Gmail. IMAP funktioniert ähnlich, aber die Node-Namen unterscheiden sich.</li>
           <li>Eine Gmail-Credential mit Zugriff auf Lesen, Labels und Entwürfe.</li>
-          <li>Eine OpenAI- oder andere Chat-Model-Credential für den AI Agent.</li>
+          <li>Eine OpenAI- oder andere Chat-Model-Credential für die Basic LLM Chain.</li>
           <li>Eine Slack-Credential oder einen anderen Benachrichtigungskanal für dringende Fälle.</li>
           <li>Test-E-Mails. Keine produktiven Kundenmails, bevor du die Klassifikation geprüft hast.</li>
         </ul>
@@ -6395,7 +6426,7 @@ Budget: {{ $json.budget }} €
 
       <h2>Das Ziel</h2>
       <p>Der Workflow reagiert auf neue ungelesene E-Mails. Er holt den vollständigen Inhalt, kürzt ihn auf das Nötige,
-        fragt einen AI Agent nach Kategorie, Dringlichkeit und Antwortentwurf, verarbeitet die strukturierte Ausgabe und
+        fragt eine Basic LLM Chain nach Kategorie, Dringlichkeit und Antwortentwurf, verarbeitet die strukturierte Ausgabe und
         legt einen Gmail-Entwurf an. Sehr dringende E-Mails werden zusätzlich in Slack gemeldet.</p>
 
       <figure class="figure">
@@ -6421,7 +6452,7 @@ Budget: {{ $json.budget }} €
               <div class="n8n-node n8n-node--ai" style="left:738px; top:124px;">
                 <span class="n8n-node__icon">🤖</span><span class="ep in"></span>
                 <span class="ep out" style="top:46px;"></span>
-                <span class="n8n-node__label">AI Agent</span></div>
+                <span class="n8n-node__label">Basic LLM Chain</span></div>
               <div class="n8n-node" style="left:958px; top:59px;">
                 <span class="n8n-node__icon">📝</span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Entwurf</span><span class="badge badge--ok">✓</span></div>
@@ -6431,7 +6462,7 @@ Budget: {{ $json.budget }} €
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 17.1</span>Der AI Agent entscheidet nicht allein: Er erzeugt strukturierte
+        <figcaption><span class="fig-tag">Abb. 17.1</span>Die LLM Chain entscheidet nicht allein: Sie erzeugt strukturierte
           Vorschläge, n8n macht daraus Entwurf, Label und Team-Hinweis.</figcaption>
       </figure>
 
@@ -6557,7 +6588,7 @@ Budget: {{ $json.budget }} €
 
       <h2>Schritt 4 — E-Mail-Text vorbereiten</h2>
       <p>KI-Modelle brauchen nicht jede Signatur, jedes Tracking-Bild und jede alte Antwortkette. Wir bauen ein kompaktes
-        Objekt, das der AI Agent lesen soll.</p>
+        Objekt, das die Basic LLM Chain lesen soll.</p>
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
@@ -6600,18 +6631,19 @@ Budget: {{ $json.budget }} €
         Alte Zitate und Signaturen erhöhen Kosten und Fehlerwahrscheinlichkeit.
       </div>
 
-      <h2>Schritt 5 — AI Agent hinzufügen</h2>
-      <p>Jetzt kommt der Agent. Er soll keine Tools aufrufen und keine E-Mail senden. Seine Aufgabe ist enger:
-        klassifizieren, begründen, Entwurf formulieren.</p>
+      <h2>Schritt 5 — Basic LLM Chain hinzufügen</h2>
+      <p>Jetzt kommt der KI-Schritt. Kritischer Punkt für Mai 2026: Der aktuelle AI Agent ist ein Tool-Agent und erwartet
+        mindestens ein Tool. Für diese reine Klassifikations- und Entwurfsaufgabe ist eine <strong>Basic LLM Chain</strong>
+        sauberer als ein Agent ohne Werkzeuge.</p>
 
       <ol class="steps">
-        <li><h4>AI Agent anhängen</h4>
-          <p>Ziehe von <strong>E-Mail vorbereiten</strong> eine Linie ins Leere, suche <code>ai agent</code> und wähle
-            <strong>AI Agent</strong>.</p></li>
-        <li><h4>Agent-Typ schlicht halten</h4>
-          <p>Nutze den Standard-Agenten bzw. eine einfache Konfiguration ohne externe Tools.</p></li>
+        <li><h4>Basic LLM Chain anhängen</h4>
+          <p>Ziehe von <strong>E-Mail vorbereiten</strong> eine Linie ins Leere, suche <code>basic llm chain</code> und wähle
+            <strong>Basic LLM Chain</strong>.</p></li>
+        <li><h4>Keine Tools erzwingen</h4>
+          <p>Diese Chain bekommt nur den vorbereiteten E-Mail-Text und gibt strukturiertes JSON zurück.</p></li>
         <li><h4>Chat Model verbinden</h4>
-          <p>Klicke am AI-Agent-Node auf den Anschluss für <strong>Chat Model</strong> und wähle z. B.
+          <p>Klicke am Chain-Node auf den Anschluss für <strong>Chat Model</strong> und wähle z. B.
             <strong>OpenAI Chat Model</strong>. Wähle deine Credential und ein günstiges, zuverlässiges Modell.</p></li>
         <li><h4>Prompt-Modus setzen</h4>
           <p>Setze <strong>Prompt</strong> auf <strong>Define below</strong>.</p></li>
@@ -6620,7 +6652,7 @@ Budget: {{ $json.budget }} €
       </ol>
 
       <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Prompt für den AI Agent</div>
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Prompt für die Basic LLM Chain</div>
 <pre>Du bist ein vorsichtiger E-Mail-Assistent.
 Analysiere die E-Mail und antworte ausschließlich als gültiges JSON.
 
@@ -6652,26 +6684,25 @@ Text: {{ $json.email_text }}</pre>
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:720px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">🤖</span><b>AI Agent</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic">🤖</span><b>Basic LLM Chain</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
-                <div class="ndv-panel__head">Agent</div>
+                <div class="ndv-panel__head">Chain</div>
                 <div class="ndv-panel__body">
                   <div class="row"><label>Prompt</label><div class="n8n-select">Define below <span class="chev">▾</span></div></div>
                   <div class="row"><label>User Message</label><input class="n8n-input is-expr" value="Analysiere die E-Mail und antworte ausschließlich als gültiges JSON ..."></div>
                   <div class="row"><label>Chat Model</label><div class="n8n-select">OpenAI Chat Model verbunden <span class="chev">▾</span></div></div>
-                  <div class="row"><label>Tools</label><div class="n8n-select">keine Tools verbunden <span class="chev">▾</span></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 17.4</span>Für diesen Workflow braucht der Agent keine Werkzeuge. Er soll nur
-          strukturiert antworten.</figcaption>
+        <figcaption><span class="fig-tag">Abb. 17.4</span>Für diesen Workflow braucht der KI-Schritt keine Werkzeuge. Deshalb ist
+          die Chain passender als ein AI Agent.</figcaption>
       </figure>
 
       <div class="callout callout--warn">
-        <b class="t">Wenn der Agent kein JSON liefert</b>
+        <b class="t">Wenn die Chain kein JSON liefert</b>
         Prüfe, ob dein Prompt wirklich „ausschließlich gültiges JSON“ verlangt. Falls deine n8n-Version einen Output Parser
         oder „Require Specific Output Format“ anbietet, nutze ihn. Trotzdem solltest du den nächsten Prüfschritt behalten.
       </div>
@@ -6682,11 +6713,11 @@ Text: {{ $json.email_text }}</pre>
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
-          <p>Hänge hinter den AI Agent einen Code-Node und nenne ihn <code>KI-Ausgabe prüfen</code>.</p></li>
+          <p>Hänge hinter die Basic LLM Chain einen Code-Node und nenne ihn <code>KI-Ausgabe prüfen</code>.</p></li>
         <li><h4>Modus wählen</h4>
           <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
         <li><h4>Code einfügen</h4>
-          <p>Füge diesen robusten Parser ein. Je nach n8n-Version heißt das Agent-Ausgabefeld <code>output</code>,
+          <p>Füge diesen robusten Parser ein. Je nach n8n-Version heißt das KI-Ausgabefeld <code>output</code>,
             <code>text</code> oder ähnlich; passe die erste Zeile bei Bedarf an.</p></li>
       </ol>
 
@@ -6728,7 +6759,7 @@ Text: {{ $json.email_text }}</pre>
 
       <div class="callout callout--pareto">
         <b class="t">⚡ KI-Ausgaben sind Eingaben</b>
-        Behandle Agent-Antworten wie Daten von außen: parsen, validieren, Defaults setzen. Erst danach darf der Workflow
+        Behandle KI-Antworten wie Daten von außen: parsen, validieren, Defaults setzen. Erst danach darf der Workflow
         Entscheidungen treffen.
       </div>
 
@@ -6838,7 +6869,7 @@ Zusammenfassung:
         absichtlich konservativ.
       </div>
 
-      <h2>Schritt 10 — Gesamttest</h2>
+      <h2>Konkrete Testfälle</h2>
       <ol class="steps">
         <li><h4>Normale Testmail senden</h4>
           <p>Sende eine harmlose Anfrage mit dem Testlabel. Erwartung: Entwurf entsteht, keine Slack-Meldung.</p></li>
@@ -6850,8 +6881,8 @@ Zusammenfassung:
         <li><h4>Executions prüfen</h4>
           <p>Öffne jede Ausführung. Prüfe besonders die Felder <code>category</code>, <code>urgency</code>,
             <code>summary</code> und <code>draft_body</code>.</p></li>
-        <li><h4>Workflow aktivieren</h4>
-          <p>Erst wenn alle drei Fälle passen, speichere und aktiviere den Workflow. Lasse das Testlabel zunächst bestehen.</p></li>
+        <li><h4>Workflow publishen</h4>
+          <p>Erst wenn alle drei Fälle passen, warte auf Auto-Save und klicke <strong>Publish</strong>. Lasse das Testlabel zunächst bestehen.</p></li>
       </ol>
 
       <div class="callout callout--pareto">
@@ -6877,7 +6908,7 @@ Zusammenfassung:
         <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
         <tbody>
           <tr><td>Human approval</td><td>Slack- oder Gmail-Schritt mit Freigabe einbauen, bevor eine Antwort gesendet wird.</td></tr>
-          <tr><td>CRM-Kontext</td><td>Vor dem Agenten Kontakt im CRM suchen und Kundentyp oder offene Tickets ergänzen.</td></tr>
+          <tr><td>CRM-Kontext</td><td>Vor der Chain Kontakt im CRM suchen und Kundentyp oder offene Tickets ergänzen.</td></tr>
           <tr><td>Mehrere Labels</td><td>Nach <code>category</code> unterschiedliche Gmail-Labels setzen.</td></tr>
           <tr><td>Kostenkontrolle</td><td>Nur Mails über einer Mindestlänge an KI senden; Newsletter vorher filtern.</td></tr>
           <tr><td>Output Parser</td><td>Falls verfügbar, Structured Output Parser nutzen und den Code-Parser trotzdem als Sicherheitsnetz behalten.</td></tr>
@@ -6890,7 +6921,7 @@ Zusammenfassung:
           <li>Warum triggert der Workflow zuerst nur auf ein Testlabel?</li>
           <li>Warum erstellt der Workflow einen Entwurf statt direkt zu senden?</li>
           <li>Warum wird die KI-Ausgabe noch einmal geparst und validiert?</li>
-          <li>Welche drei Testfälle brauchst du vor dem Aktivieren?</li>
+          <li>Welche drei Testfälle brauchst du vor dem Publish?</li>
           <li>Warum markieren wir die Mail erst am Ende als gelesen?</li>
         </ul>
       </div>
@@ -7529,8 +7560,8 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
           <p>Erstelle ein PDF als Screenshot oder lösche wichtige Felder. Erwartung: Slack-Review, keine blinde Speicherung.</p></li>
         <li><h4>Executions öffnen</h4>
           <p>Prüfe bei jedem Test, welchen Weg das Item genommen hat: Regeln, KI-Fallback oder Review.</p></li>
-        <li><h4>Workflow erst danach aktivieren</h4>
-          <p>Schalte den Workflow nur aktiv, wenn alle drei Fälle erwartungsgemäß laufen.</p></li>
+        <li><h4>Workflow erst danach publishen</h4>
+          <p>Klicke nur dann auf <strong>Publish</strong>, wenn alle drei Fälle erwartungsgemäß laufen.</p></li>
       </ol>
 
       <div class="callout callout--pareto">
@@ -7558,7 +7589,7 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
           <li>Warum ist <code>text_length</code> ein nützlicher Prüfwert?</li>
           <li>Welche vier Felder bestimmen im Beispiel den Regel-Score?</li>
           <li>Warum darf der KI-Fallback nicht ohne Validierung speichern?</li>
-          <li>Welche drei Testfälle brauchst du vor dem Aktivieren?</li>
+          <li>Welche drei Testfälle brauchst du vor dem Publish?</li>
         </ul>
       </div>
 
@@ -7727,9 +7758,8 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
         <li><h4>Manual Trigger hinzufügen</h4>
           <p>Klicke auf das große <span class="kbd">+</span>, suche <code>manual</code> und wähle <strong>Trigger manually</strong>.
             Für den Aufbau starten wir bewusst von Hand.</p></li>
-        <li><h4>Speichern</h4>
-          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Prüfe oben, ob der Speichern-Status auf
-            <strong>Saved</strong> steht.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist. Publish kommt erst nach dem End-to-End-Test.</p></li>
       </ol>
 
       <div class="callout callout--info">
@@ -7937,23 +7967,24 @@ return {
         späteren Fehlerfall lesbarer.
       </div>
 
-      <h2>Schritt 8 — Entwurf mit dem AI Agent erzeugen</h2>
-      <p>Der Agent bekommt ein klares Briefing und muss strukturiertes JSON zurückgeben. Er darf Quellen nicht abschreiben
-        und soll Unsicherheiten offen markieren.</p>
+      <h2>Schritt 8 — Entwurf mit einer Basic LLM Chain erzeugen</h2>
+      <p>Die Chain bekommt ein klares Briefing und muss strukturiertes JSON zurückgeben. Sie darf Quellen nicht abschreiben
+        und soll Unsicherheiten offen markieren. Ein AI Agent wäre hier überdimensioniert, weil die Recherche bereits vorher
+        geholt wurde und keine Tool-Entscheidung nötig ist.</p>
 
       <ol class="steps">
-        <li><h4>AI-Agent-Node anhängen</h4>
-          <p>Hänge hinter <strong>Recherche verdichten</strong> einen <strong>AI Agent</strong>-Node.</p></li>
+        <li><h4>Basic-LLM-Chain-Node anhängen</h4>
+          <p>Hänge hinter <strong>Recherche verdichten</strong> einen <strong>Basic LLM Chain</strong>-Node.</p></li>
         <li><h4>Chat Model verbinden</h4>
           <p>Verbinde ein Chat Model, z. B. OpenAI Chat Model, und wähle deine Credential.</p></li>
-        <li><h4>Keine Tools verbinden</h4>
-          <p>Für diesen Workflow braucht der Agent keine externen Tools. Die Recherche wurde bereits vorher geholt.</p></li>
+        <li><h4>Keine Tools erzwingen</h4>
+          <p>Für diesen Workflow braucht der KI-Schritt keine externen Tools. Die Recherche wurde bereits vorher geholt.</p></li>
         <li><h4>Prompt definieren</h4>
           <p>Setze <strong>Prompt</strong> auf <strong>Define below</strong> und füge den folgenden Text ein.</p></li>
       </ol>
 
       <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Prompt für den AI Agent</div>
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Prompt für die Basic LLM Chain</div>
 <pre>Du bist ein vorsichtiger Content-Editor.
 Erstelle einen Entwurf und antworte ausschließlich als gültiges JSON.
 
@@ -7989,18 +8020,17 @@ Regeln:
             <div class="ndv__bar"><span class="ndvic">🤖</span><b>Entwurf bauen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
-                <div class="ndv-panel__head">Agent</div>
+                <div class="ndv-panel__head">Chain</div>
                 <div class="ndv-panel__body">
                   <div class="row"><label>Prompt</label><div class="n8n-select">Define below <span class="chev">▾</span></div></div>
                   <div class="row"><label>User Message</label><input class="n8n-input is-expr" value="Erstelle einen Entwurf und antworte ausschließlich als gültiges JSON ..."></div>
                   <div class="row"><label>Chat Model</label><div class="n8n-select">verbunden <span class="chev">▾</span></div></div>
-                  <div class="row"><label>Tools</label><div class="n8n-select">keine Tools verbunden <span class="chev">▾</span></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 19.4</span>Der Agent arbeitet als Editor. Er veröffentlicht nichts und
+        <figcaption><span class="fig-tag">Abb. 19.4</span>Die Chain arbeitet als Editor. Sie veröffentlicht nichts und
           verändert keine externen Systeme.</figcaption>
       </figure>
 
@@ -8010,13 +8040,13 @@ Regeln:
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
-          <p>Hänge hinter den AI Agent einen <strong>Code</strong>-Node.</p></li>
+          <p>Hänge hinter die Basic LLM Chain einen <strong>Code</strong>-Node.</p></li>
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>Entwurf prüfen</code>.</p></li>
         <li><h4>Modus setzen</h4>
           <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
         <li><h4>Code einfügen</h4>
-          <p>Füge den folgenden Parser ein. Falls dein Agent-Ausgabefeld anders heißt, passe die erste Zeile an.</p></li>
+          <p>Füge den folgenden Parser ein. Falls dein KI-Ausgabefeld anders heißt, passe die erste Zeile an.</p></li>
       </ol>
 
       <div class="code">
@@ -8123,8 +8153,8 @@ Bitte im Sheet prüfen und status auf approved setzen, wenn der Entwurf veröffe
       <ol class="steps">
         <li><h4>Canvas schließen</h4>
           <p>Schließe die Node-Detailansicht, damit du den kompletten Workflow siehst.</p></li>
-        <li><h4>Speichern</h4>
-          <p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Test workflow starten</h4>
           <p>Klicke auf <strong>Test workflow</strong>. Beobachte, ob alle Nodes nacheinander grün werden.</p></li>
         <li><h4>Sheet prüfen</h4>
@@ -8315,8 +8345,8 @@ return {
             bei <code>1</code>.</p></li>
         <li><h4>Workflow 2 auf Schedule umstellen</h4>
           <p>Starte den Publish-Workflow später, z. B. werktags um 15:00 Uhr. So bleibt Zeit für Review.</p></li>
-        <li><h4>Aktivieren</h4>
-          <p>Speichere beide Workflows und schalte sie erst aktiv, wenn der manuelle Test vollständig war.</p></li>
+        <li><h4>Publish</h4>
+          <p>Veröffentliche beide Workflows erst, wenn der manuelle Test vollständig war.</p></li>
       </ol>
 
       <figure class="figure">
@@ -8347,7 +8377,7 @@ return {
         <li><h4>Nicht-freigegebene Zeile testen</h4>
           <p>Eine Zeile steht auf <code>idea</code> oder <code>needs_revision</code>. Erwartung: Kein Workflow verarbeitet sie.</p></li>
         <li><h4>Fehlerfall testen</h4>
-          <p>Manipuliere testweise den Agent-Prompt so, dass kein JSON zurückkommt. Erwartung: Status
+          <p>Manipuliere testweise den Chain-Prompt so, dass kein JSON zurückkommt. Erwartung: Status
             <code>needs_revision</code>, keine Veröffentlichung.</p></li>
         <li><h4>Executions prüfen</h4>
           <p>Öffne die Ausführungshistorie beider Workflows. Prüfe, wie viele Items an jedem Node ankamen.</p></li>
@@ -8379,7 +8409,7 @@ return {
           <li>Warum ist <code>approved</code> ein besseres Freigabesignal als eine Slack-Nachricht?</li>
           <li>Warum wird pro Testlauf nur ein Item verarbeitet?</li>
           <li>Warum darf <code>published</code> erst nach dem Veröffentlichungs-Node gesetzt werden?</li>
-          <li>Welche drei Fälle musst du testen, bevor ein Schedule aktiv wird?</li>
+          <li>Welche drei Fälle musst du testen, bevor ein Schedule published wird?</li>
         </ul>
       </div>
 
@@ -8543,7 +8573,9 @@ return {
 
       <h2>Schritt 2 — AI Agent hinzufügen</h2>
       <p>Der Agent bekommt die Chatnachricht vom Trigger. In aktuellen n8n-Versionen arbeitet der AI Agent als Tool-Agent:
-        Er erwartet ein Chat Model und mindestens ein Tool. Für reine Textantworten wäre eine Basic LLM Chain schlichter.</p>
+        Er erwartet ein Chat Model und mindestens ein Tool. Stand Mai 2026 ist der AI Agent auf Version 3.x; die alte
+        Auswahl verschiedener Agent-Typen ist nicht mehr das Grundmodell. Für reine Textantworten wäre eine Basic LLM
+        Chain schlichter.</p>
 
       <ol class="steps">
         <li><h4>AI Agent anhängen</h4>
@@ -8654,7 +8686,8 @@ Regeln:
 
       <ol class="steps">
         <li><h4>Tool-Anschluss öffnen</h4>
-          <p>Klicke am AI-Agent-Node auf <strong>Tool</strong> und wähle <strong>HTTP Request Tool</strong>.</p></li>
+          <p>Klicke am AI-Agent-Node auf <strong>Tool</strong> und wähle den normalen <strong>HTTP Request</strong>-Node
+            als Tool. Verwende nicht den legacy <strong>HTTP Request Tool</strong>-Node.</p></li>
         <li><h4>Tool benennen</h4>
           <p>Nenne das Tool <code>Ort suchen</code>.</p></li>
         <li><h4>Beschreibung eintragen</h4>
@@ -8676,7 +8709,7 @@ Regeln:
             <div class="ndv__bar"><span class="ndvic">🌍</span><b>Ort suchen</b><span class="ndv__exec-step">Tool</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
-                <div class="ndv-panel__head">HTTP Request Tool</div>
+                <div class="ndv-panel__head">HTTP Request als Tool</div>
                 <div class="ndv-panel__body">
                   <div class="row"><label>Description</label><input class="n8n-input" value="Sucht zu einem Ortsnamen die wahrscheinlichsten Koordinaten."></div>
                   <div class="row"><label>Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
@@ -8702,8 +8735,8 @@ Regeln:
         Koordinaten das Wetter holen.</p>
 
       <ol class="steps">
-        <li><h4>Zweites HTTP Request Tool hinzufügen</h4>
-          <p>Füge am Tool-Anschluss des AI Agent ein weiteres <strong>HTTP Request Tool</strong> hinzu.</p></li>
+        <li><h4>Zweites HTTP-Request-Tool hinzufügen</h4>
+          <p>Füge am Tool-Anschluss des AI Agent einen weiteren normalen <strong>HTTP Request</strong>-Node als Tool hinzu.</p></li>
         <li><h4>Tool benennen</h4>
           <p>Nenne es <code>Wetter holen</code>.</p></li>
         <li><h4>Beschreibung eintragen</h4>
@@ -8886,8 +8919,8 @@ Regeln:
         <li><h4>Load Previous Session prüfen</h4>
           <p>Wenn Nutzer frühere Chatnachrichten laden sollen, setze <strong>Load Previous Session</strong> auf
             <strong>From Memory</strong> und nutze denselben Memory-Node wie am Agenten.</p></li>
-        <li><h4>Workflow aktivieren</h4>
-          <p>Speichere den Workflow und schalte ihn erst dann aktiv.</p></li>
+        <li><h4>Workflow publishen</h4>
+          <p>Warte auf Auto-Save und klicke erst dann <strong>Publish</strong>.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -9061,8 +9094,8 @@ Regeln:
           <p>Erstelle einen Workflow und nenne ihn <code>RAG Wissen laden</code>.</p></li>
         <li><h4>Manual Trigger hinzufügen</h4>
           <p>Wähle als ersten Node <strong>Trigger manually</strong>. Ein Ladeprozess soll nicht aus Versehen automatisch laufen.</p></li>
-        <li><h4>Speichern</h4>
-          <p>Speichere den Workflow. Prüfe oben, ob der Status auf <strong>Saved</strong> steht.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -9294,8 +9327,8 @@ Quelle: {{ $json.source }}
       <ol class="steps">
         <li><h4>Canvas schließen</h4>
           <p>Schließe die Detailansichten, damit du den Lade-Workflow vollständig siehst.</p></li>
-        <li><h4>Workflow speichern</h4>
-          <p>Speichere den Workflow.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Test workflow starten</h4>
           <p>Klicke auf <strong>Test workflow</strong>. Die Nodes sollten nacheinander grün werden.</p></li>
         <li><h4>Output prüfen</h4>
@@ -9489,7 +9522,8 @@ Frage:
 
       <ol class="steps">
         <li><h4>AI Agent verwenden</h4>
-          <p>Nutze einen <strong>AI Agent</strong> nur dann, wenn der Chat außer RAG noch weitere Entscheidungen treffen muss.</p></li>
+          <p>Nutze einen <strong>AI Agent</strong> nur dann, wenn der Chat außer RAG noch weitere Entscheidungen treffen muss.
+            Stand Mai 2026 braucht der Agent ein Chat Model und mindestens ein Tool; für reines Q&amp;A bleibt die Chain einfacher.</p></li>
         <li><h4>Vector Store Question Answer Tool anschließen</h4>
           <p>Verbinde am Tool-Anschluss des Agenten das <strong>Vector Store Question Answer Tool</strong>.</p></li>
         <li><h4>Beschreibung präzise setzen</h4>
@@ -9741,8 +9775,8 @@ Frage:
         <li><h4>Eingaben definieren</h4>
           <p>Stelle die Eingabe so ein, dass die Felder explizit definiert werden. Lege diese Felder an:
             <code>name</code>, <code>email</code>, <code>company</code>, <code>source</code>.</p></li>
-        <li><h4>Workflow speichern</h4>
-          <p>Speichere den Workflow. Erst gespeicherte Workflows lassen sich sauber aus dem Haupt-Workflow auswählen.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist. Erst gespeicherte Workflows lassen sich sauber aus dem Haupt-Workflow auswählen.</p></li>
       </ol>
 
       <figure class="figure">
@@ -10077,7 +10111,7 @@ return inputItems.map((item) =&gt; {
       <table class="btable">
         <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
         <tbody>
-          <tr><td>Sub-Workflow erscheint nicht in der Auswahl</td><td>nicht gespeichert oder falscher Trigger</td><td>Sub-Workflow speichern, Execute Sub-workflow Trigger prüfen</td></tr>
+          <tr><td>Sub-Workflow erscheint nicht in der Auswahl</td><td>Draft noch nicht gespeichert oder falscher Trigger</td><td>Auto-Save abwarten, Execute Sub-workflow Trigger prüfen</td></tr>
           <tr><td>Aufruf schlägt mit fehlenden Feldern fehl</td><td>Eingabevertrag passt nicht zur Zuordnung</td><td>Feldnamen im Trigger und Execute-Node vergleichen</td></tr>
           <tr><td>Es kommt nur ein Item zurück</td><td>Code verarbeitet nicht alle Items</td><td>Code-Node auf All Items stellen und <code>$input.all()</code> nutzen</td></tr>
           <tr><td>Haupt-Workflow kann nicht verzweigen</td><td>er wartet nicht auf die Rückgabe</td><td>Wait for completion einschalten</td></tr>
@@ -10162,6 +10196,13 @@ return inputItems.map((item) =&gt; {
         <b class="t">Mehr parallel ist nicht automatisch schneller</b>
         Ein Workflow kann an API-Limits, Datenbankverbindungen, Speicher, Dateigrößen oder Modellkosten scheitern.
         Performance heißt daher nicht „alles gleichzeitig“, sondern kontrollierter Durchsatz.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Stand Mai 2026: Code-Nodes und Task Runner</b>
+        Die Beispiele nutzen Code-Nodes, nicht die alten Function-Nodes. In self-hosted Produktivumgebungen werden
+        Code-Nodes über Task Runner ausgeführt; externe Task Runner sind die robustere Betriebsform. Für das lokale
+        Lernsetup musst du daran noch nichts konfigurieren.
       </div>
 
       <h2>Das Ziel</h2>
@@ -10637,7 +10678,7 @@ return [{
                 <span class="n8n-node__label">Pull in Produktion</span></div>
               <div class="n8n-node" style="left:1028px; top:96px;">
                 <span class="n8n-node__icon">🚀</span><span class="ep in"></span>
-                <span class="n8n-node__label">Aktiver Workflow</span></div>
+                <span class="n8n-node__label">Published Workflow</span></div>
 
               <div class="n8n-node" style="left:180px; top:256px;">
                 <span class="n8n-node__icon">🔐</span><span class="ep in"></span>
@@ -10668,7 +10709,7 @@ return [{
           <tr><td><strong>Workflow-Logik</strong></td><td>Nodes, Verbindungen, Expressions, Fehlerzweige</td><td>Kann ich diese Version später wiederherstellen?</td></tr>
           <tr><td><strong>Credentials</strong></td><td>Tokens, API-Keys, OAuth-Zugänge in n8n-Credentials</td><td>Steht irgendwo ein echtes Secret im JSON?</td></tr>
           <tr><td><strong>Umgebung</strong></td><td>Domain, Webhook-URL, Zeitzone, Datenbank, Feature-Flags</td><td>Ist Test absichtlich anders als Produktion?</td></tr>
-          <tr><td><strong>Aktivierung</strong></td><td>Workflow wird eingeschaltet und empfängt echte Ereignisse</td><td>Wurde vorher ein Testlauf mit produktionsnahen Daten gemacht?</td></tr>
+          <tr><td><strong>Publish</strong></td><td>Eine getestete Workflow-Version wird produktiv und empfängt echte Ereignisse</td><td>Wurde vorher ein Testlauf mit produktionsnahen Daten gemacht?</td></tr>
         </tbody>
       </table>
 
@@ -10833,7 +10874,7 @@ volumes:
         <li><h4>Test-URL öffnen</h4>
           <p>Starte den Testmodus und öffne die angezeigte Test-URL im Browser.</p></li>
         <li><h4>Produktions-URL prüfen</h4>
-          <p>Aktiviere den Workflow kurz in einer Testumgebung und prüfe, ob die Produktions-URL die richtige Domain
+          <p>Publishe den Workflow kurz in einer Testumgebung und prüfe, ob die Produktions-URL die richtige Domain
             zeigt.</p></li>
         <li><h4>Falsche Domain korrigieren</h4>
           <p>Wenn n8n eine interne Adresse oder <code>localhost</code> anzeigt, korrigiere <code>WEBHOOK_URL</code> und
@@ -10885,7 +10926,7 @@ volumes:
 
       <h2>Schritt 6 — Source Control in n8n nutzen</h2>
       <p>Falls deine n8n-Edition Source Control unterstützt, läuft der Ablauf grob so: Git-Zugang verbinden, Änderungen
-        aus der Entwicklungsinstanz pushen, in Produktion pullen und danach erst aktivieren.</p>
+        aus der Entwicklungsinstanz pushen, in Produktion pullen und danach erst publishen.</p>
 
       <ol class="steps">
         <li><h4>Einstellungen öffnen</h4>
@@ -10894,11 +10935,11 @@ volumes:
           <p>Verbinde ein Git-Repository über die angebotene Authentifizierung. Nutze ein separates Repo oder einen klar
             getrennten Ordner für n8n-Workflows.</p></li>
         <li><h4>Entwicklungsänderung pushen</h4>
-          <p>Push aus <code>dev</code> nur dann, wenn der Workflow gespeichert, getestet und verständlich benannt ist.</p></li>
+          <p>Push aus <code>dev</code> nur dann, wenn der Draft gespeichert, getestet und verständlich benannt ist.</p></li>
         <li><h4>Produktionsinstanz pullen</h4>
-          <p>Ziehe die Änderung in <code>prod</code>. Prüfe danach Credentials und Variablen, bevor du aktivierst.</p></li>
-        <li><h4>Aktivierung bewusst durchführen</h4>
-          <p>Aktiviere den Workflow erst nach einem Testlauf mit ungefährlichen Daten.</p></li>
+          <p>Ziehe die Änderung in <code>prod</code>. Prüfe danach Credentials und Variablen, bevor du publishst.</p></li>
+        <li><h4>Publish bewusst durchführen</h4>
+          <p>Publishe den Workflow erst nach einem Testlauf mit ungefährlichen Daten.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -10960,10 +11001,10 @@ volumes:
         <thead><tr><th>Prüfung</th><th>Erwartung</th><th>Wenn nicht erfüllt</th></tr></thead>
         <tbody>
           <tr><td>Workflow-Version</td><td>Git-Commit oder exportierte JSON-Version ist bekannt</td><td>Version festhalten, dann deployen</td></tr>
-          <tr><td>Credentials</td><td>prod-Credentials sind gesetzt und getestet</td><td>nicht aktivieren</td></tr>
+          <tr><td>Credentials</td><td>prod-Credentials sind gesetzt und getestet</td><td>nicht publishen</td></tr>
           <tr><td>Webhook-URL</td><td>zeigt auf die externe HTTPS-Domain</td><td><code>WEBHOOK_URL</code> und Proxy prüfen</td></tr>
           <tr><td>Variablen</td><td>prod-Werte sind nicht aus dev kopiert</td><td>Werte bewusst setzen</td></tr>
-          <tr><td>Testlauf</td><td>ungefährliche Daten laufen durch den produktiven Workflow</td><td>Fehler beheben, erst danach einschalten</td></tr>
+          <tr><td>Testlauf</td><td>ungefährliche Daten laufen durch den produktiven Workflow</td><td>Fehler beheben, erst danach publishen</td></tr>
           <tr><td>Rollback</td><td>alte Version ist auffindbar</td><td>kein Deployment ohne Rückweg</td></tr>
         </tbody>
       </table>
@@ -10996,7 +11037,7 @@ volumes:
           <tr><td>Workflow läuft in dev, aber nicht in prod</td><td>Variable, Credential oder Domain unterscheidet sich</td><td>Deployment-Checkliste Punkt für Punkt prüfen</td></tr>
           <tr><td>Git-Export enthält sensible Werte</td><td>Secret wurde in Node-Parameter geschrieben</td><td>Workflow bereinigen, Secret in Credential verschieben</td></tr>
           <tr><td>Pull überschreibt produktive Änderung</td><td>Änderungen wurden direkt in prod gemacht</td><td>klare Regel setzen: Logik nur in dev ändern</td></tr>
-          <tr><td>Nach Aktivierung entstehen Dubletten</td><td>Retry, manueller Test oder doppelter Trigger schreibt erneut</td><td>Idempotenzschlüssel und Vorabprüfung ergänzen</td></tr>
+          <tr><td>Nach Publish entstehen Dubletten</td><td>Retry, manueller Test oder doppelter Trigger schreibt erneut</td><td>Idempotenzschlüssel und Vorabprüfung ergänzen</td></tr>
         </tbody>
       </table>
 
@@ -11033,7 +11074,7 @@ volumes:
       </div>
 
       <p>Du hast jetzt ein Deployment-Modell: Logik versionieren, Secrets trennen, Umgebungswerte prüfen und erst dann
-        aktivieren. Im nächsten Kapitel wird daraus Betrieb unter Last: Sicherheit, Queue Mode, Worker und Skalierung.</p>
+        publishen. Im nächsten Kapitel wird daraus Betrieb unter Last: Sicherheit, Queue Mode, Worker und Skalierung.</p>
 
     </article>
       <nav class="pn-wrap" data-slug="24-deployment"></nav></section>
@@ -11261,6 +11302,28 @@ volumes:
         niedriger Concurrency können die Datenbank stärker belasten als wenige gut dimensionierte Worker.
       </div>
 
+      <h2>Task Runner für Code-Nodes</h2>
+      <p>Task Runner führen Code-Node-Aufgaben getrennt vom n8n-Hauptprozess aus. Das ist kein Ersatz für Queue-Mode:
+        Queue-Mode verteilt Workflow-Ausführungen, Task Runner isolieren JavaScript- und Python-Code innerhalb einer
+        Ausführung. Für Produktion ist der externe Modus die skeptischere Wahl, weil der Runner als eigener Prozess oder
+        Sidecar läuft.</p>
+
+      <table class="btable">
+        <thead><tr><th>Variable</th><th>Beispiel</th><th>Wofür?</th></tr></thead>
+        <tbody>
+          <tr><td><code>N8N_RUNNERS_ENABLED</code></td><td><code>true</code></td><td>Task Runner einschalten</td></tr>
+          <tr><td><code>N8N_RUNNERS_MODE</code></td><td><code>external</code></td><td>Runner außerhalb des n8n-Prozesses betreiben</td></tr>
+          <tr><td><code>N8N_RUNNERS_AUTH_TOKEN</code></td><td><code>lange-zufaellige-zeichenfolge</code></td><td>Runner und Broker gegenseitig absichern</td></tr>
+          <tr><td><code>N8N_RUNNERS_BROKER_LISTEN_ADDRESS</code></td><td><code>0.0.0.0</code></td><td>Broker für Sidecar/Container erreichbar machen</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">Queue-Mode plus Task Runner sauber kombinieren</b>
+        Wenn Worker Code-Nodes ausführen, brauchen auch diese Worker passende Runner-Sidecars. Sonst skaliert der Workflow,
+        aber der Code-Schritt bleibt falsch isoliert oder läuft nicht wie erwartet.
+      </div>
+
       <h2>Skalieren: hoch, breit oder gar nicht?</h2>
       <p>Skalierung hat drei typische Richtungen. Jede hat einen Preis. Die beste Lösung ist oft nicht die größte,
         sondern diejenige, die den tatsächlichen Engpass trifft.</p>
@@ -11297,6 +11360,7 @@ volumes:
           <tr><td>Encryption Key</td><td>Main und alle Worker denselben Schlüssel nutzen</td><td>Deployment stoppen, Schlüssel vereinheitlichen</td></tr>
           <tr><td>Datenbank</td><td>Backup und Restore einmal getestet wurden</td><td>nicht produktiv gehen</td></tr>
           <tr><td>Redis</td><td>Worker Jobs aufnehmen und abschließen</td><td>Redis-Verbindung, Passwort, TLS, Netzwerk prüfen</td></tr>
+          <tr><td>Task Runner</td><td>Code-Nodes in externer Runner-Umgebung laufen</td><td>Runner-Sidecar, Auth-Token und Broker-Adresse prüfen</td></tr>
           <tr><td>Dubletten</td><td>schreibende Workflows idempotent oder vorab prüfend sind</td><td>Schlüssel, Suche oder Merge-Prüfung ergänzen</td></tr>
           <tr><td>Monitoring</td><td>Fehler, Queue-Rückstau und lange Ausführungen auffallen</td><td>Benachrichtigung oder Dashboard ergänzen</td></tr>
         </tbody>
@@ -11409,7 +11473,7 @@ volumes:
           <tr><td>Neuen Workflow erstellen</td><td><span class="kbd">Strg</span> + <span class="kbd">Alt</span> + <span class="kbd">N</span></td><td>schnell mit leerem Workflow starten</td></tr>
           <tr><td>Workflow öffnen</td><td><span class="kbd">Strg</span> + <span class="kbd">O</span></td><td>zu einem vorhandenen Workflow wechseln</td></tr>
           <tr><td>Node-Panel öffnen</td><td><span class="kbd">N</span></td><td>neuen Node suchen, ohne das Plus zu treffen</td></tr>
-          <tr><td>Workflow speichern</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></td><td>Änderungen sichern</td></tr>
+          <tr><td>Version/Publish-Menü</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></td><td>je nach n8n-Version Version benennen oder Publish-Menü öffnen</td></tr>
           <tr><td>Workflow testen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span></td><td>manuellen Testlauf starten</td></tr>
           <tr><td>Alles auswählen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">A</span></td><td>alle sichtbaren Nodes markieren</td></tr>
           <tr><td>Auswahl löschen</td><td><span class="kbd">Entf</span> oder <span class="kbd">Backspace</span></td><td>markierte Nodes entfernen</td></tr>
@@ -11479,7 +11543,7 @@ volumes:
         <li><h4>Parameter setzen</h4><p>In der Detailansicht Werte eintragen. Bestehenden Text mit
           <span class="kbd">Strg/⌘</span> + <span class="kbd">A</span> markieren und ersetzen.</p></li>
         <li><h4>Ansicht schließen</h4><p><span class="kbd">Esc</span> drücken, bis du wieder den Canvas siehst.</p></li>
-        <li><h4>Workflow sichern</h4><p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span> drücken.</p></li>
+        <li><h4>Auto-Save prüfen</h4><p>Warten, bis der Draft gespeichert ist.</p></li>
         <li><h4>Testlauf starten</h4><p><span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span> nutzen oder sichtbar auf
           <strong>Test workflow</strong> klicken, wenn dein Browser das Kürzel abfängt.</p></li>
       </ol>
@@ -11525,7 +11589,7 @@ volumes:
         2) <span class="kbd">⌘</span>. ·
         3) Du kommst aus Menüs und Detailansichten zurück zum Canvas. ·
         4) Welche Auswahl aktiv ist. ·
-        5) Die entsprechende Schaltfläche in n8n, z. B. <strong>Save</strong> oder <strong>Test workflow</strong>.
+        5) Die entsprechende Schaltfläche in n8n, z. B. <strong>Publish</strong> oder <strong>Test workflow</strong>.
       </div>
 
     </article>
@@ -11642,7 +11706,7 @@ volumes:
         <tbody>
           <tr><td>Node findet keine Daten</td><td>falscher Eingang oder falscher Feldname</td><td>Input-Panel prüfen und Feld per Drag-and-drop wählen</td></tr>
           <tr><td>HTTP Request liefert 401</td><td>Authentifizierung fehlt oder ist falsch</td><td>Credential, Header und Token-Typ prüfen</td></tr>
-          <tr><td>Webhook reagiert nur im Test</td><td>Produktions-URL nicht aktiviert oder Workflow nicht veröffentlicht</td><td>Workflow aktivieren und Production URL nutzen</td></tr>
+          <tr><td>Webhook reagiert nur im Test</td><td>Workflow ist nicht published oder falsche URL wird genutzt</td><td>Publish klicken und Production-URL nutzen</td></tr>
           <tr><td>Merge liefert unerwartete Paare</td><td>falscher Kombinationsmodus</td><td>Position, Matching Fields oder Append bewusst wählen</td></tr>
           <tr><td>Code-Node macht alles und keiner versteht ihn</td><td>zu viel Logik im Code versteckt</td><td>einfache Teile zurück in sichtbare Nodes verlagern</td></tr>
         </tbody>
@@ -11979,7 +12043,7 @@ volumes:
 </div>
 <script>
 var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter","14-projekt-form","15-projekt-news","16-projekt-leads","17-projekt-ai","18-projekt-pdf","19-grossprojekt","20-ai-agent","21-rag","22-subworkflows","23-performance","24-deployment","25-skalierung","A-shortcuts","B-nodes","C-expressions","D-glossar"];
-var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"ready"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"ready"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"ready"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"ready"}];
+var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (Basic LLM Chain)","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"ready"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"ready"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"ready"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"ready"}];
 
 function show(slug) {
   if (!slug || READY.indexOf(slug) === -1 && slug !== "home") slug = "home";

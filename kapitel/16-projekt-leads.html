@@ -174,8 +174,8 @@
 
       <div class="callout callout--warn">
         <b class="t">Wenn der Webhook nichts empfängt</b>
-        Prüfe Methode und URL. Ein POST an die GET-URL oder ein Aufruf der Production-URL bei inaktivem Workflow führt
-        typischerweise zu 404 oder keinem Test-Item.
+        Prüfe Methode und URL. Ein POST an die GET-URL oder ein Aufruf der Production-URL bei unveröffentlichtem Workflow
+        führt typischerweise zu 404 oder keinem Test-Item.
       </div>
 
       <h2>Schritt 4 — Lead normalisieren</h2>
@@ -403,14 +403,25 @@ Budget: {{ $json.budget }} €
           <p>Sende einen Testlead ohne <code>email</code>. Er muss in diesen Fehlerzweig laufen und darf keinen CRM-Kontakt erzeugen.</p></li>
       </ol>
 
-      <h2>Schritt 11 — Production-URL aktivieren</h2>
+      <h2>Konkrete Testfälle</h2>
+      <p>Vor dem Publish testest du nicht nur den Idealfall. Du brauchst mindestens diese drei Fälle:</p>
+      <table class="btable">
+        <thead><tr><th>Fall</th><th>Eingabe</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Sales-Lead</td><td><code>topic: sales</code> mit gültiger E-Mail</td><td>Sales-Kontakt im CRM, Meldung im Sales-Kanal</td></tr>
+          <tr><td>Support-Anfrage</td><td><code>topic: support</code> mit gültiger E-Mail</td><td>Support-Zweig läuft, keine falsche Sales-Meldung</td></tr>
+          <tr><td>Ungültiger Lead</td><td>Lead ohne <code>email</code></td><td>Fehlerzweig läuft, kein CRM-Kontakt entsteht</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Schritt 11 — Production-URL veröffentlichen</h2>
       <ol class="steps">
-        <li><h4>Gesamttest durchführen</h4>
-          <p>Teste Sales, Support und fehlende E-Mail. Prüfe jedes Mal CRM, Slack und Executions.</p></li>
-        <li><h4>Workflow speichern</h4>
-          <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>.</p></li>
-        <li><h4>Aktiv schalten</h4>
-          <p>Schalte den Workflow oben rechts auf <strong>Active</strong>.</p></li>
+        <li><h4>Testergebnisse prüfen</h4>
+          <p>Prüfe für alle drei Testfälle CRM, Slack und Executions. Erst danach arbeitest du mit der Production-URL.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
+        <li><h4>Publish klicken</h4>
+          <p>Klicke oben rechts auf <strong>Publish</strong>.</p></li>
         <li><h4>Production-URL kopieren</h4>
           <p>Kopiere aus dem Webhook-Node die URL mit <code>/webhook/lead-routing</code>, nicht die Test-URL.</p></li>
         <li><h4>Externes Formular verbinden</h4>

@@ -631,8 +631,8 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
           <p>Erstelle ein PDF als Screenshot oder lösche wichtige Felder. Erwartung: Slack-Review, keine blinde Speicherung.</p></li>
         <li><h4>Executions öffnen</h4>
           <p>Prüfe bei jedem Test, welchen Weg das Item genommen hat: Regeln, KI-Fallback oder Review.</p></li>
-        <li><h4>Workflow erst danach aktivieren</h4>
-          <p>Schalte den Workflow nur aktiv, wenn alle drei Fälle erwartungsgemäß laufen.</p></li>
+        <li><h4>Workflow erst danach publishen</h4>
+          <p>Klicke nur dann auf <strong>Publish</strong>, wenn alle drei Fälle erwartungsgemäß laufen.</p></li>
       </ol>
 
       <div class="callout callout--pareto">
@@ -660,7 +660,7 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
           <li>Warum ist <code>text_length</code> ein nützlicher Prüfwert?</li>
           <li>Welche vier Felder bestimmen im Beispiel den Regel-Score?</li>
           <li>Warum darf der KI-Fallback nicht ohne Validierung speichern?</li>
-          <li>Welche drei Testfälle brauchst du vor dem Aktivieren?</li>
+          <li>Welche drei Testfälle brauchst du vor dem Publish?</li>
         </ul>
       </div>
 

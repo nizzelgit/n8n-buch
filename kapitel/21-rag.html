@@ -139,8 +139,8 @@
           <p>Erstelle einen Workflow und nenne ihn <code>RAG Wissen laden</code>.</p></li>
         <li><h4>Manual Trigger hinzufügen</h4>
           <p>Wähle als ersten Node <strong>Trigger manually</strong>. Ein Ladeprozess soll nicht aus Versehen automatisch laufen.</p></li>
-        <li><h4>Speichern</h4>
-          <p>Speichere den Workflow. Prüfe oben, ob der Status auf <strong>Saved</strong> steht.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -372,8 +372,8 @@ Quelle: {{ $json.source }}
       <ol class="steps">
         <li><h4>Canvas schließen</h4>
           <p>Schließe die Detailansichten, damit du den Lade-Workflow vollständig siehst.</p></li>
-        <li><h4>Workflow speichern</h4>
-          <p>Speichere den Workflow.</p></li>
+        <li><h4>Auto-Save prüfen</h4>
+          <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Test workflow starten</h4>
           <p>Klicke auf <strong>Test workflow</strong>. Die Nodes sollten nacheinander grün werden.</p></li>
         <li><h4>Output prüfen</h4>
@@ -567,7 +567,8 @@ Frage:
 
       <ol class="steps">
         <li><h4>AI Agent verwenden</h4>
-          <p>Nutze einen <strong>AI Agent</strong> nur dann, wenn der Chat außer RAG noch weitere Entscheidungen treffen muss.</p></li>
+          <p>Nutze einen <strong>AI Agent</strong> nur dann, wenn der Chat außer RAG noch weitere Entscheidungen treffen muss.
+            Stand Mai 2026 braucht der Agent ein Chat Model und mindestens ein Tool; für reines Q&amp;A bleibt die Chain einfacher.</p></li>
         <li><h4>Vector Store Question Answer Tool anschließen</h4>
           <p>Verbinde am Tool-Anschluss des Agenten das <strong>Vector Store Question Answer Tool</strong>.</p></li>
         <li><h4>Beschreibung präzise setzen</h4>
