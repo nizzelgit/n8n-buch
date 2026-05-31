@@ -192,6 +192,17 @@
             ankommen. Danach URL wieder korrigieren.</p></li>
       </ol>
 
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Retry</td><td>HTTP-Node mit temporärem Fehler testen</td><td>n8n versucht mehrfach statt sofort abzubrechen</td></tr>
+          <tr><td>Fehlerausgang</td><td>On Error auf roten Ausgang stellen</td><td>Fehlerdaten laufen in den Fehlerzweig</td></tr>
+          <tr><td>Error-Workflow</td><td>aktiven Workflow absichtlich scheitern lassen</td><td>Benachrichtigung kommt mit Workflow- und Node-Name an</td></tr>
+          <tr><td>Stop and Error</td><td>Pflichtfeld absichtlich fehlen lassen</td><td>Workflow bricht mit lesbarer eigener Meldung ab</td></tr>
+        </tbody>
+      </table>
+
       <div class="prereq">
         <h4>✅ Selbsttest</h4>
         <ul>

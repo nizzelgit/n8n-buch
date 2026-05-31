@@ -214,6 +214,17 @@
             angenehmer als das große Roh-JSON.</p></li>
       </ol>
 
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Felder reduzieren</td><td><strong>Include Other Input Fields</strong> ausschalten</td><td>nur <code>stadt</code>, <code>tempC</code>, <code>windKmh</code> bleiben</td></tr>
+          <tr><td>Filter</td><td>Filter mit passenden und unpassenden Items testen</td><td>nur passende Items laufen weiter</td></tr>
+          <tr><td>Code pro Item</td><td>Code-Node im Modus Each Item ausführen</td><td>jedes Item bekommt berechnete Felder</td></tr>
+          <tr><td>Falscher Modus</td><td>Code-Modus bewusst wechseln</td><td>Fehlermeldung erklärt Rückgabeformat oder Zugriff</td></tr>
+        </tbody>
+      </table>
+
       <div class="prereq">
         <h4>✅ Selbsttest</h4>
         <ul>

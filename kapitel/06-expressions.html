@@ -360,6 +360,17 @@ Wind: 12 km/h.</span></div>
         sind ein falsch geschriebener Feldname — und beides zeigt dir die Wahrheit in Sekunden.
       </div>
 
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Expression</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Feldzugriff</td><td><code>{{ $json.current.temperature_2m }}</code></td><td>konkreter Zahlenwert</td></tr>
+          <tr><td>Standardwert</td><td><code>{{ $json.name || 'Gast' }}</code></td><td><code>Gast</code>, wenn das Feld fehlt</td></tr>
+          <tr><td>Rundung</td><td><code>{{ Math.round($json.current.wind_speed_10m) }}</code></td><td>ganze Zahl</td></tr>
+          <tr><td>Syntaxfehler</td><td>eine schließende Klammer entfernen</td><td>roter Fehler in der Vorschau</td></tr>
+        </tbody>
+      </table>
+
       <div class="prereq">
         <h4>✅ Selbsttest — sitzt das Wichtigste?</h4>
         <ul>

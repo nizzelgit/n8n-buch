@@ -268,6 +268,17 @@
         Automatisierung, die rund um die Uhr für dich arbeitet.
       </div>
 
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Manual</td><td><strong>Test workflow</strong> klicken</td><td>Workflow läuft sofort</td></tr>
+          <tr><td>Schedule</td><td>Schedule-Trigger einsetzen und manuell testen</td><td>Workflow läuft auch vor der geplanten Uhrzeit</td></tr>
+          <tr><td>Aktivierung</td><td>Workflow speichern und aktiv schalten</td><td>Schedule ist für echte Läufe bereit</td></tr>
+          <tr><td>Webhook-Unterschied</td><td>Test-URL und Production-URL vergleichen</td><td><code>/webhook-test/</code> und <code>/webhook/</code> sind unterscheidbar</td></tr>
+        </tbody>
+      </table>
+
       <div class="prereq">
         <h4>✅ Selbsttest — sitzt das Wichtigste?</h4>
         <ul>

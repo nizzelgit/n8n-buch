@@ -2436,8 +2436,8 @@ docker run -it --rm <span class="ky">\</span>
             Items er ausgegeben hat.</p></li>
       </ol>
 
-      <div class="callout callout--tip">
-        <b class="t">🎉 Geschafft — und das war kein Spielzeug</b>
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Das Grundmuster trägt weit</b>
         Du hast einen vollständigen Workflow gebaut, der echte Daten aus dem Internet holt, sie verarbeitet und ein sauberes
         Ergebnis erzeugt. Genau dieses Skelett — <em>Trigger → Daten holen → umformen</em> — steckt in der Mehrheit aller
         Automatisierungen, die du je bauen wirst.
@@ -2486,6 +2486,17 @@ docker run -it --rm <span class="ky">\</span>
         Fast immer einer dieser drei Gründe: (1) Du hast dem Bot noch <em>nicht</em> selbst geschrieben (Schritt 2 nachholen),
         (2) falsche Chat-ID, oder (3) ein Tippfehler im Token. Die rote Fehlermeldung im Node nennt dir meist genau den Grund.
       </div>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>HTTP-Test</td><td>HTTP-Node einzeln ausführen</td><td>Output enthält <code>current.temperature_2m</code></td></tr>
+          <tr><td>Expression-Test</td><td>Edit-Fields-Node ausführen</td><td><code>nachricht</code> enthält echte Wetterwerte</td></tr>
+          <tr><td>Workflow-Test</td><td><strong>Test workflow</strong> starten</td><td>alle Nodes werden grün ausgeführt</td></tr>
+          <tr><td>Optionaler Telegram-Test</td><td>Telegram-Node mit Testchat ausführen</td><td>genau eine Nachricht kommt an</td></tr>
+        </tbody>
+      </table>
 
       <h2>Was du in diesem Kapitel gelernt hast</h2>
       <ul>
@@ -3073,6 +3084,17 @@ Wind: 12 km/h.</span></div>
         sind ein falsch geschriebener Feldname — und beides zeigt dir die Wahrheit in Sekunden.
       </div>
 
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Expression</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Feldzugriff</td><td><code>{{ $json.current.temperature_2m }}</code></td><td>konkreter Zahlenwert</td></tr>
+          <tr><td>Standardwert</td><td><code>{{ $json.name || 'Gast' }}</code></td><td><code>Gast</code>, wenn das Feld fehlt</td></tr>
+          <tr><td>Rundung</td><td><code>{{ Math.round($json.current.wind_speed_10m) }}</code></td><td>ganze Zahl</td></tr>
+          <tr><td>Syntaxfehler</td><td>eine schließende Klammer entfernen</td><td>roter Fehler in der Vorschau</td></tr>
+        </tbody>
+      </table>
+
       <div class="prereq">
         <h4>✅ Selbsttest — sitzt das Wichtigste?</h4>
         <ul>
@@ -3355,6 +3377,17 @@ Wind: 12 km/h.</span></div>
         Automatisierung, die rund um die Uhr für dich arbeitet.
       </div>
 
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Manual</td><td><strong>Test workflow</strong> klicken</td><td>Workflow läuft sofort</td></tr>
+          <tr><td>Schedule</td><td>Schedule-Trigger einsetzen und manuell testen</td><td>Workflow läuft auch vor der geplanten Uhrzeit</td></tr>
+          <tr><td>Aktivierung</td><td>Workflow speichern und aktiv schalten</td><td>Schedule ist für echte Läufe bereit</td></tr>
+          <tr><td>Webhook-Unterschied</td><td>Test-URL und Production-URL vergleichen</td><td><code>/webhook-test/</code> und <code>/webhook/</code> sind unterscheidbar</td></tr>
+        </tbody>
+      </table>
+
       <div class="prereq">
         <h4>✅ Selbsttest — sitzt das Wichtigste?</h4>
         <ul>
@@ -3621,6 +3654,17 @@ Wind: 12 km/h.</span></div>
           (oder umgekehrt). Method anpassen.</p>
       </div>
 
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>GET</td><td>einen offenen Beispiel-Endpunkt lesen</td><td>Status 200 und JSON-Ausgabe</td></tr>
+          <tr><td>POST</td><td>Echo-Dienst mit JSON-Body ausführen</td><td><code>data</code> spiegelt den Body</td></tr>
+          <tr><td>Query</td><td>Parameter in der Parameterliste setzen</td><td>URL wird korrekt zusammengesetzt</td></tr>
+          <tr><td>Fehler</td><td>Method absichtlich falsch wählen</td><td>Statuscode macht die Ursache sichtbar</td></tr>
+        </tbody>
+      </table>
+
       <div class="prereq">
         <h4>✅ Selbsttest</h4>
         <ul>
@@ -3848,6 +3892,17 @@ Wind: 12 km/h.</span></div>
           <p>„▶ Schritt ausführen": Im Ausgang steht jetzt ein knappes Objekt <code>{ stadt, tempC, windKmh }</code> — viel
             angenehmer als das große Roh-JSON.</p></li>
       </ol>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Felder reduzieren</td><td><strong>Include Other Input Fields</strong> ausschalten</td><td>nur <code>stadt</code>, <code>tempC</code>, <code>windKmh</code> bleiben</td></tr>
+          <tr><td>Filter</td><td>Filter mit passenden und unpassenden Items testen</td><td>nur passende Items laufen weiter</td></tr>
+          <tr><td>Code pro Item</td><td>Code-Node im Modus Each Item ausführen</td><td>jedes Item bekommt berechnete Felder</td></tr>
+          <tr><td>Falscher Modus</td><td>Code-Modus bewusst wechseln</td><td>Fehlermeldung erklärt Rückgabeformat oder Zugriff</td></tr>
+        </tbody>
+      </table>
 
       <div class="prereq">
         <h4>✅ Selbsttest</h4>
@@ -4087,6 +4142,17 @@ Wind: 12 km/h.</span></div>
         führe sie zusammen — dann brauchst du den Versand-Node nur <em>einmal</em>.
       </div>
 
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>true-Zweig</td><td><code>tempC</code> auf über 20 setzen</td><td>warmer Text läuft oben weiter</td></tr>
+          <tr><td>false-Zweig</td><td><code>tempC</code> auf 20 oder weniger setzen</td><td>kühler Text läuft unten weiter</td></tr>
+          <tr><td>Merge</td><td>beide Zweige vor einem gemeinsamen Versand zusammenführen</td><td>nach dem Merge gibt es wieder einen gemeinsamen Pfad</td></tr>
+          <tr><td>Loop-Kontrolle</td><td>Loop-Verbindung im Test beobachten</td><td>Loop endet am Done-Ausgang statt endlos zu laufen</td></tr>
+        </tbody>
+      </table>
+
       <div class="prereq">
         <h4>✅ Selbsttest</h4>
         <ul>
@@ -4293,6 +4359,17 @@ Wind: 12 km/h.</span></div>
             ankommen. Danach URL wieder korrigieren.</p></li>
       </ol>
 
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Retry</td><td>HTTP-Node mit temporärem Fehler testen</td><td>n8n versucht mehrfach statt sofort abzubrechen</td></tr>
+          <tr><td>Fehlerausgang</td><td>On Error auf roten Ausgang stellen</td><td>Fehlerdaten laufen in den Fehlerzweig</td></tr>
+          <tr><td>Error-Workflow</td><td>aktiven Workflow absichtlich scheitern lassen</td><td>Benachrichtigung kommt mit Workflow- und Node-Name an</td></tr>
+          <tr><td>Stop and Error</td><td>Pflichtfeld absichtlich fehlen lassen</td><td>Workflow bricht mit lesbarer eigener Meldung ab</td></tr>
+        </tbody>
+      </table>
+
       <div class="prereq">
         <h4>✅ Selbsttest</h4>
         <ul>
@@ -4469,6 +4546,17 @@ Wind: 12 km/h.</span></div>
           <p>Zurück im Node ist die Credential ausgewählt. Jeder Request schickt den Header nun automatisch mit — du musst ihn nie
             wieder eintippen, und er steht nicht im Workflow.</p></li>
       </ol>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Header-Credential</td><td>HTTP-Node mit Header Auth ausführen</td><td>Request nutzt Credential statt offenem Token-Feld</td></tr>
+          <tr><td>Falscher Token</td><td>Platzhalter oder ungültigen Wert testen</td><td>API antwortet mit 401/403 statt still zu scheitern</td></tr>
+          <tr><td>Export-Prüfung</td><td>Workflow-JSON exportieren und öffnen</td><td>kein echter Token steht im Export</td></tr>
+          <tr><td>Wiederverwendung</td><td>Credential in zweitem HTTP-Node auswählen</td><td>du legst sie nicht erneut an</td></tr>
+        </tbody>
+      </table>
 
       <div class="prereq">
         <h4>✅ Selbsttest</h4>
@@ -4873,6 +4961,18 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
         Aktivieren ist nicht das Ende. Prüfe nach dem ersten echten Lauf die Ausführungshistorie. Erst danach darfst du
         annehmen, dass der Workflow im Alltag zuverlässig läuft.
       </div>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Normalfall</td><td>Workflow manuell starten</td><td>Telegram erhält genau eine Wetter-Nachricht</td></tr>
+          <tr><td>HTTP-Daten prüfen</td><td>HTTP-Node öffnen und Output lesen</td><td><code>daily.temperature_2m_max[0]</code> ist vorhanden</td></tr>
+          <tr><td>Textfeld prüfen</td><td>Node <strong>Report bauen</strong> ausführen</td><td><code>nachricht</code> enthält Ort, Temperatur und Regenwahrscheinlichkeit</td></tr>
+          <tr><td>Telegram-Fehler</td><td>Testweise falsche Chat-ID verwenden</td><td>Fehler ist im Telegram-Node sichtbar</td></tr>
+          <tr><td>Automatischer Lauf</td><td>Nach Aktivierung die erste Execution öffnen</td><td>geplanter Lauf ist grün und Nachricht ist angekommen</td></tr>
+        </tbody>
+      </table>
 
       <h2>Varianten, die du sofort bauen kannst</h2>
       <table class="btable">
@@ -5338,6 +5438,30 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         aktiven Workflow.
       </div>
 
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>Formular löst nicht aus</td><td>Test-Listener läuft nicht oder falsche URL geöffnet</td><td>Form-Trigger erneut auf <strong>Listen for test event</strong> stellen</td></tr>
+          <tr><td>Sheets-Zeile bleibt leer</td><td>Spaltennamen passen nicht zum Mapping</td><td>Tabellenkopf und Feldzuordnung vergleichen</td></tr>
+          <tr><td>Slack sendet nichts</td><td>App fehlt im Kanal oder Credential ist falsch</td><td>Slack-App einladen, Credential testen, Testkanal nutzen</td></tr>
+          <tr><td>Production-URL reagiert nicht</td><td>Workflow ist nicht aktiv</td><td>speichern, aktivieren und Production-URL neu kopieren</td></tr>
+          <tr><td>Doppelte Einträge entstehen</td><td>Test mehrfach abgesendet oder Retry wiederholt Schreiben</td><td>Testdaten markieren und später Dublettenprüfung ergänzen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Normale Anfrage</td><td>alle Formularfelder mit plausiblen Testdaten füllen</td><td>eine Sheet-Zeile und eine Slack-Nachricht entstehen</td></tr>
+          <tr><td>Hohe Priorität</td><td><code>Priorität = hoch</code> absenden</td><td>Slack-Text zeigt die Priorität sichtbar an</td></tr>
+          <tr><td>Lange Nachricht</td><td>mehrzeiligen Text ins Nachrichtenfeld schreiben</td><td>Zeilenumbrüche bleiben in Slack lesbar</td></tr>
+          <tr><td>Production-Test</td><td>Production-URL in privatem Fenster öffnen</td><td>aktiver Workflow erzeugt eine Execution</td></tr>
+          <tr><td>Mapping-Prüfung</td><td>Sheet-Zeile mit Slack-Nachricht vergleichen</td><td>Name, E-Mail, Thema und Nachricht stimmen überein</td></tr>
+        </tbody>
+      </table>
+
       <h2>Sinnvolle Erweiterungen</h2>
       <table class="btable">
         <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
@@ -5727,6 +5851,30 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         Der Workflow kann technisch grün sein und trotzdem schlechte Treffer liefern. Sammle ein paar Tage Beispiele:
         Welche Keywords sind zu breit, welche fehlen? Danach schärfst du den Filter.
       </div>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>RSS liefert keine Items</td><td>Feed-URL falsch oder Feed vorübergehend leer</td><td>URL im Browser öffnen und mit bekanntem Feed gegenprüfen</td></tr>
+          <tr><td>Filter lässt alles durch</td><td>Bedingung zu breit oder falsches Feld genutzt</td><td>Output des RSS-Nodes prüfen und Filter enger setzen</td></tr>
+          <tr><td>Digest erzeugt mehrere Items</td><td>Code-Node läuft pro Item statt für alle Items</td><td>Modus auf <strong>Run Once for All Items</strong> stellen</td></tr>
+          <tr><td>Slack sendet mehrere Nachrichten</td><td>Slack hängt vor dem Digest oder bekommt mehrere Items</td><td>Slack hinter <strong>Digest bauen</strong> platzieren</td></tr>
+          <tr><td>Automatischer Lauf wirkt nutzlos</td><td>Trefferqualität ist schlecht, obwohl Technik grün ist</td><td>Keywords und Quellen anhand echter Beispiele nachschärfen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Normalfall</td><td>Feed mit mehreren passenden Einträgen ausführen</td><td>Slack erhält eine Digest-Nachricht mit maximal fünf Links</td></tr>
+          <tr><td>Keine Treffer</td><td>Keyword absichtlich sehr eng setzen</td><td>Digest meldet „Heute keine Treffer“</td></tr>
+          <tr><td>Limit-Prüfung</td><td>mehr als fünf passende Items erzeugen</td><td>nach dem Limit laufen höchstens fünf Items weiter</td></tr>
+          <tr><td>Duplikat-Risiko</td><td>Workflow zweimal direkt nacheinander starten</td><td>du erkennst, ob dieselben Links erneut gesendet würden</td></tr>
+          <tr><td>Erster Schedule-Lauf</td><td>nach Aktivierung die nächste Execution öffnen</td><td>automatischer Lauf ist grün und fachlich plausibel</td></tr>
+        </tbody>
+      </table>
 
       <h2>Sinnvolle Erweiterungen</h2>
       <table class="btable">
@@ -6141,7 +6289,7 @@ Budget: {{ $json.budget }} €
         Für operative Prozesse ist meist besser: erst dauerhaft speichern, dann melden.
       </div>
 
-      <h2>Schritt 10 — Fehlerausgang für ungültige Leads</h2>
+      <h2>Schritt 10 — Wenn etwas schiefgeht: Fehlerausgang für ungültige Leads</h2>
       <p>Der false-Ausgang von <strong>E-Mail vorhanden?</strong> darf nicht ins Leere führen. Schicke ungültige Leads in einen
         Testkanal oder eine Tabelle, damit du die Ursache sehen kannst.</p>
 
@@ -6711,6 +6859,18 @@ Zusammenfassung:
         Eine KI-Demo funktioniert fast immer mit perfekten Beispielen. Relevant sind die schlechten Fälle: zu wenig Kontext,
         widersprüchlicher Text, Dringlichkeit ohne klare Zuständigkeit.
       </div>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>kein Entwurf entsteht</td><td>Gmail-Node nutzt falsche Message-ID oder falsche Aktion</td><td>Message-ID aus der vollständigen Mail prüfen und <strong>Create Draft</strong> wählen</td></tr>
+          <tr><td>KI-Ausgabe lässt sich nicht parsen</td><td>Modell liefert Text statt erwarteter Struktur</td><td>Prompt enger formulieren und Parser-Fehler sichtbar stoppen lassen</td></tr>
+          <tr><td>Slack meldet zu viele Mails</td><td>Dringlichkeitsregel ist zu weich</td><td>Prompt und IF-Bedingung mit normalen Testmails nachschärfen</td></tr>
+          <tr><td>Label fehlt</td><td>Gmail-Label existiert nicht oder Node läuft vor dem Entwurf</td><td>Label anlegen und Reihenfolge prüfen</td></tr>
+          <tr><td>Mail wird zu früh gelesen markiert</td><td>Mark-as-Read steht vor Entwurf oder Prüfung</td><td>erst ganz am Ende markieren oder den Schritt weglassen</td></tr>
+        </tbody>
+      </table>
 
       <h2>Sinnvolle Erweiterungen</h2>
       <table class="btable">
@@ -7292,7 +7452,7 @@ return {
 };</pre>
       </div>
 
-      <h2>Schritt 10 — Review-Zweig für unsichere Fälle</h2>
+      <h2>Schritt 10 — Wenn etwas schiefgeht: Review-Zweig für unsichere Fälle</h2>
       <p>Der KI-Weg darf nicht automatisch speichern, wenn wichtige Felder fehlen. Dafür bauen wir einen zweiten IF-Node.</p>
 
       <ol class="steps">
@@ -7355,7 +7515,7 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
           entscheidet, ob gespeichert oder eskaliert wird.</figcaption>
       </figure>
 
-      <h2>Schritt 11 — Drei Tests durchführen</h2>
+      <h2>Schritt 11 — Konkrete Testfälle durchführen</h2>
       <p>Ein einzelner Erfolgstest reicht hier nicht. Du brauchst bewusst gute, schwierige und schlechte Fälle.</p>
 
       <ol class="steps">
@@ -8116,7 +8276,7 @@ return {
         der letzte Node scheitert, sieht das Sheet fälschlich fertig aus.
       </div>
 
-      <h2>Schritt 18 — Fehlerzweige ergänzen</h2>
+      <h2>Schritt 18 — Wenn etwas schiefgeht: Fehlerzweige ergänzen</h2>
       <p>Ein Großprojekt ohne Fehlerpfad ist nur eine Demo. Du brauchst mindestens zwei Schutzmechanismen.</p>
 
       <table class="btable">
@@ -8179,7 +8339,7 @@ return {
         <figcaption><span class="fig-tag">Abb. 19.6</span>Ein Schedule kommt erst am Ende. Vorher testest du manuell.</figcaption>
       </figure>
 
-      <h2>Schritt 20 — Gesamttest mit drei Fällen</h2>
+      <h2>Schritt 20 — Konkrete Testfälle mit drei Fällen</h2>
       <ol class="steps">
         <li><h4>Normalfall testen</h4>
           <p>Eine Zeile steht auf <code>ready</code>. Erwartung: Workflow 1 setzt <code>review</code>, du setzt
@@ -8687,7 +8847,7 @@ Regeln:
 };</pre>
       </div>
 
-      <h2>Schritt 11 — Fehlerfälle sichtbar machen</h2>
+      <h2>Schritt 11 — Wenn etwas schiefgeht: Fehlerfälle sichtbar machen</h2>
       <p>Agentenfehler sind oft leise: falscher Ort, falscher Tool-Parameter, leere API-Antwort. Baue deshalb kleine
         Kontrollfragen ein.</p>
 
@@ -8703,7 +8863,7 @@ Regeln:
       </table>
 
       <div class="callout callout--info">
-        <b class="t">Minimaler Kontrollsatz</b>
+        <b class="t">Konkrete Testfälle</b>
         Teste immer: konkrete Frage, mehrdeutige Frage, Folgefrage mit Memory, API-Fehler. Wenn einer dieser Fälle
         scheitert, ist der Agent noch nicht robust.
       </div>
@@ -9388,7 +9548,7 @@ Frage:
         eine Strategie für Löschung, Neuindexierung und Versionierung.
       </div>
 
-      <h2>Schritt 18 — Testmatrix anlegen</h2>
+      <h2>Schritt 18 — Konkrete Testfälle anlegen</h2>
       <p>RAG ohne Testfragen ist Bauchgefühl. Lege eine kleine Testmatrix an und prüfe sie nach jedem Daten- oder
         Promptwechsel.</p>
 
@@ -9926,6 +10086,18 @@ return inputItems.map((item) =&gt; {
         </tbody>
       </table>
 
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Normale Liste</td><td>drei Leads mit vollständigen Feldern ausführen</td><td>alle Items kommen normalisiert zurück</td></tr>
+          <tr><td>Ungültige E-Mail</td><td>ein Item mit <code>grace.hopper</code> statt E-Mail senden</td><td><code>is_valid_email = false</code> und Fehlerliste ist gefüllt</td></tr>
+          <tr><td>Fehlende Firma</td><td><code>company</code> bei einem Item leer lassen</td><td>Score sinkt, aber der Workflow bricht nicht ab</td></tr>
+          <tr><td>Execute-Modus</td><td>zwischen All Items und Each Item vergleichen</td><td>du siehst den Unterschied in Rückgabe und Debugging</td></tr>
+          <tr><td>False-Zweig</td><td>Haupt-Workflow mit ungültiger E-Mail starten</td><td>Item landet kontrolliert im Prüfzweig</td></tr>
+        </tbody>
+      </table>
+
       <h2>Sinnvolle Erweiterungen</h2>
       <table class="btable">
         <thead><tr><th>Erweiterung</th><th>Wie?</th><th>Skeptische Frage</th></tr></thead>
@@ -10339,7 +10511,7 @@ return [{
         Wenn ein Workflow 10 MB pro Item durch zehn Nodes trägt, hast du kein Anzeigeproblem. Du hast ein Datenmodellproblem.
       </div>
 
-      <h2>Testmatrix</h2>
+      <h2>Konkrete Testfälle</h2>
       <p>Nutze kleine Zahlen, aber teste die entscheidenden Fälle. Das Muster ist wichtiger als die absolute Menge.</p>
 
       <table class="btable">
@@ -10803,7 +10975,7 @@ volumes:
         klare Dublettenprüfung.
       </div>
 
-      <h2>Testmatrix</h2>
+      <h2>Konkrete Testfälle</h2>
       <table class="btable">
         <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
         <tbody>

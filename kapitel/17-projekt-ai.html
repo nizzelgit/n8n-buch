@@ -510,6 +510,18 @@ Zusammenfassung:
         widersprüchlicher Text, Dringlichkeit ohne klare Zuständigkeit.
       </div>
 
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>kein Entwurf entsteht</td><td>Gmail-Node nutzt falsche Message-ID oder falsche Aktion</td><td>Message-ID aus der vollständigen Mail prüfen und <strong>Create Draft</strong> wählen</td></tr>
+          <tr><td>KI-Ausgabe lässt sich nicht parsen</td><td>Modell liefert Text statt erwarteter Struktur</td><td>Prompt enger formulieren und Parser-Fehler sichtbar stoppen lassen</td></tr>
+          <tr><td>Slack meldet zu viele Mails</td><td>Dringlichkeitsregel ist zu weich</td><td>Prompt und IF-Bedingung mit normalen Testmails nachschärfen</td></tr>
+          <tr><td>Label fehlt</td><td>Gmail-Label existiert nicht oder Node läuft vor dem Entwurf</td><td>Label anlegen und Reihenfolge prüfen</td></tr>
+          <tr><td>Mail wird zu früh gelesen markiert</td><td>Mark-as-Read steht vor Entwurf oder Prüfung</td><td>erst ganz am Ende markieren oder den Schritt weglassen</td></tr>
+        </tbody>
+      </table>
+
       <h2>Sinnvolle Erweiterungen</h2>
       <table class="btable">
         <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>

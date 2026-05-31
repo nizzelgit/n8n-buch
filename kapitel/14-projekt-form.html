@@ -440,6 +440,30 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         aktiven Workflow.
       </div>
 
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>Formular löst nicht aus</td><td>Test-Listener läuft nicht oder falsche URL geöffnet</td><td>Form-Trigger erneut auf <strong>Listen for test event</strong> stellen</td></tr>
+          <tr><td>Sheets-Zeile bleibt leer</td><td>Spaltennamen passen nicht zum Mapping</td><td>Tabellenkopf und Feldzuordnung vergleichen</td></tr>
+          <tr><td>Slack sendet nichts</td><td>App fehlt im Kanal oder Credential ist falsch</td><td>Slack-App einladen, Credential testen, Testkanal nutzen</td></tr>
+          <tr><td>Production-URL reagiert nicht</td><td>Workflow ist nicht aktiv</td><td>speichern, aktivieren und Production-URL neu kopieren</td></tr>
+          <tr><td>Doppelte Einträge entstehen</td><td>Test mehrfach abgesendet oder Retry wiederholt Schreiben</td><td>Testdaten markieren und später Dublettenprüfung ergänzen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Normale Anfrage</td><td>alle Formularfelder mit plausiblen Testdaten füllen</td><td>eine Sheet-Zeile und eine Slack-Nachricht entstehen</td></tr>
+          <tr><td>Hohe Priorität</td><td><code>Priorität = hoch</code> absenden</td><td>Slack-Text zeigt die Priorität sichtbar an</td></tr>
+          <tr><td>Lange Nachricht</td><td>mehrzeiligen Text ins Nachrichtenfeld schreiben</td><td>Zeilenumbrüche bleiben in Slack lesbar</td></tr>
+          <tr><td>Production-Test</td><td>Production-URL in privatem Fenster öffnen</td><td>aktiver Workflow erzeugt eine Execution</td></tr>
+          <tr><td>Mapping-Prüfung</td><td>Sheet-Zeile mit Slack-Nachricht vergleichen</td><td>Name, E-Mail, Thema und Nachricht stimmen überein</td></tr>
+        </tbody>
+      </table>
+
       <h2>Sinnvolle Erweiterungen</h2>
       <table class="btable">
         <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>

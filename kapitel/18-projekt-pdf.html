@@ -554,7 +554,7 @@ return {
 };</pre>
       </div>
 
-      <h2>Schritt 10 — Review-Zweig für unsichere Fälle</h2>
+      <h2>Schritt 10 — Wenn etwas schiefgeht: Review-Zweig für unsichere Fälle</h2>
       <p>Der KI-Weg darf nicht automatisch speichern, wenn wichtige Felder fehlen. Dafür bauen wir einen zweiten IF-Node.</p>
 
       <ol class="steps">
@@ -617,7 +617,7 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
           entscheidet, ob gespeichert oder eskaliert wird.</figcaption>
       </figure>
 
-      <h2>Schritt 11 — Drei Tests durchführen</h2>
+      <h2>Schritt 11 — Konkrete Testfälle durchführen</h2>
       <p>Ein einzelner Erfolgstest reicht hier nicht. Du brauchst bewusst gute, schwierige und schlechte Fälle.</p>
 
       <ol class="steps">

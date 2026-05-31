@@ -390,6 +390,18 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
         annehmen, dass der Workflow im Alltag zuverlässig läuft.
       </div>
 
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Normalfall</td><td>Workflow manuell starten</td><td>Telegram erhält genau eine Wetter-Nachricht</td></tr>
+          <tr><td>HTTP-Daten prüfen</td><td>HTTP-Node öffnen und Output lesen</td><td><code>daily.temperature_2m_max[0]</code> ist vorhanden</td></tr>
+          <tr><td>Textfeld prüfen</td><td>Node <strong>Report bauen</strong> ausführen</td><td><code>nachricht</code> enthält Ort, Temperatur und Regenwahrscheinlichkeit</td></tr>
+          <tr><td>Telegram-Fehler</td><td>Testweise falsche Chat-ID verwenden</td><td>Fehler ist im Telegram-Node sichtbar</td></tr>
+          <tr><td>Automatischer Lauf</td><td>Nach Aktivierung die erste Execution öffnen</td><td>geplanter Lauf ist grün und Nachricht ist angekommen</td></tr>
+        </tbody>
+      </table>
+
       <h2>Varianten, die du sofort bauen kannst</h2>
       <table class="btable">
         <thead><tr><th>Variante</th><th>Änderung</th></tr></thead>

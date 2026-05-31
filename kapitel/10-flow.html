@@ -224,6 +224,17 @@
         führe sie zusammen — dann brauchst du den Versand-Node nur <em>einmal</em>.
       </div>
 
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>true-Zweig</td><td><code>tempC</code> auf über 20 setzen</td><td>warmer Text läuft oben weiter</td></tr>
+          <tr><td>false-Zweig</td><td><code>tempC</code> auf 20 oder weniger setzen</td><td>kühler Text läuft unten weiter</td></tr>
+          <tr><td>Merge</td><td>beide Zweige vor einem gemeinsamen Versand zusammenführen</td><td>nach dem Merge gibt es wieder einen gemeinsamen Pfad</td></tr>
+          <tr><td>Loop-Kontrolle</td><td>Loop-Verbindung im Test beobachten</td><td>Loop endet am Done-Ausgang statt endlos zu laufen</td></tr>
+        </tbody>
+      </table>
+
       <div class="prereq">
         <h4>✅ Selbsttest</h4>
         <ul>

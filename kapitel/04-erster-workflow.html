@@ -452,8 +452,8 @@
             Items er ausgegeben hat.</p></li>
       </ol>
 
-      <div class="callout callout--tip">
-        <b class="t">🎉 Geschafft — und das war kein Spielzeug</b>
+      <div class="callout callout--pareto">
+        <b class="t">⚡ Das Grundmuster trägt weit</b>
         Du hast einen vollständigen Workflow gebaut, der echte Daten aus dem Internet holt, sie verarbeitet und ein sauberes
         Ergebnis erzeugt. Genau dieses Skelett — <em>Trigger → Daten holen → umformen</em> — steckt in der Mehrheit aller
         Automatisierungen, die du je bauen wirst.
@@ -502,6 +502,17 @@
         Fast immer einer dieser drei Gründe: (1) Du hast dem Bot noch <em>nicht</em> selbst geschrieben (Schritt 2 nachholen),
         (2) falsche Chat-ID, oder (3) ein Tippfehler im Token. Die rote Fehlermeldung im Node nennt dir meist genau den Grund.
       </div>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>HTTP-Test</td><td>HTTP-Node einzeln ausführen</td><td>Output enthält <code>current.temperature_2m</code></td></tr>
+          <tr><td>Expression-Test</td><td>Edit-Fields-Node ausführen</td><td><code>nachricht</code> enthält echte Wetterwerte</td></tr>
+          <tr><td>Workflow-Test</td><td><strong>Test workflow</strong> starten</td><td>alle Nodes werden grün ausgeführt</td></tr>
+          <tr><td>Optionaler Telegram-Test</td><td>Telegram-Node mit Testchat ausführen</td><td>genau eine Nachricht kommt an</td></tr>
+        </tbody>
+      </table>
 
       <h2>Was du in diesem Kapitel gelernt hast</h2>
       <ul>

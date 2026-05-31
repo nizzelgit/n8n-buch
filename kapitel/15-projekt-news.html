@@ -364,6 +364,30 @@
         Welche Keywords sind zu breit, welche fehlen? Danach schärfst du den Filter.
       </div>
 
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>RSS liefert keine Items</td><td>Feed-URL falsch oder Feed vorübergehend leer</td><td>URL im Browser öffnen und mit bekanntem Feed gegenprüfen</td></tr>
+          <tr><td>Filter lässt alles durch</td><td>Bedingung zu breit oder falsches Feld genutzt</td><td>Output des RSS-Nodes prüfen und Filter enger setzen</td></tr>
+          <tr><td>Digest erzeugt mehrere Items</td><td>Code-Node läuft pro Item statt für alle Items</td><td>Modus auf <strong>Run Once for All Items</strong> stellen</td></tr>
+          <tr><td>Slack sendet mehrere Nachrichten</td><td>Slack hängt vor dem Digest oder bekommt mehrere Items</td><td>Slack hinter <strong>Digest bauen</strong> platzieren</td></tr>
+          <tr><td>Automatischer Lauf wirkt nutzlos</td><td>Trefferqualität ist schlecht, obwohl Technik grün ist</td><td>Keywords und Quellen anhand echter Beispiele nachschärfen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Normalfall</td><td>Feed mit mehreren passenden Einträgen ausführen</td><td>Slack erhält eine Digest-Nachricht mit maximal fünf Links</td></tr>
+          <tr><td>Keine Treffer</td><td>Keyword absichtlich sehr eng setzen</td><td>Digest meldet „Heute keine Treffer“</td></tr>
+          <tr><td>Limit-Prüfung</td><td>mehr als fünf passende Items erzeugen</td><td>nach dem Limit laufen höchstens fünf Items weiter</td></tr>
+          <tr><td>Duplikat-Risiko</td><td>Workflow zweimal direkt nacheinander starten</td><td>du erkennst, ob dieselben Links erneut gesendet würden</td></tr>
+          <tr><td>Erster Schedule-Lauf</td><td>nach Aktivierung die nächste Execution öffnen</td><td>automatischer Lauf ist grün und fachlich plausibel</td></tr>
+        </tbody>
+      </table>
+
       <h2>Sinnvolle Erweiterungen</h2>
       <table class="btable">
         <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>

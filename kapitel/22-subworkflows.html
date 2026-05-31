@@ -478,6 +478,18 @@ return inputItems.map((item) =&gt; {
         </tbody>
       </table>
 
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Normale Liste</td><td>drei Leads mit vollständigen Feldern ausführen</td><td>alle Items kommen normalisiert zurück</td></tr>
+          <tr><td>Ungültige E-Mail</td><td>ein Item mit <code>grace.hopper</code> statt E-Mail senden</td><td><code>is_valid_email = false</code> und Fehlerliste ist gefüllt</td></tr>
+          <tr><td>Fehlende Firma</td><td><code>company</code> bei einem Item leer lassen</td><td>Score sinkt, aber der Workflow bricht nicht ab</td></tr>
+          <tr><td>Execute-Modus</td><td>zwischen All Items und Each Item vergleichen</td><td>du siehst den Unterschied in Rückgabe und Debugging</td></tr>
+          <tr><td>False-Zweig</td><td>Haupt-Workflow mit ungültiger E-Mail starten</td><td>Item landet kontrolliert im Prüfzweig</td></tr>
+        </tbody>
+      </table>
+
       <h2>Sinnvolle Erweiterungen</h2>
       <table class="btable">
         <thead><tr><th>Erweiterung</th><th>Wie?</th><th>Skeptische Frage</th></tr></thead>
