@@ -70,9 +70,9 @@ window.BOOK = {
       part: "Anhang",
       chapters: [
         { num: "A", slug: "A-shortcuts",        title: "Tastenkürzel-Referenz", status: "ready", mins: 7 },
-        { num: "B", slug: "B-nodes",            title: "Spickzettel: die wichtigsten Nodes", status: "soon", mins: 6 },
-        { num: "C", slug: "C-expressions",      title: "Expression-Cheatsheet", status: "soon", mins: 6 },
-        { num: "D", slug: "D-glossar",          title: "Glossar", status: "soon", mins: 4 }
+        { num: "B", slug: "B-nodes",            title: "Spickzettel: die wichtigsten Nodes", status: "ready", mins: 10 },
+        { num: "C", slug: "C-expressions",      title: "Expression-Cheatsheet", status: "ready", mins: 10 },
+        { num: "D", slug: "D-glossar",          title: "Glossar", status: "ready", mins: 8 }
       ]
     }
   ]

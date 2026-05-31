@@ -1003,16 +1003,16 @@ ol.steps > li p { font-size: 15.5px; }
       </a><div class="sb-part">Anhang</div><a class="sb-link" data-title="tastenkürzel-referenz"
       href="#A-shortcuts" data-slug="A-shortcuts">
       <span class="num">A</span><span>Tastenkürzel-Referenz</span>
-      </a><a class="sb-link is-soon" data-title="spickzettel: die wichtigsten nodes"
-      href="javascript:void(0)" data-slug="B-nodes">
+      </a><a class="sb-link" data-title="spickzettel: die wichtigsten nodes"
+      href="#B-nodes" data-slug="B-nodes">
       <span class="num">B</span><span>Spickzettel: die wichtigsten Nodes</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="expression-cheatsheet"
-      href="javascript:void(0)" data-slug="C-expressions">
+      </a><a class="sb-link" data-title="expression-cheatsheet"
+      href="#C-expressions" data-slug="C-expressions">
       <span class="num">C</span><span>Expression-Cheatsheet</span>
-      <span class="soon">bald</span></a><a class="sb-link is-soon" data-title="glossar"
-      href="javascript:void(0)" data-slug="D-glossar">
+      </a><a class="sb-link" data-title="glossar"
+      href="#D-glossar" data-slug="D-glossar">
       <span class="num">D</span><span>Glossar</span>
-      <span class="soon">bald</span></a><div class="sb-foot">© 2026 · Lehrbuch-Entwurf · „n8n“ ist eine Marke der n8n GmbH. Unabhängiges Lernprojekt.</div></aside>
+      </a><div class="sb-foot">© 2026 · Lehrbuch-Entwurf · „n8n“ ist eine Marke der n8n GmbH. Unabhängiges Lernprojekt.</div></aside>
   <div id="content">
     <header id="bookbar"></header>
     <section class="page" id="home" hidden>
@@ -1107,16 +1107,16 @@ ol.steps > li p { font-size: 15.5px; }
       <span class="pill">lesen</span></a></div></div><div class="toc-part"><h3>Anhang</h3><div class="toc-list"><a class="toc-row" href="#A-shortcuts">
       <span class="n">A</span><span class="ti">Tastenkürzel-Referenz</span>
       <span class="mins">⏱ 7 Min</span>
-      <span class="pill">lesen</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="pill">lesen</span></a><a class="toc-row" href="#B-nodes">
       <span class="n">B</span><span class="ti">Spickzettel: die wichtigsten Nodes</span>
-      <span class="mins">⏱ 6 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="mins">⏱ 10 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row" href="#C-expressions">
       <span class="n">C</span><span class="ti">Expression-Cheatsheet</span>
-      <span class="mins">⏱ 6 Min</span>
-      <span class="pill">bald</span></a><a class="toc-row soon" href="javascript:void(0)">
+      <span class="mins">⏱ 10 Min</span>
+      <span class="pill">lesen</span></a><a class="toc-row" href="#D-glossar">
       <span class="n">D</span><span class="ti">Glossar</span>
-      <span class="mins">⏱ 4 Min</span>
-      <span class="pill">bald</span></a></div></div></div>
+      <span class="mins">⏱ 8 Min</span>
+      <span class="pill">lesen</span></a></div></div></div>
 </section>
     <section class="page" id="00-vorwort" hidden><article>
 
@@ -11358,12 +11358,456 @@ volumes:
 
     </article>
       <nav class="pn-wrap" data-slug="A-shortcuts"></nav></section>
+<section class="page" id="B-nodes" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">B</span> Anhang</div>
+      <h1 class="chap-title">Spickzettel: die wichtigsten Nodes</h1>
+      <p class="chap-lede">n8n hat viele Nodes. Du brauchst am Anfang nicht alle. Dieser Spickzettel ordnet die
+        wichtigsten Bausteine danach, welches Problem sie lösen: starten, holen, verändern, verzweigen, warten,
+        schreiben und antworten.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 10 Minuten</span>
+        <span>🎯 Niveau: Nachschlagen</span>
+        <span>🧩 Voraussetzung: Kapitel 5</span>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">80/20 für Nodes</b>
+        Die meisten Einsteiger-Workflows entstehen aus zehn Bausteinen: Manual Trigger, Schedule Trigger, Webhook,
+        HTTP Request, Edit Fields, IF, Switch, Merge, Code und Respond to Webhook.
+      </div>
+
+      <h2>Node-Typen verstehen</h2>
+      <table class="btable">
+        <thead><tr><th>Typ</th><th>Was er macht</th><th>Merksatz</th></tr></thead>
+        <tbody>
+          <tr><td>Trigger</td><td>startet einen Workflow</td><td>ohne Trigger läuft nichts automatisch</td></tr>
+          <tr><td>Action</td><td>arbeitet mit Daten oder externen Diensten</td><td>holt, verändert, sendet oder speichert</td></tr>
+          <tr><td>Core Node</td><td>liefert allgemeine Logik</td><td>nicht an einen bestimmten Dienst gebunden</td></tr>
+          <tr><td>App Node</td><td>spricht einen konkreten Dienst an</td><td>z. B. Google Sheets, Slack, Gmail</td></tr>
+          <tr><td>Credential-only</td><td>stellt Authentifizierung bereit</td><td>oft zusammen mit HTTP Request nützlich</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Starten</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Typischer Fehler</th></tr></thead>
+        <tbody>
+          <tr><td>Manual Trigger</td><td>du einen Workflow beim Bauen von Hand starten willst</td><td>später vergessen, einen echten Trigger einzubauen</td></tr>
+          <tr><td>Schedule Trigger</td><td>etwas regelmäßig laufen soll</td><td>Zeitfenster und Zeitzone nicht prüfen</td></tr>
+          <tr><td>Webhook</td><td>ein externes System n8n aufrufen soll</td><td>Test-URL mit Produktions-URL verwechseln</td></tr>
+          <tr><td>Form Trigger</td><td>Menschen einfache Daten eingeben sollen</td><td>Formular als Ersatz für Datenvalidierung missverstehen</td></tr>
+          <tr><td>Error Trigger</td><td>Fehler zentral behandelt werden sollen</td><td>Fehlerworkflow selbst ungetestet lassen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Daten holen und senden</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Prüffrage</th></tr></thead>
+        <tbody>
+          <tr><td>HTTP Request</td><td>du eine REST-API ansprechen willst</td><td>Welche Methode, URL, Authentifizierung und Antwortstruktur?</td></tr>
+          <tr><td>Google Sheets</td><td>Zeilen gelesen oder geschrieben werden sollen</td><td>Ist die Kopfzeile stabil?</td></tr>
+          <tr><td>Slack</td><td>Nachrichten in Kanäle oder Personen gehen</td><td>Ist der Zielkanal korrekt?</td></tr>
+          <tr><td>Gmail / Email</td><td>E-Mails gelesen oder versendet werden</td><td>Ist Senden wirklich gewollt oder erst Testmodus?</td></tr>
+          <tr><td>Read/Write Files</td><td>lokale Dateien in Self-hosted-Setups gebraucht werden</td><td>Existiert der Pfad auch im Container?</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">HTTP Request ist mächtig, aber nicht automatisch richtig</b>
+        Wenn ein Dienst einen eigenen n8n-Node hat, ist dieser oft schneller verständlich. HTTP Request ist die
+        Ausweich- und Profioption, wenn du direkt mit einer API sprechen musst.
+      </div>
+
+      <h2>Daten verändern</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Grenze</th></tr></thead>
+        <tbody>
+          <tr><td>Edit Fields</td><td>du Felder setzen, umbenennen oder gezielt weitergeben willst</td><td>keine komplexe Programmlogik</td></tr>
+          <tr><td>Filter</td><td>Items anhand von Bedingungen behalten oder entfernen willst</td><td>kein Verzweigungsdiagramm</td></tr>
+          <tr><td>Sort</td><td>Items sortiert werden sollen</td><td>sortiert nur vorhandene Items</td></tr>
+          <tr><td>Limit</td><td>du nur eine begrenzte Anzahl Items weiterreichen willst</td><td>löst keine API-Pagination</td></tr>
+          <tr><td>Remove Duplicates</td><td>Dubletten anhand von Feldern verschwinden sollen</td><td>ersetzt keine fachliche Idempotenz</td></tr>
+          <tr><td>Code</td><td>die GUI-Optionen nicht reichen</td><td>macht Workflows schwerer lesbar</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Entscheiden und zusammenführen</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Merksatz</th></tr></thead>
+        <tbody>
+          <tr><td>IF</td><td>es genau zwei Wege gibt</td><td>wahr oder falsch</td></tr>
+          <tr><td>Switch</td><td>mehrere Wege möglich sind</td><td>mehrere Fälle statt verschachtelter IFs</td></tr>
+          <tr><td>Merge</td><td>zwei oder mehr Datenströme wieder zusammenkommen</td><td>erst klären: nach Position oder nach Feld?</td></tr>
+          <tr><td>Loop Over Items</td><td>Items portioniert verarbeitet werden sollen</td><td>hilft bei Batching und Limits</td></tr>
+          <tr><td>Wait</td><td>ein Workflow pausieren soll</td><td>bewusst warten, nicht blockierend schlafen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Antworten und stoppen</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Wichtig</th></tr></thead>
+        <tbody>
+          <tr><td>Respond to Webhook</td><td>ein Webhook eine kontrollierte Antwort liefern soll</td><td>Webhook muss auf diese Antwortmethode eingestellt sein</td></tr>
+          <tr><td>Stop and Error</td><td>ein Workflow absichtlich fehlschlagen soll</td><td>Fehlertext so schreiben, dass du ihn später verstehst</td></tr>
+          <tr><td>No Operation</td><td>du einen Platzhalter oder Endpunkt im Workflow brauchst</td><td>nur zur Struktur, nicht als Logikersatz</td></tr>
+          <tr><td>Execution Data</td><td>du eigene Ausführungsdaten speichern willst</td><td>keine sensiblen Daten unnötig ablegen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Auswahlregel</h2>
+      <ol class="steps">
+        <li><h4>Start klären</h4><p>Kommt das Ereignis per Zeitplan, Webhook, Formular, manuell oder aus einem Dienst?</p></li>
+        <li><h4>Datenquelle bestimmen</h4><p>Gibt es einen passenden App-Node? Wenn nicht, prüfe HTTP Request.</p></li>
+        <li><h4>Transformation klein halten</h4><p>Nutze Edit Fields, Filter, Sort und Limit, bevor du Code einsetzt.</p></li>
+        <li><h4>Verzweigung sichtbar machen</h4><p>Nimm IF für zwei Wege, Switch für mehrere Wege.</p></li>
+        <li><h4>Schreibende Nodes absichern</h4><p>Prüfe Dubletten, Testdaten und Credentials, bevor Daten extern verändert werden.</p></li>
+      </ol>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>Node findet keine Daten</td><td>falscher Eingang oder falscher Feldname</td><td>Input-Panel prüfen und Feld per Drag-and-drop wählen</td></tr>
+          <tr><td>HTTP Request liefert 401</td><td>Authentifizierung fehlt oder ist falsch</td><td>Credential, Header und Token-Typ prüfen</td></tr>
+          <tr><td>Webhook reagiert nur im Test</td><td>Produktions-URL nicht aktiviert oder Workflow nicht veröffentlicht</td><td>Workflow aktivieren und Production URL nutzen</td></tr>
+          <tr><td>Merge liefert unerwartete Paare</td><td>falscher Kombinationsmodus</td><td>Position, Matching Fields oder Append bewusst wählen</td></tr>
+          <tr><td>Code-Node macht alles und keiner versteht ihn</td><td>zu viel Logik im Code versteckt</td><td>einfache Teile zurück in sichtbare Nodes verlagern</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Webhook-Test</td><td>Test-URL mit kleiner JSON-Payload aufrufen</td><td>Webhook zeigt ein neues Item</td></tr>
+          <tr><td>Filter-Test</td><td>Beispieldaten mit passenden und unpassenden Items verwenden</td><td>nur erwartete Items laufen weiter</td></tr>
+          <tr><td>Merge-Test</td><td>zwei Listen mit sichtbaren IDs zusammenführen</td><td>Paare stimmen mit den IDs überein</td></tr>
+          <tr><td>HTTP-Test</td><td>ungefährlichen GET-Request ausführen</td><td>Status und Antwortstruktur sind sichtbar</td></tr>
+          <tr><td>Schreib-Test</td><td>in Testtabelle oder Testkanal schreiben</td><td>genau ein neuer Eintrag entsteht</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Wann nimmst du IF, wann Switch?</li>
+          <li>Warum ist HTTP Request nicht immer die erste Wahl?</li>
+          <li>Was musst du vor einem schreibenden Node prüfen?</li>
+          <li>Warum ist Merge ohne klare Schlüssel verdächtig?</li>
+          <li>Wann ist ein Code-Node gerechtfertigt?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) IF für zwei Wege, Switch für mehrere Fälle. ·
+        2) Ein App-Node ist oft lesbarer und führt dich besser durch Authentifizierung und Felder. ·
+        3) Ziel, Testdaten, Dubletten und Credentials. ·
+        4) Weil unklar ist, welche Items fachlich zusammengehören. ·
+        5) Wenn GUI-Nodes die nötige Transformation nicht sauber ausdrücken.
+      </div>
+
+    </article>
+      <nav class="pn-wrap" data-slug="B-nodes"></nav></section>
+<section class="page" id="C-expressions" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">C</span> Anhang</div>
+      <h1 class="chap-title">Expression-Cheatsheet</h1>
+      <p class="chap-lede">Expressions sind kleine JavaScript-Ausdrücke in Node-Feldern. Sie holen Werte aus Items,
+        formen Text, prüfen Bedingungen und bauen dynamische URLs. Dieses Cheatsheet zeigt die Muster, die du wirklich
+        häufig brauchst.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 10 Minuten</span>
+        <span>🎯 Niveau: Nachschlagen</span>
+        <span>🧩 Voraussetzung: Kapitel 6</span>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">80/20 für Expressions</b>
+        Lerne zuerst <code>$json</code>, Punktzugriff, eckige Klammern, Verkettung mit Text, <code>??</code> als
+        Fallback, ternäre Bedingungen und Datumsformatierung mit <code>$now.toFormat()</code>.
+      </div>
+
+      <h2>Grundform</h2>
+      <table class="btable">
+        <thead><tr><th>Ziel</th><th>Expression</th><th>Beispielausgabe</th></tr></thead>
+        <tbody>
+          <tr><td>Feld lesen</td><td><code>{{ $json.email }}</code></td><td><code>ada@example.com</code></td></tr>
+          <tr><td>Verschachteltes Feld</td><td><code>{{ $json.customer.name }}</code></td><td><code>Ada Lovelace</code></td></tr>
+          <tr><td>Feld mit Leerzeichen</td><td><code>{{ $json["Order ID"] }}</code></td><td><code>ORD-42</code></td></tr>
+          <tr><td>Text bauen</td><td><code>{{ "Hallo " + $json.name }}</code></td><td><code>Hallo Ada</code></td></tr>
+          <tr><td>Template-String</td><td><code>{{ `Hallo ${$json.name}` }}</code></td><td><code>Hallo Ada</code></td></tr>
+        </tbody>
+      </table>
+
+      <h2>Häufige Zugriffe</h2>
+      <table class="btable">
+        <thead><tr><th>Du brauchst ...</th><th>Muster</th><th>Hinweis</th></tr></thead>
+        <tbody>
+          <tr><td>aktuelles Item</td><td><code>{{ $json }}</code></td><td>das JSON des gerade verarbeiteten Items</td></tr>
+          <tr><td>aktuelles Feld</td><td><code>{{ $json.status }}</code></td><td>Standardfall in den meisten Nodes</td></tr>
+          <tr><td>erster Wert aus anderem Node</td><td><code>{{ $("Webhook").first().json.body.email }}</code></td><td>gut für globale Daten aus einem Trigger</td></tr>
+          <tr><td>verknüpftes Item aus anderem Node</td><td><code>{{ $("Kunden").item.json.id }}</code></td><td>nutzt die Item-Verknüpfung</td></tr>
+          <tr><td>Binärdaten</td><td><code>{{ $binary.data.fileName }}</code></td><td>nur wenn Binary Data vorhanden ist</td></tr>
+          <tr><td>heutiges Datum</td><td><code>{{ $today }}</code></td><td>Datum ohne genaue Uhrzeit</td></tr>
+          <tr><td>aktueller Zeitpunkt</td><td><code>{{ $now }}</code></td><td>Datum und Uhrzeit</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">Item-Verknüpfung nicht erraten</b>
+        <code>$("Node").item</code> ist dann sinnvoll, wenn n8n weiß, welches frühere Item zum aktuellen Item gehört.
+        Wenn du bewusst den ersten Datensatz brauchst, nutze klar <code>.first()</code>.
+      </div>
+
+      <h2>Fallbacks und Bedingungen</h2>
+      <table class="btable">
+        <thead><tr><th>Ziel</th><th>Expression</th><th>Warum?</th></tr></thead>
+        <tbody>
+          <tr><td>Fallback bei leerem Wert</td><td><code>{{ $json.email ?? "keine-mail@example.com" }}</code></td><td>nutzt Ersatz bei <code>null</code> oder <code>undefined</code></td></tr>
+          <tr><td>optional lesen</td><td><code>{{ $json.customer?.address?.city }}</code></td><td>bricht nicht ab, wenn ein Zwischenfeld fehlt</td></tr>
+          <tr><td>Bedingung</td><td><code>{{ $json.total &gt; 100 ? "hoch" : "normal" }}</code></td><td>kurzer Wenn-dann-sonst-Ausdruck</td></tr>
+          <tr><td>Text klein schreiben</td><td><code>{{ $json.email.toLowerCase() }}</code></td><td>nützlich für Vergleich und Dublettenprüfung</td></tr>
+          <tr><td>Leerzeichen entfernen</td><td><code>{{ $json.name.trim() }}</code></td><td>bereinigt Eingaben</td></tr>
+          <tr><td>Zahl runden</td><td><code>{{ Math.round($json.amount * 100) / 100 }}</code></td><td>zwei Dezimalstellen als Zahl</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Listen und Objekte</h2>
+      <table class="btable">
+        <thead><tr><th>Ziel</th><th>Expression</th><th>Ergebnisidee</th></tr></thead>
+        <tbody>
+          <tr><td>erstes Element</td><td><code>{{ $json.items[0].name }}</code></td><td>Name des ersten Listeneintrags</td></tr>
+          <tr><td>Anzahl</td><td><code>{{ $json.items.length }}</code></td><td>wie viele Einträge vorhanden sind</td></tr>
+          <tr><td>Liste verbinden</td><td><code>{{ $json.tags.join(", ") }}</code></td><td><code>lead, vip, eu</code></td></tr>
+          <tr><td>Feldliste bauen</td><td><code>{{ $json.items.map(i =&gt; i.email).join(",") }}</code></td><td>kommagetrennte E-Mail-Liste</td></tr>
+          <tr><td>Eintrag suchen</td><td><code>{{ $json.items.find(i =&gt; i.status === "open")?.id }}</code></td><td>ID des ersten offenen Eintrags</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Datum und Zeit</h2>
+      <table class="btable">
+        <thead><tr><th>Ziel</th><th>Expression</th><th>Hinweis</th></tr></thead>
+        <tbody>
+          <tr><td>ISO-Datum</td><td><code>{{ $now.toFormat("yyyy-MM-dd") }}</code></td><td>gut für Dateinamen und Tabellen</td></tr>
+          <tr><td>deutsches Datum</td><td><code>{{ $now.toFormat("dd.MM.yyyy") }}</code></td><td>gut für Nachrichten</td></tr>
+          <tr><td>morgen</td><td><code>{{ $now.plus({ days: 1 }).toFormat("yyyy-MM-dd") }}</code></td><td>relative Termine</td></tr>
+          <tr><td>Unix-Zeit</td><td><code>{{ $now.toSeconds() }}</code></td><td>manche APIs erwarten Sekunden</td></tr>
+          <tr><td>Datum aus Feld</td><td><code>{{ DateTime.fromISO($json.createdAt).toFormat("dd.MM.yyyy") }}</code></td><td>wenn ein ISO-Zeitstempel im Item liegt</td></tr>
+        </tbody>
+      </table>
+
+      <h2>URLs und API-Parameter</h2>
+      <table class="btable">
+        <thead><tr><th>Ziel</th><th>Expression</th><th>Warum?</th></tr></thead>
+        <tbody>
+          <tr><td>Query-Wert schützen</td><td><code>{{ encodeURIComponent($json.search) }}</code></td><td>Leerzeichen und Sonderzeichen werden URL-sicher</td></tr>
+          <tr><td>URL bauen</td><td><code>{{ "https://api.example.com/users/" + $json.id }}</code></td><td>dynamischer API-Endpunkt</td></tr>
+          <tr><td>Header-Wert</td><td><code>{{ "Bearer " + $json.access_token }}</code></td><td>nur mit Testwerten, echte Tokens gehören in Credentials</td></tr>
+          <tr><td>Dateiname</td><td><code>{{ `rechnung-${$json.invoiceId}.pdf` }}</code></td><td>stabile Dateinamen erzeugen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Arbeitsregel</h2>
+      <ol class="steps">
+        <li><h4>Input ansehen</h4><p>Öffne das Input-Panel und prüfe den echten Feldnamen. Nicht aus dem Gedächtnis raten.</p></li>
+        <li><h4>Klein anfangen</h4><p>Erst <code>{{ $json }}</code>, dann <code>{{ $json.feld }}</code>, dann erst Logik ergänzen.</p></li>
+        <li><h4>Fallback setzen</h4><p>Bei optionalen Feldern <code>??</code> oder <code>?.</code> verwenden.</p></li>
+        <li><h4>Komplexität begrenzen</h4><p>Wenn eine Expression mehr als eine Zeile Denkarbeit braucht, prüfe Edit Fields oder Code.</p></li>
+        <li><h4>Mit echten Testdaten prüfen</h4><p>Mindestens ein vollständiges und ein unvollständiges Item testen.</p></li>
+      </ol>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td><code>undefined</code></td><td>Feld existiert nicht im aktuellen Item</td><td>Input-Panel prüfen, Feldnamen exakt übernehmen</td></tr>
+          <tr><td>Expression bleibt Text</td><td>Feld steht im Fixed-Modus</td><td>auf Expression-Modus wechseln</td></tr>
+          <tr><td>Fehler bei fehlendem Unterfeld</td><td>verschachtelter Zugriff ohne <code>?.</code></td><td><code>$json.customer?.email</code> verwenden</td></tr>
+          <tr><td>falsches Item aus altem Node</td><td><code>.first()</code> statt verknüpftem Item genutzt</td><td><code>.item</code> prüfen oder bewusst erstes Item dokumentieren</td></tr>
+          <tr><td>API-URL kaputt</td><td>Sonderzeichen nicht kodiert</td><td><code>encodeURIComponent()</code> verwenden</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Input</th><th>Expression</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Pflichtfeld</td><td><code>{"name":"Ada"}</code></td><td><code>{{ $json.name }}</code></td><td><code>Ada</code></td></tr>
+          <tr><td>Fallback</td><td><code>{"email":null}</code></td><td><code>{{ $json.email ?? "fehlt" }}</code></td><td><code>fehlt</code></td></tr>
+          <tr><td>Bedingung</td><td><code>{"total":120}</code></td><td><code>{{ $json.total &gt; 100 ? "hoch" : "normal" }}</code></td><td><code>hoch</code></td></tr>
+          <tr><td>Liste</td><td><code>{"tags":["lead","vip"]}</code></td><td><code>{{ $json.tags.join(", ") }}</code></td><td><code>lead, vip</code></td></tr>
+          <tr><td>Datum</td><td>aktueller Zeitpunkt</td><td><code>{{ $now.toFormat("yyyy-MM-dd") }}</code></td><td>Datum im ISO-Format</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Wie liest du das Feld <code>email</code> aus dem aktuellen Item?</li>
+          <li>Was macht <code>??</code>?</li>
+          <li>Wann nutzt du <code>?.</code>?</li>
+          <li>Warum ist <code>.first()</code> nicht immer korrekt?</li>
+          <li>Wann sollte eine Expression in einen Code-Node wandern?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) <code>{{ $json.email }}</code>. ·
+        2) Es liefert einen Fallback bei <code>null</code> oder <code>undefined</code>. ·
+        3) Bei optionalen verschachtelten Feldern. ·
+        4) Es nimmt bewusst das erste Item, nicht automatisch das fachlich passende. ·
+        5) Wenn die Logik lang, mehrfach verschachtelt oder schlecht lesbar wird.
+      </div>
+
+    </article>
+      <nav class="pn-wrap" data-slug="C-expressions"></nav></section>
+<section class="page" id="D-glossar" hidden><article>
+
+      <div class="chap-eyebrow"><span class="knum">D</span> Anhang</div>
+      <h1 class="chap-title">Glossar</h1>
+      <p class="chap-lede">Dieses Glossar erklärt die Begriffe aus dem Werkbuch in kurzen, arbeitsnahen Sätzen.
+        Es ist nicht als technische Spezifikation gedacht, sondern als Orientierung beim Lesen und Debuggen.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 8 Minuten</span>
+        <span>🎯 Niveau: Nachschlagen</span>
+        <span>🧩 Voraussetzung: keine</span>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">80/20 für Begriffe</b>
+        Wenn du nur sechs Wörter sicher können willst, dann diese: Workflow, Node, Item, JSON, Credential und Execution.
+        Diese Begriffe tauchen in fast jeder Fehlersuche auf.
+      </div>
+
+      <h2>A bis C</h2>
+      <table class="btable">
+        <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
+        <tbody>
+          <tr><td>Activation</td><td>ein Workflow ist für automatische Ausführung eingeschaltet</td><td>Ist der Workflow wirklich aktiv?</td></tr>
+          <tr><td>API</td><td>Schnittstelle, über die Systeme Daten austauschen</td><td>Welche URL, Methode und Authentifizierung?</td></tr>
+          <tr><td>API-Key</td><td>geheimer Schlüssel für einen Dienst</td><td>Liegt er in Credentials statt im Workflow?</td></tr>
+          <tr><td>Batching</td><td>Items in kleineren Gruppen verarbeiten</td><td>Wie groß darf eine Gruppe sein?</td></tr>
+          <tr><td>Binary Data</td><td>Dateiinhalte wie PDFs, Bilder oder Anhänge</td><td>Wo wird die Datei gespeichert?</td></tr>
+          <tr><td>Canvas</td><td>Arbeitsfläche, auf der Nodes verbunden werden</td><td>Welche Daten laufen entlang der Verbindung?</td></tr>
+          <tr><td>Code Node</td><td>Node für eigene JavaScript- oder Python-Logik</td><td>Ist Code hier nötig oder reicht ein sichtbarer Node?</td></tr>
+          <tr><td>Credential</td><td>gespeicherte Authentifizierung für externe Dienste</td><td>Wer darf dieses Credential benutzen?</td></tr>
+        </tbody>
+      </table>
+
+      <h2>D bis I</h2>
+      <table class="btable">
+        <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
+        <tbody>
+          <tr><td>Datenfluss</td><td>Reihenfolge, in der Items durch Nodes laufen</td><td>Welcher Node erzeugt welches Feld?</td></tr>
+          <tr><td>Deployment</td><td>kontrolliertes Überführen in eine Zielumgebung</td><td>Welche Version läuft in Produktion?</td></tr>
+          <tr><td>Encryption Key</td><td>Schlüssel zum Verschlüsseln gespeicherter Credentials</td><td>Ist er gesichert und in allen Prozessen gleich?</td></tr>
+          <tr><td>Environment Variable</td><td>Konfigurationswert außerhalb des Workflow-JSON</td><td>Unterscheidet sich dev von prod?</td></tr>
+          <tr><td>Error Workflow</td><td>Workflow, der auf Fehler anderer Workflows reagiert</td><td>Welche Information brauche ich bei einem Fehler?</td></tr>
+          <tr><td>Execution</td><td>eine konkrete Ausführung eines Workflows</td><td>Welche Items kamen rein, welche gingen raus?</td></tr>
+          <tr><td>Expression</td><td>dynamischer Ausdruck in einem Node-Feld</td><td>Aus welchem Item kommt der Wert?</td></tr>
+          <tr><td>Idempotenz</td><td>mehrfaches Ausführen erzeugt kein mehrfaches Ergebnis</td><td>Wie verhindere ich Dubletten?</td></tr>
+          <tr><td>Item</td><td>ein Datensatz, der durch den Workflow läuft</td><td>Wie sieht das aktuelle JSON aus?</td></tr>
+        </tbody>
+      </table>
+
+      <h2>J bis Q</h2>
+      <table class="btable">
+        <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
+        <tbody>
+          <tr><td>JSON</td><td>strukturierte Daten aus Objekten, Feldern und Listen</td><td>Ist das Feld wirklich dort, wo ich es suche?</td></tr>
+          <tr><td>Loop</td><td>wiederholte Verarbeitung von Items oder Gruppen</td><td>Wann endet die Schleife?</td></tr>
+          <tr><td>Merge</td><td>Zusammenführen mehrerer Datenströme</td><td>Nach Position oder nach Schlüssel?</td></tr>
+          <tr><td>NDV</td><td>Node-Detailansicht mit Parametern, Input und Output</td><td>Welche Einstellung verändert das Verhalten?</td></tr>
+          <tr><td>Node</td><td>ein einzelner Baustein im Workflow</td><td>Was ist seine Eingabe, was seine Ausgabe?</td></tr>
+          <tr><td>Output</td><td>Daten, die ein Node nach der Ausführung weitergibt</td><td>Welche Felder sind ab jetzt verfügbar?</td></tr>
+          <tr><td>Pagination</td><td>API-Daten seitenweise abrufen</td><td>Wo steht die nächste Seite?</td></tr>
+          <tr><td>Queue-Mode</td><td>Ausführungen werden über Redis an Worker verteilt</td><td>Brauche ich wirklich mehrere Worker?</td></tr>
+        </tbody>
+      </table>
+
+      <h2>R bis Z</h2>
+      <table class="btable">
+        <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
+        <tbody>
+          <tr><td>Rate-Limit</td><td>Grenze für API-Aufrufe in einem Zeitfenster</td><td>Wie viele Requests darf ich senden?</td></tr>
+          <tr><td>Redis</td><td>Speicher- und Queue-Dienst für verteilte Ausführung</td><td>Erreichen Main und Worker dieselbe Queue?</td></tr>
+          <tr><td>Retry</td><td>erneuter Versuch nach einem Fehler</td><td>Ist die Aktion beim zweiten Versuch noch sicher?</td></tr>
+          <tr><td>RAG</td><td>KI-Muster: eigene Dokumente suchen und als Kontext nutzen</td><td>Welche Quelle darf die Antwort stützen?</td></tr>
+          <tr><td>Secret</td><td>sensibler Wert wie Token, Passwort oder Schlüssel</td><td>Ist er aus Exporten und Logs herausgehalten?</td></tr>
+          <tr><td>Sub-Workflow</td><td>wiederverwendbarer Workflow als Baustein</td><td>Welche Eingaben erwartet er?</td></tr>
+          <tr><td>Trigger</td><td>Node, der eine Ausführung startet</td><td>Wann und wodurch startet der Workflow?</td></tr>
+          <tr><td>Webhook</td><td>URL, die externe Systeme aufrufen können</td><td>Ist es Test-URL oder Produktions-URL?</td></tr>
+          <tr><td>Workflow</td><td>verbundene Nodes, die eine Automatisierung beschreiben</td><td>Welches fachliche Ziel erfüllt er?</td></tr>
+          <tr><td>Worker</td><td>n8n-Prozess, der Jobs im Queue-Mode ausführt</td><td>Hat er Datenbank, Redis und Encryption Key korrekt?</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Arbeitsregel</h2>
+      <ol class="steps">
+        <li><h4>Begriff im Fehlertext markieren</h4><p>Suche zuerst das Wort, das wirklich im Fehler steht: Credential,
+          item, execution, webhook oder connection.</p></li>
+        <li><h4>Zum passenden Objekt wechseln</h4><p>Credential-Fehler im Credential prüfen, Item-Fehler im Input/Output,
+          Webhook-Fehler im Trigger.</p></li>
+        <li><h4>Nicht Begriffe vermischen</h4><p>Ein Workflow ist nicht eine Execution. Ein Node ist nicht ein Item.
+          Diese Trennung spart viele Fehlannahmen.</p></li>
+        <li><h4>Begriff mit Testdaten verbinden</h4><p>Frage immer: Wie sieht ein konkretes Beispiel dazu aus?</p></li>
+      </ol>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Verwechslung</th><th>Warum problematisch?</th><th>Korrektur</th></tr></thead>
+        <tbody>
+          <tr><td>Workflow vs. Execution</td><td>du änderst Logik, obwohl nur ein Lauf fehlerhaft war</td><td>erst die konkrete Ausführung ansehen</td></tr>
+          <tr><td>Credential vs. Secret</td><td>Secret wird eventuell im Workflow gespeichert</td><td>Secret gehört in Credential oder Secret-Verwaltung</td></tr>
+          <tr><td>Item vs. Feld</td><td>du suchst Daten auf der falschen Ebene</td><td>JSON-Struktur vollständig öffnen</td></tr>
+          <tr><td>Webhook Test vs. Produktion</td><td>Tests funktionieren, echte Aufrufe nicht</td><td>richtige URL und Aktivierung prüfen</td></tr>
+          <tr><td>Retry vs. Idempotenz</td><td>erneuter Versuch erzeugt Dubletten</td><td>vor schreibenden Aktionen Dublettenprüfung ergänzen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Frage</th><th>Du suchst nach ...</th><th>Ort in n8n</th></tr></thead>
+        <tbody>
+          <tr><td>Warum kam kein Wert an?</td><td>Item, JSON, Feldname</td><td>Input und Output des Nodes</td></tr>
+          <tr><td>Warum darf n8n nicht zugreifen?</td><td>Credential, Secret, Authentifizierung</td><td>Credential-Einstellung und Node-Fehler</td></tr>
+          <tr><td>Warum startet nichts automatisch?</td><td>Trigger, Activation, Webhook</td><td>Startnode und Workflow-Schalter</td></tr>
+          <tr><td>Warum gibt es doppelte Einträge?</td><td>Retry, Idempotenz, schreibender Node</td><td>Execution-Verlauf und Zielsystem</td></tr>
+          <tr><td>Warum ist der Worker kaputt?</td><td>Queue-Mode, Redis, Encryption Key</td><td>Deployment- und Worker-Logs</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Was ist der Unterschied zwischen Workflow und Execution?</li>
+          <li>Warum ist ein Item nicht dasselbe wie ein Feld?</li>
+          <li>Was unterscheidet Credential und Secret?</li>
+          <li>Warum ist Idempotenz bei Retries wichtig?</li>
+          <li>Welche drei Begriffe prüfst du bei Queue-Mode-Problemen zuerst?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Workflow ist die Logik, Execution ein konkreter Lauf. ·
+        2) Ein Item enthält Felder; ein Feld ist nur ein einzelner Wert darin. ·
+        3) Secret ist der sensible Wert, Credential ist die gesicherte n8n-Konfiguration dafür. ·
+        4) Sonst kann ein erneuter Versuch doppelt schreiben. ·
+        5) Redis, Datenbankverbindung und <code>N8N_ENCRYPTION_KEY</code>.
+      </div>
+
+    </article>
+      <nav class="pn-wrap" data-slug="D-glossar"></nav></section>
 
   </div>
 </div>
 <script>
-var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter","14-projekt-form","15-projekt-news","16-projekt-leads","17-projekt-ai","18-projekt-pdf","19-grossprojekt","20-ai-agent","21-rag","22-subworkflows","23-performance","24-deployment","25-skalierung","A-shortcuts"];
-var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"ready"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"soon"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"soon"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"soon"}];
+var READY = ["00-vorwort","00-pareto","01-was-ist-n8n","02-installation","03-oberflaeche","04-erster-workflow","05-kernkonzepte","06-expressions","07-trigger","08-http","09-transform","10-flow","11-fehler","12-credentials","13-projekt-wetter","14-projekt-form","15-projekt-news","16-projekt-leads","17-projekt-ai","18-projekt-pdf","19-grossprojekt","20-ai-agent","21-rag","22-subworkflows","23-performance","24-deployment","25-skalierung","A-shortcuts","B-nodes","C-expressions","D-glossar"];
+var FLAT = [{"slug":"00-vorwort","title":"Vorwort & wie du dieses Buch nutzt","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"00-pareto","title":"Das 80/20 von n8n — die wichtigen 35 %","part":"Teil 0 · Orientierung","status":"ready"},{"slug":"01-was-ist-n8n","title":"Was ist n8n? Konzept & Einsatzgebiete","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"02-installation","title":"Installation & Setup (Cloud, npx, Docker)","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"03-oberflaeche","title":"Die Oberfläche im Detail","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"04-erster-workflow","title":"Dein erster Workflow — Schritt für Schritt","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"05-kernkonzepte","title":"Kernkonzepte: Nodes, Items & Datenfluss","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"06-expressions","title":"Expressions & der Ausdruckseditor","part":"Teil 1 · Grundlagen","status":"ready"},{"slug":"07-trigger","title":"Trigger-Nodes (Manual, Schedule, Webhook)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"08-http","title":"Der HTTP-Request-Node: jede API ansprechen","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"09-transform","title":"Daten transformieren (Set, Code, Filter)","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"10-flow","title":"Flow-Logik: IF, Switch, Merge, Loops","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"11-fehler","title":"Fehlerbehandlung & Error-Workflows","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"12-credentials","title":"Credentials & Authentifizierung","part":"Teil 2 · Bausteine im Detail","status":"ready"},{"slug":"13-projekt-wetter","title":"Projekt 1: Täglicher Report per Telegram","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"14-projekt-form","title":"Projekt 2: Formular → Sheets → Slack","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"15-projekt-news","title":"Projekt 3: News-Aggregator mit Filter","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"16-projekt-leads","title":"Projekt 4: Lead-Routing vom Webhook ins CRM","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"17-projekt-ai","title":"Projekt 5: KI-E-Mail-Assistent (AI Agent)","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"18-projekt-pdf","title":"Projekt 6: PDF-/Rechnungs-Extraktion","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"19-grossprojekt","title":"Großprojekt: Content-Pipeline end-to-end","part":"Teil 3 · Projekte (klein → groß)","status":"ready"},{"slug":"20-ai-agent","title":"AI-Agent, Chat-Trigger, Memory & Tools","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"21-rag","title":"RAG: Vektorstores & Q&A über eigene Daten","part":"Teil 4 · KI & Agenten","status":"ready"},{"slug":"22-subworkflows","title":"Sub-Workflows & Modularisierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"23-performance","title":"Performance, Batching & Rate-Limits","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"24-deployment","title":"Deployment, Env-Variablen & Git","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"25-skalierung","title":"Sicherheit, Queue-Mode & Skalierung","part":"Teil 5 · Profi & Betrieb","status":"ready"},{"slug":"A-shortcuts","title":"Tastenkürzel-Referenz","part":"Anhang","status":"ready"},{"slug":"B-nodes","title":"Spickzettel: die wichtigsten Nodes","part":"Anhang","status":"ready"},{"slug":"C-expressions","title":"Expression-Cheatsheet","part":"Anhang","status":"ready"},{"slug":"D-glossar","title":"Glossar","part":"Anhang","status":"ready"}];
 
 function show(slug) {
   if (!slug || READY.indexOf(slug) === -1 && slug !== "home") slug = "home";

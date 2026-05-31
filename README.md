@@ -54,7 +54,12 @@ n8n-buch/
 │   ├── 21-rag.html             # RAG: Vektorstores & Q&A über eigene Daten
 │   ├── 22-subworkflows.html    # Sub-Workflows & Modularisierung
 │   ├── 23-performance.html     # Performance, Batching & Rate-Limits
-│   └── 24-deployment.html      # Deployment, Env-Variablen & Git
+│   ├── 24-deployment.html      # Deployment, Env-Variablen & Git
+│   ├── 25-skalierung.html      # Sicherheit, Queue-Mode & Skalierung
+│   ├── A-shortcuts.html        # Tastenkürzel-Referenz
+│   ├── B-nodes.html            # Spickzettel: die wichtigsten Nodes
+│   ├── C-expressions.html      # Expression-Cheatsheet
+│   └── D-glossar.html          # Glossar
 └── assets/
     ├── css/
     │   ├── book.css            # Layout, Typografie, didaktische Elemente
@@ -69,8 +74,8 @@ n8n-buch/
 Das vollständige Inhaltsverzeichnis (25+ Kapitel über 6 Teile) lebt in
 `assets/js/chapters.js`. Aktueller Ausbaustand:
 
-- **Fertig:** Teil 0, Teil 1, Teil 2, Teil 3 sowie Kapitel 20–24.
-- **Geplant (markiert „bald“):** Skalierung sowie Anhänge.
+- **Fertig:** Teil 0 bis Teil 5 sowie Anhänge A–D.
+- **Geplant:** kein weiteres Kapitel im aktuellen Manifest.
 
 ## Neue Kapitel hinzufügen
 

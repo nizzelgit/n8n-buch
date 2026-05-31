@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expression-Cheatsheet — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="C-expressions" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">C</span> Anhang</div>
+      <h1 class="chap-title">Expression-Cheatsheet</h1>
+      <p class="chap-lede">Expressions sind kleine JavaScript-Ausdrücke in Node-Feldern. Sie holen Werte aus Items,
+        formen Text, prüfen Bedingungen und bauen dynamische URLs. Dieses Cheatsheet zeigt die Muster, die du wirklich
+        häufig brauchst.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 10 Minuten</span>
+        <span>🎯 Niveau: Nachschlagen</span>
+        <span>🧩 Voraussetzung: Kapitel 6</span>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">80/20 für Expressions</b>
+        Lerne zuerst <code>$json</code>, Punktzugriff, eckige Klammern, Verkettung mit Text, <code>??</code> als
+        Fallback, ternäre Bedingungen und Datumsformatierung mit <code>$now.toFormat()</code>.
+      </div>
+
+      <h2>Grundform</h2>
+      <table class="btable">
+        <thead><tr><th>Ziel</th><th>Expression</th><th>Beispielausgabe</th></tr></thead>
+        <tbody>
+          <tr><td>Feld lesen</td><td><code>{{ $json.email }}</code></td><td><code>ada@example.com</code></td></tr>
+          <tr><td>Verschachteltes Feld</td><td><code>{{ $json.customer.name }}</code></td><td><code>Ada Lovelace</code></td></tr>
+          <tr><td>Feld mit Leerzeichen</td><td><code>{{ $json["Order ID"] }}</code></td><td><code>ORD-42</code></td></tr>
+          <tr><td>Text bauen</td><td><code>{{ "Hallo " + $json.name }}</code></td><td><code>Hallo Ada</code></td></tr>
+          <tr><td>Template-String</td><td><code>{{ `Hallo ${$json.name}` }}</code></td><td><code>Hallo Ada</code></td></tr>
+        </tbody>
+      </table>
+
+      <h2>Häufige Zugriffe</h2>
+      <table class="btable">
+        <thead><tr><th>Du brauchst ...</th><th>Muster</th><th>Hinweis</th></tr></thead>
+        <tbody>
+          <tr><td>aktuelles Item</td><td><code>{{ $json }}</code></td><td>das JSON des gerade verarbeiteten Items</td></tr>
+          <tr><td>aktuelles Feld</td><td><code>{{ $json.status }}</code></td><td>Standardfall in den meisten Nodes</td></tr>
+          <tr><td>erster Wert aus anderem Node</td><td><code>{{ $("Webhook").first().json.body.email }}</code></td><td>gut für globale Daten aus einem Trigger</td></tr>
+          <tr><td>verknüpftes Item aus anderem Node</td><td><code>{{ $("Kunden").item.json.id }}</code></td><td>nutzt die Item-Verknüpfung</td></tr>
+          <tr><td>Binärdaten</td><td><code>{{ $binary.data.fileName }}</code></td><td>nur wenn Binary Data vorhanden ist</td></tr>
+          <tr><td>heutiges Datum</td><td><code>{{ $today }}</code></td><td>Datum ohne genaue Uhrzeit</td></tr>
+          <tr><td>aktueller Zeitpunkt</td><td><code>{{ $now }}</code></td><td>Datum und Uhrzeit</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">Item-Verknüpfung nicht erraten</b>
+        <code>$("Node").item</code> ist dann sinnvoll, wenn n8n weiß, welches frühere Item zum aktuellen Item gehört.
+        Wenn du bewusst den ersten Datensatz brauchst, nutze klar <code>.first()</code>.
+      </div>
+
+      <h2>Fallbacks und Bedingungen</h2>
+      <table class="btable">
+        <thead><tr><th>Ziel</th><th>Expression</th><th>Warum?</th></tr></thead>
+        <tbody>
+          <tr><td>Fallback bei leerem Wert</td><td><code>{{ $json.email ?? "keine-mail@example.com" }}</code></td><td>nutzt Ersatz bei <code>null</code> oder <code>undefined</code></td></tr>
+          <tr><td>optional lesen</td><td><code>{{ $json.customer?.address?.city }}</code></td><td>bricht nicht ab, wenn ein Zwischenfeld fehlt</td></tr>
+          <tr><td>Bedingung</td><td><code>{{ $json.total &gt; 100 ? "hoch" : "normal" }}</code></td><td>kurzer Wenn-dann-sonst-Ausdruck</td></tr>
+          <tr><td>Text klein schreiben</td><td><code>{{ $json.email.toLowerCase() }}</code></td><td>nützlich für Vergleich und Dublettenprüfung</td></tr>
+          <tr><td>Leerzeichen entfernen</td><td><code>{{ $json.name.trim() }}</code></td><td>bereinigt Eingaben</td></tr>
+          <tr><td>Zahl runden</td><td><code>{{ Math.round($json.amount * 100) / 100 }}</code></td><td>zwei Dezimalstellen als Zahl</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Listen und Objekte</h2>
+      <table class="btable">
+        <thead><tr><th>Ziel</th><th>Expression</th><th>Ergebnisidee</th></tr></thead>
+        <tbody>
+          <tr><td>erstes Element</td><td><code>{{ $json.items[0].name }}</code></td><td>Name des ersten Listeneintrags</td></tr>
+          <tr><td>Anzahl</td><td><code>{{ $json.items.length }}</code></td><td>wie viele Einträge vorhanden sind</td></tr>
+          <tr><td>Liste verbinden</td><td><code>{{ $json.tags.join(", ") }}</code></td><td><code>lead, vip, eu</code></td></tr>
+          <tr><td>Feldliste bauen</td><td><code>{{ $json.items.map(i =&gt; i.email).join(",") }}</code></td><td>kommagetrennte E-Mail-Liste</td></tr>
+          <tr><td>Eintrag suchen</td><td><code>{{ $json.items.find(i =&gt; i.status === "open")?.id }}</code></td><td>ID des ersten offenen Eintrags</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Datum und Zeit</h2>
+      <table class="btable">
+        <thead><tr><th>Ziel</th><th>Expression</th><th>Hinweis</th></tr></thead>
+        <tbody>
+          <tr><td>ISO-Datum</td><td><code>{{ $now.toFormat("yyyy-MM-dd") }}</code></td><td>gut für Dateinamen und Tabellen</td></tr>
+          <tr><td>deutsches Datum</td><td><code>{{ $now.toFormat("dd.MM.yyyy") }}</code></td><td>gut für Nachrichten</td></tr>
+          <tr><td>morgen</td><td><code>{{ $now.plus({ days: 1 }).toFormat("yyyy-MM-dd") }}</code></td><td>relative Termine</td></tr>
+          <tr><td>Unix-Zeit</td><td><code>{{ $now.toSeconds() }}</code></td><td>manche APIs erwarten Sekunden</td></tr>
+          <tr><td>Datum aus Feld</td><td><code>{{ DateTime.fromISO($json.createdAt).toFormat("dd.MM.yyyy") }}</code></td><td>wenn ein ISO-Zeitstempel im Item liegt</td></tr>
+        </tbody>
+      </table>
+
+      <h2>URLs und API-Parameter</h2>
+      <table class="btable">
+        <thead><tr><th>Ziel</th><th>Expression</th><th>Warum?</th></tr></thead>
+        <tbody>
+          <tr><td>Query-Wert schützen</td><td><code>{{ encodeURIComponent($json.search) }}</code></td><td>Leerzeichen und Sonderzeichen werden URL-sicher</td></tr>
+          <tr><td>URL bauen</td><td><code>{{ "https://api.example.com/users/" + $json.id }}</code></td><td>dynamischer API-Endpunkt</td></tr>
+          <tr><td>Header-Wert</td><td><code>{{ "Bearer " + $json.access_token }}</code></td><td>nur mit Testwerten, echte Tokens gehören in Credentials</td></tr>
+          <tr><td>Dateiname</td><td><code>{{ `rechnung-${$json.invoiceId}.pdf` }}</code></td><td>stabile Dateinamen erzeugen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Arbeitsregel</h2>
+      <ol class="steps">
+        <li><h4>Input ansehen</h4><p>Öffne das Input-Panel und prüfe den echten Feldnamen. Nicht aus dem Gedächtnis raten.</p></li>
+        <li><h4>Klein anfangen</h4><p>Erst <code>{{ $json }}</code>, dann <code>{{ $json.feld }}</code>, dann erst Logik ergänzen.</p></li>
+        <li><h4>Fallback setzen</h4><p>Bei optionalen Feldern <code>??</code> oder <code>?.</code> verwenden.</p></li>
+        <li><h4>Komplexität begrenzen</h4><p>Wenn eine Expression mehr als eine Zeile Denkarbeit braucht, prüfe Edit Fields oder Code.</p></li>
+        <li><h4>Mit echten Testdaten prüfen</h4><p>Mindestens ein vollständiges und ein unvollständiges Item testen.</p></li>
+      </ol>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td><code>undefined</code></td><td>Feld existiert nicht im aktuellen Item</td><td>Input-Panel prüfen, Feldnamen exakt übernehmen</td></tr>
+          <tr><td>Expression bleibt Text</td><td>Feld steht im Fixed-Modus</td><td>auf Expression-Modus wechseln</td></tr>
+          <tr><td>Fehler bei fehlendem Unterfeld</td><td>verschachtelter Zugriff ohne <code>?.</code></td><td><code>$json.customer?.email</code> verwenden</td></tr>
+          <tr><td>falsches Item aus altem Node</td><td><code>.first()</code> statt verknüpftem Item genutzt</td><td><code>.item</code> prüfen oder bewusst erstes Item dokumentieren</td></tr>
+          <tr><td>API-URL kaputt</td><td>Sonderzeichen nicht kodiert</td><td><code>encodeURIComponent()</code> verwenden</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Input</th><th>Expression</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Pflichtfeld</td><td><code>{"name":"Ada"}</code></td><td><code>{{ $json.name }}</code></td><td><code>Ada</code></td></tr>
+          <tr><td>Fallback</td><td><code>{"email":null}</code></td><td><code>{{ $json.email ?? "fehlt" }}</code></td><td><code>fehlt</code></td></tr>
+          <tr><td>Bedingung</td><td><code>{"total":120}</code></td><td><code>{{ $json.total &gt; 100 ? "hoch" : "normal" }}</code></td><td><code>hoch</code></td></tr>
+          <tr><td>Liste</td><td><code>{"tags":["lead","vip"]}</code></td><td><code>{{ $json.tags.join(", ") }}</code></td><td><code>lead, vip</code></td></tr>
+          <tr><td>Datum</td><td>aktueller Zeitpunkt</td><td><code>{{ $now.toFormat("yyyy-MM-dd") }}</code></td><td>Datum im ISO-Format</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Wie liest du das Feld <code>email</code> aus dem aktuellen Item?</li>
+          <li>Was macht <code>??</code>?</li>
+          <li>Wann nutzt du <code>?.</code>?</li>
+          <li>Warum ist <code>.first()</code> nicht immer korrekt?</li>
+          <li>Wann sollte eine Expression in einen Code-Node wandern?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) <code>{{ $json.email }}</code>. ·
+        2) Es liefert einen Fallback bei <code>null</code> oder <code>undefined</code>. ·
+        3) Bei optionalen verschachtelten Feldern. ·
+        4) Es nimmt bewusst das erste Item, nicht automatisch das fachlich passende. ·
+        5) Wenn die Logik lang, mehrfach verschachtelt oder schlecht lesbar wird.
+      </div>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

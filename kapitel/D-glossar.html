@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossar — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="D-glossar" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">D</span> Anhang</div>
+      <h1 class="chap-title">Glossar</h1>
+      <p class="chap-lede">Dieses Glossar erklärt die Begriffe aus dem Werkbuch in kurzen, arbeitsnahen Sätzen.
+        Es ist nicht als technische Spezifikation gedacht, sondern als Orientierung beim Lesen und Debuggen.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 8 Minuten</span>
+        <span>🎯 Niveau: Nachschlagen</span>
+        <span>🧩 Voraussetzung: keine</span>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">80/20 für Begriffe</b>
+        Wenn du nur sechs Wörter sicher können willst, dann diese: Workflow, Node, Item, JSON, Credential und Execution.
+        Diese Begriffe tauchen in fast jeder Fehlersuche auf.
+      </div>
+
+      <h2>A bis C</h2>
+      <table class="btable">
+        <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
+        <tbody>
+          <tr><td>Activation</td><td>ein Workflow ist für automatische Ausführung eingeschaltet</td><td>Ist der Workflow wirklich aktiv?</td></tr>
+          <tr><td>API</td><td>Schnittstelle, über die Systeme Daten austauschen</td><td>Welche URL, Methode und Authentifizierung?</td></tr>
+          <tr><td>API-Key</td><td>geheimer Schlüssel für einen Dienst</td><td>Liegt er in Credentials statt im Workflow?</td></tr>
+          <tr><td>Batching</td><td>Items in kleineren Gruppen verarbeiten</td><td>Wie groß darf eine Gruppe sein?</td></tr>
+          <tr><td>Binary Data</td><td>Dateiinhalte wie PDFs, Bilder oder Anhänge</td><td>Wo wird die Datei gespeichert?</td></tr>
+          <tr><td>Canvas</td><td>Arbeitsfläche, auf der Nodes verbunden werden</td><td>Welche Daten laufen entlang der Verbindung?</td></tr>
+          <tr><td>Code Node</td><td>Node für eigene JavaScript- oder Python-Logik</td><td>Ist Code hier nötig oder reicht ein sichtbarer Node?</td></tr>
+          <tr><td>Credential</td><td>gespeicherte Authentifizierung für externe Dienste</td><td>Wer darf dieses Credential benutzen?</td></tr>
+        </tbody>
+      </table>
+
+      <h2>D bis I</h2>
+      <table class="btable">
+        <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
+        <tbody>
+          <tr><td>Datenfluss</td><td>Reihenfolge, in der Items durch Nodes laufen</td><td>Welcher Node erzeugt welches Feld?</td></tr>
+          <tr><td>Deployment</td><td>kontrolliertes Überführen in eine Zielumgebung</td><td>Welche Version läuft in Produktion?</td></tr>
+          <tr><td>Encryption Key</td><td>Schlüssel zum Verschlüsseln gespeicherter Credentials</td><td>Ist er gesichert und in allen Prozessen gleich?</td></tr>
+          <tr><td>Environment Variable</td><td>Konfigurationswert außerhalb des Workflow-JSON</td><td>Unterscheidet sich dev von prod?</td></tr>
+          <tr><td>Error Workflow</td><td>Workflow, der auf Fehler anderer Workflows reagiert</td><td>Welche Information brauche ich bei einem Fehler?</td></tr>
+          <tr><td>Execution</td><td>eine konkrete Ausführung eines Workflows</td><td>Welche Items kamen rein, welche gingen raus?</td></tr>
+          <tr><td>Expression</td><td>dynamischer Ausdruck in einem Node-Feld</td><td>Aus welchem Item kommt der Wert?</td></tr>
+          <tr><td>Idempotenz</td><td>mehrfaches Ausführen erzeugt kein mehrfaches Ergebnis</td><td>Wie verhindere ich Dubletten?</td></tr>
+          <tr><td>Item</td><td>ein Datensatz, der durch den Workflow läuft</td><td>Wie sieht das aktuelle JSON aus?</td></tr>
+        </tbody>
+      </table>
+
+      <h2>J bis Q</h2>
+      <table class="btable">
+        <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
+        <tbody>
+          <tr><td>JSON</td><td>strukturierte Daten aus Objekten, Feldern und Listen</td><td>Ist das Feld wirklich dort, wo ich es suche?</td></tr>
+          <tr><td>Loop</td><td>wiederholte Verarbeitung von Items oder Gruppen</td><td>Wann endet die Schleife?</td></tr>
+          <tr><td>Merge</td><td>Zusammenführen mehrerer Datenströme</td><td>Nach Position oder nach Schlüssel?</td></tr>
+          <tr><td>NDV</td><td>Node-Detailansicht mit Parametern, Input und Output</td><td>Welche Einstellung verändert das Verhalten?</td></tr>
+          <tr><td>Node</td><td>ein einzelner Baustein im Workflow</td><td>Was ist seine Eingabe, was seine Ausgabe?</td></tr>
+          <tr><td>Output</td><td>Daten, die ein Node nach der Ausführung weitergibt</td><td>Welche Felder sind ab jetzt verfügbar?</td></tr>
+          <tr><td>Pagination</td><td>API-Daten seitenweise abrufen</td><td>Wo steht die nächste Seite?</td></tr>
+          <tr><td>Queue-Mode</td><td>Ausführungen werden über Redis an Worker verteilt</td><td>Brauche ich wirklich mehrere Worker?</td></tr>
+        </tbody>
+      </table>
+
+      <h2>R bis Z</h2>
+      <table class="btable">
+        <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
+        <tbody>
+          <tr><td>Rate-Limit</td><td>Grenze für API-Aufrufe in einem Zeitfenster</td><td>Wie viele Requests darf ich senden?</td></tr>
+          <tr><td>Redis</td><td>Speicher- und Queue-Dienst für verteilte Ausführung</td><td>Erreichen Main und Worker dieselbe Queue?</td></tr>
+          <tr><td>Retry</td><td>erneuter Versuch nach einem Fehler</td><td>Ist die Aktion beim zweiten Versuch noch sicher?</td></tr>
+          <tr><td>RAG</td><td>KI-Muster: eigene Dokumente suchen und als Kontext nutzen</td><td>Welche Quelle darf die Antwort stützen?</td></tr>
+          <tr><td>Secret</td><td>sensibler Wert wie Token, Passwort oder Schlüssel</td><td>Ist er aus Exporten und Logs herausgehalten?</td></tr>
+          <tr><td>Sub-Workflow</td><td>wiederverwendbarer Workflow als Baustein</td><td>Welche Eingaben erwartet er?</td></tr>
+          <tr><td>Trigger</td><td>Node, der eine Ausführung startet</td><td>Wann und wodurch startet der Workflow?</td></tr>
+          <tr><td>Webhook</td><td>URL, die externe Systeme aufrufen können</td><td>Ist es Test-URL oder Produktions-URL?</td></tr>
+          <tr><td>Workflow</td><td>verbundene Nodes, die eine Automatisierung beschreiben</td><td>Welches fachliche Ziel erfüllt er?</td></tr>
+          <tr><td>Worker</td><td>n8n-Prozess, der Jobs im Queue-Mode ausführt</td><td>Hat er Datenbank, Redis und Encryption Key korrekt?</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Arbeitsregel</h2>
+      <ol class="steps">
+        <li><h4>Begriff im Fehlertext markieren</h4><p>Suche zuerst das Wort, das wirklich im Fehler steht: Credential,
+          item, execution, webhook oder connection.</p></li>
+        <li><h4>Zum passenden Objekt wechseln</h4><p>Credential-Fehler im Credential prüfen, Item-Fehler im Input/Output,
+          Webhook-Fehler im Trigger.</p></li>
+        <li><h4>Nicht Begriffe vermischen</h4><p>Ein Workflow ist nicht eine Execution. Ein Node ist nicht ein Item.
+          Diese Trennung spart viele Fehlannahmen.</p></li>
+        <li><h4>Begriff mit Testdaten verbinden</h4><p>Frage immer: Wie sieht ein konkretes Beispiel dazu aus?</p></li>
+      </ol>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Verwechslung</th><th>Warum problematisch?</th><th>Korrektur</th></tr></thead>
+        <tbody>
+          <tr><td>Workflow vs. Execution</td><td>du änderst Logik, obwohl nur ein Lauf fehlerhaft war</td><td>erst die konkrete Ausführung ansehen</td></tr>
+          <tr><td>Credential vs. Secret</td><td>Secret wird eventuell im Workflow gespeichert</td><td>Secret gehört in Credential oder Secret-Verwaltung</td></tr>
+          <tr><td>Item vs. Feld</td><td>du suchst Daten auf der falschen Ebene</td><td>JSON-Struktur vollständig öffnen</td></tr>
+          <tr><td>Webhook Test vs. Produktion</td><td>Tests funktionieren, echte Aufrufe nicht</td><td>richtige URL und Aktivierung prüfen</td></tr>
+          <tr><td>Retry vs. Idempotenz</td><td>erneuter Versuch erzeugt Dubletten</td><td>vor schreibenden Aktionen Dublettenprüfung ergänzen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Frage</th><th>Du suchst nach ...</th><th>Ort in n8n</th></tr></thead>
+        <tbody>
+          <tr><td>Warum kam kein Wert an?</td><td>Item, JSON, Feldname</td><td>Input und Output des Nodes</td></tr>
+          <tr><td>Warum darf n8n nicht zugreifen?</td><td>Credential, Secret, Authentifizierung</td><td>Credential-Einstellung und Node-Fehler</td></tr>
+          <tr><td>Warum startet nichts automatisch?</td><td>Trigger, Activation, Webhook</td><td>Startnode und Workflow-Schalter</td></tr>
+          <tr><td>Warum gibt es doppelte Einträge?</td><td>Retry, Idempotenz, schreibender Node</td><td>Execution-Verlauf und Zielsystem</td></tr>
+          <tr><td>Warum ist der Worker kaputt?</td><td>Queue-Mode, Redis, Encryption Key</td><td>Deployment- und Worker-Logs</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Was ist der Unterschied zwischen Workflow und Execution?</li>
+          <li>Warum ist ein Item nicht dasselbe wie ein Feld?</li>
+          <li>Was unterscheidet Credential und Secret?</li>
+          <li>Warum ist Idempotenz bei Retries wichtig?</li>
+          <li>Welche drei Begriffe prüfst du bei Queue-Mode-Problemen zuerst?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) Workflow ist die Logik, Execution ein konkreter Lauf. ·
+        2) Ein Item enthält Felder; ein Feld ist nur ein einzelner Wert darin. ·
+        3) Secret ist der sensible Wert, Credential ist die gesicherte n8n-Konfiguration dafür. ·
+        4) Sonst kann ein erneuter Versuch doppelt schreiben. ·
+        5) Redis, Datenbankverbindung und <code>N8N_ENCRYPTION_KEY</code>.
+      </div>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>

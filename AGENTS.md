@@ -11,9 +11,9 @@ detailgetreu nachgebaut, damit Abbildungen scharf, konsistent und wartbar bleibe
 
 ## Aktueller Einstieg
 
-- Fertig im Manifest (`status: "ready"`): Kapitel `00-vorwort` bis `24-deployment`.
-- Nächster sinnvoller Schritt: `25-skalierung` — Sicherheit, Queue-Mode & Skalierung.
-- Danach: Anhänge A–D.
+- Fertig im Manifest (`status: "ready"`): Kapitel `00-vorwort` bis Anhang `D-glossar`.
+- Nächster sinnvoller Schritt: Gesamtlektüre, Konsistenzprüfung und Feinschliff.
+- Danach: bei Freigabe `main` mit dem Feature-Branch synchronisieren.
 
 ## Projektstruktur
 

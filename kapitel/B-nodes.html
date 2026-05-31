@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spickzettel: die wichtigsten Nodes — Das n8n-Werkbuch</title>
+<link rel="stylesheet" href="../assets/css/book.css">
+<link rel="stylesheet" href="../assets/css/n8n-ui.css">
+</head>
+<body data-slug="B-nodes" data-base="..">
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="content">
+    <header id="bookbar"></header>
+    <article>
+
+      <div class="chap-eyebrow"><span class="knum">B</span> Anhang</div>
+      <h1 class="chap-title">Spickzettel: die wichtigsten Nodes</h1>
+      <p class="chap-lede">n8n hat viele Nodes. Du brauchst am Anfang nicht alle. Dieser Spickzettel ordnet die
+        wichtigsten Bausteine danach, welches Problem sie lösen: starten, holen, verändern, verzweigen, warten,
+        schreiben und antworten.</p>
+      <div class="chap-meta">
+        <span>⏱ ca. 10 Minuten</span>
+        <span>🎯 Niveau: Nachschlagen</span>
+        <span>🧩 Voraussetzung: Kapitel 5</span>
+      </div>
+
+      <div class="callout callout--pareto">
+        <b class="t">80/20 für Nodes</b>
+        Die meisten Einsteiger-Workflows entstehen aus zehn Bausteinen: Manual Trigger, Schedule Trigger, Webhook,
+        HTTP Request, Edit Fields, IF, Switch, Merge, Code und Respond to Webhook.
+      </div>
+
+      <h2>Node-Typen verstehen</h2>
+      <table class="btable">
+        <thead><tr><th>Typ</th><th>Was er macht</th><th>Merksatz</th></tr></thead>
+        <tbody>
+          <tr><td>Trigger</td><td>startet einen Workflow</td><td>ohne Trigger läuft nichts automatisch</td></tr>
+          <tr><td>Action</td><td>arbeitet mit Daten oder externen Diensten</td><td>holt, verändert, sendet oder speichert</td></tr>
+          <tr><td>Core Node</td><td>liefert allgemeine Logik</td><td>nicht an einen bestimmten Dienst gebunden</td></tr>
+          <tr><td>App Node</td><td>spricht einen konkreten Dienst an</td><td>z. B. Google Sheets, Slack, Gmail</td></tr>
+          <tr><td>Credential-only</td><td>stellt Authentifizierung bereit</td><td>oft zusammen mit HTTP Request nützlich</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Starten</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Typischer Fehler</th></tr></thead>
+        <tbody>
+          <tr><td>Manual Trigger</td><td>du einen Workflow beim Bauen von Hand starten willst</td><td>später vergessen, einen echten Trigger einzubauen</td></tr>
+          <tr><td>Schedule Trigger</td><td>etwas regelmäßig laufen soll</td><td>Zeitfenster und Zeitzone nicht prüfen</td></tr>
+          <tr><td>Webhook</td><td>ein externes System n8n aufrufen soll</td><td>Test-URL mit Produktions-URL verwechseln</td></tr>
+          <tr><td>Form Trigger</td><td>Menschen einfache Daten eingeben sollen</td><td>Formular als Ersatz für Datenvalidierung missverstehen</td></tr>
+          <tr><td>Error Trigger</td><td>Fehler zentral behandelt werden sollen</td><td>Fehlerworkflow selbst ungetestet lassen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Daten holen und senden</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Prüffrage</th></tr></thead>
+        <tbody>
+          <tr><td>HTTP Request</td><td>du eine REST-API ansprechen willst</td><td>Welche Methode, URL, Authentifizierung und Antwortstruktur?</td></tr>
+          <tr><td>Google Sheets</td><td>Zeilen gelesen oder geschrieben werden sollen</td><td>Ist die Kopfzeile stabil?</td></tr>
+          <tr><td>Slack</td><td>Nachrichten in Kanäle oder Personen gehen</td><td>Ist der Zielkanal korrekt?</td></tr>
+          <tr><td>Gmail / Email</td><td>E-Mails gelesen oder versendet werden</td><td>Ist Senden wirklich gewollt oder erst Testmodus?</td></tr>
+          <tr><td>Read/Write Files</td><td>lokale Dateien in Self-hosted-Setups gebraucht werden</td><td>Existiert der Pfad auch im Container?</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">HTTP Request ist mächtig, aber nicht automatisch richtig</b>
+        Wenn ein Dienst einen eigenen n8n-Node hat, ist dieser oft schneller verständlich. HTTP Request ist die
+        Ausweich- und Profioption, wenn du direkt mit einer API sprechen musst.
+      </div>
+
+      <h2>Daten verändern</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Grenze</th></tr></thead>
+        <tbody>
+          <tr><td>Edit Fields</td><td>du Felder setzen, umbenennen oder gezielt weitergeben willst</td><td>keine komplexe Programmlogik</td></tr>
+          <tr><td>Filter</td><td>Items anhand von Bedingungen behalten oder entfernen willst</td><td>kein Verzweigungsdiagramm</td></tr>
+          <tr><td>Sort</td><td>Items sortiert werden sollen</td><td>sortiert nur vorhandene Items</td></tr>
+          <tr><td>Limit</td><td>du nur eine begrenzte Anzahl Items weiterreichen willst</td><td>löst keine API-Pagination</td></tr>
+          <tr><td>Remove Duplicates</td><td>Dubletten anhand von Feldern verschwinden sollen</td><td>ersetzt keine fachliche Idempotenz</td></tr>
+          <tr><td>Code</td><td>die GUI-Optionen nicht reichen</td><td>macht Workflows schwerer lesbar</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Entscheiden und zusammenführen</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Merksatz</th></tr></thead>
+        <tbody>
+          <tr><td>IF</td><td>es genau zwei Wege gibt</td><td>wahr oder falsch</td></tr>
+          <tr><td>Switch</td><td>mehrere Wege möglich sind</td><td>mehrere Fälle statt verschachtelter IFs</td></tr>
+          <tr><td>Merge</td><td>zwei oder mehr Datenströme wieder zusammenkommen</td><td>erst klären: nach Position oder nach Feld?</td></tr>
+          <tr><td>Loop Over Items</td><td>Items portioniert verarbeitet werden sollen</td><td>hilft bei Batching und Limits</td></tr>
+          <tr><td>Wait</td><td>ein Workflow pausieren soll</td><td>bewusst warten, nicht blockierend schlafen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Antworten und stoppen</h2>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Wichtig</th></tr></thead>
+        <tbody>
+          <tr><td>Respond to Webhook</td><td>ein Webhook eine kontrollierte Antwort liefern soll</td><td>Webhook muss auf diese Antwortmethode eingestellt sein</td></tr>
+          <tr><td>Stop and Error</td><td>ein Workflow absichtlich fehlschlagen soll</td><td>Fehlertext so schreiben, dass du ihn später verstehst</td></tr>
+          <tr><td>No Operation</td><td>du einen Platzhalter oder Endpunkt im Workflow brauchst</td><td>nur zur Struktur, nicht als Logikersatz</td></tr>
+          <tr><td>Execution Data</td><td>du eigene Ausführungsdaten speichern willst</td><td>keine sensiblen Daten unnötig ablegen</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Auswahlregel</h2>
+      <ol class="steps">
+        <li><h4>Start klären</h4><p>Kommt das Ereignis per Zeitplan, Webhook, Formular, manuell oder aus einem Dienst?</p></li>
+        <li><h4>Datenquelle bestimmen</h4><p>Gibt es einen passenden App-Node? Wenn nicht, prüfe HTTP Request.</p></li>
+        <li><h4>Transformation klein halten</h4><p>Nutze Edit Fields, Filter, Sort und Limit, bevor du Code einsetzt.</p></li>
+        <li><h4>Verzweigung sichtbar machen</h4><p>Nimm IF für zwei Wege, Switch für mehrere Wege.</p></li>
+        <li><h4>Schreibende Nodes absichern</h4><p>Prüfe Dubletten, Testdaten und Credentials, bevor Daten extern verändert werden.</p></li>
+      </ol>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>Node findet keine Daten</td><td>falscher Eingang oder falscher Feldname</td><td>Input-Panel prüfen und Feld per Drag-and-drop wählen</td></tr>
+          <tr><td>HTTP Request liefert 401</td><td>Authentifizierung fehlt oder ist falsch</td><td>Credential, Header und Token-Typ prüfen</td></tr>
+          <tr><td>Webhook reagiert nur im Test</td><td>Produktions-URL nicht aktiviert oder Workflow nicht veröffentlicht</td><td>Workflow aktivieren und Production URL nutzen</td></tr>
+          <tr><td>Merge liefert unerwartete Paare</td><td>falscher Kombinationsmodus</td><td>Position, Matching Fields oder Append bewusst wählen</td></tr>
+          <tr><td>Code-Node macht alles und keiner versteht ihn</td><td>zu viel Logik im Code versteckt</td><td>einfache Teile zurück in sichtbare Nodes verlagern</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Konkrete Testfälle</h2>
+      <table class="btable">
+        <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
+        <tbody>
+          <tr><td>Webhook-Test</td><td>Test-URL mit kleiner JSON-Payload aufrufen</td><td>Webhook zeigt ein neues Item</td></tr>
+          <tr><td>Filter-Test</td><td>Beispieldaten mit passenden und unpassenden Items verwenden</td><td>nur erwartete Items laufen weiter</td></tr>
+          <tr><td>Merge-Test</td><td>zwei Listen mit sichtbaren IDs zusammenführen</td><td>Paare stimmen mit den IDs überein</td></tr>
+          <tr><td>HTTP-Test</td><td>ungefährlichen GET-Request ausführen</td><td>Status und Antwortstruktur sind sichtbar</td></tr>
+          <tr><td>Schreib-Test</td><td>in Testtabelle oder Testkanal schreiben</td><td>genau ein neuer Eintrag entsteht</td></tr>
+        </tbody>
+      </table>
+
+      <div class="prereq">
+        <h4>✅ Selbsttest</h4>
+        <ul>
+          <li>Wann nimmst du IF, wann Switch?</li>
+          <li>Warum ist HTTP Request nicht immer die erste Wahl?</li>
+          <li>Was musst du vor einem schreibenden Node prüfen?</li>
+          <li>Warum ist Merge ohne klare Schlüssel verdächtig?</li>
+          <li>Wann ist ein Code-Node gerechtfertigt?</li>
+        </ul>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Antworten</b>
+        1) IF für zwei Wege, Switch für mehrere Fälle. ·
+        2) Ein App-Node ist oft lesbarer und führt dich besser durch Authentifizierung und Felder. ·
+        3) Ziel, Testdaten, Dubletten und Credentials. ·
+        4) Weil unklar ist, welche Items fachlich zusammengehören. ·
+        5) Wenn GUI-Nodes die nötige Transformation nicht sauber ausdrücken.
+      </div>
+
+    </article>
+    <nav id="prevnext"></nav>
+  </div>
+</div>
+<script src="../assets/js/chapters.js"></script>
+<script src="../assets/js/book.js"></script>
+</body>
+</html>
