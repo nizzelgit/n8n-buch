@@ -743,14 +743,19 @@ return {
         <li><h4>Google-Sheets-Node anhängen</h4>
           <p>Hänge hinter den Veröffentlichungs-Node einen Google-Sheets-Node, <strong>Operation</strong> wieder auf
             <strong>Update Row</strong>.</p></li>
+        <li><h4>Auf den richtigen Node zeigen</h4>
+          <p>Vor diesem Node steht Slack, und Slack gibt seine eigene API-Antwort zurück. In <code>$json</code> liegen ab
+            hier also Slack-Felder, nicht mehr <code>id</code>, <code>published_at</code> und <code>audit_note</code>.
+            Alle Expressions in diesem Node greifen deshalb auf <code>Post formatieren</code> zurück.</p></li>
         <li><h4>Zeile aktualisieren</h4>
           <p>Finde die Zeile wieder über <strong>Column to match on</strong> = <code>id</code> und <strong>Value of Column
-            to Match On</strong> = <code>{{ $json.id }}</code>.</p></li>
+            to Match On</strong> = <code>{{ $('Post formatieren').item.json.id }}</code>.</p></li>
         <li><h4>Status setzen</h4>
           <p>Setze <code>status</code> auf <code>published</code> und <code>published_at</code> auf
-            <code>{{ $json.published_at }}</code>.</p></li>
+            <code>{{ $('Post formatieren').item.json.published_at }}</code>.</p></li>
         <li><h4>Audit-Hinweis ergänzen</h4>
-          <p>Schreibe optional <code>{{ $json.audit_note }}</code> in eine zusätzliche Spalte <code>audit_note</code>.</p></li>
+          <p>Schreibe optional <code>{{ $('Post formatieren').item.json.audit_note }}</code> in eine zusätzliche Spalte
+            <code>audit_note</code>.</p></li>
       </ol>
 
       <div class="callout callout--pareto">
