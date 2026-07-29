@@ -133,14 +133,14 @@
           <tr><td><code>$itemIndex</code></td><td>Die Position des aktuellen Items: 0, 1, 2 … (Zählung beginnt bei 0).</td></tr>
           <tr><td><code>$runIndex</code></td><td>Der wievielte Durchlauf des Nodes gerade läuft, ab 0 gezählt (relevant in Schleifen, Kapitel 10).</td></tr>
           <tr><td><code>$workflow.name</code></td><td>Name des laufenden Workflows. Auch da: <code>$execution.id</code> (ID des Laufs).</td></tr>
-          <tr><td><code>$vars.name</code></td><td>Selbst angelegte Variablen für Werte, die du an mehreren Stellen brauchst. Anlegen lassen sie sich nur in der Self-hosted-Enterprise-Version und im Pro-Plan der Cloud, und auch dort nur als Owner oder Admin.</td></tr>
+          <tr><td><code>$vars.name</code></td><td>Selbst angelegte Variablen für Werte, die du an mehreren Stellen brauchst. Anlegen lassen sie sich nur in der Self-hosted-Enterprise-Version und in der Cloud ab dem Pro-Plan, und auch dort nur als Owner oder Admin.</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--info">
         <b class="t">Ältere Anleitungen schreiben das anders</b>
-        In Tutorials aus der n8n-0.x-Zeit siehst du oft <code>$node["Webhook"].json.email</code> oder <code>$items()</code>.
-        Diese Schreibweisen stammen aus alten Versionen und stehen in der aktuellen Doku nicht mehr. Nimm für neue Workflows
+        In älteren Tutorials siehst du oft <code>$node["Webhook"].json.email</code> oder <code>$items()</code>.
+        Diese Schreibweisen stammen aus früheren n8n-Versionen und stehen in der aktuellen Doku nicht mehr. Nimm für neue Workflows
         <code>$('Webhook').item.json.email</code> und <code>$input.all()</code>.
       </div>
 
@@ -173,8 +173,8 @@
         Du darfst mehrere Funktionen hintereinander hängen: <code>$json.email.trim().toLowerCase()</code> entfernt erst die
         Leerzeichen und macht <em>dann</em> alles klein. Von links nach rechts gelesen, eine Stufe nach der anderen.
         Genau deshalb ergibt <code>.trim().extractDomain()</code> noch „Example.com“: <code>extractDomain</code> schneidet
-        nur die Domain heraus, es schreibt sie nicht klein. Willst du „example.com“, hängst du
-        <code>.toLowerCase()</code> davor.
+        nur die Domain heraus, es schreibt sie nicht klein. Willst du „example.com“, schiebst du
+        <code>.toLowerCase()</code> davor: <code>$json.email.trim().toLowerCase().extractDomain()</code>.
       </div>
 
       <div class="callout callout--info">
@@ -209,7 +209,7 @@
       </div>
 
       <h2>Mit Datum &amp; Uhrzeit arbeiten</h2>
-      <p>Datum ist das Thema, an dem die meisten Einsteiger:innen hängenbleiben — zu Unrecht.
+      <p>Datum ist das Thema, an dem die meisten Einsteiger:innen hängenbleiben. Zu Unrecht.
         <code>$now</code> und <code>$today</code> sind keine simplen Texte, sondern <strong>Datum-Objekte</strong> aus der
         Bibliothek Luxon, die n8n mitbringt. Damit kannst du <em>rechnen</em> (Tage addieren) und sie in <em>jedes Format</em>
         bringen:</p>
@@ -363,7 +363,8 @@ Wind: 12 km/h.</span></div>
       <div class="callout callout--tip">
         <b class="t">🎉 Das war ein großer Schritt</b>
         Du hast in <em>einem einzigen Feld</em> ein Datum formatiert, eine Zahl gerundet und eine Bedingung ausgewertet, ganz
-        ohne zusätzliche Nodes. Ohne Expressions hättest du dafür drei weitere Nodes auf dem Canvas.
+        ohne zusätzliche Nodes. Dieselbe Nachricht ohne Expressions zu bauen, hieße: mehrere Nodes hintereinander,
+        nur um einen Satz zusammenzusetzen.
       </div>
 
       <h2>Wenn etwas schiefgeht: die vier häufigsten Expression-Fehler</h2>
@@ -412,7 +413,7 @@ Wind: 12 km/h.</span></div>
         2) <code>{{ $json.preis.round(2) }}</code> (oder <code>Math.round</code> für ganze Zahlen). ·
         3) <code>{{ $now.toFormat('dd.MM.yyyy') }}</code>. ·
         4) <code>{{ $json.name || 'Gast' }}</code>. ·
-        5) Die Autovervollständigung zeigt die echten, vorhandenen Felder — kein Raten, keine Tippfehler.
+        5) Die Autovervollständigung zeigt die Felder, die gerade wirklich hereinkommen: kein Raten, keine Tippfehler.
       </div>
 
       <p>Du hast jetzt das Werkzeug, mit dem du Daten in jede gewünschte Form bringst. Ab hier nehmen wir die einzelnen

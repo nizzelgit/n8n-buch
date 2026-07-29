@@ -16,8 +16,9 @@
 
       <div class="chap-eyebrow"><span class="knum">D</span> Anhang</div>
       <h1 class="chap-title">Glossar</h1>
-      <p class="chap-lede">Dieses Glossar erklärt die Begriffe aus dem Werkbuch in kurzen, arbeitsnahen Sätzen.
-        Es ist nicht als technische Spezifikation gedacht, sondern als Orientierung beim Lesen und Debuggen.</p>
+      <p class="chap-lede">Dieses Glossar erklärt die Begriffe aus dem Werkbuch und aus der n8n-Oberfläche in kurzen,
+        arbeitsnahen Sätzen. Gedacht ist es zum Nachschlagen beim Lesen und beim Debuggen. Eine technische Spezifikation
+        ersetzt es nicht.</p>
       <div class="chap-meta">
         <span>⏱ ca. 8 Minuten</span>
         <span>🎯 Niveau: Nachschlagen</span>
@@ -26,20 +27,27 @@
 
       <div class="callout callout--pareto">
         <b class="t">80/20 für Begriffe</b>
-        Wenn du nur sechs Wörter sicher können willst, dann diese: Workflow, Node, Item, JSON, Credential und Execution.
-        Diese Begriffe tauchen in fast jeder Fehlersuche auf.
+        Wenn du nur sieben Wörter sicher können willst, dann diese: Workflow, Node, Item, JSON, Credential, Execution
+        und Publish. Diese Begriffe tauchen in fast jeder Fehlersuche auf.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Welcher Stand hier gilt</b>
+        Die Erklärungen folgen dem Stand Juli 2026 und n8n 2.32.x. Ein paar Begriffe haben mit n8n 2.0 den Namen
+        gewechselt. Am häufigsten stolpert man über den alten Aktiv-Schalter: Was früher „aktivieren“ hieß, heißt
+        heute <strong>Publish</strong>. Wo ein Begriff so einen Vorgänger hat, stehen beide Namen im Eintrag.
       </div>
 
       <h2>A bis C</h2>
       <table class="btable">
         <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
         <tbody>
-          <tr><td>Activation</td><td>älterer Begriff dafür, dass ein Workflow automatisch läuft. Seit n8n 2.0 heißt der Schritt <em>Publish</em></td><td>Ist der Workflow wirklich publiziert?</td></tr>
-          <tr><td>Agent Builder</td><td>Oberfläche, in der KI-Agenten als eigenständige Objekte entstehen, statt nur als Node im Workflow</td><td>Baue ich den Agenten inline oder als eigenes Objekt?</td></tr>
+          <tr><td>Active / Activation</td><td>in n8n 1.x der Schalter, mit dem ein Workflow automatisch lief. Seit n8n 2.0 gibt es dafür <em>Publish</em> und als Gegenstück <em>Unpublish</em>. Ältere Anleitungen sagen noch „aktivieren“</td><td>Steht der Workflow auf Published?</td></tr>
+          <tr><td>Agent Builder</td><td>Oberfläche im Projekt-Reiter <em>Agents</em>, in der ein KI-Agent ein eigenes Objekt neben den Workflows ist. n8n führt das noch als Preview</td><td>Baue ich den Agenten inline oder als eigenes Objekt?</td></tr>
           <tr><td>API</td><td>Schnittstelle, über die Systeme Daten austauschen</td><td>Welche URL, Methode und Authentifizierung?</td></tr>
           <tr><td>API-Key</td><td>geheimer Schlüssel für einen Dienst</td><td>Liegt er in Credentials statt im Workflow?</td></tr>
           <tr><td>Batching</td><td>Items in kleineren Gruppen verarbeiten</td><td>Wie groß darf eine Gruppe sein?</td></tr>
-          <tr><td>Binary Data</td><td>Dateiinhalte wie PDFs, Bilder oder Anhänge</td><td>Wo wird die Datei gespeichert?</td></tr>
+          <tr><td>Binary Data</td><td>Dateiinhalte wie PDFs, Bilder oder Anhänge. Seit n8n 2.0 liegen die Bytes im Dateisystem, im Queue-Modus in der Datenbank</td><td>Wo wird die Datei gespeichert?</td></tr>
           <tr><td>Canvas</td><td>Arbeitsfläche, auf der Nodes verbunden werden</td><td>Welche Daten laufen entlang der Verbindung?</td></tr>
           <tr><td>Code Node</td><td>Node für eigene JavaScript- oder Python-Logik</td><td>Ist Code hier nötig oder reicht ein sichtbarer Node?</td></tr>
           <tr><td>Credential</td><td>gespeicherte Authentifizierung für externe Dienste</td><td>Wer darf dieses Credential benutzen?</td></tr>
@@ -50,15 +58,17 @@
       <table class="btable">
         <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
         <tbody>
+          <tr><td>Data Table</td><td>Tabelle, die n8n selbst speichert, im Projekt unter <em>Data Tables</em>. Der Node <em>Data Table</em> liest und schreibt sie im Workflow</td><td>Reicht eine n8n-Tabelle oder brauche ich eine echte Datenbank?</td></tr>
           <tr><td>Datenfluss</td><td>Reihenfolge, in der Items durch Nodes laufen</td><td>Welcher Node erzeugt welches Feld?</td></tr>
           <tr><td>Deployment</td><td>kontrolliertes Überführen in eine Zielumgebung</td><td>Welche Version läuft in Produktion?</td></tr>
+          <tr><td>Draft</td><td>dein Bearbeitungsstand im Editor. n8n sichert ihn automatisch, in den Betrieb kommt er erst mit <em>Publish</em></td><td>Teste ich den Draft oder die veröffentlichte Version?</td></tr>
           <tr><td>Encryption Key</td><td>Schlüssel zum Verschlüsseln gespeicherter Credentials</td><td>Ist er gesichert und in allen Prozessen gleich?</td></tr>
           <tr><td>Environment Variable</td><td>Konfigurationswert außerhalb des Workflow-JSON</td><td>Unterscheidet sich dev von prod?</td></tr>
           <tr><td>Error Workflow</td><td>Workflow, der auf Fehler anderer Workflows reagiert</td><td>Welche Information brauche ich bei einem Fehler?</td></tr>
           <tr><td>Execution</td><td>eine konkrete Ausführung eines Workflows</td><td>Welche Items kamen rein, welche gingen raus?</td></tr>
           <tr><td>Expression</td><td>dynamischer Ausdruck in einem Node-Feld</td><td>Aus welchem Item kommt der Wert?</td></tr>
           <tr><td>Idempotenz</td><td>mehrfaches Ausführen erzeugt kein mehrfaches Ergebnis</td><td>Wie verhindere ich Dubletten?</td></tr>
-          <tr><td>Insights</td><td>Auswertung über Erfolge, Fehler und Laufzeiten deiner Ausführungen</td><td>Welcher Workflow schlägt am häufigsten fehl?</td></tr>
+          <tr><td>Insights</td><td>Auswertung über Anzahl, Fehlerquote und Laufzeit deiner Ausführungen. Gezählt werden nur Produktionsläufe, Testläufe bleiben draußen</td><td>Welcher Workflow schlägt am häufigsten fehl?</td></tr>
           <tr><td>Item</td><td>ein Datensatz, der durch den Workflow läuft</td><td>Wie sieht das aktuelle JSON aus?</td></tr>
         </tbody>
       </table>
@@ -69,13 +79,13 @@
         <tbody>
           <tr><td>JSON</td><td>strukturierte Daten aus Objekten, Feldern und Listen</td><td>Ist das Feld wirklich dort, wo ich es suche?</td></tr>
           <tr><td>Loop</td><td>wiederholte Verarbeitung von Items oder Gruppen</td><td>Wann endet die Schleife?</td></tr>
-          <tr><td>MCP</td><td>Protokoll, über das ein Agent externe Werkzeuge anspricht</td><td>Welche Werkzeuge gibt der Server frei?</td></tr>
+          <tr><td>MCP</td><td>Protokoll, über das ein Agent externe Werkzeuge anspricht. n8n kann beide Seiten: Client über das MCP Client Tool, Server über den MCP Server Trigger</td><td>Welche Werkzeuge gibt der Server frei?</td></tr>
           <tr><td>Merge</td><td>Zusammenführen mehrerer Datenströme</td><td>Nach Position oder nach Schlüssel?</td></tr>
           <tr><td>NDV</td><td>Node-Detailansicht mit Parametern, Input und Output</td><td>Welche Einstellung verändert das Verhalten?</td></tr>
           <tr><td>Node</td><td>ein einzelner Baustein im Workflow</td><td>Was ist seine Eingabe, was seine Ausgabe?</td></tr>
           <tr><td>Output</td><td>Daten, die ein Node nach der Ausführung weitergibt</td><td>Welche Felder sind ab jetzt verfügbar?</td></tr>
           <tr><td>Pagination</td><td>API-Daten seitenweise abrufen</td><td>Wo steht die nächste Seite?</td></tr>
-          <tr><td>Publish</td><td>den gespeicherten Stand eines Workflows live schalten. <em>Save</em> sichert nur, ohne die Produktion zu verändern</td><td>Habe ich gespeichert oder auch publiziert?</td></tr>
+          <tr><td>Publish</td><td>den gespeicherten Draft live schalten. Vorher ändert sich am Produktivbetrieb nichts, der Autosave sichert nur deine Arbeit. Zurück geht es mit <em>Unpublish</em></td><td>Habe ich nur gespeichert oder auch publiziert?</td></tr>
           <tr><td>Queue-Mode</td><td>Ausführungen werden über Redis an Worker verteilt</td><td>Brauche ich wirklich mehrere Worker?</td></tr>
         </tbody>
       </table>
@@ -84,17 +94,17 @@
       <table class="btable">
         <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
         <tbody>
+          <tr><td>RAG</td><td>KI-Muster: eigene Dokumente suchen und als Kontext nutzen</td><td>Welche Quelle darf die Antwort stützen?</td></tr>
           <tr><td>Rate-Limit</td><td>Grenze für API-Aufrufe in einem Zeitfenster</td><td>Wie viele Requests darf ich senden?</td></tr>
           <tr><td>Redis</td><td>Speicher- und Queue-Dienst für verteilte Ausführung</td><td>Erreichen Main und Worker dieselbe Queue?</td></tr>
           <tr><td>Retry</td><td>erneuter Versuch nach einem Fehler</td><td>Ist die Aktion beim zweiten Versuch noch sicher?</td></tr>
-          <tr><td>RAG</td><td>KI-Muster: eigene Dokumente suchen und als Kontext nutzen</td><td>Welche Quelle darf die Antwort stützen?</td></tr>
           <tr><td>Secret</td><td>sensibler Wert wie Token, Passwort oder Schlüssel</td><td>Ist er aus Exporten und Logs herausgehalten?</td></tr>
           <tr><td>Sub-Workflow</td><td>wiederverwendbarer Workflow als Baustein</td><td>Welche Eingaben erwartet er?</td></tr>
-          <tr><td>Task Runner</td><td>abgeschottete Umgebung, in der Code-Nodes ausgeführt werden. Seit n8n 2.0 der Normalfall</td><td>Warum sieht mein Code die Umgebungsvariable nicht?</td></tr>
+          <tr><td>Task Runner</td><td>abgeschotteter Prozess, in dem n8n den JavaScript- oder Python-Code aus dem Code-Node ausführt. Seit n8n 2.0 der Normalfall</td><td>Warum sieht mein Code die Umgebungsvariable nicht?</td></tr>
           <tr><td>Trigger</td><td>Node, der eine Ausführung startet</td><td>Wann und wodurch startet der Workflow?</td></tr>
           <tr><td>Webhook</td><td>URL, die externe Systeme aufrufen können</td><td>Ist es Test-URL oder Produktions-URL?</td></tr>
-          <tr><td>Workflow</td><td>verbundene Nodes, die eine Automatisierung beschreiben</td><td>Welches fachliche Ziel erfüllt er?</td></tr>
           <tr><td>Worker</td><td>n8n-Prozess, der Jobs im Queue-Mode ausführt</td><td>Hat er Datenbank, Redis und Encryption Key korrekt?</td></tr>
+          <tr><td>Workflow</td><td>verbundene Nodes, die eine Automatisierung beschreiben</td><td>Welches fachliche Ziel erfüllt er?</td></tr>
         </tbody>
       </table>
 
@@ -104,8 +114,8 @@
           item, execution, webhook oder connection.</p></li>
         <li><h4>Zum passenden Objekt wechseln</h4><p>Credential-Fehler im Credential prüfen, Item-Fehler im Input/Output,
           Webhook-Fehler im Trigger.</p></li>
-        <li><h4>Nicht Begriffe vermischen</h4><p>Ein Workflow ist nicht eine Execution. Ein Node ist nicht ein Item.
-          Diese Trennung spart viele Fehlannahmen.</p></li>
+        <li><h4>Nicht Begriffe vermischen</h4><p>Ein Workflow ist keine Execution. Ein Node ist kein Item. Ein Draft
+          ist noch nicht veröffentlicht. Diese Trennung spart viele Fehlannahmen.</p></li>
         <li><h4>Begriff mit Testdaten verbinden</h4><p>Frage immer: Wie sieht ein konkretes Beispiel dazu aus?</p></li>
       </ol>
 
@@ -127,7 +137,7 @@
         <tbody>
           <tr><td>Warum kam kein Wert an?</td><td>Item, JSON, Feldname</td><td>Input und Output des Nodes</td></tr>
           <tr><td>Warum darf n8n nicht zugreifen?</td><td>Credential, Secret, Authentifizierung</td><td>Credential-Einstellung und Node-Fehler</td></tr>
-          <tr><td>Warum startet nichts automatisch?</td><td>Trigger, Activation, Webhook</td><td>Startnode und Workflow-Schalter</td></tr>
+          <tr><td>Warum startet nichts automatisch?</td><td>Trigger, Publish, Webhook</td><td>Startnode und Publish-Status oben rechts</td></tr>
           <tr><td>Warum gibt es doppelte Einträge?</td><td>Retry, Idempotenz, schreibender Node</td><td>Execution-Verlauf und Zielsystem</td></tr>
           <tr><td>Warum ist der Worker kaputt?</td><td>Queue-Mode, Redis, Encryption Key</td><td>Deployment- und Worker-Logs</td></tr>
         </tbody>
@@ -141,6 +151,7 @@
           <li>Was unterscheidet Credential und Secret?</li>
           <li>Warum ist Idempotenz bei Retries wichtig?</li>
           <li>Welche drei Begriffe prüfst du bei Queue-Mode-Problemen zuerst?</li>
+          <li>Was ändert Publish, was ändert der Autosave?</li>
         </ul>
       </div>
 
@@ -150,7 +161,8 @@
         2) Ein Item enthält Felder; ein Feld ist nur ein einzelner Wert darin. ·
         3) Secret ist der sensible Wert, Credential ist die gesicherte n8n-Konfiguration dafür. ·
         4) Sonst kann ein erneuter Versuch doppelt schreiben. ·
-        5) Redis, Datenbankverbindung und <code>N8N_ENCRYPTION_KEY</code>.
+        5) Redis, Datenbankverbindung und <code>N8N_ENCRYPTION_KEY</code>. ·
+        6) Publish schiebt den Draft in den Betrieb; der Autosave sichert nur deinen Bearbeitungsstand.
       </div>
 
     </article>

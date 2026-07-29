@@ -134,7 +134,7 @@
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>RSS lesen</code>.</p></li>
         <li><h4>Feed-URL eintragen</h4>
-          <p>Trage als <strong>URL</strong> ein: <code>https://hnrss.org/frontpage</code>. Der Feed liefert von Haus aus rund
+          <p>Trage als <strong>URL</strong> ein: <code>https://hnrss.org/frontpage</code>. Der Feed liefert standardmäßig
             zwanzig Einträge. Mit <code>https://hnrss.org/frontpage?count=50</code> bekommst du mehr, bei 100 ist Schluss.</p></li>
         <li><h4>Schritt ausführen</h4>
           <p>Klicke <strong>▶ Schritt ausführen</strong>. Rechts erscheint die aktuelle Frontpage, ein Item pro Eintrag. Jedes
@@ -242,10 +242,13 @@
       </figure>
 
       <div class="callout callout--info">
-        <b class="t">Doppelt gemoppelt, mit Absicht</b>
-        Der Filter-Node hat unter <strong>Options</strong> den Schalter <strong>Ignore Case</strong>, und der steht schon
-        standardmäßig auf an. Groß- und Kleinschreibung wäre also ohnehin egal. Ich schreibe <code>toLowerCase()</code>
-        trotzdem hin, weil man in der Expression-Vorschau dann sieht, worauf tatsächlich verglichen wird.
+        <b class="t">Warum hier toLowerCase() steht</b>
+        Solange du unter <strong>Options</strong> nichts hinzufügst, vergleicht der Filter-Node mit Groß- und
+        Kleinschreibung. Ein Titel mit „AI“ fiele bei der Bedingung <code>ai</code> also durchs Raster.
+        <code>toLowerCase()</code> in der Expression löst das. Es geht auch anders: unter <strong>Options</strong> auf
+        <strong>Add option</strong> klicken und <strong>Ignore Case</strong> hinzufügen; die Option ist dann gleich
+        eingeschaltet. Ich bleibe bei <code>toLowerCase()</code>, weil man in der Expression-Vorschau sieht, worauf
+        wirklich verglichen wird.
       </div>
 
       <div class="callout callout--pareto">
@@ -276,8 +279,8 @@
       </div>
 
       <h2>Schritt 6: Digest bauen</h2>
-      <p>Der Slack-Node arbeitet pro Item. Bei fünf Treffern schickt er fünf einzelne Nachrichten. Wir wollen eine
-        Nachricht mit bis zu fünf Links. Dafür machen wir aus mehreren Items ein einziges Item.</p>
+      <p>Der Slack-Node arbeitet pro Item: Bei fünf Treffern schickt er fünf einzelne Nachrichten. Wir wollen aber eine
+        Nachricht mit bis zu fünf Links, und dafür machen wir aus mehreren Items ein einziges.</p>
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
@@ -355,7 +358,7 @@
         <li><h4>Slack-Node anhängen</h4>
           <p>Ziehe vom Code-Node eine Linie ins Leere, suche <code>slack</code> und wähle <strong>Slack</strong>.</p></li>
         <li><h4>Aktion wählen</h4>
-          <p>Wähle <strong>Send a message</strong> bzw. <strong>Nachricht senden</strong>.</p></li>
+          <p>Wähle in der Aktionsliste <strong>Send a message</strong>.</p></li>
         <li><h4>Credential wählen</h4>
           <p>Wähle deine Slack-Credential aus. Falls noch keine da ist: <strong>Create new credential</strong>,
             Slack-Workspace verbinden, Zugriff erlauben, speichern.</p></li>
@@ -363,8 +366,8 @@
           <p>Lass <strong>Send Message To</strong> auf <strong>Channel</strong> stehen und wähle darunter bei
             <strong>Channel</strong> einen Testkanal, z. B. <code>#news-test</code>.</p></li>
         <li><h4>Text auf Expression stellen</h4>
-          <p><strong>Message Type</strong> bleibt auf <strong>Text</strong>. Schalte das Feld <strong>Message Text</strong>
-            auf <strong>Expression</strong>.</p></li>
+          <p><strong>Message Type</strong> bleibt auf <strong>Simple Text Message</strong>. Schalte das Feld
+            <strong>Message Text</strong> auf <strong>Expression</strong>.</p></li>
         <li><h4>Digest-Text einsetzen</h4>
           <p>Trage ein: <code>{{ $json.text }}</code></p></li>
         <li><h4>Schritt ausführen</h4>

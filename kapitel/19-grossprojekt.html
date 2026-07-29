@@ -134,6 +134,7 @@
           <tr><td><code>angle</code></td><td>Blickwinkel</td><td><code>praktisch, skeptisch, nicht hype-getrieben</code></td></tr>
           <tr><td><code>draft_title</code></td><td>wird von n8n gefüllt</td><td>leer lassen</td></tr>
           <tr><td><code>draft_body</code></td><td>wird von n8n gefüllt</td><td>leer lassen</td></tr>
+          <tr><td><code>source_notes</code></td><td>wird von n8n gefüllt</td><td>leer lassen</td></tr>
           <tr><td><code>review_notes</code></td><td>menschliche Hinweise</td><td><code>Kürzer, Beispiel ergänzen</code></td></tr>
           <tr><td><code>published_at</code></td><td>Zeitpunkt der Veröffentlichung</td><td>leer lassen</td></tr>
         </tbody>
@@ -191,7 +192,8 @@
         <li><h4>Node benennen</h4>
           <p>Nenne den Node <code>Backlog lesen</code>.</p></li>
         <li><h4>Schritt ausführen</h4>
-          <p>Klicke auf <strong>Schritt ausführen</strong>. Rechts sollten deine Testzeilen als Items erscheinen.</p></li>
+          <p>Klicke auf <strong>Schritt ausführen</strong> (in der englischen Oberfläche <em>Execute step</em>). Rechts
+            sollten deine Testzeilen als Items erscheinen.</p></li>
       </ol>
 
       <figure class="figure">
@@ -533,9 +535,10 @@ return {
           <p>Setze <strong>Column to match on</strong> auf <code>id</code>. Darunter erscheint das Feld <strong>Value of
             Column to Match On</strong>; trage dort <code>{{ $json.id }}</code> ein.</p></li>
         <li><h4>Felder setzen</h4>
-          <p>Setze <strong>Mapping Column Mode</strong> auf <strong>Map Each Column Manually</strong>. Aktualisiere dann
-            <code>status</code> auf <code>review</code> und schreibe <code>draft_title</code>, <code>draft_body</code>,
-            <code>source_notes</code> und <code>risks</code> zurück.</p></li>
+          <p>Setze <strong>Mapping Column Mode</strong> auf <strong>Map Each Column Manually</strong>. Danach listet n8n
+            die Spalten des Blatts auf, und du füllst sie wie in der Tabelle unten. Eine eigene Spalte für
+            <code>risks</code> gibt es nicht: Die Risiken schreibst du nach <code>review_notes</code>, damit sie beim
+            Review direkt neben dem Entwurf stehen.</p></li>
         <li><h4>Schritt ausführen</h4>
           <p>Führe den Node aus und öffne das Sheet. Die Zeile <code>post-001</code> sollte jetzt einen Entwurf enthalten.</p></li>
       </ol>
@@ -546,6 +549,7 @@ return {
           <tr><td><code>status</code></td><td><code>review</code></td></tr>
           <tr><td><code>draft_title</code></td><td><code>{{ $json.draft_title }}</code></td></tr>
           <tr><td><code>draft_body</code></td><td><code>{{ $json.draft_body }}</code></td></tr>
+          <tr><td><code>source_notes</code></td><td><code>{{ $json.source_notes }}</code></td></tr>
           <tr><td><code>review_notes</code></td><td><code>{{ $json.risks }}</code></td></tr>
         </tbody>
       </table>
@@ -565,16 +569,18 @@ return {
           <p>Setze <strong>Send Message To</strong> auf <strong>Channel</strong> und wähle unter <strong>Channel</strong>
             einen Testkanal, z. B. <code>#content-review-test</code>.</p></li>
         <li><h4>Nachricht setzen</h4>
-          <p>Trage die folgende Expression in das Feld <strong>Message Text</strong> ein.</p></li>
+          <p>Trage die folgende Expression in das Feld <strong>Message Text</strong> ein. Achte auf den Node-Namen darin:
+            Der Sheets-Node gibt nur die Spalten zurück, die du gerade gemappt hast, und <code>keyword</code> ist nicht
+            dabei. Deshalb holen wir die Werte direkt aus <code>Entwurf prüfen</code>.</p></li>
       </ol>
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Slack-Review-Hinweis</div>
 <pre>Neuer Content-Entwurf wartet auf Review.
 
-ID: {{ $json.id }}
-Thema: {{ $json.keyword }}
-Titel: {{ $json.draft_title }}
+ID: {{ $('Entwurf prüfen').item.json.id }}
+Thema: {{ $('Entwurf prüfen').item.json.keyword }}
+Titel: {{ $('Entwurf prüfen').item.json.draft_title }}
 
 Bitte im Sheet prüfen und status auf approved setzen, wenn der Entwurf veröffentlicht werden darf.</pre>
       </div>

@@ -28,7 +28,7 @@
       <div class="prereq">
         <h4>📋 Was du mitbringen solltest</h4>
         <ul>
-          <li><strong>Items</strong> und das „läuft pro Item"-Prinzip (Kapitel 5).</li>
+          <li><strong>Items</strong> und das „läuft pro Item“-Prinzip (Kapitel 5).</li>
           <li><strong>Expressions</strong> (Kapitel 6): In Set und Filter brauchst du sie ständig.</li>
           <li>Den <strong>Edit-Fields-Node</strong> hast du in Kapitel 4 schon kurz benutzt.</li>
         </ul>
@@ -47,8 +47,8 @@
       <div class="callout callout--pareto">
         <b class="t">⚡ Erst no-code, dann Code</b>
         Greif zum <strong>Code</strong>-Node erst, wenn es mit Set, Filter &amp; Co. wirklich nicht geht. Einen visuellen Node
-        versteht auch jemand, der kein JavaScript kann. Sehr vieles, was nach „da brauche ich Code" aussieht, löst
-        eine Expression in einem Set-Node.
+        versteht auch jemand, der kein JavaScript kann, und nach jedem „▶ Schritt ausführen“ siehst du im Output-Panel sofort,
+        was er getan hat. Sehr vieles, was nach „da brauche ich Code“ aussieht, löst eine Expression in einem Set-Node.
       </div>
 
       <h2>Edit Fields (Set): das Arbeitspferd</h2>
@@ -58,18 +58,18 @@
 
       <ol class="steps">
         <li><h4>Node anlegen &amp; öffnen</h4>
-          <p>Häng „Edit Fields (Set)" an und öffne ihn. <strong>Mode</strong> steht auf <em>Manual Mapping</em>. Die zweite
+          <p>Häng „Edit Fields (Set)“ an und öffne ihn. <strong>Mode</strong> steht auf <em>Manual Mapping</em>. Die zweite
             Möglichkeit im selben Dropdown heißt <em>JSON</em>; dort tippst du das Ausgabe-Objekt als JSON. Wir bleiben bei
             Manual Mapping.</p></li>
         <li><h4>Felder hinzufügen</h4>
-          <p>Der Bereich heißt <strong>„Fields to Set"</strong>. Klick dort auf <strong>„Add Field"</strong>. Jeder Eintrag hat
+          <p>Der Bereich heißt <strong>„Fields to Set“</strong>. Klick dort auf <strong>„Add Field“</strong>. Jeder Eintrag hat
             drei Angaben: <strong>Name</strong> (z. B. <code>stadt</code>), <strong>Type</strong> (String, Number, Boolean …)
             und <strong>Value</strong>. Beim Wert schaltest du wie gewohnt zwischen <strong>Fest</strong> (engl. <em>Fixed</em>)
             und <strong>Expression</strong> um.</p></li>
         <li><h4>Nur gesetzte Felder behalten</h4>
-          <p>Ganz unten gibt es den Schalter <strong>„Include Other Input Fields"</strong>. Er ist von Haus aus <strong>aus</strong>,
+          <p>Ganz unten gibt es den Schalter <strong>„Include Other Input Fields“</strong>. Er ist von Haus aus <strong>aus</strong>,
             und dann enthält die Ausgabe <em>nur</em> deine neuen Felder. So wirst du den Ballast los. Schaltest du ihn ein,
-            erscheint darunter <strong>„Input Fields to Include"</strong> mit den Möglichkeiten <em>All</em>, <em>Selected</em>
+            erscheint darunter <strong>„Input Fields to Include“</strong> mit den Möglichkeiten <em>All</em>, <em>Selected</em>
             und <em>All Except</em>.</p></li>
       </ol>
 
@@ -85,14 +85,14 @@
                   <div class="row"><label>String · stadt</label><input class="n8n-input" value="Berlin"></div>
                   <div class="row"><label>Number · tempC</label><input class="n8n-input is-expr" value="{{ Math.round($json.current.temperature_2m) }}"></div>
                   <div class="row"><label>Number · windKmh</label><input class="n8n-input is-expr" value="{{ Math.round($json.current.wind_speed_10m) }}"></div>
-                  <div class="row"><label>Include Other Input Fields</label><div class="n8n-select">⦿ aus <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Include Other Input Fields</label><div class="n8n-toggle"><span class="n8n-switch"></span>aus</div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 9.1</span>Aus dem großen Wetter-JSON wird ein schlankes Objekt mit genau drei
-          Feldern. „Include Other Input Fields" ist aus, alles andere fällt weg.</figcaption>
+          Feldern. „Include Other Input Fields“ ist aus, alles andere fällt weg.</figcaption>
       </figure>
 
       <div class="callout callout--tip">
@@ -107,14 +107,14 @@
 
       <ol class="steps">
         <li><h4>Node anlegen &amp; öffnen</h4>
-          <p>„Filter" anhängen und öffnen. Du siehst einen Bereich <strong>„Conditions"</strong>.</p></li>
+          <p>„Filter“ anhängen und öffnen. Du siehst einen Bereich <strong>„Conditions“</strong>.</p></li>
         <li><h4>Eine Bedingung bauen</h4>
           <p>Links der <strong>Wert</strong> (per Expression, z. B. <code>{{ $json.tempC }}</code>), in der Mitte der
             <strong>Operator</strong> (z. B. <em>is greater than</em>), rechts der <strong>Vergleichswert</strong> (z. B. <code>20</code>).
             Welche Operatoren dir angeboten werden, hängt am gewählten Datentyp: bei Zahlen <em>is greater than</em>, bei Text
             <em>contains</em>, bei Datum <em>is after</em>.</p></li>
         <li><h4>Mehrere Bedingungen kombinieren</h4>
-          <p>Mit <strong>AND</strong>/<strong>OR</strong> verknüpfst du Bedingungen, z. B. „tempC &gt; 20 <em>UND</em> windKmh &lt; 15".</p></li>
+          <p>Mit <strong>AND</strong>/<strong>OR</strong> verknüpfst du Bedingungen, z. B. „tempC &gt; 20 <em>UND</em> windKmh &lt; 15“.</p></li>
       </ol>
 
       <figure class="figure">
@@ -144,8 +144,9 @@
       <div class="callout callout--tip">
         <b class="t">💡 Wenn plötzlich gar nichts durchkommt</b>
         Dann passt meist der Datentyp nicht. Der Text <code>"20"</code> ist für n8n etwas anderes als die Zahl <code>20</code>,
-        und die Bedingung greift nicht. Unter <strong>Options</strong> findest du <strong>„Convert types where required"</strong>.
-        Damit rechnet n8n den Wert vor dem Vergleich in den passenden Typ um.
+        und die Bedingung greift nicht. Direkt unter den Conditions sitzt dafür der Schalter
+        <strong>„Convert types where required“</strong>, und der steht anfangs auf aus. Schalte ihn ein, dann rechnet n8n den
+        Wert vor dem Vergleich in den passenden Typ um.
       </div>
 
       <div class="callout callout--info">
@@ -167,7 +168,7 @@
       </ul>
 
       <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Modus „Run Once for Each Item"</div>
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Code · Modus „Run Once for Each Item“</div>
 <pre><span class="cm">// Vor- und Nachname zu einem Anzeigenamen zusammenbauen</span>
 <span class="ky">return</span> {
   name: $json.vorname + <span class="st">' '</span> + $json.nachname,
@@ -191,7 +192,7 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 9.3</span>Der Code-Node im Modus „pro Item". Beachte das <code>return</code>: Es
+        <figcaption><span class="fig-tag">Abb. 9.3</span>Der Code-Node im Modus „pro Item“. Beachte das <code>return</code>: Es
           bestimmt, was als neues Item herauskommt.</figcaption>
       </figure>
 
@@ -207,16 +208,16 @@
           über <code>NODE_FUNCTION_ALLOW_BUILTIN</code> und <code>NODE_FUNCTION_ALLOW_EXTERNAL</code> frei, und zwar an den Task
           Runnern, nicht am n8n-Hauptprozess.</p>
         <p style="margin:0">• <strong>Kein HTTP, keine Dateien, keine Credentials.</strong> Willst du eine API rufen, nimm den
-          HTTP-Request-Node. Willst du eine Datei lesen, nimm „Read/Write Files from Disk".</p>
+          HTTP-Request-Node. Willst du eine Datei lesen, nimm „Read/Write Files from Disk“.</p>
       </div>
 
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
-        <p style="margin:0 0 6px">• <strong>„Code doesn't return items properly"?</strong> Im Modus „All Items" musst du eine
+        <p style="margin:0 0 6px">• <strong>„Code doesn't return items properly“?</strong> Im Modus „All Items“ musst du eine
           <em>Liste</em> zurückgeben (<code>return [...]</code>), nicht ein einzelnes Objekt.</p>
         <p style="margin:0 0 6px">• <strong>Falscher Modus.</strong> Greifst du auf <code>$json</code> zu, brauchst du „Run Once for Each
-          Item". Willst du alle Items auf einmal sehen, nimm „All Items" mit <code>$input.all()</code>.</p>
-        <p style="margin:0">• <strong>„Cannot find module …"?</strong> Das Modul ist nicht freigegeben. Auf n8n Cloud kannst du daran
+          Item“. Willst du alle Items auf einmal sehen, nimm „All Items“ mit <code>$input.all()</code>.</p>
+        <p style="margin:0">• <strong>„Cannot find module …“?</strong> Das Modul ist nicht freigegeben. Auf n8n Cloud kannst du daran
           nichts ändern und musst ohne auskommen. Selbst gehostet trägst du es in
           <code>NODE_FUNCTION_ALLOW_BUILTIN</code> bzw. <code>NODE_FUNCTION_ALLOW_EXTERNAL</code> ein.</p>
       </div>
@@ -237,17 +238,17 @@
       <hr>
 
       <h2>Mini-Übung: Wetterdaten auf das Wesentliche eindampfen</h2>
-      <p>Wir nehmen wieder den Wetter-Workflow und hängen hinter „Wetter holen" einen Set-Node, der ein sauberes Objekt baut.</p>
+      <p>Wir nehmen wieder den Wetter-Workflow und hängen hinter „Wetter holen“ einen Set-Node, der ein sauberes Objekt baut.</p>
       <ol class="steps">
-        <li><h4>Set-Node anhängen</h4><p>Vom HTTP-Node eine Linie ziehen, „Edit Fields (Set)" wählen, öffnen.</p></li>
+        <li><h4>Set-Node anhängen</h4><p>Vom HTTP-Node eine Linie ziehen, „Edit Fields (Set)“ wählen, öffnen.</p></li>
         <li><h4>Drei Felder anlegen</h4>
           <p><em>String</em> <code>stadt</code> = <code>Berlin</code> · <em>Number</em> <code>tempC</code> =
             <code>{{ Math.round($json.current.temperature_2m) }}</code> · <em>Number</em> <code>windKmh</code> =
             <code>{{ Math.round($json.current.wind_speed_10m) }}</code>.</p></li>
-        <li><h4>„Include Other Input Fields" ausschalten</h4>
-          <p>Damit nur deine drei Felder übrig bleiben.</p></li>
+        <li><h4>„Include Other Input Fields“ ausgeschaltet lassen</h4>
+          <p>Der Schalter steht ohnehin auf aus. Schau trotzdem kurz nach, damit wirklich nur deine drei Felder übrig bleiben.</p></li>
         <li><h4>Ausführen &amp; prüfen</h4>
-          <p>„▶ Schritt ausführen": Im Ausgang steht jetzt ein knappes Objekt <code>{ stadt, tempC, windKmh }</code>. Viel
+          <p>„▶ Schritt ausführen“: Im Ausgang steht jetzt ein knappes Objekt <code>{ stadt, tempC, windKmh }</code>. Viel
             angenehmer als das große Roh-JSON.</p></li>
       </ol>
 
@@ -255,7 +256,7 @@
       <table class="btable">
         <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
         <tbody>
-          <tr><td>Felder reduzieren</td><td><strong>Include Other Input Fields</strong> ausschalten</td><td>nur <code>stadt</code>, <code>tempC</code>, <code>windKmh</code> bleiben</td></tr>
+          <tr><td>Felder reduzieren</td><td><strong>Include Other Input Fields</strong> aus lassen</td><td>nur <code>stadt</code>, <code>tempC</code>, <code>windKmh</code> bleiben</td></tr>
           <tr><td>Filter</td><td>Filter mit passenden und unpassenden Items testen</td><td>nur passende Items laufen weiter</td></tr>
           <tr><td>Code pro Item</td><td>Code-Node im Modus Each Item ausführen</td><td>jedes Item bekommt berechnete Felder</td></tr>
           <tr><td>Falscher Modus</td><td>Code-Modus bewusst wechseln</td><td>Fehlermeldung erklärt Rückgabeformat oder Zugriff</td></tr>
@@ -278,9 +279,9 @@
       <div class="callout callout--info">
         <b class="t">Antworten</b>
         1) Edit Fields (Set): visuell, leicht zu testen, deckt das meiste ab. ·
-        2) „Include Other Input Fields" ausschalten. ·
+        2) „Include Other Input Fields“ aus lassen, das ist der Standard. ·
         3) Sie werden verworfen (Filter hat nur einen Ausgang). ·
-        4) „Run Once for All Items" → Liste; „Run Once for Each Item" → ein Objekt. ·
+        4) „Run Once for All Items“ → Liste; „Run Once for Each Item“ → ein Objekt. ·
         5) IF (zwei Ausgänge). ·
         6) Der Code-Node läuft im Task Runner, und der Zugriff auf Umgebungsvariablen ist dort standardmäßig blockiert.
       </div>

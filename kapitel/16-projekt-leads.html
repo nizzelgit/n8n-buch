@@ -83,7 +83,8 @@
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 16.1</span>Das Grundgerüst: Webhook, Normalisierung, Switch, CRM, Meldung.
-          Der IF-Node für die Pflichtfeldprüfung kommt in Schritt 5 dazu.</figcaption>
+          Der IF-Node für die Pflichtfeldprüfung kommt in Schritt 5 dazu. Die Meldung steht hier als ein Kasten; in Schritt 9
+          hängst du an jeden CRM-Zweig einen eigenen Slack-Node.</figcaption>
       </figure>
 
       <div class="callout callout--pareto">
@@ -141,8 +142,8 @@
         <li><h4>Antwort einstellen</h4>
           <p>Stelle <strong>Respond</strong> auf <strong>Immediately</strong>. Das aufrufende System bekommt dann sofort die
             Antwort <code>Workflow got started</code>, ohne auf CRM und Slack zu warten. Die Auswahlliste kennt noch
-            <strong>When Last Node Finishes</strong> und <strong>Using 'Respond to Webhook' Node</strong>, dazu einen
-            Streaming-Modus. Die brauchst du hier nicht.</p></li>
+            <strong>When Last Node Finishes</strong>, <strong>Using 'Respond to Webhook' Node</strong> und
+            <strong>Streaming</strong> für Nodes, die ihre Antwort stückweise liefern. Die brauchst du hier nicht.</p></li>
       </ol>
 
       <figure class="figure">
@@ -162,7 +163,8 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 16.2</span>POST-Webhook mit Test- und Production-URL. Zum Bauen verwendest du
+        <figcaption><span class="fig-tag">Abb. 16.2</span>POST-Webhook mit Test- und Production-URL. In n8n schaltest du
+          zwischen den beiden Adressen um, hier stehen sie zum Vergleich untereinander. Zum Bauen verwendest du
           ausschließlich die Test-URL.</figcaption>
       </figure>
 
@@ -184,9 +186,10 @@
       <div class="callout callout--warn">
         <b class="t">Wenn der Webhook nichts empfängt</b>
         Prüfe zuerst Methode und URL. Rufst du die Production-URL auf, obwohl der Workflow noch nicht published ist, antwortet
-        n8n mit 404 und der Meldung „The requested webhook is not registered“. Passt die Methode nicht zu der, die im Node
-        eingestellt ist, kommt ebenfalls ein 404. Und wenn du <code>Listen for test event</code> nicht geklickt hast, wartet
-        gar niemand auf deinen Aufruf.
+        n8n mit <strong>404</strong> und dem Text <code>The requested webhook "lead-routing" is not registered.</code>
+        Stimmt die Adresse, aber die Methode nicht, wird n8n deutlicher und schreibt sinngemäß
+        <code>This webhook is not registered for GET requests. Did you mean to make a POST request?</code> Und wenn du
+        <strong>Listen for test event</strong> nicht geklickt hast, wartet schlicht niemand auf deinen Aufruf.
       </div>
 
       <h2>Schritt 4: Lead normalisieren</h2>
@@ -363,9 +366,10 @@
 
       <p>Zwei Dinge fallen dabei auf. <strong>Lead Status Name or ID</strong> und <strong>Contact Owner Name or ID</strong> sind
         Auswahllisten, die ihre Werte aus deinem HubSpot-Account laden. Freien Text nehmen sie nicht an, der Teamname aus dem
-        Routing passt dort also nicht hinein. Und ein Feld namens „Lead Source“ bietet der Node gar nicht an. Beides löst du über
-        <strong>Custom Properties</strong>: Du legst in HubSpot eine eigene Property an, etwa <code>n8n_owner_team</code>, und
-        trägst sie hier mit Name und Wert ein.</p>
+        Routing passt dort also nicht hinein. Und ein Feld namens „Lead Source“ bietet der Node gar nicht an. Am nächsten kommt
+        <strong>Original Source Name or ID</strong>, aber das ist wieder eine Liste mit HubSpot-eigenen Werten. Beides löst du
+        über <strong>Custom Properties</strong>: Du legst in HubSpot eine eigene Property an, etwa <code>n8n_owner_team</code>,
+        und trägst sie hier mit Name und Wert ein.</p>
 
       <div class="callout callout--warn">
         <b class="t">Dubletten skeptisch behandeln</b>
@@ -409,8 +413,8 @@
             Lass <strong>Send Message To</strong> auf <strong>Channel</strong> stehen und wähle als
             <strong>Channel</strong> den Testkanal <code>#sales-leads-test</code>.</p></li>
         <li><h4>Slack-Text setzen</h4>
-          <p><strong>Message Type</strong> bleibt auf <strong>Text</strong>. Schalte <strong>Message Text</strong> auf
-            <strong>Expression</strong> und trage den folgenden Text ein.</p></li>
+          <p><strong>Message Type</strong> bleibt auf <strong>Simple Text Message</strong>. Schalte <strong>Message Text</strong>
+            auf <strong>Expression</strong> und trage den folgenden Text ein.</p></li>
       </ol>
 
       <div class="code">
@@ -445,15 +449,17 @@ Budget: {{ $('Lead vorbereiten').item.json.budget }} €
         Für operative Prozesse ist meist besser: erst dauerhaft speichern, dann melden.
       </div>
 
-      <h2>Schritt 10: Wenn etwas schiefgeht, landen ungültige Leads im Fehlerzweig</h2>
+      <h2>Schritt 10: Fehlerzweig für ungültige Leads</h2>
       <p>Der false-Ausgang von <strong>E-Mail vorhanden?</strong> darf nicht ins Leere führen. Schicke ungültige Leads in einen
         Testkanal oder eine Tabelle, damit du die Ursache sehen kannst.</p>
 
       <ol class="steps">
         <li><h4>Slack-Node an false-Ausgang hängen</h4>
-          <p>Ziehe vom false-Ausgang des IF-Nodes eine Linie ins Leere und wähle Slack.</p></li>
+          <p>Ziehe vom false-Ausgang des IF-Nodes eine Linie ins Leere, wähle Slack und darin wieder die Aktion
+            <strong>Send a message</strong>.</p></li>
         <li><h4>Kanal wählen</h4>
-          <p>Nimm einen internen Kanal wie <code>#automation-errors-test</code>.</p></li>
+          <p><strong>Send Message To</strong> bleibt auf <strong>Channel</strong>. Als <strong>Channel</strong> nimmst du einen
+            internen Kanal wie <code>#automation-errors-test</code>.</p></li>
         <li><h4>Fehlertext setzen</h4>
           <p>Schalte <strong>Message Text</strong> auf <strong>Expression</strong> und trage ein:
             <code>Lead ohne E-Mail empfangen. Rohdaten: {{ JSON.stringify($('Webhook Lead').item.json.body) }}</code>.
@@ -461,6 +467,20 @@ Budget: {{ $('Lead vorbereiten').item.json.budget }} €
         <li><h4>Test ohne E-Mail senden</h4>
           <p>Sende einen Testlead ohne <code>email</code>. Er muss in diesen Fehlerzweig laufen und darf keinen CRM-Kontakt erzeugen.</p></li>
       </ol>
+
+      <h2>Wenn etwas schiefgeht</h2>
+      <table class="btable">
+        <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
+        <tbody>
+          <tr><td>Kein Item im Webhook-Ausgang</td><td><strong>Listen for test event</strong> nicht geklickt oder der eine erlaubte Aufruf ist verbraucht</td><td>erneut klicken, dann sofort den POST senden</td></tr>
+          <tr><td>Felder in <strong>Lead vorbereiten</strong> bleiben leer</td><td>die Werte liegen unter <code>body</code>, nicht direkt im Item</td><td>im Ausgang des Webhooks nachsehen und <code>$json.body.…</code> schreiben</td></tr>
+          <tr><td>Alles landet bei Sales</td><td><code>topic</code> fehlt oder ist anders geschrieben, <code>owner_team</code> fällt auf Sales zurück</td><td>Ausgang von <strong>Lead vorbereiten</strong> prüfen und <code>topic</code> in der Quelle korrigieren</td></tr>
+          <tr><td>Ein Lead verschwindet spurlos im Switch</td><td>keine Regel trifft und <strong>Fallback Output</strong> steht auf <em>None</em></td><td>unter <strong>Options</strong> einen Fallback-Ausgang setzen</td></tr>
+          <tr><td>HubSpot verweigert das Ticket</td><td><strong>Pipeline Name or ID</strong>, <strong>Stage Name or ID</strong> oder <strong>Ticket Name</strong> ist leer</td><td>alle drei Pflichtangaben füllen, Pipeline und Stage aus den Listen wählen</td></tr>
+          <tr><td>In Slack steht <code>undefined</code></td><td><code>$json</code> zeigt hinter dem CRM-Node auf die CRM-Antwort</td><td>Lead-Felder mit <code>$('Lead vorbereiten').item.json.…</code> holen</td></tr>
+          <tr><td>Production-URL antwortet mit 404</td><td>Workflow ist gespeichert, aber nicht published</td><td>Publish klicken und die Production-URL danach neu kopieren</td></tr>
+        </tbody>
+      </table>
 
       <h2>Konkrete Testfälle</h2>
       <p>Vor dem Publish gehört mehr durch den Workflow als der Idealfall. Diese drei Fälle sind das Minimum:</p>

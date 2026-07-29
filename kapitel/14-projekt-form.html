@@ -83,8 +83,9 @@
 
       <div class="callout callout--info">
         <b class="t">Warum Slack später auf einen früheren Node zugreift</b>
-        Manche Nodes geben nach ihrer Aktion andere Daten zurück, als sie bekommen haben. Der Google-Sheets-Node antwortet
-        mit der Zeile, die er gerade geschrieben hat, samt Zeilennummer. Deshalb verwenden wir im Slack-Text
+        Manche Nodes geben nach ihrer Aktion andere Daten zurück, als sie bekommen haben. Der Google-Sheets-Node reicht
+        genau die Spalten weiter, die er geschrieben hat. Ein Feld wie <code>slack_text</code>, für das es in der Tabelle
+        keine Spalte gibt, fehlt danach. Deshalb verwenden wir im Slack-Text
         <code>$('Daten vorbereiten').item.json.Name</code> statt <code>$json.Name</code>. Das ist etwas länger, dafür bleibt
         die Nachricht stabil, wenn du den Sheets-Node später umbaust.
       </div>
@@ -158,25 +159,29 @@
           <p>Trage bei <strong>Form Description</strong> ein: <code>Schreib kurz, worum es geht. Wir melden uns zeitnah.</code></p></li>
         <li><h4>Erstes Element anlegen</h4>
           <p>Klicke unter <strong>Form Elements</strong> auf <strong>Add Form Element</strong>. Trage bei
-            <strong>Label</strong> ein: <code>Name</code>. Trage bei <strong>Field Name</strong> ebenfalls
-            <code>Name</code> ein. Stelle <strong>Element Type</strong> auf <strong>Text Input</strong> und schalte
-            <strong>Required Field</strong> an.</p></li>
-        <li><h4>Die beiden Beschriftungen auseinanderhalten</h4>
-          <p><strong>Label</strong> steht im Formular über dem Eingabefeld, die Person liest es also.
-            <strong>Field Name</strong> ist der Schlüssel, unter dem der Wert im Workflow ankommt. Lässt du ihn leer, nimmt
-            n8n das Label. Trage trotzdem überall beides gleich ein, dann passen alle Expressions in diesem Kapitel.</p></li>
+            <strong>Label</strong> ein: <code>Name</code>. Stelle <strong>Element Type</strong> auf
+            <strong>Text Input</strong>.</p></li>
+        <li><h4>Pflichtfeld einschalten</h4>
+          <p>Ein frisch angelegtes Element zeigt nur <strong>Label</strong> und <strong>Element Type</strong>. Alles
+            Weitere holst du dir über <strong>Add Attributes</strong> dazu, darunter <strong>Required Field</strong>.
+            Diesen Schalter stellst du an. Zeigt deine Version ihn ohne Umweg an, umso besser.</p></li>
+        <li><h4>Das Label ist der Schlüssel</h4>
+          <p><strong>Label</strong> steht im Formular über dem Eingabefeld, die Person liest es also. Es ist gleichzeitig
+            der Schlüssel, unter dem der Wert im Workflow ankommt. Hinter <strong>Add Attributes</strong> liegt außerdem
+            <strong>Custom Field Name</strong>. Sobald dort etwas steht, hat dieser Eintrag Vorrang und wird zum Schlüssel.
+            Lass ihn in diesem Kapitel leer, sonst passen die Expressions weiter unten nicht mehr.</p></li>
         <li><h4>Restliche Elemente anlegen</h4>
           <p>Lege nach demselben Muster die übrigen vier Elemente aus der folgenden Tabelle an.</p></li>
       </ol>
 
       <table class="btable">
-        <thead><tr><th>Label und Field Name</th><th>Element Type</th><th>Required Field?</th><th>Hinweis</th></tr></thead>
+        <thead><tr><th>Label</th><th>Element Type</th><th>Required Field?</th><th>Hinweis</th></tr></thead>
         <tbody>
           <tr><td><code>Name</code></td><td>Text Input</td><td>ja</td><td>voller Name</td></tr>
           <tr><td><code>E-Mail</code></td><td>Email</td><td>ja</td><td>Kontaktadresse</td></tr>
-          <tr><td><code>Thema</code></td><td>Dropdown</td><td>ja</td><td>vier Optionen anlegen: <code>Workshop</code>, <code>Beratung</code>, <code>Support</code>, <code>Sonstiges</code></td></tr>
+          <tr><td><code>Thema</code></td><td>Dropdown</td><td>ja</td><td>unter <strong>Field Options</strong> viermal <strong>Add Field Option</strong>: <code>Workshop</code>, <code>Beratung</code>, <code>Support</code>, <code>Sonstiges</code></td></tr>
           <tr><td><code>Nachricht</code></td><td>Textarea</td><td>ja</td><td>mehrzeiliger Text</td></tr>
-          <tr><td><code>Dringend?</code></td><td>Checkboxes</td><td>nein</td><td>genau eine Option anlegen: <code>Ja</code></td></tr>
+          <tr><td><code>Dringend?</code></td><td>Checkboxes</td><td>nein</td><td>unter <strong>Checkboxes</strong> einmal <strong>Add Checkbox</strong>, als <strong>Checkbox Label</strong> <code>Ja</code></td></tr>
         </tbody>
       </table>
 
@@ -205,8 +210,8 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 14.3</span>Der Form Trigger baut die Eingabeseite. Entscheidend ist der
-          <b>Field Name</b> jedes Elements, denn unter diesem Schlüssel kommen die Werte im Workflow an.</figcaption>
+        <figcaption><span class="fig-tag">Abb. 14.3</span>Der Form Trigger baut die Eingabeseite. Entscheidend ist das
+          <b>Label</b> jedes Elements, denn unter diesem Schlüssel kommen die Werte im Workflow an.</figcaption>
       </figure>
 
       <div class="callout callout--info">
@@ -220,8 +225,9 @@
       <div class="callout callout--info">
         <b class="t">Mehrere Seiten und eine eigene Schlussseite</b>
         Ein Formular muss nicht auf eine Seite passen. Du hängst an den Form Trigger einen weiteren Node namens
-        <strong>n8n Form</strong> und stellst bei <strong>Page Type</strong> auf <strong>Next Form Page</strong>. So entsteht
-        Seite 2 mit eigenen Elementen. Mit <strong>Form Ending</strong> bestimmst du, was die Person am Ende sieht:
+        <strong>n8n Form</strong> und stellst <strong>Page Type</strong> auf <strong>Next Form Page</strong>. So entsteht
+        Seite 2 mit eigenen Elementen. Setzt du <strong>Page Type</strong> stattdessen auf <strong>Form Ending</strong>,
+        bestimmst du unter <strong>On n8n Form Submission</strong>, was die Person am Ende sieht:
         <strong>Show Completion Screen</strong>, <strong>Redirect to URL</strong>, <strong>Show Text</strong> oder
         <strong>Return Binary File</strong>. Für unser Projekt reicht die eine Seite, aber es ist gut zu wissen, wo das steht.
       </div>
@@ -229,7 +235,7 @@
       <h2>Schritt 4: Formular testweise absenden</h2>
       <ol class="steps">
         <li><h4>Testlauf starten</h4>
-          <p>Klicke im Node auf <strong>Execute Step</strong>, in der Abbildung <strong>▶ Schritt ausführen</strong>. Beim
+          <p>Klicke im Node auf <strong>Execute step</strong>, in der Abbildung <strong>▶ Schritt ausführen</strong>. Beim
             Webhook-Node heißt derselbe Knopf <strong>Listen for test event</strong>. Beim Form Trigger nicht.</p></li>
         <li><h4>Formular öffnen</h4>
           <p>n8n öffnet die Testseite in einem neuen Browser-Tab. Blockiert dein Browser das Fenster, kopierst du die
@@ -241,13 +247,13 @@
           <p>Klicke im Formular auf <strong>Submit</strong> bzw. <strong>Absenden</strong>.</p></li>
         <li><h4>Ausgang prüfen</h4>
           <p>Zurück in n8n sollte im Ausgang des Triggers ein Item erscheinen. Wechsle auf <strong>JSON</strong> oder
-            <strong>Schema</strong> und vergleiche die Schlüssel mit deinen <strong>Field Names</strong>.</p></li>
+            <strong>Schema</strong> und vergleiche die Schlüssel mit deinen <strong>Labels</strong>.</p></li>
       </ol>
 
       <div class="callout callout--warn">
         <b class="t">Wenn kein Item erscheint</b>
         Wahrscheinlich wartet der Node nicht mehr auf eine Einsendung, oder du hast die Production-URL geöffnet. Klicke
-        <strong>Execute Step</strong> erneut und rufe die angezeigte Test-URL noch einmal auf.
+        <strong>Execute step</strong> erneut und rufe die angezeigte Test-URL noch einmal auf.
       </div>
 
       <h2>Schritt 5: Daten vorbereiten</h2>
@@ -344,9 +350,9 @@
             <strong>Create new credential</strong>. Wie es dann weitergeht, hängt davon ab, wo dein n8n läuft. Der nächste
             Kasten zeigt beide Wege.</p></li>
         <li><h4>Dokument auswählen</h4>
-          <p>Stelle <strong>Document</strong> auf <strong>From list</strong> und wähle <code>n8n Formular-Anfragen</code>.</p></li>
+          <p>Stelle <strong>Document</strong> auf <strong>From List</strong> und wähle <code>n8n Formular-Anfragen</code>.</p></li>
         <li><h4>Tab auswählen</h4>
-          <p>Stelle <strong>Sheet</strong> auf <strong>From list</strong> und wähle <code>Anfragen</code>.</p></li>
+          <p>Stelle <strong>Sheet</strong> auf <strong>From List</strong> und wähle <code>Anfragen</code>.</p></li>
         <li><h4>Zuordnung auf manuell stellen</h4>
           <p>Setze <strong>Mapping Column Mode</strong> auf <strong>Map Each Column Manually</strong>. n8n liest die
             Überschriften aus Zeile 1 und zeigt dir unter <strong>Values to Send</strong> für jede Spalte ein Eingabefeld.</p></li>
@@ -360,8 +366,9 @@
 
       <div class="callout callout--info">
         <b class="t">Google-Anmeldung: zwei Wege</b>
-        <p style="margin:0 0 6px">• <strong>n8n Cloud.</strong> Für Google Sheets gibt es dort Managed OAuth. Du klickst dich
-          durch die Google-Anmeldung im Browser, bestätigst den Zugriff und bist fertig. Ein eigenes Google-Cloud-Projekt
+        <p style="margin:0 0 6px">• <strong>n8n Cloud.</strong> Für Google Sheets gibt es dort Managed OAuth. Lass das
+          Credential auf <strong>Managed OAuth2 (recommended)</strong> stehen, klicke auf
+          <strong>Sign in with Google</strong>, melde dich an und bestätige den Zugriff. Ein eigenes Google-Cloud-Projekt
           brauchst du nicht.</p>
         <p style="margin:0 0 6px">• <strong>Selbst gehostet.</strong> Hier legst du den OAuth-Client selbst an. In der
           Google Cloud Console unter <code>console.cloud.google.com</code>: Projekt anlegen →
@@ -424,7 +431,7 @@
         <li><h4>Empfänger festlegen</h4>
           <p>Setze <strong>Send Message To</strong> auf <strong>Channel</strong>.</p></li>
         <li><h4>Kanal auswählen</h4>
-          <p>Stelle <strong>Channel</strong> auf <strong>From list</strong> und wähle einen Testkanal, z. B.
+          <p>Stelle <strong>Channel</strong> auf <strong>From List</strong> und wähle einen Testkanal, z. B.
             <code>#anfragen-test</code>. Nimm nicht sofort einen produktiven Kanal.</p></li>
         <li><h4>App in den Kanal einladen</h4>
           <p>Öffne den Kanal in Slack und schreibe <code>/invite @NameDeinerApp</code>. Ohne diesen Schritt kennt Slack die
@@ -500,10 +507,11 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         <li><h4>Auto-Save prüfen</h4>
           <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Ganzen Workflow ausführen</h4>
-          <p>Klicke unten am Canvas auf <strong>Execute workflow</strong>. n8n wartet jetzt auf eine Einsendung und lässt
-            danach alle vier Nodes durchlaufen.</p></li>
+          <p>Klicke unten am Canvas auf <strong>Execute workflow</strong>. n8n öffnet wieder die Testseite und wartet auf
+            eine Einsendung. Diesmal laufen danach alle vier Nodes durch, nicht nur der Trigger.</p></li>
         <li><h4>Formular erneut absenden</h4>
-          <p>Öffne die Test-URL, sende eine zweite Testanfrage ab und beobachte den Workflow.</p></li>
+          <p>Sende eine zweite Testanfrage ab und beobachte den Workflow. Bleibt der Tab aus, rufst du die Test-URL wieder
+            von Hand auf.</p></li>
         <li><h4>Beide Ausgänge prüfen</h4>
           <p>Prüfe Google Sheets auf eine neue Zeile und Slack auf eine neue Nachricht. Beide müssen denselben Inhalt zeigen.</p></li>
       </ol>
@@ -539,7 +547,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
       <table class="btable">
         <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
         <tbody>
-          <tr><td>Formular löst nicht aus</td><td>Testlauf beendet oder falsche URL geöffnet</td><td>im Form-Trigger erneut <strong>Execute Step</strong> klicken</td></tr>
+          <tr><td>Formular löst nicht aus</td><td>Testlauf beendet oder falsche URL geöffnet</td><td>im Form-Trigger erneut <strong>Execute step</strong> klicken</td></tr>
           <tr><td>Sheets-Zeile bleibt leer</td><td>Spaltennamen passen nicht zu den <strong>Values to Send</strong></td><td>Tabellenkopf und Feldzuordnung vergleichen</td></tr>
           <tr><td>Sheets schreibt <code>{{ … }}</code> als Text</td><td>Feld steht auf <strong>Fixed</strong> statt <strong>Expression</strong></td><td>betroffenes Feld auf <strong>Expression</strong> umschalten</td></tr>
           <tr><td>Priorität ist immer <code>hoch</code></td><td>Checkbox-Wert als Wahrheitswert geprüft</td><td><code>.length &gt; 0</code> statt einer reinen Ja/Nein-Abfrage verwenden</td></tr>
@@ -581,7 +589,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         <ul>
           <li>Warum legen wir die Sheet-Spalten vor dem n8n-Node an?</li>
           <li>Warum gibt es einen eigenen Node „Daten vorbereiten“?</li>
-          <li>Welche Angabe im Form Trigger bestimmt den Schlüssel im JSON: <strong>Label</strong> oder <strong>Field Name</strong>?</li>
+          <li>Welche Angabe im Form Trigger bestimmt den Schlüssel im JSON, solange du nichts weiter ausfüllst?</li>
           <li>Was liefert ein <strong>Checkboxes</strong>-Element, wenn niemand ein Häkchen setzt?</li>
           <li>Wo gehört die Google- oder Slack-Anmeldung hin?</li>
           <li>Was ist der Unterschied zwischen Test-Formular-URL und Production-URL?</li>
@@ -593,7 +601,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         <b class="t">Antworten</b>
         1) Der Sheets-Node braucht stabile Spaltenüberschriften für die Zuordnung. ·
         2) Damit Formularlogik, Tabellenmapping und Slack-Text entkoppelt bleiben. ·
-        3) Der Field Name; ohne Eintrag springt n8n auf das Label zurück. ·
+        3) Das Label, solange <strong>Custom Field Name</strong> leer bleibt. ·
         4) Eine leere Liste, und die ist in JavaScript wahr. ·
         5) In Credentials. ·
         6) Test ist temporär fürs Bauen, Production läuft nur bei published Workflow. ·

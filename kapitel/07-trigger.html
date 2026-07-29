@@ -68,10 +68,10 @@
       </div>
 
       <h2>Trigger 1 (Manual): für Bau und Test</h2>
-      <p>Den kennst du aus Kapitel 4. Im Trigger-Panel heißt der Eintrag <strong>„Trigger manually"</strong>, auf dem
-        Canvas landet der Node dann unter dem Namen <strong>„When clicking ‘Execute workflow’"</strong>. Der Knopf, der
-        ihn auslöst, heißt <strong>„Execute workflow"</strong>. In älteren n8n-Versionen und in vielen Video-Tutorials
-        steht an derselben Stelle noch „Test workflow"; gemeint ist derselbe Knopf. Ein Klick darauf erzeugt ein
+      <p>Den kennst du aus Kapitel 4. Im Trigger-Panel heißt der Eintrag <strong>„Trigger manually“</strong>, auf dem
+        Canvas landet der Node dann unter dem Namen <strong>„When clicking ‘Execute workflow’“</strong>. Der Knopf, der
+        ihn auslöst, heißt <strong>„Execute workflow“</strong>. In älteren n8n-Versionen und in vielen Video-Tutorials
+        steht an derselben Stelle noch „Test workflow“; gemeint ist derselbe Knopf. Ein Klick darauf erzeugt ein
         einzelnes, leeres Start-Item. Beim Entwickeln bestimmst du damit selbst, wann es losgeht.</p>
 
       <div class="callout callout--pareto">
@@ -86,21 +86,23 @@
 
       <ol class="steps">
         <li><h4>Den Trigger hinzufügen</h4>
-          <p>Auf einem leeren Canvas das große <span class="kbd">+</span> klicken (oder oben rechts „+"). Im Trigger-Panel
-            steht ganz oben <strong>„On a schedule"</strong>. Wenn du lieber suchst: <code>schedule</code> tippen und
-            <strong>„Schedule Trigger"</strong> wählen. Beide Wege setzen denselben Node.</p></li>
+          <p>Auf einem leeren Canvas das große <span class="kbd">+</span> klicken (oder oben rechts „+“). Das Trigger-Panel
+            geht auf und fragt „What triggers this workflow?“. Der dritte Eintrag von oben heißt
+            <strong>„On a schedule“</strong>; über ihm stehen „Trigger manually“ und „App Trigger Nodes“. Wenn du lieber
+            suchst: <code>schedule</code> tippen und <strong>„Schedule Trigger“</strong> wählen. Beide Wege setzen
+            denselben Node.</p></li>
         <li><h4>Das Intervall festlegen</h4>
-          <p>Doppelklick öffnet die NDV. Das wichtigste Feld ist <strong>„Trigger Interval"</strong>. Es bietet
+          <p>Doppelklick öffnet die NDV. Das wichtigste Feld ist <strong>„Trigger Interval“</strong>. Es bietet
             <em>Seconds, Minutes, Hours, Days, Weeks, Months</em> und <em>Custom (Cron)</em>. Wähle z. B. <strong>Days</strong>.</p></li>
         <li><h4>Die Uhrzeit eintragen</h4>
-          <p>Bei „Days" erscheinen Zusatzfelder: <strong>Days Between Triggers</strong> (z. B. 1 = täglich),
+          <p>Bei „Days“ erscheinen Zusatzfelder: <strong>Days Between Triggers</strong> (z. B. 1 = täglich),
             <strong>Trigger at Hour</strong> (z. B. 8am) und <strong>Trigger at Minute</strong> (z. B. 0). Damit läuft er
             <em>täglich um 8:00 Uhr</em>, und zwar in der Zeitzone, die für diesen Workflow gilt. Welche das ist, klären
-            wir gleich im Kasten „Wenn etwas schiefgeht".</p></li>
+            wir gleich im Kasten „Wenn etwas schiefgeht“.</p></li>
         <li><h4>Was du jetzt siehst</h4>
           <p>Beim Auslösen erzeugt der Node ein Item mit dem Auslöse-Zeitpunkt, unter anderem im Feld <code>timestamp</code>.
-            Zum Bauen drückst du in der NDV auf „▶ Schritt ausführen" (im englischen Original heißt der Knopf
-            <strong>„Execute step"</strong>). Dann tut der Node sofort so, als wäre die Zeit gekommen.</p></li>
+            Zum Bauen drückst du in der NDV auf „▶ Schritt ausführen“ (im englischen Original heißt der Knopf
+            <strong>„Execute step“</strong>). Dann tut der Node sofort so, als wäre die Zeit gekommen.</p></li>
       </ol>
 
       <figure class="figure">
@@ -120,13 +122,13 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 7.2</span>Schedule Trigger auf „täglich um 8:00 Uhr". Für andere Rhythmen wählst
+        <figcaption><span class="fig-tag">Abb. 7.2</span>Schedule Trigger auf „täglich um 8:00 Uhr“. Für andere Rhythmen wählst
           du oben ein anderes Intervall. <b>Custom (Cron)</b> gibt dir die volle Kontrolle.</figcaption>
       </figure>
 
       <div class="callout callout--tip">
         <b class="t">💡 Cron für Spezialfälle</b>
-        Brauchst du etwas wie „werktags alle 30 Minuten zwischen 9 und 17 Uhr", stell <strong>Trigger Interval</strong> auf
+        Brauchst du etwas wie „werktags alle 30 Minuten zwischen 9 und 17 Uhr“, stell <strong>Trigger Interval</strong> auf
         <strong>Custom (Cron)</strong>. Darunter erscheint das Feld <strong>Expression</strong>, dort trägst du den
         Cron-Ausdruck ein, z. B. <code>*/30 9-17 * * 1-5</code>. Für 90 % reichen aber die einfachen Intervalle darüber.
       </div>
@@ -134,14 +136,17 @@
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
         <p style="margin:0 0 6px">• <strong>Läuft nicht zur erwarteten Zeit?</strong> Der Schedule-Trigger feuert nur, wenn der
-          Workflow <strong>published</strong> ist. Im Editor läuft er per „Execute workflow" auch als Draft, im Betrieb
-          dagegen nicht. Der Zeitplan zählt außerdem ab dem Publish: Änderst du das Intervall, greift die Änderung erst,
-          wenn du erneut publishst.</p>
+          Workflow <strong>published</strong> ist. Im Editor läuft er per „Execute workflow“ auch als Draft, im Betrieb
+          dagegen nicht. Der Zeitplan zählt außerdem ab dem Publish. Stellst du ein Zwei-Stunden-Intervall ein und
+          veröffentlichst um 11:30 Uhr, läuft der nächste Durchgang um 13:30 Uhr. Und ein geändertes Intervall greift
+          nicht sofort: Dafür musst du den Workflow erst <strong>unpublishen</strong> und danach eine neue Version
+          publishen.</p>
         <p style="margin:0">• <strong>Falsche Uhrzeit?</strong> Dann steht die Zeitzone anders, als du denkst. Selbst
           gehostet startet n8n mit <code>America/New_York</code>, nicht mit deiner Ortszeit. Global stellst du sie über die
           Umgebungsvariable <code>GENERIC_TIMEZONE</code> um (z. B. auf <code>Europe/Berlin</code>), im Container zusätzlich
           <code>TZ</code> für das Betriebssystem. Für einen einzelnen Workflow klickst du oben rechts auf das
-          <strong>Drei-Punkte-Menü</strong>, dann auf <strong>Settings</strong>, und setzt dort <strong>Timezone</strong>.</p>
+          <strong>Drei-Punkte-Menü</strong>, dann auf <strong>Settings</strong>, setzt dort <strong>Timezone</strong> und
+          klickst auf <strong>Save</strong>.</p>
       </div>
 
       <h2>Trigger 3 (Webhook): auf Zuruf aus dem Internet</h2>
@@ -155,20 +160,22 @@
 
       <ol class="steps">
         <li><h4>Den Webhook-Trigger hinzufügen</h4>
-          <p>Im Trigger-Panel steht der Eintrag <strong>„On webhook call"</strong>. Alternativ <code>webhook</code> tippen
-            und <strong>„Webhook"</strong> wählen. Doppelklick auf den Node öffnet die NDV.</p></li>
+          <p>Im Trigger-Panel steht der Eintrag <strong>„On webhook call“</strong>. Alternativ <code>webhook</code> tippen
+            und <strong>„Webhook“</strong> wählen. Doppelklick auf den Node öffnet die NDV.</p></li>
         <li><h4>Methode &amp; Pfad ansehen</h4>
           <p><strong>HTTP Method</strong> steht auf <strong>GET</strong>. Für Tests im Browser ist das genau richtig,
-            Formulare schicken meist POST. Das Feld <strong>Path</strong> ist beim Anlegen leer; dann hängt n8n eine
-            automatisch erzeugte ID an die URL. Trag stattdessen etwas Lesbares ein, z. B. <code>wetter</code>.</p></li>
+            Formulare schicken meist POST. Im Feld <strong>Path</strong> steht bereits eine automatisch erzeugte Kennung,
+            damit sich zwei Webhooks nie dieselbe Adresse teilen. Überschreib sie mit etwas Lesbarem, z. B.
+            <code>wetter</code>.</p></li>
         <li><h4>Die zwei URLs verstehen</h4>
-          <p>Über den Parametern sitzt der Block <strong>Webhook URLs</strong> mit zwei Adressen: <strong>Test URL</strong>
-            und <strong>Production URL</strong>. Das ist der wichtigste Punkt am ganzen Node. Der Kasten unter der
-            Abbildung erklärt, warum.</p></li>
+          <p>Über den Parametern sitzt der Block <strong>Webhook URLs</strong>. Darin stehen zwei Schalter nebeneinander,
+            <strong>Test URL</strong> und <strong>Production URL</strong>, und darunter jeweils die Adresse, die gerade
+            ausgewählt ist. Beim Öffnen ist das die Test URL. Das ist der wichtigste Punkt am ganzen Node. Der Kasten
+            unter der Abbildung erklärt, warum.</p></li>
         <li><h4>Auf ein Test-Ereignis lauschen</h4>
-          <p>Klicke <strong>„Listen for test event"</strong>. Der Node horcht jetzt 120 Sekunden lang auf <em>einen</em>
+          <p>Klicke <strong>„Listen for test event“</strong>. Der Node horcht jetzt 120 Sekunden lang auf <em>einen</em>
             Aufruf der Test URL.</p></li>
-        <li><h4>Die Test-URL aufrufen</h4>
+        <li><h4>Die Test URL aufrufen</h4>
           <p>Kopiere die <strong>Test URL</strong> und öffne sie in einem neuen Browser-Tab. Häng ruhig Parameter an, z. B.
             <code>?stadt=Berlin</code>. Zurück in n8n erscheint das empfangene Item im Ausgang, inklusive deiner Parameter.</p></li>
       </ol>
@@ -191,19 +198,20 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 7.3</span>Der Webhook-Node mit beiden URLs. Beachte <code>/webhook-test/</code> (Test)
-          gegen <code>/webhook/</code> (Produktion). Dieser eine Wortteil ist die häufigste Fehlerquelle im ganzen Kapitel.</figcaption>
+        <figcaption><span class="fig-tag">Abb. 7.3</span>Der Webhook-Node. In n8n schaltest du zwischen den beiden Adressen um,
+          hier stehen sie zum Vergleich untereinander. Beachte <code>/webhook-test/</code> (Test) gegen
+          <code>/webhook/</code> (Produktion). Dieser eine Wortteil ist die häufigste Fehlerquelle im ganzen Kapitel.</figcaption>
       </figure>
 
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht: Test URL gegen Production URL</b>
         <p style="margin:0 0 6px">• Die <strong>Test URL</strong> (<code>/webhook-test/</code>) ist nur scharf, nachdem du
-          „Listen for test event" geklickt hast: 120 Sekunden lang oder bis genau <em>ein</em> Aufruf angekommen ist.
-          Danach ist sie wieder taub. Für den nächsten Versuch klickst du erneut auf „Listen for test event".</p>
+          „Listen for test event“ geklickt hast: 120 Sekunden lang oder bis genau <em>ein</em> Aufruf angekommen ist.
+          Danach ist sie wieder taub. Für den nächsten Versuch klickst du erneut auf „Listen for test event“.</p>
         <p style="margin:0">• Die <strong>Production URL</strong> (<code>/webhook/</code>) registriert n8n erst, wenn du
-          den Workflow <strong>publishst</strong>. Rufst du sie vorher auf, antwortet n8n mit <strong>404</strong> und der
-          Meldung „The requested webhook is not registered". Das ist kein Fehler in deinem Workflow. Es gibt schlicht keine
-          produktive Version, die zuhört.</p>
+          den Workflow <strong>publishst</strong>. Rufst du sie vorher auf, antwortet n8n mit <strong>404</strong>. Im Text
+          steht dann <code>The requested webhook "wetter" is not registered.</code> Das ist kein Fehler in deinem Workflow.
+          Es gibt schlicht keine produktive Version, die zuhört.</p>
       </div>
 
       <div class="callout callout--tip">
@@ -216,9 +224,10 @@
       <h2>Publish: der Schritt in den Betrieb</h2>
       <p>Schedule- und Webhook-Trigger (und alle App-Trigger) laufen im echten Betrieb nur, wenn der Workflow
         <strong>published</strong> ist. Den Button findest du oben rechts in der Topbar. n8n öffnet daraufhin den Dialog
-        <strong>Publish workflow</strong>. Dort kannst du der Version unter <strong>Version name</strong> einen Namen geben
-        und die Änderungen beschreiben; beides darfst du leer lassen. Was du danach im Editor änderst, bleibt Draft, bis du
-        erneut publishst.</p>
+        <strong>Publish workflow</strong>. Im Feld <strong>Version name</strong> steht schon eine Bezeichnung. Du darfst sie
+        überschreiben, aber nicht leeren, sonst bleibt der Knopf grau. Die Beschreibung darunter ist freiwillig. Ein Klick
+        auf <strong>Publish</strong> im Dialog schiebt die Version live. Was du danach im Editor änderst, bleibt Draft, bis
+        du erneut publishst.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -240,7 +249,7 @@
 
       <div class="callout callout--info">
         <b class="t">Published ≠ Test</b>
-        Der Knopf <strong>„Execute workflow"</strong> startet einen Lauf <em>jetzt</em>, egal ob published oder nicht. Genau
+        Der Knopf <strong>„Execute workflow“</strong> startet einen Lauf <em>jetzt</em>, egal ob published oder nicht. Genau
         das willst du beim Bauen. <strong>Published</strong> heißt dagegen: n8n übernimmt das automatische Auslösen im
         Hintergrund, dauerhaft. <strong>Unpublish</strong> im Drei-Punkte-Menü nimmt die produktive Version wieder aus dem Betrieb.
       </div>
@@ -249,7 +258,7 @@
       <table class="btable">
         <thead><tr><th>Trigger</th><th>Feuert, wenn …</th><th>Publish nötig?</th><th>Typischer Einsatz</th></tr></thead>
         <tbody>
-          <tr><td>Manual</td><td>du auf „Execute workflow" klickst</td><td>nein</td><td>Bauen &amp; Testen</td></tr>
+          <tr><td>Manual</td><td>du auf „Execute workflow“ klickst</td><td>nein</td><td>Bauen &amp; Testen</td></tr>
           <tr><td>Schedule</td><td>die eingestellte Zeit erreicht ist</td><td>ja</td><td>Reports, Erinnerungen, Abgleiche</td></tr>
           <tr><td>Webhook</td><td>jemand die URL aufruft</td><td>ja (für die Production URL)</td><td>Formulare, andere Systeme, sofortige Reaktion</td></tr>
           <tr><td>App-Trigger <span class="hint">(z. B. Telegram, Gmail)</span></td><td>im Dienst etwas passiert (neue Nachricht …)</td><td>ja</td><td>auf Ereignisse einer App reagieren</td></tr>
@@ -258,12 +267,17 @@
 
       <div class="callout callout--pareto">
         <b class="t">⚡ Zwei Trigger tragen fast alles</b>
-        <strong>Schedule</strong> („mach das regelmäßig") und <strong>Webhook</strong> („reagiere, wenn etwas reinkommt") decken
+        <strong>Schedule</strong> („mach das regelmäßig“) und <strong>Webhook</strong> („reagiere, wenn etwas reinkommt“) decken
         die große Mehrheit aller Automatisierungen ab. App-Trigger sind im Grunde spezialisierte Webhooks oder Poller: gleiches
-        Muster, nur fertig verpackt für einen bestimmten Dienst. Einen Trigger suchst du im Panel übrigens vergeblich. Der
-        <strong>Local File Trigger</strong>, der auf Änderungen im Dateisystem reagiert, ist seit n8n 2.0 aus
-        Sicherheitsgründen abgeschaltet, zusammen mit dem Execute-Command-Node. Wer ihn braucht, schaltet ihn beim
-        Self-Hosting über die Umgebungsvariable <code>NODES_EXCLUDE</code> wieder frei.
+        Muster, nur fertig verpackt für einen bestimmten Dienst.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Einen Trigger suchst du vergeblich</b>
+        Der <strong>Local File Trigger</strong> reagiert auf Änderungen im Dateisystem. Im Panel taucht er nicht auf: Seit
+        n8n 2.0 ist er aus Sicherheitsgründen abgeschaltet, zusammen mit dem Execute-Command-Node. Beide dürfen Befehle
+        ausführen und auf Dateien zugreifen. Wer sie braucht, nimmt sie beim Self-Hosting über die Umgebungsvariable
+        <code>NODES_EXCLUDE</code> wieder aus der Sperrliste.
       </div>
 
       <hr>
@@ -277,18 +291,18 @@
           <p>Öffne den Wetter-Workflow. Klick den <strong>manuellen Trigger</strong> einmal an (er wird markiert) und drücke
             <span class="kbd">Entf</span>. Die Verbindung zum HTTP-Node löst sich mit.</p></li>
         <li><h4>Den Schedule-Trigger einsetzen</h4>
-          <p>Großes <span class="kbd">+</span> klicken, <code>schedule</code> suchen, <strong>„Schedule Trigger"</strong> wählen.
+          <p>Großes <span class="kbd">+</span> klicken, <code>schedule</code> suchen, <strong>„Schedule Trigger“</strong> wählen.
             Auf <em>Days · 1 · 8am · 0</em> stellen (wie oben).</p></li>
         <li><h4>Mit dem HTTP-Node verbinden</h4>
-          <p>Vom <strong>Ausgangspunkt rechts</strong> des Schedule-Triggers eine Linie zum Eingang des „Wetter holen"-Nodes
+          <p>Vom <strong>Ausgangspunkt rechts</strong> des Schedule-Triggers eine Linie zum Eingang des „Wetter holen“-Nodes
             ziehen. Jetzt hängt die alte Kette wieder am neuen Trigger.</p></li>
         <li><h4>Testen wie immer</h4>
-          <p>Warte kurz, bis der Autosave durch ist, dann <strong>„Execute workflow"</strong>. Der Ablauf läuft durch wie
+          <p>Warte kurz, bis der Autosave durch ist, dann <strong>„Execute workflow“</strong>. Der Ablauf läuft durch wie
             gehabt. Die Uhrzeit muss dafür nicht erreicht sein.</p></li>
         <li><h4>Publish klicken</h4>
-          <p>Erst jetzt der Schritt in den Betrieb: oben rechts <strong>Publish</strong> klicken und den Dialog bestätigen.
-            Ab sofort holt n8n das Wetter jeden Morgen um 8, ganz ohne dich. Wirf vorher noch einen Blick auf die Zeitzone,
-            sonst werden aus 8 Uhr schnell 8 Uhr New Yorker Zeit.</p></li>
+          <p>Erst jetzt der Schritt in den Betrieb: oben rechts <strong>Publish</strong> klicken, dann im Dialog noch einmal
+            auf <strong>Publish</strong>. Ab sofort holt n8n das Wetter jeden Morgen um 8, ganz ohne dich. Wirf vorher noch
+            einen Blick auf die Zeitzone, sonst werden aus 8 Uhr schnell 8 Uhr New Yorker Zeit.</p></li>
       </ol>
 
       <div class="callout callout--tip">
@@ -315,7 +329,7 @@
           <li>Dein Schedule-Workflow feuert nachts nicht. Was prüfst du zuerst?</li>
           <li>Was ist der Unterschied zwischen der Test URL und der Production URL eines Webhooks?</li>
           <li>Unter welchem Pfad findest du einen Query-Parameter <code>?stadt=Berlin</code> im Item?</li>
-          <li>Muss ein Workflow published sein, damit „Execute workflow" funktioniert?</li>
+          <li>Muss ein Workflow published sein, damit „Execute workflow“ funktioniert?</li>
         </ul>
       </div>
 
@@ -323,10 +337,10 @@
         <b class="t">Antworten</b>
         1) Linke Seite abgerundet, kein Eingang, nur ein Ausgang. ·
         2) Ob der Workflow <strong>published</strong> ist, danach die Zeitzone (Drei-Punkte-Menü → Settings → Timezone). ·
-        3) Die Test URL (<code>/webhook-test/</code>) hört nur nach „Listen for test event" und nur 120 Sekunden lang;
+        3) Die Test URL (<code>/webhook-test/</code>) hört nur nach „Listen for test event“ und nur 120 Sekunden lang;
         die Production URL (<code>/webhook/</code>) nur bei published Workflow. ·
         4) <code>$json.query.stadt</code>. ·
-        5) Nein. „Execute workflow" läuft auch im Draft. Published brauchst du nur fürs automatische Auslösen.
+        5) Nein. „Execute workflow“ läuft auch im Draft. Published brauchst du nur fürs automatische Auslösen.
       </div>
 
       <p>Damit weißt du, <em>wann</em> ein Workflow startet. Im nächsten Kapitel kümmern wir uns darum, <em>woher</em> die Daten

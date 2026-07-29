@@ -122,6 +122,8 @@
         <li><h4>Gmail Trigger hinzufügen</h4>
           <p>Klicke auf das große <span class="kbd">+</span>, suche <code>gmail trigger</code> und wähle
             <strong>Gmail Trigger</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>Neue E-Mail</code>.</p></li>
         <li><h4>Credential auswählen</h4>
           <p>Wähle deine Gmail-Credential oder lege sie wie in Kapitel 12 an.</p></li>
         <li><h4>Ereignis setzen</h4>
@@ -146,9 +148,9 @@
                 <div class="ndv-panel__head">Parameter</div>
                 <div class="ndv-panel__body">
                   <div class="row"><label>Event</label><div class="n8n-select">Message Received <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Max Emails per Poll</label><input class="n8n-input" value="3"></div>
                   <div class="row"><label>Read Status</label><div class="n8n-select">Unread emails only <span class="chev">▾</span></div></div>
                   <div class="row"><label>Label Names or IDs</label><input class="n8n-input" value="n8n-test-ai"></div>
-                  <div class="row"><label>Max Emails per Poll</label><input class="n8n-input" value="3"></div>
                 </div>
               </div>
             </div>
@@ -172,6 +174,8 @@
       <ol class="steps">
         <li><h4>Gmail-Node anhängen</h4>
           <p>Ziehe vom Gmail Trigger eine Linie ins Leere, suche <code>gmail</code> und wähle <strong>Gmail</strong>.</p></li>
+        <li><h4>Node benennen</h4>
+          <p>Nenne ihn <code>E-Mail holen</code>. Unter diesem Namen sprechen wir ihn in den nächsten Schritten an.</p></li>
         <li><h4>Operation wählen</h4>
           <p>Setze <strong>Resource</strong> auf <strong>Message</strong> und <strong>Operation</strong> auf
             <strong>Get</strong>.</p></li>
@@ -352,9 +356,11 @@ Text: {{ $json.email_text }}</pre>
         <strong>Require Specific Output Format</strong>. Schaltest du ihn ein, erscheint unter dem Node ein zusätzlicher
         Anschluss <strong>Output Parser</strong>. Dort hängst du den <strong>Structured Output Parser</strong> ein, setzt
         <strong>Schema Type</strong> auf <strong>Generate From JSON Example</strong> und fügst unter <strong>JSON Example</strong>
-        genau das Objekt aus dem Prompt oben ein. Achtung: Mit Parser landen <code>category</code>, <code>urgency</code> und die
-        übrigen Schlüssel direkt oben im Item, nicht mehr in <code>text</code>. Der nächste Prüfschritt bleibt trotzdem sinnvoll,
-        denn auch ein Parser kann scheitern.
+        genau das Objekt aus dem Prompt oben ein. Achtung, das ändert den nächsten Schritt: Mit Parser landen
+        <code>category</code>, <code>urgency</code> und die übrigen Schlüssel direkt oben im Item, das Feld <code>text</code>
+        gibt es dann nicht mehr. Im Code-Node aus Schritt 6 ersetzt du deshalb die Zeile mit <code>raw</code> samt
+        <code>try</code>-Block durch <code>const parsed = item.json;</code>. Alles darunter bleibt stehen. Diese Prüfung lohnt
+        sich weiterhin, denn auch mit Parser kann ein Modell eine Kategorie erfinden, die du nicht erlaubt hast.
       </div>
 
       <h2>Schritt 6: KI-Ausgabe prüfen und zerlegen</h2>
@@ -524,13 +530,15 @@ Zusammenfassung:
           <p>Lege in Gmail ein Label <code>n8n-ai-draft</code> an.</p></li>
         <li><h4>Gmail-Node anhängen</h4>
           <p>Hänge nach dem Entwurf einen weiteren Gmail-Node an.</p></li>
-        <li><h4>Label hinzufügen</h4>
+        <li><h4>Aktion wählen</h4>
           <p>Setze <strong>Resource</strong> auf <strong>Message</strong> und <strong>Operation</strong> auf
-            <strong>Add Label</strong>. Unter <strong>Label Names or IDs</strong> wählst du <code>n8n-ai-draft</code>.</p></li>
+            <strong>Add Label</strong>.</p></li>
         <li><h4>Message ID zurückholen</h4>
           <p>Der Gmail-Node davor hat einen Entwurf zurückgegeben, nicht unsere ursprüngliche Mail. In <code>$json</code> steht
             deshalb keine <code>message_id</code> mehr. Trage im Feld <strong>Message ID</strong> als Expression
             <code>{{ $('KI-Ausgabe prüfen').item.json.message_id }}</code> ein.</p></li>
+        <li><h4>Label wählen</h4>
+          <p>Unter <strong>Label Names or IDs</strong> wählst du <code>n8n-ai-draft</code> aus der Liste.</p></li>
         <li><h4>Optional als gelesen markieren</h4>
           <p>Füge danach einen Gmail-Node mit <strong>Message → Mark as Read</strong> hinzu, wieder mit derselben Expression für
             die Message ID. Mache das erst, wenn Entwurf und Label zuverlässig funktionieren.</p></li>
@@ -587,7 +595,7 @@ Zusammenfassung:
           <tr><td>CRM-Kontext</td><td>Vor der Chain Kontakt im CRM suchen und Kundentyp oder offene Tickets ergänzen.</td></tr>
           <tr><td>Mehrere Labels</td><td>Nach <code>category</code> unterschiedliche Gmail-Labels setzen.</td></tr>
           <tr><td>Kostenkontrolle</td><td>Nur Mails über einer Mindestlänge an KI senden; Newsletter vorher filtern.</td></tr>
-          <tr><td>Output Parser</td><td><strong>Require Specific Output Format</strong> einschalten und den <strong>Structured Output Parser</strong> anhängen. Den Code-Parser trotzdem als Sicherheitsnetz behalten.</td></tr>
+          <tr><td>Output Parser</td><td><strong>Require Specific Output Format</strong> einschalten und den <strong>Structured Output Parser</strong> anhängen. Den Code-Parser als Sicherheitsnetz behalten und dort <code>parsed</code> direkt aus <code>item.json</code> nehmen.</td></tr>
           <tr><td>Fallback-Modell</td><td>In der Chain <strong>Enable Fallback Model</strong> einschalten. Dann hängst du ein zweites Modell an, das einspringt, wenn das erste ausfällt.</td></tr>
         </tbody>
       </table>

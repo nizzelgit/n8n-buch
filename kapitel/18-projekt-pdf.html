@@ -46,7 +46,8 @@
       <p>Der Workflow bekommt eine E-Mail mit PDF-Anhang. n8n liest den PDF-Text, extrahiert Rechnungsnummer, Datum,
         Betrag und Lieferant per Regel-Code. Wenn diese Regeln nicht genug erkennen, geht derselbe Text in einen
         KI-Extractor. Danach wird das Ergebnis geprüft: saubere Datensätze landen in einer Tabelle, unsichere Fälle in
-        einem Review-Kanal.</p>
+        einem Review-Kanal. Die Feldnamen und Voreinstellungen in diesem Kapitel haben den Stand Juli 2026 und
+        n8n 2.32.x.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -159,15 +160,18 @@ IBAN: DE89 3704 0044 0532 0130 00</pre>
         <li><h4>Credential auswählen</h4>
           <p>Wähle deine IMAP-Credential oder lege eine Test-Credential an.</p></li>
         <li><h4>Postfach prüfen</h4>
-          <p>Im Feld <strong>Mailbox Name</strong> steht bereits <code>INBOX</code>. Lass es so.</p></li>
+          <p>Im Feld <strong>Mailbox Name</strong> steht bereits <code>INBOX</code>. Lass es so. Darunter steht
+            <strong>Action</strong> auf <strong>Mark as Read</strong>, auch das bleibt: n8n markiert jede abgeholte Mail
+            als gelesen. Für einen zweiten Testlauf brauchst du deshalb eine frische Testmail.</p></li>
         <li><h4>Format auf Simple lassen</h4>
           <p><strong>Format</strong> steht ab Werk auf <strong>Simple</strong>. Genau das brauchen wir: Den Schalter
             <strong>Download Attachments</strong> zeigt n8n nur bei <strong>Simple</strong>. Bei <strong>Resolved</strong>
             kommen die Anhänge automatisch mit, der Schalter verschwindet dann.</p></li>
         <li><h4>Anhänge herunterladen</h4>
           <p>Schalte <strong>Download Attachments</strong> ein. Ohne diese Option sieht n8n nur die E-Mail, nicht die PDF-Datei.
-            Die Anhänge landen danach in Binary-Feldern mit dem Präfix aus <strong>Property Prefix Name</strong>, also
-            <code>attachment_0</code>, <code>attachment_1</code> und so weiter.</p></li>
+            Sobald der Schalter an ist, taucht darunter das Feld <strong>Property Prefix Name</strong> mit dem Wert
+            <code>attachment_</code> auf. Lass es stehen. n8n hängt an dieses Präfix eine laufende Nummer ab 0 an: Der
+            erste Anhang heißt <code>attachment_0</code>, der zweite <code>attachment_1</code>.</p></li>
         <li><h4>Suche auf die Testmail begrenzen</h4>
           <p>Einen eigenen Betrefffilter hat dieser Node nicht. Klicke unten auf <strong>Add option</strong> und wähle
             <strong>Custom Email Rules</strong>. Voreingestellt ist <code>["UNSEEN"]</code>. Trage stattdessen
@@ -190,6 +194,7 @@ IBAN: DE89 3704 0044 0532 0130 00</pre>
                   <div class="row"><label>Action</label><div class="n8n-select">Mark as Read <span class="chev">▾</span></div></div>
                   <div class="row"><label>Download Attachments</label><div class="n8n-toggle"><span class="n8n-switch is-on"></span>an</div></div>
                   <div class="row"><label>Format</label><div class="n8n-select">Simple <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Property Prefix Name</label><input class="n8n-input" value="attachment_"></div>
                   <div class="row"><label>Custom Email Rules</label><input class="n8n-input" value="[&quot;UNSEEN&quot;, [&quot;SUBJECT&quot;, &quot;n8n Rechnung Test&quot;]]"></div>
                 </div>
               </div>
@@ -222,8 +227,9 @@ IBAN: DE89 3704 0044 0532 0130 00</pre>
           <p>Setze <strong>Operation</strong> auf <strong>Extract From PDF</strong>. Voreingestellt ist
             <strong>Extract From CSV</strong>, das musst du also aktiv umstellen.</p></li>
         <li><h4>Binary-Feld eintragen</h4>
-          <p>Setze <strong>Input Binary Field</strong> auf den Namen aus Schritt 1, z. B. <code>attachment_0</code>.
-            Voreingestellt steht dort <code>data</code>, und das passt bei einem IMAP-Anhang nicht.</p></li>
+          <p>Trage in <strong>Input Binary Field</strong> den Namen ein, den du dir gerade gemerkt hast, also
+            <code>attachment_0</code>. Voreingestellt steht dort <code>data</code>, und das passt bei einem IMAP-Anhang
+            nicht.</p></li>
         <li><h4>Schritt ausführen</h4>
           <p>Klicke <strong>▶ Schritt ausführen</strong>. Im JSON-Output steht das Feld <code>text</code> mit dem
             Rechnungsinhalt. Daneben liefert der Node <code>numpages</code>, <code>info</code>, <code>metadata</code> und
@@ -273,8 +279,8 @@ IBAN: DE89 3704 0044 0532 0130 00</pre>
         ging der Prozess dabei gern in die Knie. Mit n8n 2.0 ist dieser In-Memory-Modus weggefallen. Seitdem wählt n8n
         automatisch: im normalen Betrieb <code>filesystem</code>, im Queue Mode <code>database</code>. Gesteuert wird das
         über <code>N8N_DEFAULT_BINARY_DATA_MODE</code>. Für dich heißt das zweierlei. Große PDF-Anhänge sprengen dir den
-        Speicher nicht mehr so schnell. Dafür braucht deine Instanz genug Platz auf der Platte, sonst bleibt der Extract-Node
-        beim Schreiben hängen.
+        Speicher nicht mehr so schnell. Dafür braucht deine Instanz genug Platz auf der Platte: Ist sie voll, scheitert
+        schon der Trigger beim Ablegen des Anhangs, und der Extract-Node bekommt gar nichts zu lesen.
       </div>
 
       <h2>Schritt 4: Rechnungstext säubern</h2>
@@ -618,7 +624,7 @@ return {
 };</pre>
       </div>
 
-      <h2>Schritt 10: Wenn etwas schiefgeht, fängt der Review-Zweig die unsicheren Fälle ab</h2>
+      <h2>Schritt 10: Wenn etwas schiefgeht, Review-Zweig für unsichere Fälle</h2>
       <p>Der KI-Weg darf nicht automatisch speichern, wenn wichtige Felder fehlen. Dafür bauen wir einen zweiten IF-Node.</p>
 
       <ol class="steps">

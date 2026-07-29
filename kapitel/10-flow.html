@@ -28,7 +28,7 @@
       <div class="prereq">
         <h4>📋 Was du mitbringen solltest</h4>
         <ul>
-          <li>Das „läuft pro Item"-Prinzip (Kapitel 5). Es erklärt, warum du Schleifen <em>selten</em> brauchst.</li>
+          <li>Das „läuft pro Item“-Prinzip (Kapitel 5). Es erklärt, warum du Schleifen <em>selten</em> brauchst.</li>
           <li>Bedingungen aus Kapitel 6 (<code>&gt;</code>, <code>||</code>, …) und dem Filter (Kapitel 9).</li>
         </ul>
       </div>
@@ -57,10 +57,10 @@
                 <span class="n8n-node__label">IF: tempC &gt; 20</span></div>
               <div class="n8n-node n8n-node--code" style="left:600px; top:64px;">
                 <span class="n8n-node__icon">🏖️</span><span class="ep in"></span><span class="ep out"></span>
-                <span class="n8n-node__label">dann: „warm"</span></div>
+                <span class="n8n-node__label">dann: „warm“</span></div>
               <div class="n8n-node n8n-node--code" style="left:600px; top:244px;">
                 <span class="n8n-node__icon">🧥</span><span class="ep in"></span><span class="ep out"></span>
-                <span class="n8n-node__label">sonst: „kühl"</span></div>
+                <span class="n8n-node__label">sonst: „kühl“</span></div>
             </div>
           </div>
         </div>
@@ -70,17 +70,17 @@
 
       <ol class="steps">
         <li><h4>IF anlegen &amp; öffnen</h4>
-          <p>Im Node-Panel nach „If" suchen, anhängen, öffnen. Der Bereich <strong>Conditions</strong> sieht aus wie beim Filter
+          <p>Im Node-Panel nach „If“ suchen, anhängen, öffnen. Der Bereich <strong>Conditions</strong> sieht aus wie beim Filter
             (Kapitel 9). Weitere Zeilen legst du mit <strong>Add Condition</strong> an.</p></li>
         <li><h4>Bedingung setzen</h4>
           <p>Links den Wert <code>{{ $json.tempC }}</code> eintragen. In der Mitte klappst du das Dropdown auf und wählst erst den
             Datentyp <strong>Number</strong>, dann die Operation <em>is greater than</em>. Rechts <code>20</code> eintragen.</p></li>
         <li><h4>Die zwei Ausgänge verbinden</h4>
-          <p>Vom <strong>oberen</strong> Ausgang (true) ziehst du zum „warm"-Zweig, vom <strong>unteren</strong> (false) zum
-            „kühl"-Zweig. Fertig ist die Verzweigung.</p></li>
+          <p>Vom <strong>oberen</strong> Ausgang (true) ziehst du zum „warm“-Zweig, vom <strong>unteren</strong> (false) zum
+            „kühl“-Zweig. Fertig ist die Verzweigung.</p></li>
       </ol>
 
-      <p>Ein Stolperstein in n8n 2.x: Der Vergleich ist typstreng. Kommt <code>tempC</code> als Text aus der API, bricht der Node mit
+      <p>Ein Stolperstein beim IF-Node: Der Vergleich ist typstreng. Kommt <code>tempC</code> als Text aus der API, bricht der Node mit
         einer Typmeldung ab, statt still <code>false</code> zu liefern. Du hast zwei Auswege. Entweder du wandelst den Wert vorher
         um (Kapitel 9), oder du schaltest im Node den Regler <strong>Convert types where required</strong> ein. In der Doku steht
         dieselbe Einstellung stellenweise noch unter ihrem alten Namen <em>Less Strict Type Validation</em>.</p>
@@ -109,9 +109,9 @@
 
       <h2>Merge: getrennte Zweige zusammenführen</h2>
       <p>Hast du verzweigt, willst du oft später wieder <strong>zusammenführen</strong>. Das macht der <strong>Merge</strong>-Node.
-        Er startet mit <strong>zwei Eingängen</strong> und einem Ausgang. In den Modi <strong>Append</strong> und
-        <strong>SQL Query</strong> kannst du über das Feld <strong>Number of Inputs</strong> weitere Eingänge dazunehmen; der Modus
-        <strong>Combine</strong> arbeitet weiterhin mit genau zwei.</p>
+        Er startet mit <strong>zwei Eingängen</strong> und einem Ausgang. Brauchst du mehr, setzt du das Feld
+        <strong>Number of Inputs</strong> höher. Das geht in jedem Modus außer <strong>Combine</strong>. Combine vergleicht immer
+        genau zwei Listen.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -161,23 +161,23 @@
       <div class="callout callout--pareto">
         <b class="t">⚡ IF + Merge sind die Arbeitspferde</b>
         Verzweigen mit <strong>IF</strong>, später mit <strong>Merge</strong> wieder zusammen: Dieses Paar deckt fast alle
-        „mal so, mal so"-Abläufe ab. Switch nur, wenn es wirklich mehr als zwei Wege sind.
+        „mal so, mal so“-Abläufe ab. Switch nur, wenn es wirklich mehr als zwei Wege sind.
       </div>
 
       <h2>Loops: meistens brauchst du sie nicht</h2>
-      <p>Der häufigste Anfänger-Reflex: „Ich habe eine Liste, ich brauche eine Schleife." Fast nie! Erinnere dich an Kapitel 5:
+      <p>Der häufigste Anfänger-Reflex: „Ich habe eine Liste, ich brauche eine Schleife.“ Fast nie! Erinnere dich an Kapitel 5:
         <strong>Ein Node läuft automatisch pro Item.</strong> Hast du 100 Items, läuft der nächste Node 100-mal, ganz ohne
         Schleife.</p>
 
       <div class="callout callout--pareto">
         <b class="t">⚡ Die Regel zuerst</b>
-        Willst du „für jede Zeile etwas tun", sorg einfach dafür, dass jede Zeile ein <strong>Item</strong> ist (z. B. „Split Out"
+        Willst du „für jede Zeile etwas tun“, sorg einfach dafür, dass jede Zeile ein <strong>Item</strong> ist (z. B. „Split Out“
         aus Kapitel 9). Den Rest macht n8n durch Wiederholung pro Item von selbst.
       </div>
 
       <p>Eine echte Schleife brauchst du nur in Sonderfällen. Im Node-Panel heißt sie
-        <strong>„Loop Over Items (Split in Batches)"</strong>, auf dem Canvas trägt der Node danach den kurzen Namen
-        „Loop Over Items". Diese Fälle gibt es:</p>
+        <strong>„Loop Over Items (Split in Batches)“</strong>, auf dem Canvas trägt der Node danach den kurzen Namen
+        „Loop Over Items“. Diese Fälle gibt es:</p>
       <ul>
         <li><strong>Batching:</strong> Eine API erlaubt nur 10 Einträge pro Aufruf. Du setzt <strong>Batch Size</strong> auf 10 und
           arbeitest die Liste in Häppchen ab.</li>
@@ -211,14 +211,15 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 10.3</span>„Loop Over Items" hat zwei Ausgänge: <b>loop</b> führt in die Verarbeitung
+        <figcaption><span class="fig-tag">Abb. 10.3</span>„Loop Over Items“ hat zwei Ausgänge: <b>loop</b> führt in die Verarbeitung
           und von dort zurück zum Node, <b>done</b> läuft erst, wenn alle Batches durch sind. Die zurücklaufende Linie ist die
-          Schleife. Die Skizze zeigt den Datenfluss; die Reihenfolge der beiden Anschlüsse steht im Text darunter.</figcaption>
+          Schleife. Die Skizze zeigt den Datenfluss; am Node selbst sitzt done oben und loop darunter.</figcaption>
       </figure>
 
-      <p>Diese Reihenfolge musst du dir merken: In n8n 2.x sitzt <b>done</b> oben und <b>loop</b> darunter. Bis n8n 1.x war es
-        umgekehrt, deshalb zeigen ältere Anleitungen und Screenshots die andere Belegung. Wenn deine Schleife nach dem ersten Klick
-        sofort „fertig" meldet, hängt der Verarbeitungszweig fast immer am falschen Ausgang.</p>
+      <p>Diese Reihenfolge musst du dir merken: Am Node sitzt <b>done</b> oben und <b>loop</b> darunter. So ist es seit der dritten
+        Version des Nodes, die im Herbst 2023 kam. Ältere Screenshots und Videos zeigen die umgekehrte Belegung, und genau daher
+        kommt die Verwechslung. Läuft dein Verarbeitungsschritt gar nicht oder nur ein einziges Mal ganz am Ende, hängt er am
+        falschen Ausgang.</p>
 
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
@@ -237,7 +238,8 @@
         <li><h4>IF anhängen</h4>
           <p>Hinter den Set-Node (mit Feld <code>tempC</code> aus Kapitel 9) einen <strong>IF</strong> setzen.</p></li>
         <li><h4>Bedingung</h4>
-          <p>Wert <code>{{ $json.tempC }}</code> · Operator <em>is greater than</em> · <code>20</code>.</p></li>
+          <p>Wert <code>{{ $json.tempC }}</code> · Datentyp <strong>Number</strong> · Operation <em>is greater than</em> ·
+            <code>20</code>.</p></li>
         <li><h4>true-Zweig</h4>
           <p>Vom <strong>oberen</strong> Ausgang einen Set-Node: Feld <code>text</code> =
             <code>🏖️ Heute warm: {{ $json.tempC }} °C!</code></p></li>
@@ -245,8 +247,8 @@
           <p>Vom <strong>unteren</strong> Ausgang einen Set-Node: Feld <code>text</code> =
             <code>🧥 Eher kühl: {{ $json.tempC }} °C.</code></p></li>
         <li><h4>Testen</h4>
-          <p>Auf <strong>Execute workflow</strong> klicken. Bis n8n 1.x hieß derselbe Knopf „Test workflow". Beobachte, welcher
-            Zweig sich pink einfärbt. Das ist der Weg, den dein Item genommen hat.</p></li>
+          <p>Klicke unten am Canvas auf <strong>Execute workflow</strong>. Bis n8n 1.x hieß derselbe Knopf „Test workflow“.
+            Beobachte, welcher Zweig sich pink einfärbt. Das ist der Weg, den dein Item genommen hat.</p></li>
       </ol>
 
       <div class="callout callout--tip">
@@ -262,7 +264,7 @@
           <tr><td>true-Zweig</td><td><code>tempC</code> auf über 20 setzen</td><td>warmer Text läuft oben weiter</td></tr>
           <tr><td>false-Zweig</td><td><code>tempC</code> auf 20 oder weniger setzen</td><td>kühler Text läuft unten weiter</td></tr>
           <tr><td>Merge</td><td>beide Zweige vor einem gemeinsamen Versand zusammenführen</td><td>nach dem Merge gibt es wieder einen gemeinsamen Pfad</td></tr>
-          <tr><td>Loop-Kontrolle</td><td>Loop-Verbindung im Test beobachten</td><td>Loop endet am <code>done</code>-Ausgang statt endlos zu laufen</td></tr>
+          <tr><td>Loop-Kontrolle</td><td>Loop-Verbindung im Test beobachten</td><td>der Zweig hinter <code>done</code> läuft erst, wenn alle Batches durch sind</td></tr>
         </tbody>
       </table>
 
@@ -272,7 +274,7 @@
           <li>Was ist der Unterschied zwischen IF und Filter?</li>
           <li>Ab wie vielen Wegen lohnt sich ein Switch statt mehrerer IFs?</li>
           <li>Welcher Merge-Modus hängt zwei Listen einfach hintereinander?</li>
-          <li>Du willst „für jedes der 50 Items eine E-Mail". Brauchst du dafür einen Loop?</li>
+          <li>Du willst „für jedes der 50 Items eine E-Mail“. Brauchst du dafür einen Loop?</li>
           <li>Woran erkennst du im Test, welchen Zweig ein Item genommen hat?</li>
         </ul>
       </div>

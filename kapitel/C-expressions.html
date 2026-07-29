@@ -20,15 +20,24 @@
         formen Text, prüfen Bedingungen und bauen dynamische URLs. Dieses Cheatsheet zeigt die Muster, die du wirklich
         häufig brauchst.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 10 Minuten</span>
+        <span>⏱ ca. 12 Minuten</span>
         <span>🎯 Niveau: Nachschlagen</span>
         <span>🧩 Voraussetzung: Kapitel 6</span>
       </div>
 
       <div class="callout callout--pareto">
         <b class="t">80/20 für Expressions</b>
-        Lerne zuerst <code>$json</code>, Punktzugriff, eckige Klammern, Verkettung mit Text, <code>??</code> als
-        Fallback, ternäre Bedingungen und Datumsformatierung mit <code>$now.toFormat()</code>.
+        Lerne zuerst <code>$json</code> mit Punktzugriff und eckigen Klammern, <code>$("Node")</code> für Werte aus
+        früheren Nodes, Verkettung mit Text, <code>??</code> als Fallback, die ternäre Bedingung und
+        <code>$now.toFormat()</code> fürs Datum. Damit füllst du fast jedes Feld.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Stand dieser Referenz</b>
+        Juli 2026, n8n 2.32.x. Die vollständige Liste steht in der n8n-Doku unter
+        <code>docs.n8n.io/build/work-with-data/transform-data/expression-reference</code>, sortiert nach Datentyp.
+        Was dort als „Custom n8n functionality“ geführt wird, heißt in diesem Buch „n8n-Helfer“. Solche Helfer gelten
+        in Expressions. Im Code-Node laufen sie nicht unbedingt, reines JavaScript und Luxon dagegen an beiden Stellen.
       </div>
 
       <h2>Grundform</h2>
@@ -49,18 +58,32 @@
         <tbody>
           <tr><td>aktuelles Item</td><td><code>{{ $json }}</code></td><td>das JSON des gerade verarbeiteten Items</td></tr>
           <tr><td>aktuelles Feld</td><td><code>{{ $json.status }}</code></td><td>Standardfall in den meisten Nodes</td></tr>
+          <tr><td>alle Items am Eingang</td><td><code>{{ $input.all() }}</code></td><td>Liste aller Items, die in diesen Node laufen</td></tr>
+          <tr><td>erstes Eingangs-Item</td><td><code>{{ $input.first().json.email }}</code></td><td>dazu passend <code>$input.last()</code> und <code>$input.item</code></td></tr>
           <tr><td>erster Wert aus anderem Node</td><td><code>{{ $("Webhook").first().json.body.email }}</code></td><td>gut für globale Daten aus einem Trigger</td></tr>
           <tr><td>verknüpftes Item aus anderem Node</td><td><code>{{ $("Kunden").item.json.id }}</code></td><td>nutzt die Item-Verknüpfung</td></tr>
-          <tr><td>Binärdaten</td><td><code>{{ $binary.data.fileName }}</code></td><td>nur wenn Binary Data vorhanden ist</td></tr>
-          <tr><td>heutiges Datum</td><td><code>{{ $today }}</code></td><td>Datum ohne genaue Uhrzeit</td></tr>
-          <tr><td>aktueller Zeitpunkt</td><td><code>{{ $now }}</code></td><td>Datum und Uhrzeit</td></tr>
+          <tr><td>bestimmtes Item aus anderem Node</td><td><code>{{ $("Kunden").all()[2].json.id }}</code></td><td>dazu passend <code>.last()</code>; Positionen zählen ab 0</td></tr>
+          <tr><td>Verknüpfung zu einer Position</td><td><code>{{ $("Kunden").itemMatching(0).json.id }}</code></td><td>wie <code>.item</code>, nur nennst du die Position im aktuellen Node ausdrücklich</td></tr>
+          <tr><td>Position des Items</td><td><code>{{ $itemIndex }}</code></td><td>zählt ab 0</td></tr>
+          <tr><td>Binärdaten</td><td><code>{{ $binary.data.fileName }}</code></td><td><code>data</code> ist der übliche Name der Binary-Property, nicht Teil der Syntax. Neben <code>fileName</code> liegen dort <code>mimeType</code>, <code>fileExtension</code> und <code>fileSize</code></td></tr>
+          <tr><td>heutiges Datum</td><td><code>{{ $today }}</code></td><td>heute um 00:00 Uhr; die Zeitzone kommt von der Instanz, falls die Workflow-Einstellungen keine eigene setzen</td></tr>
+          <tr><td>aktueller Zeitpunkt</td><td><code>{{ $now }}</code></td><td>Datum und Uhrzeit in der Zeitzone des Workflows</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--warn">
         <b class="t">Item-Verknüpfung nicht erraten</b>
         <code>$("Node").item</code> ist dann sinnvoll, wenn n8n weiß, welches frühere Item zum aktuellen Item gehört.
-        Wenn du bewusst den ersten Datensatz brauchst, nutze klar <code>.first()</code>.
+        Wenn du bewusst den ersten Datensatz brauchst, nutze klar <code>.first()</code>. Die beiden Fehlermeldungen, die
+        dir bei gerissener Verknüpfung begegnen, stehen weiter unten in „Wenn etwas schiefgeht“, ausführlich erklärt
+        sind sie in Kapitel 5.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Alte Schreibweisen aus Tutorials</b>
+        In älteren Anleitungen liest du <code>$node["Webhook"].json.email</code> oder <code>$items()</code>. Beides
+        stammt aus früheren n8n-Versionen und steht in der aktuellen Expression-Referenz nicht mehr. Schreib
+        <code>$("Webhook").item.json.email</code> und <code>$input.all()</code>.
       </div>
 
       <h2>Fallbacks und Bedingungen</h2>
@@ -68,11 +91,14 @@
         <thead><tr><th>Ziel</th><th>Expression</th><th>Warum?</th></tr></thead>
         <tbody>
           <tr><td>Fallback bei leerem Wert</td><td><code>{{ $json.email ?? "keine-mail@example.com" }}</code></td><td>nutzt Ersatz bei <code>null</code> oder <code>undefined</code></td></tr>
+          <tr><td>Fallback auch bei leerem Text</td><td><code>{{ $ifEmpty($json.name, "Gast") }}</code></td><td>n8n-Helfer; greift zusätzlich bei <code>""</code>, <code>[]</code> und <code>{}</code></td></tr>
+          <tr><td>Fallback über den Oder-Operator</td><td><code>{{ $json.name || "Gast" }}</code></td><td>greift auch bei leerem Text, aber ebenso bei <code>0</code> und <code>false</code></td></tr>
           <tr><td>optional lesen</td><td><code>{{ $json.customer?.address?.city }}</code></td><td>bricht nicht ab, wenn ein Zwischenfeld fehlt</td></tr>
           <tr><td>Bedingung</td><td><code>{{ $json.total &gt; 100 ? "hoch" : "normal" }}</code></td><td>kurzer Wenn-dann-sonst-Ausdruck</td></tr>
+          <tr><td>Bedingung als Funktion</td><td><code>{{ $if($json.total &gt; 100, "hoch", "normal") }}</code></td><td>n8n-Helfer, gleiche Wirkung, oft leichter zu lesen</td></tr>
           <tr><td>Text klein schreiben</td><td><code>{{ $json.email.toLowerCase() }}</code></td><td>nützlich für Vergleich und Dublettenprüfung</td></tr>
           <tr><td>Leerzeichen entfernen</td><td><code>{{ $json.name.trim() }}</code></td><td>bereinigt Eingaben</td></tr>
-          <tr><td>Zahl runden</td><td><code>{{ Math.round($json.amount * 100) / 100 }}</code></td><td>zwei Dezimalstellen als Zahl</td></tr>
+          <tr><td>Zahl runden</td><td><code>{{ $json.amount.round(2) }}</code></td><td>n8n-Helfer, Ergebnis bleibt eine Zahl; im Code-Node stattdessen <code>Math.round($json.amount * 100) / 100</code></td></tr>
         </tbody>
       </table>
 
@@ -80,11 +106,14 @@
       <table class="btable">
         <thead><tr><th>Ziel</th><th>Expression</th><th>Ergebnisidee</th></tr></thead>
         <tbody>
-          <tr><td>erstes Element</td><td><code>{{ $json.items[0].name }}</code></td><td>Name des ersten Listeneintrags</td></tr>
+          <tr><td>erstes Element</td><td><code>{{ $json.items[0].name }}</code></td><td>Name des ersten Listeneintrags; <code>{{ $json.items.first().name }}</code> ist derselbe Zugriff als n8n-Helfer</td></tr>
           <tr><td>Anzahl</td><td><code>{{ $json.items.length }}</code></td><td>wie viele Einträge vorhanden sind</td></tr>
           <tr><td>Liste verbinden</td><td><code>{{ $json.tags.join(", ") }}</code></td><td><code>lead, vip, eu</code></td></tr>
-          <tr><td>Feldliste bauen</td><td><code>{{ $json.items.map(i =&gt; i.email).join(",") }}</code></td><td>kommagetrennte E-Mail-Liste</td></tr>
+          <tr><td>Dubletten entfernen</td><td><code>{{ $json.tags.unique().join(", ") }}</code></td><td>n8n-Helfer; für Objektlisten heißt er <code>.removeDuplicates()</code></td></tr>
+          <tr><td>Feldliste bauen</td><td><code>{{ $json.items.map(i =&gt; i.email).join(",") }}</code></td><td>kommagetrennte E-Mail-Liste; als n8n-Helfer <code>{{ $json.items.pluck("email").join(",") }}</code></td></tr>
+          <tr><td>Summe bilden</td><td><code>{{ $json.items.pluck("amount").sum() }}</code></td><td>n8n-Helfer; bricht ab, sobald ein Wert keine Zahl ist</td></tr>
           <tr><td>Eintrag suchen</td><td><code>{{ $json.items.find(i =&gt; i.status === "open")?.id }}</code></td><td>ID des ersten offenen Eintrags</td></tr>
+          <tr><td>Feld im Objekt prüfen</td><td><code>{{ $json.customer.hasField("email") }}</code></td><td>n8n-Helfer, liefert <code>true</code> oder <code>false</code></td></tr>
         </tbody>
       </table>
 
@@ -94,17 +123,30 @@
         <tbody>
           <tr><td>ISO-Datum</td><td><code>{{ $now.toFormat("yyyy-MM-dd") }}</code></td><td>gut für Dateinamen und Tabellen</td></tr>
           <tr><td>deutsches Datum</td><td><code>{{ $now.toFormat("dd.MM.yyyy") }}</code></td><td>gut für Nachrichten</td></tr>
+          <tr><td>vollständiger Zeitstempel</td><td><code>{{ $now.toISO() }}</code></td><td>das Format, das die meisten APIs erwarten</td></tr>
           <tr><td>morgen</td><td><code>{{ $now.plus({ days: 1 }).toFormat("yyyy-MM-dd") }}</code></td><td>relative Termine</td></tr>
-          <tr><td>Unix-Zeit</td><td><code>{{ $now.toSeconds() }}</code></td><td>manche APIs erwarten Sekunden</td></tr>
-          <tr><td>Datum aus Feld</td><td><code>{{ DateTime.fromISO($json.createdAt).toFormat("dd.MM.yyyy") }}</code></td><td>wenn ein ISO-Zeitstempel im Item liegt</td></tr>
+          <tr><td>Monatsanfang</td><td><code>{{ $now.startOf("month").toFormat("yyyy-MM-dd") }}</code></td><td>dazu passend <code>endOf("month")</code>, gut für Berichtszeiträume</td></tr>
+          <tr><td>Unix-Zeit</td><td><code>{{ Math.floor($now.toSeconds()) }}</code></td><td><code>toSeconds()</code> liefert Sekunden mit Nachkommastellen; viele APIs wollen eine ganze Zahl</td></tr>
+          <tr><td>Datum aus Feld</td><td><code>{{ $json.createdAt.toDateTime().toFormat("dd.MM.yyyy") }}</code></td><td>wenn ein ISO-Zeitstempel als Text im Item liegt; Luxons <code>DateTime.fromISO($json.createdAt)</code> tut dasselbe</td></tr>
+          <tr><td>Tage bis zu einem Datum</td><td><code>{{ $now.diffTo($json.dueDate, "days") }}</code></td><td>n8n-Helfer; das Ergebnis hat Nachkommastellen und wird negativ, sobald das Datum vorbei ist</td></tr>
         </tbody>
       </table>
+
+      <div class="callout callout--tip">
+        <b class="t">Zwei Schreibweisen für dieselbe Rechnung</b>
+        <code>$now.plus({ days: 1 })</code> kommt aus Luxon und läuft überall, auch im Code-Node. Daneben kennt n8n die
+        Kurzform <code>$now.plus(1, "days")</code>, die es nur in Expressions gibt. Im Code-Node wirft sie keinen
+        Fehler, sie addiert aber auch nichts, und genau das kostet dich dann eine halbe Stunde Suche. Deshalb bleiben
+        wir im ganzen Buch bei der Objekt-Schreibweise.
+      </div>
 
       <h2>URLs und API-Parameter</h2>
       <table class="btable">
         <thead><tr><th>Ziel</th><th>Expression</th><th>Warum?</th></tr></thead>
         <tbody>
           <tr><td>Query-Wert schützen</td><td><code>{{ encodeURIComponent($json.search) }}</code></td><td>Leerzeichen und Sonderzeichen werden URL-sicher</td></tr>
+          <tr><td>Query-Wert schützen, kürzer</td><td><code>{{ $json.search.urlEncode() }}</code></td><td>n8n-Helfer mit demselben Zweck, nur in Expressions verfügbar</td></tr>
+          <tr><td>ganzen Query-String bauen</td><td><code>{{ $json.query.urlEncode() }}</code></td><td>auf ein Objekt angewandt: aus <code>{"stadt":"Bad Ems"}</code> wird <code>stadt=Bad+Ems</code>, nur die oberste Ebene</td></tr>
           <tr><td>URL bauen</td><td><code>{{ "https://api.example.com/users/" + $json.id }}</code></td><td>dynamischer API-Endpunkt</td></tr>
           <tr><td>Header-Wert</td><td><code>{{ "Bearer " + $json.access_token }}</code></td><td>nur mit Testwerten, echte Tokens gehören in Credentials</td></tr>
           <tr><td>Dateiname</td><td><code>{{ `rechnung-${$json.invoiceId}.pdf` }}</code></td><td>stabile Dateinamen erzeugen</td></tr>
@@ -112,33 +154,43 @@
       </table>
 
       <h2>Kontext: Workflow und Ausführung</h2>
-      <p>Diese Werte beschreiben nicht deine Daten, sondern den Lauf selbst. Nützlich für Logmeldungen,
-        Fehlermeldungen und Dateinamen, die man später wiederfindet.</p>
+      <p>Diese Werte beschreiben den Lauf selbst. Nützlich in Logmeldungen, in Fehlerpfaden und in Dateinamen, die du
+        später wiederfinden willst.</p>
       <table class="btable">
         <thead><tr><th>Ziel</th><th>Expression</th><th>Wofür?</th></tr></thead>
         <tbody>
           <tr><td>ID der Ausführung</td><td><code>{{ $execution.id }}</code></td><td>Logeintrag der konkreten Ausführung zuordnen</td></tr>
+          <tr><td>Art der Ausführung</td><td><code>{{ $execution.mode }}</code></td><td><code>test</code> beim Klick im Editor, <code>production</code> beim automatischen Lauf, <code>evaluation</code> bei Workflow-Tests</td></tr>
+          <tr><td>URL zum Fortsetzen</td><td><code>{{ $execution.resumeUrl }}</code></td><td>die Webhook-URL, mit der ein wartender Wait-Node weiterläuft</td></tr>
+          <tr><td>Notiz an die Ausführung</td><td><code>$execution.customData.set("kunde", $json.email)</code></td><td>heftet dem Lauf einen Wert an, nach dem du die Ausführungsliste filtern kannst. Der Aufruf gehört in einen Code-Node oder in den Execution-Data-Node, nicht in ein normales Feld. In der Cloud ab Pro, selbst gehostet ab der registrierten Community Edition</td></tr>
           <tr><td>Name des Workflows</td><td><code>{{ $workflow.name }}</code></td><td>Fehlermeldungen lesbar machen</td></tr>
           <tr><td>ID des Workflows</td><td><code>{{ $workflow.id }}</code></td><td>eindeutig, auch wenn jemand den Namen ändert</td></tr>
           <tr><td>vorheriger Node</td><td><code>{{ $prevNode.name }}</code></td><td>hilfreich in generischen Fehlerpfaden</td></tr>
+          <tr><td>welcher Ausgang war es</td><td><code>{{ $prevNode.outputIndex }}</code></td><td>zeigt hinter IF und Switch, aus welchem Ausgang das Item kam</td></tr>
           <tr><td>Durchlauf im Loop</td><td><code>{{ $runIndex }}</code></td><td>zählt die Durchläufe ab 0</td></tr>
+          <tr><td>Node-Version</td><td><code>{{ $nodeVersion }}</code></td><td>dieselbe Nummer, die unten in den Node-Einstellungen steht</td></tr>
           <tr><td>Instanz-Variable</td><td><code>{{ $vars.crmBaseUrl }}</code></td><td>Werte, die sich je Umgebung unterscheiden</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--info">
-        <b class="t">Variablen sind nicht überall verfügbar</b>
-        <code>$vars</code> setzt Variablen auf Instanzebene voraus, die zu den kostenpflichtigen Editionen gehören.
-        In der Community Edition nimmst du stattdessen Umgebungsvariablen beim Start der Instanz. Wie du Umgebungen
-        sauber trennst, steht in Kapitel 24.
+        <b class="t">Variablen gibt es nicht auf jeder Instanz</b>
+        <code>$vars</code> setzt angelegte Variablen voraus. Die Funktion gehört zum selbst gehosteten Enterprise-Plan
+        und zur Cloud ab dem Pro-Plan. Anlegen dürfen sie nur Instanz-Owner und Admins, und zwar im Tab
+        <strong>Variables</strong> über <strong>Add Variable</strong>. Seit n8n 1.118.0 lässt sich eine Variable auch
+        auf ein Projekt begrenzen. Jeder Wert kommt als Text an, und im Schlüssel sind nur Buchstaben, Ziffern und
+        Unterstriche erlaubt. Fehlt dir die Funktion, greif nicht zu Umgebungsvariablen: Seit n8n 2.0 sperrt
+        <code>N8N_BLOCK_ENV_ACCESS_IN_NODE</code> den Zugriff darauf aus Expressions. Leg stattdessen pro Umgebung
+        einen kleinen Edit-Fields-Node namens <code>Konfiguration</code> an, aber auch dort ohne Secrets. Wie du
+        Umgebungen sauber trennst, steht in Kapitel 24.
       </div>
 
       <h2>Arbeitsregel</h2>
       <ol class="steps">
         <li><h4>Input ansehen</h4><p>Öffne das Input-Panel und prüfe den echten Feldnamen. Nicht aus dem Gedächtnis raten.</p></li>
         <li><h4>Klein anfangen</h4><p>Erst <code>{{ $json }}</code>, dann <code>{{ $json.feld }}</code>, dann erst Logik ergänzen.</p></li>
-        <li><h4>Fallback setzen</h4><p>Bei optionalen Feldern <code>??</code> oder <code>?.</code> verwenden.</p></li>
-        <li><h4>Komplexität begrenzen</h4><p>Wenn eine Expression mehr als eine Zeile Denkarbeit braucht, prüfe Edit Fields oder Code.</p></li>
+        <li><h4>Fallback setzen</h4><p>Bei optionalen Feldern <code>??</code> oder <code>?.</code> verwenden. Kann das Feld auch leer ankommen, nimm <code>$ifEmpty()</code>.</p></li>
+        <li><h4>Komplexität begrenzen</h4><p>Wenn eine Expression mehr als eine Zeile Denkarbeit braucht, verteile die Schritte lieber auf einen Edit-Fields-Node oder einen Code-Node.</p></li>
         <li><h4>Mit echten Testdaten prüfen</h4><p>Mindestens ein vollständiges und ein unvollständiges Item testen.</p></li>
       </ol>
 
@@ -147,10 +199,12 @@
         <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
         <tbody>
           <tr><td><code>undefined</code></td><td>Feld existiert nicht im aktuellen Item</td><td>Input-Panel prüfen, Feldnamen exakt übernehmen</td></tr>
-          <tr><td>Expression bleibt Text</td><td>Feld steht im Fixed-Modus</td><td>auf Expression-Modus wechseln</td></tr>
+          <tr><td>Expression bleibt Text</td><td>Feld steht noch im Modus <strong>Fest</strong> (englisch <em>Fixed</em>)</td><td>über dem Feld auf <strong>Expression</strong> wechseln</td></tr>
           <tr><td>Fehler bei fehlendem Unterfeld</td><td>verschachtelter Zugriff ohne <code>?.</code></td><td><code>$json.customer?.email</code> verwenden</td></tr>
           <tr><td>falsches Item aus altem Node</td><td><code>.first()</code> statt verknüpftem Item genutzt</td><td><code>.item</code> prüfen oder bewusst erstes Item dokumentieren</td></tr>
-          <tr><td>API-URL kaputt</td><td>Sonderzeichen nicht kodiert</td><td><code>encodeURIComponent()</code> verwenden</td></tr>
+          <tr><td><code>Multiple matching items for expression</code></td><td>mehrere frühere Items sind zu einem geworden, typisch nach Merge, Aggregate oder Summarize</td><td>statt <code>.item</code> genauer werden: <code>.first()</code>, <code>.last()</code> oder <code>.all()[0]</code></td></tr>
+          <tr><td><code>Info for expression missing from previous node</code></td><td>ein Node in der Kette gibt die Paarungs-Notiz nicht mit, oft ein Code-Node</td><td>im Code-Node <code>pairedItem</code> mitliefern, sonst über <code>.first()</code> oder <code>.all()</code> gehen (Kapitel 5)</td></tr>
+          <tr><td>API-URL kaputt</td><td>Sonderzeichen nicht kodiert</td><td><code>encodeURIComponent()</code> oder <code>.urlEncode()</code> verwenden</td></tr>
         </tbody>
       </table>
 
@@ -180,10 +234,10 @@
       <div class="callout callout--info">
         <b class="t">Antworten</b>
         1) <code>{{ $json.email }}</code>. ·
-        2) Es liefert einen Fallback bei <code>null</code> oder <code>undefined</code>. ·
+        2) Es liefert einen Fallback bei <code>null</code> oder <code>undefined</code>. Bei leerem Text oder leerer Liste greift erst <code>$ifEmpty()</code>. ·
         3) Bei optionalen verschachtelten Feldern. ·
         4) Es nimmt bewusst das erste Item, nicht automatisch das fachlich passende. ·
-        5) Wenn die Logik lang, mehrfach verschachtelt oder schlecht lesbar wird.
+        5) Sobald du die Logik beim zweiten Lesen erst wieder entziffern musst.
       </div>
 
     </article>

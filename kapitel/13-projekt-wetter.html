@@ -122,7 +122,7 @@
       </ol>
 
       <h2>Schritt 3: Schedule-Trigger setzen</h2>
-      <p>Der Workflow soll von allein starten. Ein manueller Trigger scheidet damit aus. Wir nehmen einen Zeitplan.</p>
+      <p>Der Workflow soll von allein starten, also nehmen wir keinen manuellen Trigger, sondern einen Zeitplan.</p>
 
       <ol class="steps">
         <li><h4>Start-Node hinzufügen</h4>
@@ -163,13 +163,13 @@
 
       <div class="callout callout--warn">
         <b class="t">Wenn die Uhrzeit nicht stimmt</b>
-        <p style="margin:0 0 6px">Prüfe die Zeitzone. Ohne eigene Einstellung rechnet n8n in
+        <p style="margin:0 0 6px">Prüfe die Zeitzone. Selbst gehostet rechnet n8n ohne eigene Einstellung in
           <code>America/New_York</code>, also weder in UTC noch in Berliner Zeit. Aus 8:00 Uhr werden dann 14:00 Uhr
-          Berlin.</p>
+          Berlin. In der n8n-Cloud wird die Zeitzone schon bei der Anmeldung gesetzt, meist passend.</p>
         <p style="margin:0">Setzen kannst du sie an zwei Stellen. Pro Workflow: oben rechts auf das Drei-Punkte-Menü,
-          dann <strong>Settings</strong> und dort das Feld <strong>Timezone</strong>. Für die ganze Instanz: die
-          Umgebungsvariable <code>GENERIC_TIMEZONE</code>, zum Beispiel <code>GENERIC_TIMEZONE=Europe/Berlin</code>.
-          Sieh vor dem ersten produktiven Lauf einmal nach.</p>
+          dann <strong>Settings</strong>, dort das Feld <strong>Timezone</strong> und anschließend
+          <strong>Save</strong>. Für die ganze Instanz: die Umgebungsvariable <code>GENERIC_TIMEZONE</code>, zum
+          Beispiel <code>GENERIC_TIMEZONE=Europe/Berlin</code>. Sieh vor dem ersten produktiven Lauf einmal nach.</p>
       </div>
 
       <h2>Schritt 4: Wetterdaten mit Open-Meteo holen</h2>
@@ -189,7 +189,8 @@
             <code>https://api.open-meteo.com/v1/forecast</code></p></li>
         <li><h4>Query-Parameter einschalten</h4>
           <p>Schalte <strong>Send Query Parameters</strong> ein. Das Feld <strong>Specify Query Parameters</strong>
-            darunter bleibt auf <strong>Using Fields Below</strong>. Füge nun die folgenden Name/Wert-Paare hinzu.</p></li>
+            darunter bleibt auf <strong>Using Fields Below</strong>. Jede weitere Zeile holst du dir über
+            <strong>Add Query Parameter</strong>. Trage nun die folgenden Name/Wert-Paare ein.</p></li>
       </ol>
 
       <table class="btable">

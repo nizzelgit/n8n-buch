@@ -19,7 +19,7 @@
       <p class="chap-lede">Tastenkürzel sparen in n8n vor allem Such- und Mauswege. Für Einsteiger:innen sind sie
         kein Pflichtwissen, aber ein guter Hebel, sobald du öfter Workflows baust oder bestehende Workflows prüfst.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 7 Minuten</span>
+        <span>⏱ ca. 9 Minuten</span>
         <span>🎯 Niveau: Nachschlagen</span>
         <span>🧩 Voraussetzung: Kapitel 3</span>
       </div>
@@ -27,28 +27,37 @@
       <div class="callout callout--pareto">
         <b class="t">80/20 für Tastenkürzel</b>
         Wenn du nur fünf Kürzel nutzt, dann diese: <span class="kbd">N</span> für die Node-Suche,
-        <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span> zum Speichern, <span class="kbd">Esc</span>
-        zum Schließen, <span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span> zum Testen und
-        <span class="kbd">Entf</span> zum Löschen ausgewählter Nodes.
+        <span class="kbd">Esc</span> zum Schließen, <span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span>
+        für den Testlauf, <span class="kbd">Entf</span> zum Löschen ausgewählter Nodes und
+        <span class="kbd">Shift</span> + <span class="kbd">P</span> zum Publishen. Speichern steht bewusst nicht in
+        der Liste: Das erledigt n8n seit dem Autosave von selbst.
       </div>
 
       <h2>Windows, Linux und macOS</h2>
       <p>Dieses Werkbuch schreibt häufig <span class="kbd">Strg/⌘</span>. Gemeint ist: unter Windows und Linux
-        <span class="kbd">Strg</span>, unter macOS <span class="kbd">⌘</span>. Wenn ein Browser oder dein
-        Betriebssystem ein Kürzel bereits belegt, gewinnt manchmal diese Ebene. Dann nutze die sichtbare Schaltfläche
-        in n8n als Ausweichweg.</p>
+        <span class="kbd">Strg</span>, unter macOS <span class="kbd">⌘</span>. Dieselbe Trennung gilt für
+        <span class="kbd">Alt</span>: Auf der Mac-Tastatur ist das die Taste <span class="kbd">⌥</span>, je nach
+        Layout mit „alt“ oder „option“ beschriftet. <span class="kbd">Shift</span>, <span class="kbd">Enter</span> und
+        die Pfeiltasten sind auf allen drei Systemen gleich.</p>
+      <p>Eine Stolperstelle betrifft nur macOS: Die große Löschtaste rechts oben sendet
+        <span class="kbd">Backspace</span>, nicht <span class="kbd">Entf</span>. n8n hört auf beide, deshalb löschst du
+        markierte Nodes auf dem Mac mit genau dieser Taste.</p>
+      <p>Wenn ein Browser oder dein Betriebssystem ein Kürzel bereits belegt, gewinnt manchmal diese Ebene. Dann nutze
+        die sichtbare Schaltfläche in n8n als Ausweichweg.</p>
 
       <div class="callout callout--info">
         <b class="t">Versionen prüfen</b>
-        Tastenkürzel können sich zwischen n8n-Versionen ändern. Diese Referenz folgt der aktuellen n8n-Dokumentation:
-        Das Node-Panel öffnest du mit <span class="kbd">N</span>. Falls deine Instanz ein anderes Verhalten zeigt,
-        orientiere dich an den Hilfetexten in deiner Oberfläche.
+        Tastenkürzel ändern sich zwischen n8n-Versionen. Diese Referenz hat den Stand Juli 2026 und n8n 2.32.x. Ein
+        Beispiel für so eine Änderung: Das Node-Panel öffnest du mit <span class="kbd">N</span>. Früher lag es auf
+        <span class="kbd">Tab</span>, diese Belegung hat n8n abgelöst. Reagiert deine Instanz anders, läuft dort eine
+        andere Version. Den jeweils aktuellen Stand führt die Seite „Keyboard shortcuts“ in der n8n-Dokumentation.
       </div>
 
       <div class="callout callout--tip">
         <b class="t">Nicht alles hat ein Kürzel</b>
-        Manche neueren Funktionen erreichst du nur über das Kontextmenü. Das Gruppieren mehrerer Nodes zum Beispiel:
-        Nodes auswählen, Rechtsklick auf die Auswahl, dann <strong>Group</strong>. Ein Rechtsklick auf den Canvas
+        Manche Funktionen erreichst du nur mit der Maus. Eine Canvas Group umbenennen zum Beispiel: Doppelklick auf
+        den Gruppennamen, Text ändern, dann außerhalb der Gruppe klicken. Fürs Gruppieren selbst gibt es seit n8n
+        2.28.0 ein Kürzel, es steht weiter unten im Abschnitt zu ausgewählten Nodes. Ein Rechtsklick auf den Canvas
         lohnt sich generell, wenn du eine Funktion suchst und kein Kürzel dafür findest.
       </div>
 
@@ -56,20 +65,27 @@
         <thead><tr><th>Notation</th><th>Windows / Linux</th><th>macOS</th></tr></thead>
         <tbody>
           <tr><td><span class="kbd">Strg/⌘</span></td><td><span class="kbd">Strg</span></td><td><span class="kbd">⌘</span></td></tr>
-          <tr><td><span class="kbd">Alt/⌥</span></td><td><span class="kbd">Alt</span></td><td><span class="kbd">⌥</span></td></tr>
-          <tr><td><span class="kbd">Entf</span></td><td><span class="kbd">Entf</span> oder <span class="kbd">Backspace</span></td><td><span class="kbd">Backspace</span></td></tr>
+          <tr><td><span class="kbd">Alt/⌥</span></td><td><span class="kbd">Alt</span></td><td><span class="kbd">⌥</span>, auf der Taste steht „alt“ oder „option“</td></tr>
+          <tr><td><span class="kbd">Entf</span></td><td><span class="kbd">Entf</span> oder <span class="kbd">Backspace</span></td><td><span class="kbd">Backspace</span>, die große Löschtaste rechts oben</td></tr>
         </tbody>
       </table>
 
       <h2>Canvas und Workflow</h2>
+      <p>Diese Kürzel wirken auf den Workflow als Ganzes. Eines vorweg, weil es regelmäßig für Verwirrung sorgt: Deinen
+        Draft speichert n8n von selbst, meist innerhalb von ein bis fünf Sekunden. Die Doku-Seite „Keyboard shortcuts“
+        führt <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span> zwar noch als Speichern-Kürzel. In n8n 2.32
+        klappt es das Menü neben dem <em>Publish</em>-Knopf auf, in dem unter anderem <em>Name version</em> liegt.</p>
       <table class="btable">
         <thead><tr><th>Aktion</th><th>Tastenkürzel</th><th>Wofür?</th></tr></thead>
         <tbody>
-          <tr><td>Neuen Workflow erstellen</td><td><span class="kbd">Strg</span> + <span class="kbd">Alt</span> + <span class="kbd">N</span></td><td>schnell mit leerem Workflow starten</td></tr>
-          <tr><td>Workflow öffnen</td><td><span class="kbd">Strg</span> + <span class="kbd">O</span></td><td>zu einem vorhandenen Workflow wechseln</td></tr>
+          <tr><td>Neuen Workflow erstellen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Alt/⌥</span> + <span class="kbd">N</span></td><td>schnell mit leerem Workflow starten</td></tr>
+          <tr><td>Workflow öffnen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">O</span></td><td>zu einem vorhandenen Workflow wechseln</td></tr>
           <tr><td>Node-Panel öffnen</td><td><span class="kbd">N</span></td><td>neuen Node suchen, ohne das Plus zu treffen</td></tr>
-          <tr><td>Speichern</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></td><td>sichert den Stand. Live geht er erst mit <em>Publish</em></td></tr>
-          <tr><td>Workflow testen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span></td><td>manuellen Testlauf starten</td></tr>
+          <tr><td>Sticky Note einfügen</td><td><span class="kbd">Shift</span> + <span class="kbd">S</span></td><td>Notizzettel auf den Canvas legen</td></tr>
+          <tr><td>Publish-Menü öffnen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></td><td>klappt das Menü neben <em>Publish</em> auf, darin sitzt <em>Name version</em></td></tr>
+          <tr><td>Workflow publishen</td><td><span class="kbd">Shift</span> + <span class="kbd">P</span></td><td>öffnet das Publish-Fenster und schaltet den Draft produktiv</td></tr>
+          <tr><td>Workflow unpublishen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">U</span></td><td>den Workflow wieder aus der Produktion nehmen</td></tr>
+          <tr><td>Workflow ausführen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span></td><td>manuellen Testlauf starten, wie der Knopf <em>Execute workflow</em></td></tr>
           <tr><td>Alles auswählen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">A</span></td><td>alle sichtbaren Nodes markieren</td></tr>
           <tr><td>Auswahl löschen</td><td><span class="kbd">Entf</span> oder <span class="kbd">Backspace</span></td><td>markierte Nodes entfernen</td></tr>
           <tr><td>Kopieren</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">C</span></td><td>Nodes in die Zwischenablage legen</td></tr>
@@ -86,6 +102,37 @@
         kurz, welcher Node markiert ist. Bei Unsicherheit: abbrechen, neu auswählen, dann löschen.
       </div>
 
+      <h2>Ausgewählte Nodes</h2>
+      <p>Sobald mindestens ein Node markiert ist, kommen weitere Kürzel dazu. Markieren geht mit einem Klick, mit
+        einem aufgezogenen Rahmen um mehrere Nodes oder mit <span class="kbd">Strg/⌘</span> und Klick für jeden
+        weiteren Node.</p>
+      <table class="btable">
+        <thead><tr><th>Aktion</th><th>Tastenkürzel</th><th>Wofür?</th></tr></thead>
+        <tbody>
+          <tr><td>Node öffnen</td><td><span class="kbd">Enter</span></td><td>Detailansicht ohne Doppelklick öffnen</td></tr>
+          <tr><td>Zum Nachbar-Node springen</td><td><span class="kbd">←</span> <span class="kbd">→</span></td><td>die Auswahl entlang der Kette weiterschieben</td></tr>
+          <tr><td>Zum Node darüber oder darunter</td><td><span class="kbd">↑</span> <span class="kbd">↓</span></td><td>bei parallelen Zweigen den Nachbarn auf gleicher Höhe wählen</td></tr>
+          <tr><td>Kette mitnehmen</td><td><span class="kbd">Shift</span> + <span class="kbd">←</span> / <span class="kbd">→</span></td><td>alle Nodes links bzw. rechts dazunehmen</td></tr>
+          <tr><td>Node umbenennen</td><td><span class="kbd">F2</span></td><td>sprechende Namen statt „HTTP Request1“</td></tr>
+          <tr><td>Node deaktivieren</td><td><span class="kbd">D</span></td><td>einen Node im Test überspringen, ohne ihn zu löschen</td></tr>
+          <tr><td>Daten pinnen</td><td><span class="kbd">P</span></td><td>Testdaten festhalten, damit der nächste Lauf sie wiederverwendet</td></tr>
+          <tr><td>Nodes gruppieren</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">G</span></td><td>zusammengehörige Nodes zu einer Canvas Group bündeln</td></tr>
+          <tr><td>Gruppierung auflösen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Shift</span> + <span class="kbd">G</span></td><td>die Nodes bleiben, nur die Gruppe verschwindet</td></tr>
+          <tr><td>Sub-Workflow öffnen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Shift</span> + <span class="kbd">O</span></td><td>den aufgerufenen Workflow in einem neuen Tab ansehen. Mit der Maus: <span class="kbd">Strg/⌘</span> + Doppelklick</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--tip">
+        <b class="t">Wann Group ausgegraut bleibt</b>
+        Gruppieren geht auch ohne Tastatur: über das Symbol <strong>Group nodes</strong> in der Leiste über der Auswahl
+        oder über <strong>Group</strong> im Kontextmenü. Diese Wege und das Kürzel greifen aber nur, wenn die Auswahl
+        die Regeln erfüllt. Trigger-Nodes bleiben draußen, die Nodes müssen eine zusammenhängende Kette bilden, keiner darf schon
+        in einer anderen Gruppe stecken, Verbindungen nach außen dürfen nur am ersten und am letzten Node hängen, und
+        ein KI-Node nimmt seine Sub-Nodes mit. Passt etwas davon nicht, bleibt <strong>Group nodes</strong> ausgegraut
+        und <span class="kbd">Strg/⌘</span> + <span class="kbd">G</span> tut nichts. Zum Auflösen wählst du die Gruppe
+        aus und klickst auf das Symbol <strong>Ungroup</strong>.
+      </div>
+
       <h2>Zoom und Orientierung</h2>
       <table class="btable">
         <thead><tr><th>Aktion</th><th>Tastenkürzel</th><th>Wofür?</th></tr></thead>
@@ -96,7 +143,9 @@
           <tr><td>Verkleinern</td><td><span class="kbd">-</span> oder <span class="kbd">_</span></td><td>mehr vom Canvas sehen</td></tr>
           <tr><td>Vergrößern / verkleinern</td><td><span class="kbd">Strg/⌘</span> + Mausrad</td><td>stufenlos zoomen</td></tr>
           <tr><td>Canvas verschieben</td><td><span class="kbd">Space</span> halten und ziehen</td><td>größere Workflows erkunden</td></tr>
-          <tr><td>Alternative Bewegung</td><td><span class="kbd">Strg</span> + Ziehen oder mittlere Maustaste</td><td>Canvas bewegen, wenn Space nicht passt</td></tr>
+          <tr><td>Canvas mit <span class="kbd">Strg/⌘</span> ziehen</td><td><span class="kbd">Strg/⌘</span> + linke Maustaste und ziehen</td><td>Canvas bewegen, wenn Space nicht passt</td></tr>
+          <tr><td>Canvas mit der Maus ziehen</td><td>mittlere Maustaste und ziehen, auch zusammen mit <span class="kbd">Strg/⌘</span></td><td>ohne Tastatur navigieren</td></tr>
+          <tr><td>Canvas am Touchscreen</td><td>zwei Finger auf dem Canvas</td><td>am Tablet arbeiten</td></tr>
         </tbody>
       </table>
 
@@ -109,7 +158,7 @@
           <tr><td>Feldinhalt markieren</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">A</span></td><td>Parameter schnell ersetzen</td></tr>
           <tr><td>Wert kopieren</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">C</span></td><td>URLs, Expressions oder Testwerte übernehmen</td></tr>
           <tr><td>Wert einfügen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">V</span></td><td>vorbereitete Werte eintragen</td></tr>
-          <tr><td>Dialog abbrechen</td><td><span class="kbd">Esc</span></td><td>Auswahlmenüs oder Suchfelder schließen</td></tr>
+          <tr><td>Dialog abbrechen</td><td><span class="kbd">Esc</span></td><td>schließt zuerst das offene Auswahlmenü, erst der nächste Druck die Detailansicht</td></tr>
         </tbody>
       </table>
 
@@ -119,16 +168,19 @@
         <tbody>
           <tr><td>Node suchen</td><td><span class="kbd">N</span>, dann tippen</td><td>HTTP, IF, Set, Code und andere Nodes schneller finden</td></tr>
           <tr><td>Suchergebnis wählen</td><td><span class="kbd">↑</span> / <span class="kbd">↓</span>, dann <span class="kbd">Enter</span></td><td>ohne Maus einfügen</td></tr>
-          <tr><td>Command Bar öffnen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">K</span></td><td>Aktionen, Navigation und Ressourcen suchen</td></tr>
+          <tr><td>Kategorie aufklappen</td><td><span class="kbd">→</span></td><td>in eine Gruppe wie <em>Core Nodes</em> hineingehen</td></tr>
+          <tr><td>Kategorie zuklappen</td><td><span class="kbd">←</span></td><td>eine Ebene zurück in der Liste</td></tr>
+          <tr><td>Node-Panel schließen</td><td><span class="kbd">Esc</span></td><td>Suche abbrechen, ohne einen Node einzufügen</td></tr>
+          <tr><td>Command Bar öffnen</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">K</span></td><td>Aktionen, Navigation und Ressourcen suchen. Dasselbe macht die Lupe am Canvas</td></tr>
           <tr><td>Browser-Suche</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">F</span></td><td>Text im geöffneten Buchkapitel oder Browserfenster finden</td></tr>
-          <tr><td>Seitentab wechseln</td><td><span class="kbd">Strg</span> + <span class="kbd">Tab</span></td><td>zwischen n8n, Dokumentation und Testseiten springen</td></tr>
+          <tr><td>Seitentab wechseln</td><td><span class="kbd">Strg</span> + <span class="kbd">Tab</span></td><td>zwischen n8n, Dokumentation und Testseiten springen. Das kommt vom Browser, deshalb gilt auch auf macOS <span class="kbd">Strg</span></td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--info">
         <b class="t">Nicht jedes Kürzel ist n8n-spezifisch</b>
-        Viele nützliche Tastenkürzel kommen vom Browser oder Betriebssystem. Das ist kein Nachteil: Für den Alltag zählt,
-        ob du den Workflow schneller und kontrollierter bearbeiten kannst.
+        Ein Teil der Kürzel in diesen Tabellen kommt vom Browser oder vom Betriebssystem, nicht aus n8n. Für die
+        tägliche Arbeit macht die Herkunft keinen Unterschied. Es zählt der Handgriff, den du dir sparst.
       </div>
 
       <h2>Typische Arbeitsfolge ohne Maus</h2>
@@ -139,8 +191,9 @@
           <span class="kbd">Strg/⌘</span> + <span class="kbd">A</span> markieren und ersetzen.</p></li>
         <li><h4>Ansicht schließen</h4><p><span class="kbd">Esc</span> drücken, bis du wieder den Canvas siehst.</p></li>
         <li><h4>Auto-Save prüfen</h4><p>Warten, bis der Draft gespeichert ist.</p></li>
-        <li><h4>Testlauf starten</h4><p><span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span> nutzen oder sichtbar auf
-          <strong>Test workflow</strong> klicken, wenn dein Browser das Kürzel abfängt.</p></li>
+        <li><h4>Testlauf starten</h4><p><span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span> nutzen oder unten am
+          Canvas auf <strong>Execute workflow</strong> klicken, wenn dein Browser das Kürzel abfängt. In älteren
+          n8n-Versionen heißt derselbe Knopf <strong>Test workflow</strong>.</p></li>
       </ol>
 
       <h2>Wenn etwas schiefgeht</h2>
@@ -152,6 +205,8 @@
           <tr><td>Node wurde gelöscht</td><td>falsche Auswahl war aktiv</td><td><span class="kbd">Strg/⌘</span> + <span class="kbd">Z</span> nutzen</td></tr>
           <tr><td>Text wird statt Node gelöscht</td><td>Cursor steht in einem Eingabefeld</td><td>erst mit <span class="kbd">Esc</span> zurück auf den Canvas</td></tr>
           <tr><td>macOS-Kürzel passt nicht</td><td><span class="kbd">Strg</span> und <span class="kbd">⌘</span> verwechselt</td><td>bei Buchnotation <span class="kbd">Strg/⌘</span> auf macOS <span class="kbd">⌘</span> verwenden</td></tr>
+          <tr><td>Gruppieren passiert nicht</td><td>die Auswahl erfüllt die Regeln für Canvas Groups nicht</td><td>Trigger abwählen und nur direkt verbundene Nodes markieren</td></tr>
+          <tr><td>Kürzel fehlt in deiner Instanz</td><td>die Funktion ist neuer als deine n8n-Version</td><td>bis zum Update über Kontextmenü oder Schaltfläche arbeiten</td></tr>
         </tbody>
       </table>
 
@@ -160,10 +215,12 @@
         <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
         <tbody>
           <tr><td>Node-Suche</td><td><span class="kbd">N</span> drücken, <code>set</code> tippen, <span class="kbd">Enter</span></td><td>ein Set-Node wird eingefügt</td></tr>
-          <tr><td>Speichern</td><td>Node bewegen, dann <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span></td><td>Status zeigt gespeichert</td></tr>
+          <tr><td>Autosave</td><td>Node bewegen, dann ein bis fünf Sekunden warten</td><td>oben steht, dass der Draft gespeichert ist</td></tr>
           <tr><td>Schließen</td><td>Node öffnen, dann <span class="kbd">Esc</span></td><td>Detailansicht schließt sich</td></tr>
           <tr><td>Zoom</td><td><span class="kbd">1</span> drücken</td><td>der Workflow wird eingepasst</td></tr>
           <tr><td>Rückgängig</td><td>Test-Node löschen, dann <span class="kbd">Strg/⌘</span> + <span class="kbd">Z</span></td><td>Node erscheint wieder</td></tr>
+          <tr><td>Gruppieren</td><td>zwei verbundene Nodes hinter dem Trigger markieren, dann <span class="kbd">Strg/⌘</span> + <span class="kbd">G</span></td><td>eine Canvas Group entsteht, der Name ist sofort tippbereit</td></tr>
+          <tr><td>Umbenennen</td><td>Node markieren, <span class="kbd">F2</span>, neuen Namen tippen, <span class="kbd">Enter</span></td><td>der Node trägt den neuen Namen</td></tr>
         </tbody>
       </table>
 
@@ -175,6 +232,7 @@
           <li>Warum ist <span class="kbd">Esc</span> beim Arbeiten in der Detailansicht nützlich?</li>
           <li>Was prüfst du, bevor du einen Node mit <span class="kbd">Entf</span> löschst?</li>
           <li>Welche sichtbare Alternative nutzt du, wenn der Browser ein Kürzel abfängt?</li>
+          <li>Mit welchem Kürzel fasst du markierte Nodes zu einer Canvas Group zusammen?</li>
         </ul>
       </div>
 
@@ -184,7 +242,8 @@
         2) <span class="kbd">⌘</span>. ·
         3) Du kommst aus Menüs und Detailansichten zurück zum Canvas. ·
         4) Welche Auswahl aktiv ist. ·
-        5) Die entsprechende Schaltfläche in n8n, z. B. <strong>Publish</strong> oder <strong>Test workflow</strong>.
+        5) Die entsprechende Schaltfläche in n8n, z. B. <strong>Publish</strong> oder <strong>Execute workflow</strong>. ·
+        6) <span class="kbd">Strg/⌘</span> + <span class="kbd">G</span>.
       </div>
 
     </article>

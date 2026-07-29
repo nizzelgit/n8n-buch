@@ -20,7 +20,7 @@
         Produktiv heißt: Zugriffe sind begrenzt, Secrets bleiben geschützt, Jobs überstehen Lastspitzen, und du weißt,
         was passiert, wenn ein Teil der Instanz ausfällt.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 24 Minuten</span>
+        <span>⏱ ca. 30 Minuten</span>
         <span>🎯 Niveau: Betrieb verstehen</span>
         <span>🧩 Voraussetzung: Kapitel 12, 23, 24</span>
       </div>
@@ -122,9 +122,9 @@
       </div>
 
       <h2>Erst Sicherheit, dann Skalierung</h2>
-      <p>Viele Teams skalieren zu früh. Das ist verständlich, aber verdächtig: Wenn noch unklar ist, wer Zugriff hat,
-        welche Daten gespeichert werden und wie ein Restore funktioniert, ist ein zweiter Worker nur eine weitere
-        Stelle, an der etwas falsch konfiguriert sein kann.</p>
+      <p>Der Umbau auf mehrere Worker kommt fast immer zu früh. Das ist verständlich, aber verdächtig: Wenn noch unklar
+        ist, wer Zugriff hat, welche Daten gespeichert werden und wie ein Restore funktioniert, ist ein zweiter Worker
+        nur eine weitere Stelle, an der etwas falsch konfiguriert sein kann.</p>
 
       <table class="btable">
         <thead><tr><th>Bereich</th><th>Minimum</th><th>Warum?</th></tr></thead>
@@ -138,21 +138,48 @@
         </tbody>
       </table>
 
+      <p>Eine erste Bestandsaufnahme nimmt dir n8n ab. Der Befehl <code>n8n audit</code> auf der Instanz erzeugt fünf
+        Berichte: Credentials, Database, File system, Nodes und Instance. Der letzte ist der interessanteste, denn er
+        listet ungeschützte Webhooks, fehlende Sicherheitseinstellungen und eine veraltete n8n-Version. Denselben
+        Bericht bekommst du über <code>POST /audit</code> in der Public API oder im n8n-Node über
+        <strong>Resource</strong> → <strong>Audit</strong> und <strong>Operation</strong> → <strong>Generate</strong>.</p>
+
       <div class="callout callout--info">
         <b class="t">Wo diese Einstellungen inzwischen liegen</b>
-        n8n hat 2026 einen eigenen Einstellungsbereich <strong>Security &amp; policies</strong> bekommen. Dort setzt
-        du instanzweit fest, was Nutzer:innen in ihren persönlichen Bereichen dürfen, etwa Workflows teilen oder
-        publizieren. Zwei weitere Punkte lohnen einen Blick, sobald echte Kundendaten durch die Instanz laufen: Die
-        Rechte <code>workflow:publish</code> und <code>workflow:unpublish</code> lassen sich getrennt vom
-        Bearbeitungsrecht vergeben, und Ausführungsdaten können so verwahrt werden, dass sensible Inhalte erst nach
-        einer ausdrücklichen Freigabe sichtbar werden. Die Rechte-Feinsteuerung gehört zu den kostenpflichtigen
-        Editionen; die Denkfrage dahinter gilt trotzdem für jede Instanz.
+        Seit Februar 2026 sammelt n8n die Instanzregeln an einer Stelle. Angekündigt wurde der Bereich als
+        <strong>Security &amp; policies</strong>, in der Oberfläche und in der Doku steht er unter
+        <strong>Settings</strong> → <strong>Security</strong>. Dort schaltest du <strong>Enforce two-factor
+        authentication</strong> ein, und im Abschnitt <strong>Personal Space</strong> legen die Schalter
+        <strong>Sharing workflows and credentials</strong> und <strong>Publishing workflows</strong> fest, was
+        Nutzer:innen in ihrem persönlichen Bereich dürfen. Davon getrennt gibt es seit n8n 2.8.0 die Rechte
+        <code>workflow:publish</code> und <code>workflow:unpublish</code>: Wer einen Workflow bearbeiten darf, darf ihn
+        deshalb noch nicht live schalten. Ab n8n 2.18.0 kannst du dieselben Regeln beim Start vorgeben, mit
+        <code>N8N_SECURITY_POLICY_MANAGED_BY_ENV=true</code> und den Variablen <code>N8N_MFA_ENFORCED_ENABLED</code>,
+        <code>N8N_PERSONAL_SPACE_SHARING_ENABLED</code> und <code>N8N_PERSONAL_SPACE_PUBLISHING_ENABLED</code>. Die
+        Schalter sind dann in der Oberfläche nur noch lesbar. Das gehört zu den kostenpflichtigen Editionen; die
+        Denkfrage dahinter gilt trotzdem für jede Instanz.
       </div>
 
+      <h2>Vier Stellschrauben für größere Instanzen</h2>
+      <p>Sobald mehrere Teams auf derselben Instanz arbeiten, reicht „starke Passwörter“ nicht mehr als Antwort. n8n hat
+        2026 vier Bereiche nachgelegt. Alle stecken in den kostenpflichtigen Editionen, und keinen davon musst du sofort
+        einschalten. Du solltest nur wissen, dass es sie gibt, bevor die erste Compliance-Frage kommt. Die Versionen in
+        der Spalte „Seit“ beziehen sich auf den Stand Juli 2026, n8n 2.32.</p>
+
+      <table class="btable">
+        <thead><tr><th>Funktion</th><th>Seit</th><th>Wo du sie findest</th><th>Was sie löst</th></tr></thead>
+        <tbody>
+          <tr><td>Redaction von Ausführungsdaten</td><td>2.16.0, instanzweit ab 2.26.0</td><td>Im geöffneten Workflow über das Drei-Punkte-Menü oben rechts → <strong>Settings</strong>: <strong>Redact production execution data</strong> und <strong>Redact manual execution data</strong>. Instanzweit unter <strong>Settings</strong> → <strong>Security</strong> im Abschnitt <strong>Data redaction</strong></td><td>Node-Namen, Status und Laufzeit bleiben sichtbar, die Daten selbst nicht. Wer das Recht <code>execution:reveal</code> hat, blendet sie über <strong>Reveal data</strong> einzeln wieder ein, und jeder dieser Aufrufe landet im Audit-Log</td></tr>
+          <tr><td>Rollen aus dem Identity Provider</td><td>Rollenvergabe per SSO ab 1.122.2, Regeln in n8n ab 2.19.0</td><td><strong>Settings</strong> → <strong>SSO</strong>, dort das Dropdown <strong>Role assignment</strong> auf <strong>Instance roles via SSO</strong> stellen (oder auf <strong>Instance and project roles via SSO</strong>, wenn auch die Projektzugriffe von dort kommen sollen). Erst danach erscheint das zweite Dropdown <strong>Role mapping method</strong>. Dort wählst du <strong>Map rules inside n8n</strong> statt <strong>Map rules on your IdP</strong></td><td>Der IdP liefert nur Gruppen. Welche n8n-Rolle daraus wird, schreibst du als Expression über das Objekt <code>$claims</code>, das die SAML-Attribute beziehungsweise OIDC-Claims des Logins enthält. Die Regeln werden von oben nach unten geprüft, die erste passende gewinnt, und n8n wertet bei jedem Login neu aus</td></tr>
+          <tr><td>Token Exchange nach RFC 8693</td><td>2.16.0</td><td>Env-Variable <code>N8N_ENV_FEAT_TOKEN_EXCHANGE=true</code>, dazu ein Schlüsselpaar; den öffentlichen Teil trägst du in <code>N8N_TOKEN_EXCHANGE_TRUSTED_KEYS</code> ein</td><td>n8n im iframe eines anderen Produkts, ohne zweiten Login. Dein Backend signiert ein kurzlebiges JWT, n8n prüft es und gibt entweder ein Session-Cookie oder ein API-Token zurück. n8n führt das als Preview, Endpunkte und Claims können sich noch ändern</td></tr>
+          <tr><td>External Secrets</td><td>mehrere Vaults je Anbieter ab 2.10.0, 1Password ab 2.12.0</td><td><strong>Settings</strong> → <strong>External Secrets</strong>, dann <strong>Add secrets vault</strong></td><td>Tokens bleiben im Vault und werden zur Laufzeit geholt. Neben AWS, Azure, GCP, HashiCorp Vault und Infisical geht jetzt auch 1Password über dessen Connect Server. Referenziert wird als <code>{{ $secrets.&lt;vault&gt;.&lt;item&gt; }}</code>, und das nur in Credential-Feldern</td></tr>
+        </tbody>
+      </table>
+
       <h2>Der einfache Betrieb</h2>
-      <p>Eine einzelne n8n-Instanz ist nicht falsch. Für kleine interne Automationen ist sie oft die vernünftige Wahl:
-        weniger Teile, weniger Konfiguration, weniger Fehlerquellen. Sie wird problematisch, wenn dieselbe Instanz
-        gleichzeitig Editor, Webhook-Eingang, Trigger-Verwaltung und lange Ausführungen tragen muss.</p>
+      <p>Eine einzelne n8n-Instanz ist nicht falsch. Für kleine interne Automationen ist sie meist die vernünftige Wahl,
+        weil es nur einen Prozess gibt, den du konfigurierst und im Blick behältst. Problematisch wird sie, wenn dieselbe
+        Instanz gleichzeitig Editor, Webhook-Eingang, Trigger-Verwaltung und lange Ausführungen tragen muss.</p>
 
       <ol class="steps">
         <li><h4>Lastbild beschreiben</h4>
@@ -165,8 +192,10 @@
           <p>Öffne HTTP-, Code- und AI-Nodes und suche nach Tokens, Passwörtern und privaten URLs. Verschiebe sie in
             Credentials oder Env-Variablen. Ein Workflow-Export darf keine echten Geheimnisse enthalten.</p></li>
         <li><h4>Ausführungsdaten begrenzen</h4>
-          <p>Prüfe, wie lange erfolgreiche und fehlgeschlagene Ausführungen gespeichert werden. Viele gespeicherte
-            große Outputs belasten die Datenbank stärker als die Workflow-Logik selbst.</p></li>
+          <p>Prüfe, wie lange erfolgreiche und fehlgeschlagene Ausführungen gespeichert werden. Das Pruning läuft
+            voreingestellt mit, aber großzügig: <code>EXECUTIONS_DATA_MAX_AGE</code> steht auf 336 Stunden und
+            <code>EXECUTIONS_DATA_PRUNE_MAX_COUNT</code> auf 10 000 Ausführungen. Viele gespeicherte große Outputs
+            belasten die Datenbank stärker als die Workflow-Logik selbst. Die Details dazu stehen in Kapitel 23.</p></li>
         <li><h4>Erst messen, dann umbauen</h4>
           <p>Skaliere nicht aus Bauchgefühl. Notiere: Wo wartet der Workflow? CPU, Datenbank, externe API, große Dateien
             oder zu viele gleichzeitige Webhooks? Die Ursache entscheidet über die Lösung.</p></li>
@@ -191,13 +220,25 @@
           <tr><td>Worker</td><td>führt Workflows parallel aus</td><td>macht die Arbeit</td></tr>
           <tr><td>Datenbank</td><td>Workflows, Credentials, Ausführungen, Status</td><td>ist die gemeinsame Wahrheit</td></tr>
           <tr><td>Webhook-Prozessor</td><td>optional: nimmt viele Webhook-Anfragen entgegen</td><td>entlastet den Main-Prozess bei Eingangslast</td></tr>
+          <tr><td>Zweiter Main-Prozess</td><td>optional: Hochverfügbarkeit über Multi-Main</td><td>springt ein, wenn der Leader ausfällt</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--danger">
         <b class="t">SQLite ist hier die falsche Unterlage</b>
-        Queue-Mode ist ein verteiltes Setup. Dafür brauchst du eine zentrale Datenbank, typischerweise Postgres, und
-        Redis als Message Broker. Eine lokale SQLite-Datei passt nicht zu mehreren Prozessen auf mehreren Maschinen.
+        Queue-Mode ist ein verteiltes Setup. Dafür brauchst du eine zentrale Datenbank und Redis als Message Broker.
+        n8n empfiehlt Postgres ab Version 13. Eine lokale SQLite-Datei passt nicht zu mehreren Prozessen auf mehreren
+        Maschinen; n8n rät ausdrücklich davon ab und unterstützt die Kombination nicht.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Ein einzelner Main-Prozess ist ein Single Point of Failure</b>
+        Fällt der Main-Prozess aus, nimmt niemand mehr Trigger und Webhooks an, egal wie viele Worker bereitstehen.
+        Dagegen gibt es das Multi-Main-Setup: mehrere Main-Prozesse hinter einem Load Balancer mit Sticky Sessions, alle
+        mit <code>N8N_MULTI_MAIN_SETUP_ENABLED=true</code>. Einer davon ist Leader und übernimmt die Aufgaben, die genau
+        einmal laufen dürfen, also Timer, Poller, dauerhafte Verbindungen wie IMAP und das Pruning. Die übrigen bedienen
+        UI und API. Fällt der Leader aus, übernimmt ein anderer, und wenn der alte zurückkommt, wird er Follower. Alle
+        Prozesse müssen dieselbe n8n-Version fahren. Das Setup braucht eine Enterprise-Lizenz.
       </div>
 
       <h2>Queue-Mode gedanklich konfigurieren</h2>
@@ -207,11 +248,14 @@
 
       <ol class="steps">
         <li><h4>Gemeinsame Datenbank festlegen</h4>
-          <p>Nutze für ein produktives Queue-Setup eine zentrale Datenbank, z. B. Postgres. Main und Worker greifen auf
-            dieselben Workflow- und Credential-Daten zu.</p></li>
+          <p>Nutze für ein produktives Queue-Setup eine zentrale Datenbank. n8n empfiehlt Postgres ab Version 13. Main
+            und Worker greifen auf dieselben Workflow- und Credential-Daten zu.</p></li>
         <li><h4>Redis bereitstellen</h4>
-          <p>Redis hält die Warteschlange. In n8n werden die Redis-Verbindungsdaten über Queue-Mode-Variablen wie
-            <code>QUEUE_BULL_REDIS_HOST</code>, <code>QUEUE_BULL_REDIS_PORT</code> und bei Bedarf Passwort/TLS gesetzt.</p></li>
+          <p>Redis hält die Warteschlange. Die Verbindungsdaten setzt du über <code>QUEUE_BULL_REDIS_HOST</code>
+            (voreingestellt <code>localhost</code>) und <code>QUEUE_BULL_REDIS_PORT</code> (voreingestellt
+            <code>6379</code>). Läuft Redis mit Authentifizierung, kommen <code>QUEUE_BULL_REDIS_USERNAME</code> und
+            <code>QUEUE_BULL_REDIS_PASSWORD</code> dazu, für verschlüsselte Verbindungen
+            <code>QUEUE_BULL_REDIS_TLS=true</code>.</p></li>
         <li><h4>Queue-Mode einschalten</h4>
           <p>Setze auf Main, Workern und optionalen Webhook-Prozessoren <code>EXECUTIONS_MODE=queue</code>. Sonst
             sprechen die Prozesse nicht dasselbe Ausführungsmodell.</p></li>
@@ -219,12 +263,26 @@
           <p>Setze <code>N8N_ENCRYPTION_KEY</code> auf allen n8n-Prozessen identisch. Ein Worker mit anderem Schlüssel
             kann gespeicherte Credentials nicht korrekt verwenden.</p></li>
         <li><h4>Worker starten</h4>
-          <p>Worker werden separat gestartet, z. B. mit <code>n8n worker</code>. Die Parallelität pro Worker wird über
-            Concurrency gesteuert, etwa <code>n8n worker --concurrency=5</code>.</p></li>
+          <p>Worker sind eigene Prozesse und werden mit dem Unterbefehl <code>worker</code> gestartet: lokal
+            <code>n8n worker</code>, im Container
+            <code>docker run --name n8n-worker -p 5679:5678 docker.n8n.io/n8nio/n8n worker</code>. Die Parallelität pro
+            Worker steuerst du über das Flag <code>--concurrency</code>, also etwa
+            <code>n8n worker --concurrency=5</code>. Voreingestellt sind <code>10</code>.</p></li>
+        <li><h4>Webhook-Prozessoren starten</h4>
+          <p>Diesen Schritt brauchst du nur bei hoher Eingangslast. Der Unterbefehl heißt <code>webhook</code>:
+            <code>n8n webhook</code>, im Container
+            <code>docker run --name n8n-webhook -p 5680:5678 -e "EXECUTIONS_MODE=queue" docker.n8n.io/n8nio/n8n webhook</code>.
+            Diese Prozesse brauchen Redis, die Datenbank und dieselben Variablen wie ein Worker. In der n8n-Doku heißen
+            beide Beispielcontainer <code>n8n-queue</code>; nebeneinander starten lassen sie sich so natürlich nicht,
+            gib ihnen also eigene Namen und eigene Ports.</p></li>
         <li><h4>Webhook-Routing prüfen</h4>
           <p>Wenn du zusätzliche Webhook-Prozessoren nutzt, leite produktive Pfade wie <code>/webhook/*</code> und
-            <code>/webhook-waiting/*</code> dorthin. Manuelle Test-Webhooks wie <code>/webhook-test/*</code> gehören zum
-            Main-Prozess.</p></li>
+            <code>/webhook-waiting/*</code> dorthin. Der zweite Pfad gehört zu den Human-in-the-Loop-Nodes, also den
+            „send and wait“-Operationen. Manuelle Test-Webhooks wie <code>/webhook-test/*</code> gehören zum
+            Main-Prozess, alle übrigen Pfade ebenfalls. n8n rät davon ab, den Main-Prozess in den Webhook-Pool des Load
+            Balancers zu hängen; sonst wird der Editor unter Last zäh. Willst du ganz sichergehen, setze auf dem Main
+            <code>N8N_DISABLE_PRODUCTION_MAIN_PROCESS=true</code>. Dann nimmt er produktive Webhooks gar nicht mehr
+            an.</p></li>
       </ol>
 
       <h2>Die wichtigsten Env-Variablen</h2>
@@ -233,18 +291,25 @@
         <tbody>
           <tr><td><code>EXECUTIONS_MODE</code></td><td><code>queue</code></td><td>aktiviert das Warteschlangenmodell</td></tr>
           <tr><td><code>N8N_ENCRYPTION_KEY</code></td><td><code>lange-zufaellige-zeichenfolge</code></td><td>entschlüsselt Credentials auf Main und Workern</td></tr>
-          <tr><td><code>QUEUE_BULL_REDIS_HOST</code></td><td><code>redis</code></td><td>Adresse des Redis-Servers</td></tr>
+          <tr><td><code>QUEUE_BULL_REDIS_HOST</code></td><td><code>redis</code></td><td>Adresse des Redis-Servers, voreingestellt <code>localhost</code></td></tr>
           <tr><td><code>QUEUE_BULL_REDIS_PORT</code></td><td><code>6379</code></td><td>Port des Redis-Servers</td></tr>
-          <tr><td><code>WEBHOOK_URL</code></td><td><code>https://n8n.example.com/</code></td><td>öffentliche Basis-URL für produktive Webhooks</td></tr>
-          <tr><td><code>N8N_PROXY_HOPS</code></td><td><code>1</code></td><td>hilft n8n, Proxy-Header korrekt zu interpretieren</td></tr>
-          <tr><td><code>OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS</code></td><td><code>true</code></td><td>optional: auch manuelle Ausführungen auf Worker verschieben</td></tr>
+          <tr><td><code>QUEUE_BULL_REDIS_PASSWORD</code></td><td><code>nicht-dieser-wert</code></td><td>Passwort, wenn Redis eines verlangt; daneben gibt es <code>QUEUE_BULL_REDIS_TLS</code></td></tr>
+          <tr><td><code>N8N_WEBHOOK_URL</code></td><td><code>https://n8n.example.com/</code></td><td>öffentliche Basis-URL für Webhooks. Der alte Name <code>WEBHOOK_URL</code> funktioniert weiter, erzeugt aber eine Deprecation-Warnung</td></tr>
+          <tr><td><code>N8N_PROXY_HOPS</code></td><td><code>1</code></td><td>Zahl der Reverse Proxies vor n8n, voreingestellt <code>0</code></td></tr>
+          <tr><td><code>N8N_GRACEFUL_SHUTDOWN_TIMEOUT</code></td><td><code>30</code></td><td>Sekunden, die ein Worker beim Beenden noch für laufende Jobs bekommt</td></tr>
+          <tr><td><code>QUEUE_HEALTH_CHECK_ACTIVE</code></td><td><code>true</code></td><td>schaltet <code>/healthz</code> und <code>/healthz/readiness</code> auf den Workern frei</td></tr>
+          <tr><td><code>OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS</code></td><td><code>true</code></td><td>optional: auch manuelle Ausführungen auf Worker verschieben, voreingestellt <code>false</code></td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--warn">
         <b class="t">Concurrency ist kein Wunschzettel</b>
-        Mehr parallele Jobs erhöhen auch Datenbankverbindungen, API-Aufrufe und Speicherverbrauch. Viele Worker mit sehr
-        niedriger Concurrency können die Datenbank stärker belasten als wenige gut dimensionierte Worker.
+        Mehr parallele Jobs erhöhen auch Datenbankverbindungen, API-Aufrufe und Speicherverbrauch. In die andere
+        Richtung gilt das genauso: Viele Worker mit sehr niedriger Concurrency können den Verbindungspool der Datenbank
+        erschöpfen. n8n empfiehlt deshalb mindestens <code>5</code> pro Worker. Wenn du den Wert lieber zentral setzt,
+        nimm <code>N8N_CONCURRENCY_PRODUCTION_LIMIT</code>; die Variable hat Vorrang vor dem Flag
+        <code>--concurrency</code>, sobald sie auf etwas anderes als <code>-1</code> steht. Sie zählt nur produktive
+        Ausführungen, also die aus Webhooks und Trigger-Nodes.
       </div>
 
       <h2>Task Runner für Code-Nodes</h2>
@@ -256,18 +321,34 @@
       <p>Seit n8n 2.0 musst du Task Runner nicht mehr einschalten: Sie sind der Standard, und Code-Nodes laufen
         von Haus aus isoliert. Zu konfigurieren bleibt der <em>Modus</em>. Eine Nebenwirkung, über die viele beim
         Umstieg stolpern: Der Zugriff auf Umgebungsvariablen über <code>process.env</code> ist im Code-Node
-        standardmäßig gesperrt. Das ist Absicht, denn ein Code-Node soll nicht die Betriebsgeheimnisse der Instanz
-        auslesen können.</p>
+        standardmäßig gesperrt, denn <code>N8N_BLOCK_ENV_ACCESS_IN_NODE</code> steht ab 2.0 auf <code>true</code>. Das
+        ist Absicht. Ein Code-Node soll nicht die Betriebsgeheimnisse der Instanz auslesen können, und in einem
+        Queue-Setup stehen in der Worker-Umgebung genau die Werte, die niemand im Workflow braucht.</p>
 
       <table class="btable">
         <thead><tr><th>Variable</th><th>Beispiel</th><th>Wofür?</th></tr></thead>
         <tbody>
-          <tr><td><code>N8N_RUNNERS_ENABLED</code></td><td><code>true</code></td><td>seit n8n 2.0 überflüssig, weil Runner der Standard sind. Nur für 1.x nötig</td></tr>
-          <tr><td><code>N8N_RUNNERS_MODE</code></td><td><code>external</code></td><td>Runner außerhalb des n8n-Prozesses betreiben</td></tr>
-          <tr><td><code>N8N_RUNNERS_AUTH_TOKEN</code></td><td><code>lange-zufaellige-zeichenfolge</code></td><td>Runner und Broker gegenseitig absichern</td></tr>
-          <tr><td><code>N8N_RUNNERS_BROKER_LISTEN_ADDRESS</code></td><td><code>0.0.0.0</code></td><td>Broker für Sidecar/Container erreichbar machen</td></tr>
+          <tr><td><code>N8N_RUNNERS_ENABLED</code></td><td><code>true</code></td><td>ab n8n 2.0 deprecated, weil Runner der Standard sind. Nur für 1.x nötig</td></tr>
+          <tr><td><code>N8N_RUNNERS_MODE</code></td><td><code>external</code></td><td>Runner außerhalb des n8n-Prozesses betreiben. Voreingestellt ist <code>internal</code>, dann startet n8n den Runner als Kindprozess</td></tr>
+          <tr><td><code>N8N_RUNNERS_AUTH_TOKEN</code></td><td><code>lange-zufaellige-zeichenfolge</code></td><td>gemeinsames Geheimnis zwischen Runner und Broker. Im externen Modus Pflicht</td></tr>
+          <tr><td><code>N8N_RUNNERS_BROKER_LISTEN_ADDRESS</code></td><td><code>0.0.0.0</code></td><td>Broker für Sidecar/Container erreichbar machen. Voreingestellt hört er nur auf <code>127.0.0.1</code></td></tr>
+          <tr><td><code>N8N_RUNNERS_BROKER_PORT</code></td><td><code>5679</code></td><td>Port, auf dem der Broker die Runner annimmt</td></tr>
+          <tr><td><code>N8N_RUNNERS_TASK_TIMEOUT</code></td><td><code>300</code></td><td>Sekunden, nach denen ein hängender Code-Node abgebrochen und der Runner neu gestartet wird</td></tr>
         </tbody>
       </table>
+
+      <div class="callout callout--info">
+        <b class="t">Der Runner ist eine Sicherheitsgrenze, keine Hülle</b>
+        Im externen Modus läuft der Runner als eigener Container, und dann lohnt es sich, ihn auch so zu behandeln. Die
+        n8n-Doku nennt dafür vier weitere Maßnahmen: das Image mit dem Suffix <code>-distroless</code>, den
+        unprivilegierten Benutzer <code>nobody</code> mit UID und GID 65532, ein schreibgeschütztes Root-Dateisystem mit
+        einem kleinen <code>emptyDir</code> auf <code>/tmp</code>, und ein AppArmor-Profil, das den Zugriff auf
+        <code>/proc/&lt;pid&gt;/environ</code> und <code>/proc/&lt;pid&gt;/mounts</code> verbietet. Die letzte Regel
+        klingt exotisch, hat aber einen sehr konkreten Grund: Über diese beiden Dateien kann Code im Container die
+        Umgebungsvariablen mitlesen, und dort stehen oft genug Zugangsdaten. Umgekehrt hebt
+        <code>N8N_RUNNERS_INSECURE_MODE=true</code> die Schutzmaßnahmen im Runner wieder auf. Das ist ein Notnagel für
+        Bibliotheken, die anders nicht laufen, und gehört nicht in Produktion.
+      </div>
 
       <div class="callout callout--warn">
         <b class="t">Queue-Mode plus Task Runner sauber kombinieren</b>
@@ -276,8 +357,9 @@
       </div>
 
       <h2>Skalieren: hoch, breit oder gar nicht?</h2>
-      <p>Skalierung hat drei typische Richtungen. Jede hat einen Preis. Die beste Lösung ist oft nicht die größte,
-        sondern diejenige, die den tatsächlichen Engpass trifft.</p>
+      <p>Skalierung hat drei Richtungen: mehr Leistung pro Prozess, mehr Prozesse, oder eben keine von beiden. Jede
+        Richtung hat einen Preis. Was hilft, hängt am tatsächlichen Engpass, und der sitzt selten dort, wo man ihn
+        zuerst vermutet.</p>
 
       <table class="btable">
         <thead><tr><th>Situation</th><th>Sinnvolle Reaktion</th><th>Nicht zuerst tun</th></tr></thead>
@@ -292,9 +374,15 @@
 
       <h2>Binary Data im Queue-Mode</h2>
       <p>Dateien sind ein Sonderfall. Wenn ein Worker eine Datei erzeugt und ein anderer Prozess später darauf zugreifen
-        soll, darf die Datei nicht nur auf einer lokalen Festplatte liegen, die nur dieser eine Worker sieht. Für
-        Queue-Mode brauchst du eine Speicherung, die alle beteiligten Prozesse erreichen können, z. B. Datenbank oder
-        externe Objektspeicherung.</p>
+        soll, darf die Datei nicht nur auf einer lokalen Festplatte liegen, die nur dieser eine Worker sieht. Genau
+        deshalb unterstützt n8n den Modus <code>filesystem</code> im Queue-Mode nicht, obwohl er sonst die Empfehlung
+        für große Dateien ist. Den Modus stellst du über <code>N8N_DEFAULT_BINARY_DATA_MODE</code> ein. Für ein
+        verteiltes Setup bleiben <code>database</code> und die externe Objektspeicherung: <code>s3</code> für AWS S3 und
+        S3-kompatible Dienste, <code>azure</code> für Azure Blob Storage. Die beiden letzten musst du zusätzlich
+        freischalten, sonst kennt die Instanz sie gar nicht. Für S3 sind das zwei Zeilen:
+        <code>N8N_AVAILABLE_BINARY_DATA_MODES=filesystem,s3</code> und
+        <code>N8N_DEFAULT_BINARY_DATA_MODE=s3</code>. Die externe Speicherung setzt eine Enterprise-Lizenz voraus, und
+        beim S3-Bucket setzt du die Lifecycle-Regel fürs Aufräumen selbst. n8n löscht dort nichts.</p>
 
       <div class="callout callout--info">
         <b class="t">Pragmatische Regel</b>
@@ -306,7 +394,7 @@
       <table class="btable">
         <thead><tr><th>Prüfung</th><th>Bestanden, wenn ...</th><th>Wenn nicht</th></tr></thead>
         <tbody>
-          <tr><td>Öffentliche URL</td><td><code>WEBHOOK_URL</code> zeigt auf HTTPS und echte Domain</td><td>Reverse Proxy und Env-Variablen korrigieren</td></tr>
+          <tr><td>Öffentliche URL</td><td><code>N8N_WEBHOOK_URL</code> zeigt auf HTTPS und echte Domain</td><td>Reverse Proxy und Env-Variablen korrigieren</td></tr>
           <tr><td>Credentials</td><td>keine Tokens in Node-Parametern oder Code stehen</td><td>in Credentials/Secrets verschieben</td></tr>
           <tr><td>Encryption Key</td><td>Main und alle Worker denselben Schlüssel nutzen</td><td>Deployment stoppen, Schlüssel vereinheitlichen</td></tr>
           <tr><td>Datenbank</td><td>Backup und Restore einmal getestet wurden</td><td>nicht produktiv gehen</td></tr>
@@ -317,17 +405,24 @@
         </tbody>
       </table>
 
+      <p>Für den letzten Punkt bringt n8n selbst etwas mit. Auf selbst gehosteten Enterprise-Instanzen listet
+        <strong>Settings</strong> → <strong>Workers</strong> die laufenden Worker samt Kennzahlen. Ohne diese Lizenz
+        bleiben dir die Endpunkte, die jeder Worker-Prozess ohnehin bereitstellt: <code>/healthz</code> für „Prozess
+        lebt“ und <code>/healthz/readiness</code> für „Datenbank und Redis sind verbunden“. Beide antworten erst, wenn
+        <code>QUEUE_HEALTH_CHECK_ACTIVE=true</code> gesetzt ist. Das reicht als Eingang für jedes übliche
+        Monitoring-System.</p>
+
       <h2>Wenn etwas schiefgeht</h2>
       <table class="btable">
         <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
         <tbody>
           <tr><td>Worker startet, kann aber keine Credentials nutzen</td><td><code>N8N_ENCRYPTION_KEY</code> fehlt oder unterscheidet sich</td><td>denselben Schlüssel auf Main und Worker setzen, dann neu starten</td></tr>
           <tr><td>Jobs bleiben in der Warteschlange</td><td>Worker erreicht Redis oder Datenbank nicht</td><td>Netzwerk, Host, Port, Passwort und Logs prüfen</td></tr>
-          <tr><td>Webhook ist extern nicht erreichbar</td><td><code>WEBHOOK_URL</code>, Proxy oder Load-Balancer-Routing falsch</td><td>öffentliche URL, Proxy-Header und Pfade prüfen</td></tr>
+          <tr><td>Webhook ist extern nicht erreichbar</td><td><code>N8N_WEBHOOK_URL</code>, Proxy oder Load-Balancer-Routing falsch</td><td>öffentliche URL, Proxy-Header und Pfade prüfen</td></tr>
           <tr><td>Editor wird langsam, obwohl Worker laufen</td><td>Main verarbeitet weiterhin zu viel Eingangslast</td><td>Webhook-Prozessoren prüfen und Main aus dem Webhook-Pool nehmen</td></tr>
           <tr><td>Dubletten in CRM oder Ticketsystem</td><td>Retry oder parallele Ausführungen schreiben mehrfach</td><td>Idempotenzschlüssel und Suche-vor-Schreiben ergänzen</td></tr>
           <tr><td>Datenbank meldet zu viele Verbindungen</td><td>zu viele Worker oder ungünstige Concurrency</td><td>Parallelität reduzieren, Pooling und Datenbanklimits prüfen</td></tr>
-          <tr><td>Dateianhänge verschwinden scheinbar</td><td>lokale Binary-Data-Speicherung passt nicht zum verteilten Setup</td><td>gemeinsame Speicherung für Binary Data wählen</td></tr>
+          <tr><td>Dateianhänge verschwinden scheinbar</td><td><code>N8N_DEFAULT_BINARY_DATA_MODE</code> steht auf <code>filesystem</code>, jeder Worker sieht nur seine eigene Platte</td><td>auf <code>database</code>, <code>s3</code> oder <code>azure</code> umstellen</td></tr>
         </tbody>
       </table>
 
@@ -357,6 +452,7 @@
           <li>Warum ist eine lokale SQLite-Datei für ein verteiltes Queue-Setup ungeeignet?</li>
           <li>Was prüfst du, bevor du die Worker-Anzahl erhöhst?</li>
           <li>Warum können parallele Ausführungen Dubletten erzeugen?</li>
+          <li>Wozu dient ein eigener Webhook-Prozess, und welche Pfade leitest du dorthin?</li>
         </ul>
       </div>
 
@@ -366,12 +462,18 @@
         2) Redis hält die Warteschlange offener Ausführungen. ·
         3) Mehrere Prozesse brauchen eine gemeinsame, zentrale Datenbank. ·
         4) Den echten Engpass: API-Limit, Datenbank, Speicher, große Dateien oder Workflow-Logik. ·
-        5) Weil Retries und parallele Jobs dieselbe schreibende Aktion mehrfach auslösen können.
+        5) Weil Retries und parallele Jobs dieselbe schreibende Aktion mehrfach auslösen können. ·
+        6) Er nimmt dem Main-Prozess die Eingangslast ab. Dorthin gehören <code>/webhook/*</code> und
+        <code>/webhook-waiting/*</code>, alle übrigen Pfade zum Main.
       </div>
 
-      <p>Du hast damit den Betriebsrahmen des Werkbuchs: Workflows modularisieren, Last begrenzen, Deployments
-        nachvollziehbar machen und erst dann skalieren. Gute Automatisierung ist nicht die, die am meisten parallel
-        läuft, sondern die, die unter realen Bedingungen kontrollierbar bleibt.</p>
+      <p>Damit steht der Betriebsrahmen des Werkbuchs: Workflows modularisieren, Last begrenzen, Deployments
+        nachvollziehbar machen und erst dann skalieren. Eine Automatisierung ist dann gut, wenn sie unter realen
+        Bedingungen kontrollierbar bleibt. Wie viel sie parallel schafft, ist die zweite Frage. Eine Falle zum Schluss,
+        weil sie erst beim ersten Rollout auffällt: Ein Worker bekommt beim Beenden nur
+        <code>N8N_GRACEFUL_SHUTDOWN_TIMEOUT</code> Sekunden, um laufende Jobs zu Ende zu bringen, voreingestellt 30.
+        Beendet dein Orchestrator den Container schneller, brechen Ausführungen mitten in einer schreibenden Aktion ab.
+        Genau die Sorte Fehler, die sich hinterher kaum noch rekonstruieren lässt.</p>
 
     </article>
     <nav id="prevnext"></nav>

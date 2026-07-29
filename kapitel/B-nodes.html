@@ -17,18 +17,28 @@
       <div class="chap-eyebrow"><span class="knum">B</span> Anhang</div>
       <h1 class="chap-title">Spickzettel: die wichtigsten Nodes</h1>
       <p class="chap-lede">n8n hat viele Nodes. Du brauchst am Anfang nicht alle. Dieser Spickzettel ordnet die
-        wichtigsten Bausteine danach, welches Problem sie lösen: starten, holen, verändern, verzweigen, warten,
-        schreiben und antworten.</p>
+        wichtigsten Nodes danach, welches Problem sie lösen: starten, Daten holen, Daten verändern, verzweigen,
+        antworten und stoppen. Dazu die KI-Nodes, der Node für die gesparte Zeit und die Namen, die n8n unterwegs
+        geändert hat.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 10 Minuten</span>
+        <span>⏱ ca. 12 Minuten</span>
         <span>🎯 Niveau: Nachschlagen</span>
         <span>🧩 Voraussetzung: Kapitel 5</span>
       </div>
 
       <div class="callout callout--pareto">
         <b class="t">80/20 für Nodes</b>
-        Die meisten Einsteiger-Workflows entstehen aus zehn Bausteinen: Manual Trigger, Schedule Trigger, Webhook,
-        HTTP Request, Edit Fields, IF, Switch, Merge, Code und Respond to Webhook.
+        Die meisten Einsteiger-Workflows entstehen aus zehn Nodes: Manual Trigger, Schedule Trigger, Webhook,
+        HTTP Request, Edit Fields (Set), If, Switch, Merge, Code und Respond to Webhook.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Welche Namen hier stehen</b>
+        Die Namen in diesem Spickzettel sind die Anzeigenamen aus dem Node-Panel, Stand Juli 2026 und n8n 2.32.x.
+        Manche sind dort länger als auf dem Canvas. Du suchst nach <strong>„Edit Fields (Set)“</strong>, auf dem
+        Canvas steht danach kurz „Edit Fields“. Genauso bei <strong>„Loop Over Items (Split in Batches)“</strong>.
+        Die Suche im Node-Panel reagiert auf beide Teile: <code>edit fields</code> findet den Node, <code>set</code>
+        genauso.
       </div>
 
       <h2>Node-Typen verstehen</h2>
@@ -39,9 +49,19 @@
           <tr><td>Action</td><td>arbeitet mit Daten oder externen Diensten</td><td>holt, verändert, sendet oder speichert</td></tr>
           <tr><td>Core Node</td><td>liefert allgemeine Logik</td><td>nicht an einen bestimmten Dienst gebunden</td></tr>
           <tr><td>App Node</td><td>spricht einen konkreten Dienst an</td><td>z. B. Google Sheets, Slack, Gmail</td></tr>
-          <tr><td>Credential-only</td><td>stellt Authentifizierung bereit</td><td>oft zusammen mit HTTP Request nützlich</td></tr>
+          <tr><td>Credential-only</td><td>bringt nur die Authentifizierung mit</td><td>oft zusammen mit HTTP Request nützlich</td></tr>
+          <tr><td>Cluster Node</td><td>Root-Node mit angedockten Sub-Nodes</td><td>die KI-Nodes funktionieren so</td></tr>
         </tbody>
       </table>
+
+      <div class="callout callout--warn">
+        <b class="t">Diese Nodes suchst du vergeblich</b>
+        n8n 2.0 hat aufgeräumt. Den <strong>Start</strong>-Node gibt es nicht mehr. Für Testläufe nimmst du jetzt den
+        <strong>Manual Trigger</strong>, in aufgerufenen Workflows den <strong>Execute Sub-workflow Trigger</strong>.
+        Ebenfalls entfernt sind die Nodes für Dienste, die es selbst nicht mehr gibt: Spontit, crowd.dev, Kitemaker und
+        Automizy. In diesem Spickzettel steht keiner davon. Wenn du aber einen älteren Workflow oder eine ältere
+        Anleitung aus dem Netz öffnest, ist das oft die Ursache für einen Node, den n8n nicht mehr kennt.
+      </div>
 
       <h2>Starten</h2>
       <table class="btable">
@@ -50,7 +70,7 @@
           <tr><td>Manual Trigger</td><td>du einen Workflow beim Bauen von Hand starten willst</td><td>später vergessen, einen echten Trigger einzubauen</td></tr>
           <tr><td>Schedule Trigger</td><td>etwas regelmäßig laufen soll</td><td>Zeitfenster und Zeitzone nicht prüfen</td></tr>
           <tr><td>Webhook</td><td>ein externes System n8n aufrufen soll</td><td>Test-URL mit Produktions-URL verwechseln</td></tr>
-          <tr><td>Form Trigger</td><td>Menschen einfache Daten eingeben sollen</td><td>Formular als Ersatz für Datenvalidierung missverstehen</td></tr>
+          <tr><td>n8n Form Trigger</td><td>Menschen einfache Daten eingeben sollen</td><td>Formular als Ersatz für Datenvalidierung missverstehen</td></tr>
           <tr><td>Error Trigger</td><td>Fehler zentral behandelt werden sollen</td><td>Fehlerworkflow selbst ungetestet lassen</td></tr>
         </tbody>
       </table>
@@ -62,22 +82,35 @@
           <tr><td>HTTP Request</td><td>du eine REST-API ansprechen willst</td><td>Welche Methode, URL, Authentifizierung und Antwortstruktur?</td></tr>
           <tr><td>Google Sheets</td><td>Zeilen gelesen oder geschrieben werden sollen</td><td>Ist die Kopfzeile stabil?</td></tr>
           <tr><td>Slack</td><td>Nachrichten in Kanäle oder Personen gehen</td><td>Ist der Zielkanal korrekt?</td></tr>
-          <tr><td>Gmail / Email</td><td>E-Mails gelesen oder versendet werden</td><td>Ist Senden wirklich gewollt oder erst Testmodus?</td></tr>
-          <tr><td>Read/Write Files</td><td>lokale Dateien in Self-hosted-Setups gebraucht werden</td><td>Existiert der Pfad auch im Container?</td></tr>
+          <tr><td>Gmail / Send Email</td><td>E-Mails verschickt werden sollen; lesen kann von den beiden nur Gmail</td><td>Ist Senden wirklich gewollt oder erst Testmodus?</td></tr>
+          <tr><td>Notion</td><td>Seiten oder Datenbankeinträge in Notion gebraucht werden</td><td>Ressource Page, Database Page oder Data Source?</td></tr>
+          <tr><td>Read/Write Files from Disk</td><td>lokale Dateien in Self-hosted-Setups gebraucht werden</td><td>Existiert der Pfad im Container und im erlaubten Verzeichnis?</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--warn">
-        <b class="t">HTTP Request ist mächtig, aber nicht automatisch richtig</b>
-        Wenn ein Dienst einen eigenen n8n-Node hat, ist dieser oft schneller verständlich. HTTP Request ist die
-        Ausweich- und Profioption, wenn du direkt mit einer API sprechen musst.
+        <b class="t">HTTP Request kann alles, ist aber selten der erste Griff</b>
+        Wenn ein Dienst einen eigenen n8n-Node hat, ist dieser meist schneller verständlich: Er führt dich durch
+        Authentifizierung, Ressourcen und Felder. Zum HTTP Request greifst du, wenn es keinen passenden Node gibt oder
+        der vorhandene Node die eine Operation nicht kennt, die du brauchst.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Zwei Stolperstellen an diesen Nodes</b>
+        Seit n8n 2.0 darf „Read/Write Files from Disk“ selbst gehostet nur noch unter <code>~/.n8n-files</code> lesen und
+        schreiben. Das steckt in der Variable <code>N8N_RESTRICT_FILE_ACCESS_TO</code>. Brauchst du einen anderen Ordner,
+        trägst du ihn dort ein, mehrere Ordner trennst du mit Semikolon. Der Notion-Node wiederum läuft inzwischen in
+        Version 3. Neben <strong>Database</strong> gibt es dort die Ressource <strong>Data Source</strong> mit
+        <strong>Get</strong> und <strong>Search</strong>, weil Notion seine Datenbanken in Data Sources aufgeteilt hat.
+        Der Notion Trigger fragt ab seiner Node-Version 1.1 ebenfalls nach einer <strong>Data Source</strong> statt nach
+        einer Database.
       </div>
 
       <h2>Daten verändern</h2>
       <table class="btable">
         <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Grenze</th></tr></thead>
         <tbody>
-          <tr><td>Edit Fields</td><td>du Felder setzen, umbenennen oder gezielt weitergeben willst</td><td>keine komplexe Programmlogik</td></tr>
+          <tr><td>Edit Fields (Set)</td><td>du Felder setzen, umbenennen oder gezielt weitergeben willst</td><td>keine komplexe Programmlogik</td></tr>
           <tr><td>Filter</td><td>Items anhand von Bedingungen behalten oder entfernen willst</td><td>kein Verzweigungsdiagramm</td></tr>
           <tr><td>Sort</td><td>Items sortiert werden sollen</td><td>sortiert nur vorhandene Items</td></tr>
           <tr><td>Limit</td><td>du nur eine begrenzte Anzahl Items weiterreichen willst</td><td>löst keine API-Pagination</td></tr>
@@ -90,10 +123,10 @@
       <table class="btable">
         <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Merksatz</th></tr></thead>
         <tbody>
-          <tr><td>IF</td><td>es genau zwei Wege gibt</td><td>wahr oder falsch</td></tr>
-          <tr><td>Switch</td><td>mehrere Wege möglich sind</td><td>mehrere Fälle statt verschachtelter IFs</td></tr>
-          <tr><td>Merge</td><td>zwei oder mehr Datenströme wieder zusammenkommen</td><td>erst klären: nach Position oder nach Feld?</td></tr>
-          <tr><td>Loop Over Items</td><td>Items portioniert verarbeitet werden sollen</td><td>hilft bei Batching und Limits</td></tr>
+          <tr><td>If</td><td>es genau zwei Wege gibt</td><td>wahr oder falsch. In älteren Versionen hieß er „IF“</td></tr>
+          <tr><td>Switch</td><td>mehrere Wege möglich sind</td><td>mehrere Fälle statt verschachtelter If-Nodes</td></tr>
+          <tr><td>Merge</td><td>zwei oder mehr Datenströme wieder zusammenkommen</td><td>erst Mode wählen, bei Combine dann Combine By</td></tr>
+          <tr><td>Loop Over Items (Split in Batches)</td><td>Items portioniert verarbeitet werden sollen</td><td>hilft bei Batching und Limits</td></tr>
           <tr><td>Wait</td><td>ein Workflow pausieren soll</td><td>bewusst warten, nicht blockierend schlafen</td></tr>
         </tbody>
       </table>
@@ -102,41 +135,75 @@
       <table class="btable">
         <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Wichtig</th></tr></thead>
         <tbody>
-          <tr><td>Respond to Webhook</td><td>ein Webhook eine kontrollierte Antwort liefern soll</td><td>Webhook muss auf diese Antwortmethode eingestellt sein</td></tr>
+          <tr><td>Respond to Webhook</td><td>ein Webhook eine kontrollierte Antwort liefern soll</td><td>im Webhook-Node muss <strong>Respond</strong> auf <strong>Using 'Respond to Webhook' Node</strong> stehen</td></tr>
           <tr><td>Stop and Error</td><td>ein Workflow absichtlich fehlschlagen soll</td><td>Fehlertext so schreiben, dass du ihn später verstehst</td></tr>
-          <tr><td>No Operation</td><td>du einen Platzhalter oder Endpunkt im Workflow brauchst</td><td>nur zur Struktur, nicht als Logikersatz</td></tr>
+          <tr><td>No Operation, do nothing</td><td>du einen Platzhalter oder Endpunkt im Workflow brauchst</td><td>nur zur Struktur, nicht als Logikersatz</td></tr>
           <tr><td>Execution Data</td><td>du eigene Ausführungsdaten speichern willst</td><td>keine sensiblen Daten unnötig ablegen</td></tr>
         </tbody>
       </table>
 
+      <h2>Zeitersparnis messen</h2>
+      <p>Wie viel Arbeit spart ein Workflow eigentlich? Seit n8n 2.1.0 gibt es dafür einen eigenen Node. Im Node-Panel
+        heißt er <strong>Track Time Saved</strong>, auf dem Canvas trägt er danach den kurzen Namen <code>Time Saved</code>.
+        Er reicht alle Items unverändert weiter und meldet nebenbei, wie viele Minuten dieser Lauf gespart hat.</p>
+
+      <ol class="steps">
+        <li><h4>Workflow-Einstellungen öffnen</h4>
+          <p>Klicke im Workflow oben rechts auf das Drei-Punkte-Menü und wähle <strong>Settings</strong>.</p></li>
+        <li><h4>Berechnung umstellen</h4>
+          <p>Setze <strong>Estimated time saved</strong> auf <strong>Dynamic</strong> und speichere. Die Alternative
+            <strong>Fixed</strong> ist eine feste Minutenzahl pro Ausführung, dafür brauchst du keinen Node.</p></li>
+        <li><h4>Node einsetzen</h4>
+          <p>Hänge in jeden Zweig, der wirklich Arbeit spart, einen <strong>Track Time Saved</strong>-Node.</p></li>
+        <li><h4>Minuten eintragen</h4>
+          <p>Der Node hat zwei Felder. <strong>Calculation Mode</strong> steht auf <strong>Once For All Items</strong>
+            oder <strong>Per Item</strong>, wobei Per Item die Minuten mit der Anzahl der Eingabe-Items multipliziert.
+            In <strong>Minutes Saved</strong> trägst du die Zahl ein.</p></li>
+      </ol>
+
+      <p>n8n addiert die Werte aller Time-Saved-Nodes, die in einem Lauf tatsächlich durchlaufen werden. Die Summe
+        landet im Insights-Banner oben im Bereich <strong>Overview</strong>; das ausführliche Insights-Dashboard gibt
+        es erst ab dem Pro-Plan. Zwei Grenzen solltest du kennen. Insights zählt nur Produktions-Ausführungen, deine
+        Testläufe im Editor also nicht. Und gezählt wird nur der Eltern-Workflow: Zeit aus Sub-Workflows rechnet n8n
+        bisher nicht mit.</p>
+
       <h2>KI-Bausteine</h2>
       <p>Diese Nodes gehören zu den Kapiteln 17, 20 und 21. Sie funktionieren anders als der Rest: Ein Chat Model,
-        ein Memory oder ein Tool wird nicht in die Kette gehängt, sondern von unten an einen Hauptbaustein
-        angedockt.</p>
+        ein Memory oder ein Tool wird nicht in die Kette gehängt, sondern von unten an einen Root-Node angedockt.
+        n8n nennt das Cluster Nodes, der angedockte Teil heißt Sub-Node.</p>
       <table class="btable">
         <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Prüffrage</th></tr></thead>
         <tbody>
           <tr><td>Basic LLM Chain</td><td>ein Modell genau eine Aufgabe erledigen soll</td><td>Reicht ein fester Prompt ohne Werkzeuge?</td></tr>
           <tr><td>AI Agent</td><td>das Modell selbst entscheiden soll, welches Werkzeug es benutzt</td><td>Braucht es wirklich Entscheidungsfreiheit?</td></tr>
           <tr><td>Chat Trigger</td><td>Menschen im Dialog mit dem Workflow sprechen sollen</td><td>Wer darf diesen Chat aufrufen?</td></tr>
-          <tr><td>Vector Store</td><td>eigene Dokumente durchsuchbar werden sollen</td><td>Einfügen oder Abfragen, und mit welchem Embedding?</td></tr>
+          <tr><td>Simple Memory</td><td>der Agent sich an die vorigen Nachrichten erinnern soll</td><td>Läuft die Instanz im Queue-Mode? Dann Redis oder Postgres.</td></tr>
+          <tr><td>Simple Vector Store</td><td>eigene Dokumente durchsuchbar werden sollen</td><td>Einfügen oder Abfragen, und mit welchem Embedding?</td></tr>
           <tr><td>Structured Output Parser</td><td>die Antwort ein festes JSON-Schema haben muss</td><td>Was passiert, wenn das Modell abweicht?</td></tr>
         </tbody>
       </table>
 
+      <p>Bei Memory und Vector Store lohnt ein Blick über die Tabelle hinaus. Der Memory-Sub-Node
+        <strong>Motorhead</strong> ist seit n8n 2.8.0 deprecated, weil das Projekt dahinter nicht mehr gepflegt wird.
+        Im Node-Panel taucht er nicht mehr auf, bestehende Workflows laufen weiter. Für alles jenseits des
+        Lernbeispiels nimmst du ohnehin Redis Chat Memory oder Postgres Chat Memory. Der Simple Vector Store hat ein
+        anderes Problem: Er hält die Vektoren im Arbeitsspeicher der Instanz, ein Neustart löscht sie. Abgekündigt ist
+        er nicht. Produktiv nimmst du trotzdem Pinecone Vector Store, Qdrant Vector Store oder PGVector Vector
+        Store.</p>
+
       <div class="callout callout--warn">
         <b class="t">Ein Agent ist die teurere Antwort</b>
         Ein AI Agent ruft das Modell mehrfach auf, bis er fertig ist. Wenn die Aufgabe immer gleich abläuft, ist die
-        Basic LLM Chain schneller, billiger und leichter zu debuggen. Nimm den Agent erst, wenn der Ablauf wirklich
-        von der Eingabe abhängt.
+        Basic LLM Chain billiger und leichter zu debuggen. Nimm den Agent erst, wenn der Ablauf wirklich von der
+        Eingabe abhängt.
       </div>
 
       <h2>Auswahlregel</h2>
       <ol class="steps">
         <li><h4>Start klären</h4><p>Kommt das Ereignis per Zeitplan, Webhook, Formular, manuell oder aus einem Dienst?</p></li>
         <li><h4>Datenquelle bestimmen</h4><p>Gibt es einen passenden App-Node? Wenn nicht, prüfe HTTP Request.</p></li>
-        <li><h4>Transformation klein halten</h4><p>Nutze Edit Fields, Filter, Sort und Limit, bevor du Code einsetzt.</p></li>
-        <li><h4>Verzweigung sichtbar machen</h4><p>Nimm IF für zwei Wege, Switch für mehrere Wege.</p></li>
+        <li><h4>Transformation klein halten</h4><p>Nutze Edit Fields (Set), Filter, Sort und Limit, bevor du Code einsetzt.</p></li>
+        <li><h4>Verzweigung sichtbar machen</h4><p>Nimm If für zwei Wege, Switch für mehrere Wege.</p></li>
         <li><h4>Schreibende Nodes absichern</h4><p>Prüfe Dubletten, Testdaten und Credentials, bevor Daten extern verändert werden.</p></li>
       </ol>
 
@@ -147,7 +214,7 @@
           <tr><td>Node findet keine Daten</td><td>falscher Eingang oder falscher Feldname</td><td>Input-Panel prüfen und Feld per Drag-and-drop wählen</td></tr>
           <tr><td>HTTP Request liefert 401</td><td>Authentifizierung fehlt oder ist falsch</td><td>Credential, Header und Token-Typ prüfen</td></tr>
           <tr><td>Webhook reagiert nur im Test</td><td>Workflow ist nicht published oder falsche URL wird genutzt</td><td>Publish klicken und Production-URL nutzen</td></tr>
-          <tr><td>Merge liefert unerwartete Paare</td><td>falscher Kombinationsmodus</td><td>Position, Matching Fields oder Append bewusst wählen</td></tr>
+          <tr><td>Merge liefert unerwartete Paare</td><td>falscher Kombinationsmodus</td><td>erst <strong>Mode</strong> auf Append oder Combine stellen, bei Combine dann <strong>Combine By</strong> setzen</td></tr>
           <tr><td>Code-Node macht alles und keiner versteht ihn</td><td>zu viel Logik im Code versteckt</td><td>einfache Teile zurück in sichtbare Nodes verlagern</td></tr>
         </tbody>
       </table>
@@ -167,21 +234,24 @@
       <div class="prereq">
         <h4>✅ Selbsttest</h4>
         <ul>
-          <li>Wann nimmst du IF, wann Switch?</li>
+          <li>Wann nimmst du If, wann Switch?</li>
           <li>Warum ist HTTP Request nicht immer die erste Wahl?</li>
           <li>Was musst du vor einem schreibenden Node prüfen?</li>
           <li>Warum ist Merge ohne klare Schlüssel verdächtig?</li>
           <li>Wann ist ein Code-Node gerechtfertigt?</li>
+          <li>Welcher Node meldet, wie viele Minuten ein Lauf gespart hat?</li>
         </ul>
       </div>
 
       <div class="callout callout--info">
         <b class="t">Antworten</b>
-        1) IF für zwei Wege, Switch für mehrere Fälle. ·
+        1) If für zwei Wege, Switch für mehrere Fälle. ·
         2) Ein App-Node ist oft lesbarer und führt dich besser durch Authentifizierung und Felder. ·
         3) Ziel, Testdaten, Dubletten und Credentials. ·
         4) Weil unklar ist, welche Items fachlich zusammengehören. ·
-        5) Wenn GUI-Nodes die nötige Transformation nicht sauber ausdrücken.
+        5) Wenn GUI-Nodes die nötige Transformation nicht sauber ausdrücken. ·
+        6) Track Time Saved. Vorher im Workflow unter <strong>Settings</strong> die
+        <strong>Estimated time saved</strong> auf <strong>Dynamic</strong> stellen.
       </div>
 
     </article>

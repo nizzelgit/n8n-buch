@@ -44,7 +44,7 @@
           <tr><td><strong>Method</strong></td><td>Die Absicht: <em>holen, senden, ändern, löschen</em> (siehe Tabelle unten).</td></tr>
           <tr><td><strong>URL</strong></td><td>Die Adresse des Dienstes: wohin der Brief geht.</td></tr>
           <tr><td><strong>Query-Parameter</strong></td><td>Zusätze an der URL nach dem <code>?</code>, z. B. <code>?stadt=Berlin</code>.</td></tr>
-          <tr><td><strong>Headers</strong></td><td>Metadaten, z. B. „ich erwarte JSON" oder ein Zugangsschlüssel.</td></tr>
+          <tr><td><strong>Headers</strong></td><td>Metadaten, z. B. „ich erwarte JSON“ oder ein Zugangsschlüssel.</td></tr>
           <tr><td><strong>Body</strong></td><td>Der eigentliche Inhalt, nur beim <em>Senden</em> (POST/PUT), meist als JSON.</td></tr>
           <tr><td><strong>Authentication</strong></td><td>Wer du bist, falls der Dienst einen Login verlangt (Kapitel 12).</td></tr>
         </tbody>
@@ -72,16 +72,17 @@
         <strong>Import cURL</strong>. Darunter stehen <strong>Method</strong> und <strong>URL</strong>, dann die
         <strong>Authentication</strong> und dann drei Schalter, die je einen Bereich aufklappen:
         <strong>Send Query Parameters</strong>, <strong>Send Headers</strong> und <strong>Send Body</strong>. Am Fuß der Liste
-        steht <strong>Add option</strong>. Darüber blendest du die Zusatzoptionen ein, um die es weiter unten geht.</p>
+        steht <strong>Add option</strong>. Damit holst du dir die Zusatzoptionen, um die es weiter unten geht.</p>
 
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:600px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request</b><span class="ndv-docs">Import cURL ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
                 <div class="ndv-panel__body">
+                  <div class="row" style="text-align:right; margin-bottom:10px;"><span style="font-size:12px; font-weight:600; color:var(--n8n-primary);">Import cURL</span></div>
                   <div class="row"><label>Method</label><div class="n8n-select">GET <span class="chev">▾</span></div></div>
                   <div class="row"><label>URL <span class="req">*</span></label><input class="n8n-input" value="https://api.open-meteo.com/v1/forecast"></div>
                   <div class="row"><label>Authentication</label><div class="n8n-select">None <span class="chev">▾</span></div></div>
@@ -157,12 +158,13 @@
       </div>
 
       <h2>Die Antwort lesen</h2>
-      <p>Nach „▶ Schritt ausführen" steht die Antwort im Ausgang, meist als ein Item mit JSON. Wie n8n sie behandelt, stellst du
+      <p>Nach „▶ Schritt ausführen“ steht die Antwort im Ausgang, meist als ein Item mit JSON. Wie n8n sie behandelt, stellst du
         ganz unten im Node ein: Klick auf <strong>Add option</strong> und wähle <strong>Response</strong>. Der Eintrag klappt drei
         Felder auf:</p>
       <ul>
         <li><strong>Response Format:</strong> <em>Autodetect</em> reicht fast immer. Für Dateien (PDF, Bild) nimmst du <em>File</em>,
-          für Antworten, die kein sauberes JSON sind, <em>Text</em>. Bei <em>File</em> und <em>Text</em> kommt das Feld
+          für Antworten, die kein sauberes JSON sind, <em>Text</em>. <em>JSON</em> erzwingt die JSON-Auswertung, auch wenn der
+          Server einen anderen Content-Type meldet. Bei <em>File</em> und <em>Text</em> kommt das Feld
           <strong>Put Output in Field</strong> dazu; es steht auf <code>data</code>.</li>
         <li><strong>Include Response Headers and Status:</strong> legt neben dem Body auch Statuscode und Header ins Item. Praktisch,
           wenn du den Code später auswerten willst.</li>
@@ -171,19 +173,23 @@
       </ul>
       <p>Eines suchst du hier vergeblich: ein Feld, das eine Liste in einzelne Items zerlegt. Das hat der Node nicht mehr. In
         n8n 1.x hieß die Option <em>Split Into Items</em>; heute steckt sie nur noch in den alten Node-Versionen 1 und 2. Neue
-        HTTP-Request-Nodes legt n8n als Version 4.x an. Liefert dir eine API also ein Array, häng den Node
-        <strong>Split Out</strong> dahinter und trag unter <strong>Fields To Split Out</strong> den Feldnamen ein. Danach läuft
-        der nächste Node pro Eintrag (Kapitel 9).</p>
+        HTTP-Request-Nodes legt n8n als Version 4.x an. Antwortet eine API mit einer reinen Liste auf oberster Ebene, macht n8n
+        daraus ohnehin schon ein Item pro Eintrag. Steckt die Liste dagegen als Feld in der Antwort, etwa unter
+        <code>results</code>, häng den Node <strong>Split Out</strong> dahinter und trag den Feldnamen unter
+        <strong>Fields To Split Out</strong> ein. Danach läuft der nächste Node pro Eintrag (Kapitel 9).</p>
 
       <h2>Viele Seiten, viele Items: Pagination und Batching</h2>
       <p>Zwei weitere Einträge unter <strong>Add option</strong> lösen die häufigsten Probleme mit echten APIs.</p>
       <p><strong>Pagination</strong> holt Ergebnisseiten nach. Viele Dienste geben pro Aufruf nur 50 oder 100 Einträge zurück und
         verstecken den Rest hinter einer zweiten, dritten, vierten Seite. Füg die Option <strong>Pagination</strong> hinzu und
-        stell den <strong>Pagination Mode</strong> ein. Zwei Wege stehen zur Wahl.
-        <em>Update a Parameter in Each Request</em> zählt bei jedem Aufruf einen Parameter hoch; als Wert trägst du
-        <code>{{ $pageCount + 1 }}</code> ein. <em>Response Contains Next URL</em> folgt der Adresse, die die Antwort selbst
-        mitliefert; die trägst du unter <strong>Next URL</strong> als Expression ein, in der Form
-        <code>{{ $response.body["next-page"] }}</code>. Wie das Feld bei deiner API heißt, steht in deren Doku. Wann Schluss ist,
+        stell den <strong>Pagination Mode</strong> ein; neben <em>Off</em> stehen dort zwei Wege zur Wahl.</p>
+      <p>Der erste heißt <em>Update a Parameter in Each Request</em> und zählt bei jedem Aufruf einen Parameter hoch. Darunter
+        steht die Liste <strong>Parameters</strong> mit den Feldern <strong>Type</strong> (bleibt auf <em>Query</em>),
+        <strong>Name</strong> und <strong>Value</strong>. Unter <strong>Name</strong> trägst du ein, wie der Seitenzähler heißt,
+        oft <code>page</code>; unter <strong>Value</strong> kommt die Expression <code>{{ $pageCount + 1 }}</code>.</p>
+      <p>Der zweite, <em>Response Contains Next URL</em>, folgt der Adresse, die die Antwort selbst mitliefert. Die trägst du
+        unter <strong>Next URL</strong> als Expression ein, in der Form <code>{{ $response.body["next-page"] }}</code>. Wie das
+        Feld heißt, steht in der Doku deiner API; ein einheitliches Standardfeld gibt es dafür nicht. Wann Schluss ist,
         entscheidet <strong>Pagination Complete When</strong>, voreingestellt auf <em>Response Is Empty</em>.</p>
       <p>Stell beim ersten Ausprobieren <strong>Limit Pages Fetched</strong> auf an und <strong>Max Pages</strong> auf 3. Sonst
         dreht der Node Runde um Runde, falls die Abbruchbedingung nicht greift. Das habe ich beim ersten Mal falsch gemacht und
@@ -202,7 +208,7 @@
           <strong>Credential Type</strong>, dort suchst du den Dienst aus der Liste.</p>
         <p style="margin:0 0 6px">Kennt n8n ihn nicht, wähle <strong>Generic Credential Type</strong>. Darunter erscheint
           <strong>Generic Auth Type</strong>. Schickt die API ihren Schlüssel als <code>Authorization: Bearer …</code>, nimm
-          <em>Bearer Auth</em> und trag den Schlüssel unter <strong>Bearer Token</strong> ein. Das Wort „Bearer" setzt n8n selbst
+          <em>Bearer Auth</em> und trag den Schlüssel unter <strong>Bearer Token</strong> ein. Das Wort „Bearer“ setzt n8n selbst
           davor. Braucht die API einen eigenen Header wie <code>X-API-Key</code>, nimm <em>Header Auth</em> und füll
           <strong>Name</strong> und <strong>Value</strong> aus.</p>
         <p style="margin:0"><strong>Niemals</strong> den Token offen in die URL schreiben. Wie Credentials sicher gespeichert
@@ -251,17 +257,18 @@
 
       <ol class="steps" style="counter-reset: st 5;">
         <li><h4>Ausführen</h4>
-          <p>„▶ Schritt ausführen" klicken. Rechts erscheint die Antwort.</p></li>
+          <p>„▶ Schritt ausführen“ klicken. Rechts erscheint die Antwort.</p></li>
         <li><h4>Die Spiegelung finden</h4>
           <p>Such im Ergebnis das Feld <code>data</code>. Der Echo-Dienst gibt dort exakt deinen Body zurück. Damit ist bewiesen,
-            dass dein POST samt JSON sauber angekommen ist. Daneben liegen noch <code>args</code>, <code>headers</code>,
-            <code>json</code> und <code>url</code>. Die kannst du fürs Erste übergehen.</p></li>
+            dass dein POST samt JSON sauber angekommen ist. Daneben liegen noch <code>args</code>, <code>files</code>,
+            <code>form</code>, <code>headers</code>, <code>json</code> und <code>url</code>. Die kannst du fürs Erste
+            übergehen.</p></li>
       </ol>
 
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request</b><span class="ndv-docs">Import cURL ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body"><div class="ndv-empty">leeres Start-Item</div></div></div>
@@ -287,15 +294,15 @@
         </div>
         <figcaption><span class="fig-tag">Abb. 8.3</span>Der Echo-Dienst spiegelt unter <code>data</code> exakt den gesendeten
           Body zurück. Das ist der Beweis, dass dein POST funktioniert hat. Die Abbildung zeigt nur die beiden wichtigen Felder;
-          in der echten Antwort stehen zusätzlich <code>args</code>, <code>form</code>, <code>headers</code> und
-          <code>json</code>.</figcaption>
+          in der echten Antwort stehen zusätzlich <code>args</code>, <code>files</code>, <code>form</code>, <code>headers</code>
+          und <code>json</code>.</figcaption>
       </figure>
 
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
-        <p style="margin:0 0 6px">• <strong>Roter Fehler „The value in the 'JSON Body' field is not valid JSON"?</strong> Im Body
-          fehlt ein Komma, eine Klammer oder ein Anführungszeichen. Die Vorschau zeigt dir die Stelle. In n8n 1.x hieß dieselbe
-          Meldung noch „JSON parameter need to be an valid JSON".</p>
+        <p style="margin:0 0 6px">• <strong>Roter Fehler <code>The value in the "JSON Body" field is not valid JSON</code>?</strong>
+          Im Body fehlt ein Komma, eine Klammer oder ein Anführungszeichen. Die Vorschau zeigt dir die Stelle. Unter n8n 1.x
+          lautet dieselbe Meldung <code>JSON parameter needs to be valid JSON</code>.</p>
         <p style="margin:0">• <strong>Code 405 (Method Not Allowed)?</strong> Du sendest GET an eine Adresse, die POST erwartet
           (oder umgekehrt). Method anpassen.</p>
       </div>
@@ -316,10 +323,10 @@
         <h4>✅ Selbsttest</h4>
         <ul>
           <li>Welche Method nimmst du zum <em>Lesen</em>, welche zum <em>Senden</em>?</li>
-          <li>Was ist der Vorteil der „Send Query Parameters"-Liste gegenüber Parametern direkt in der URL?</li>
-          <li>Wie machst du aus einer API-Liste „ein Item pro Eintrag"?</li>
+          <li>Was ist der Vorteil der „Send Query Parameters“-Liste gegenüber Parametern direkt in der URL?</li>
+          <li>Wie machst du aus einer API-Liste „ein Item pro Eintrag“?</li>
           <li>Was bedeutet ein Antwortcode <code>401</code>, und woran liegt es meist?</li>
-          <li>Wofür ist „Import cURL" gut?</li>
+          <li>Wofür ist „Import cURL“ gut?</li>
           <li>Welche Option holst du dir, wenn eine API pro Aufruf nur 100 Einträge liefert?</li>
         </ul>
       </div>
@@ -335,7 +342,7 @@
         6) Unter <strong>Add option</strong> den Eintrag <strong>Pagination</strong>.
       </div>
 
-      <p>Du kannst jetzt Daten holen <em>und</em> senden. Zwischen „rein" und „raus" liegt aber die eigentliche Arbeit: Daten
+      <p>Du kannst jetzt Daten holen <em>und</em> senden. Zwischen „rein“ und „raus“ liegt aber die eigentliche Arbeit: Daten
         umformen. Im nächsten Kapitel lernst du die Werkzeuge dafür kennen: <strong>Edit Fields (Set)</strong>,
         <strong>Code</strong> und <strong>Filter</strong>. Bevor du weiterblätterst, schick den Echo-Request noch einmal mit
         einem absichtlich kaputten Body los, etwa ohne das Komma zwischen den beiden Zeilen. Die Fehlermeldung wirst du im Lauf

@@ -68,7 +68,7 @@
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Settings</div>
                 <div class="ndv-panel__body">
-                  <div class="row"><label>Retry On Fail</label><div class="n8n-select">⦿ an <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Retry On Fail</label><div class="n8n-toggle"><span class="n8n-switch is-on"></span>an</div></div>
                   <div class="row"><label>Max. Tries</label><input class="n8n-input" value="3"></div>
                   <div class="row"><label>Wait Between Tries (ms)</label><input class="n8n-input" value="1000"></div>
                   <div class="row"><label>On Error</label><div class="n8n-select">Stop Workflow <span class="chev">▾</span></div></div>
@@ -195,17 +195,18 @@
           Fail“). Lässt du Fehler stillschweigend durchlaufen, ohne sie zu melden, merkst du nie, dass etwas hakt. Kombiniere
           die Option immer mit einer Benachrichtigung.</p>
         <p style="margin:0">• <strong>Error-Workflow feuert nicht?</strong> Er muss in den <em>Settings des überwachten</em>
-          Workflows eingetragen sein. Und er greift nur bei published Läufen, also in der Produktion. Bei einem manuellen Test
-          im Editor passiert nichts. Testen kannst du ihn deshalb nur, indem du den überwachten Workflow publishst und echt
-          laufen lässt.</p>
+          Workflows eingetragen sein. Und er springt nur an, wenn der überwachte Workflow published ist und von selbst läuft.
+          Bei einem manuellen Test im Editor passiert nichts. Testen kannst du ihn deshalb nur, indem du den überwachten
+          Workflow publishst und echt laufen lässt.</p>
       </div>
 
       <div class="callout callout--info">
         <b class="t">Bewusst Fehler werfen: „Stop and Error“</b>
         Manchmal <em>willst</em> du abbrechen, etwa wenn Pflichtdaten fehlen. Der Node <strong>„Stop and Error“</strong> wirft
-        einen selbst formulierten Fehler: <strong>„Error Type“</strong> auf <strong>„Error Message“</strong> stellen, den Text
-        ins Feld <strong>„Error Message“</strong> schreiben, fertig. Der Workflow scheitert dann kontrolliert, statt unbemerkt
-        mit Müll weiterzulaufen. Genau diesen Text bekommt anschließend dein Error-Workflow zu sehen.
+        einen selbst formulierten Fehler. Das Feld <strong>„Error Type“</strong> steht schon auf
+        <strong>„Error Message“</strong>, du schreibst also nur noch deinen Text ins Feld darunter, das ebenfalls
+        <strong>„Error Message“</strong> heißt. Der Workflow scheitert dann kontrolliert, statt unbemerkt mit Müll
+        weiterzulaufen. Genau diesen Text bekommt anschließend dein Error-Workflow zu sehen.
       </div>
 
       <hr>
