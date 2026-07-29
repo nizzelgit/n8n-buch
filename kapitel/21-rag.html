@@ -37,8 +37,9 @@
 
       <div class="callout callout--warn">
         <b class="t">Simple Vector Store nur als Lernspeicher</b>
-        Der <strong>Simple Vector Store</strong> hieß bis Februar 2025 <strong>In-Memory Vector Store</strong> und hält
-        alle Vektoren im Arbeitsspeicher der n8n-Instanz. Zum Lernen ist das ideal. Für echte Dokumente nicht: Nach einem
+        Den <strong>Simple Vector Store</strong> findest du in älteren Anleitungen als <strong>In-Memory Vector
+        Store</strong>; n8n hat ihn mit 1.82 im März 2025 umbenannt. Er hält alle Vektoren im Arbeitsspeicher der
+        n8n-Instanz. Zum Lernen ist das ideal. Für echte Dokumente nicht: Nach einem
         Neustart ist der Inhalt weg, bei knappem Speicher räumt n8n ältere Stores selbst ab, und die Memory Keys gelten
         instanzweit. Wer auf derselben Instanz einen Simple Vector Store einfügt, sieht deinen Key in der Auswahlliste und
         kann mitlesen. Auf n8n Cloud gelten rund 100 MB (etwa 8000 Dokumente) und sieben Tage ohne Zugriff als Grenze;
@@ -395,7 +396,7 @@ Quelle: {{ $json.source }}
         <li><h4>Auto-Save prüfen</h4>
           <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Workflow starten</h4>
-          <p>Klicke unten am Canvas auf <strong>Execute workflow</strong>, in n8n 1.x hieß der Knopf noch
+          <p>Klicke unten am Canvas auf <strong>Execute workflow</strong>. Bis n8n 1.x hieß derselbe Knopf
             <strong>Test workflow</strong>. Die Nodes sollten nacheinander grün werden.</p></li>
         <li><h4>Output prüfen</h4>
           <p>Öffne <strong>Teamhandbuch speichern</strong>. Rechts steht pro gespeichertem Chunk ein Item mit den Feldern
@@ -536,8 +537,8 @@ Context: {context}</pre>
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 21.4</span>Die Chain nutzt Modell und Retriever. Sie ist enger geführt als
-          ein Agent mit mehreren Tools. Die Antwort steht ab Node-Version 1.5 im Feld <code>response</code>, früher in
-          <code>text</code>.</figcaption>
+          ein Agent mit mehreren Tools. Die Antwort steht ab Node-Version 1.5 direkt im Feld <code>response</code>, davor
+          eine Ebene tiefer in <code>response.text</code>.</figcaption>
       </figure>
 
       <h2>Schritt 12: Erste Fragen testen</h2>
@@ -546,8 +547,8 @@ Context: {context}</pre>
 
       <ol class="steps">
         <li><h4>Chat öffnen</h4>
-          <p>Doppelklicke den Chat Trigger und klicke auf <strong>Open Chat Window</strong>. Alternativ nutzt du den
-            Chat-Knopf unten am Canvas.</p></li>
+          <p>Klicke unten am Canvas auf <strong>Open chat</strong>. Das ist derselbe interne Testchat wie in Kapitel 20.
+            Veröffentlichen musst du dafür nichts.</p></li>
         <li><h4>P1-Frage stellen</h4>
           <p>Schreibe: <code>Wie schnell muss P1 eskaliert werden?</code></p></li>
         <li><h4>Antwort prüfen</h4>
@@ -728,7 +729,7 @@ Context: {context}</pre>
           <tr><td>Google Drive anbinden</td><td>Drive-Trigger oder regelmäßiger Lade-Workflow, aber mit Versions- und Löschstrategie.</td></tr>
           <tr><td>Quellen ausgeben</td><td>Direkte Vector-Store-Suche verwenden und <code>title</code>/<code>source</code> in die Antwort schreiben.</td></tr>
           <tr><td>Metadata Filter</td><td>Nur bestimmte Themen, Versionen oder Kundensegmente suchen lassen.</td></tr>
-          <tr><td>Reranking</td><td>Bei vielen ähnlichen Treffern <code>Rerank Results</code> am Vector Store einschalten und einen Reranker-Sub-Node anhängen, etwa <strong>Reranker Cohere</strong>.</td></tr>
+          <tr><td>Reranking</td><td>Bei vielen ähnlichen Treffern <strong>Rerank Results</strong> am Vector Store einschalten und einen Reranker-Sub-Node anhängen, etwa <strong>Reranker Cohere</strong>.</td></tr>
           <tr><td>Human Review</td><td>Antworten mit niedriger Sicherheit an Slack oder ein Ticket-System schicken statt automatisch zu senden.</td></tr>
         </tbody>
       </table>

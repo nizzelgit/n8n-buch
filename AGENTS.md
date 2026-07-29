@@ -12,7 +12,11 @@ detailgetreu nachgebaut, damit Abbildungen scharf, konsistent und wartbar bleibe
 ## Aktueller Einstieg
 
 - Fertig im Manifest (`status: "ready"`): Kapitel `00-vorwort` bis Anhang `D-glossar`.
-- Nächster sinnvoller Schritt: Gesamtlektüre, Konsistenzprüfung und Feinschliff.
+- Alle 31 Seiten sind fachlich gegen n8n 2.32 geprüft (Stand Juli 2026) und
+  sprachlich überarbeitet. Das Buch nennt diesen Stand einheitlich.
+- Nächster sinnvoller Schritt: bei der nächsten n8n-Version erneut abgleichen.
+  Erfahrungsgemäß veralten zuerst Node-Namen, Feldbeschriftungen und
+  Umgebungsvariablen, nicht die Abläufe.
 - Danach: bei Freigabe `main` mit dem Feature-Branch synchronisieren.
 
 ## Projektstruktur
