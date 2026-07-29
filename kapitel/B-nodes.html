@@ -109,6 +109,28 @@
         </tbody>
       </table>
 
+      <h2>KI-Bausteine</h2>
+      <p>Diese Nodes gehören zu den Kapiteln 17, 20 und 21. Sie funktionieren anders als der Rest: Ein Chat Model,
+        ein Memory oder ein Tool wird nicht in die Kette gehängt, sondern von unten an einen Hauptbaustein
+        angedockt.</p>
+      <table class="btable">
+        <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Prüffrage</th></tr></thead>
+        <tbody>
+          <tr><td>Basic LLM Chain</td><td>ein Modell genau eine Aufgabe erledigen soll</td><td>Reicht ein fester Prompt ohne Werkzeuge?</td></tr>
+          <tr><td>AI Agent</td><td>das Modell selbst entscheiden soll, welches Werkzeug es benutzt</td><td>Braucht es wirklich Entscheidungsfreiheit?</td></tr>
+          <tr><td>Chat Trigger</td><td>Menschen im Dialog mit dem Workflow sprechen sollen</td><td>Wer darf diesen Chat aufrufen?</td></tr>
+          <tr><td>Vector Store</td><td>eigene Dokumente durchsuchbar werden sollen</td><td>Einfügen oder Abfragen, und mit welchem Embedding?</td></tr>
+          <tr><td>Structured Output Parser</td><td>die Antwort ein festes JSON-Schema haben muss</td><td>Was passiert, wenn das Modell abweicht?</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--warn">
+        <b class="t">Ein Agent ist die teurere Antwort</b>
+        Ein AI Agent ruft das Modell mehrfach auf, bis er fertig ist. Wenn die Aufgabe immer gleich abläuft, ist die
+        Basic LLM Chain schneller, billiger und leichter zu debuggen. Nimm den Agent erst, wenn der Ablauf wirklich
+        von der Eingabe abhängt.
+      </div>
+
       <h2>Auswahlregel</h2>
       <ol class="steps">
         <li><h4>Start klären</h4><p>Kommt das Ereignis per Zeitplan, Webhook, Formular, manuell oder aus einem Dienst?</p></li>

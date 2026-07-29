@@ -15,10 +15,10 @@
     <article>
 
       <div class="chap-eyebrow"><span class="knum">4</span> Grundlagen</div>
-      <h1 class="chap-title">Dein erster Workflow — Schritt für Schritt</h1>
-      <p class="chap-lede">Wir bauen gemeinsam etwas Echtes: einen Workflow, der das aktuelle Wetter abruft, es in
-        einen lesbaren Satz verwandelt und dir zeigt. Dieses Kapitel ist bewusst <em>extrem</em> kleinschrittig — jeder
-        einzelne Klick, jede Maus-Bewegung und alles, was du dabei auf dem Bildschirm siehst, ist beschrieben.</p>
+      <h1 class="chap-title">Dein erster Workflow, Schritt für Schritt</h1>
+      <p class="chap-lede">Wir bauen gemeinsam etwas Echtes: einen Workflow, der das aktuelle Wetter abruft und daraus
+        einen lesbaren Satz macht. Dieses Kapitel ist bewusst <em>extrem</em> kleinschrittig. Jeder Klick bekommt seine
+        eigene Zeile, und dazu steht jedes Mal, was du danach auf dem Bildschirm siehst.</p>
       <div class="chap-meta">
         <span>⏱ ca. 25 Minuten</span>
         <span>🎯 Niveau: Einstieg</span>
@@ -29,7 +29,7 @@
         <h4>📋 Was du brauchst</h4>
         <ul>
           <li>n8n läuft, und du siehst den Editor (so wie am Ende von Kapitel 2).</li>
-          <li><strong>Kein</strong> Konto und <strong>kein</strong> API-Schlüssel — wir nutzen eine offene, kostenlose Wetter-API namens <em>Open-Meteo</em>.</li>
+          <li><strong>Kein</strong> Konto und <strong>kein</strong> API-Schlüssel. Wir nutzen eine offene, kostenlose Wetter-API namens <em>Open-Meteo</em>.</li>
           <li>Optional ganz am Ende: ein Telegram-Bot, falls du das Ergebnis aufs Handy schicken willst (reine Kür, du kannst es weglassen).</li>
         </ul>
       </div>
@@ -37,13 +37,13 @@
       <div class="callout callout--info">
         <b class="t">Wie du dieses Kapitel liest</b>
         Halte n8n in einem zweiten Fenster offen und mach jeden nummerierten Schritt sofort mit. Wenn etwas anders
-        aussieht als beschrieben, lies die <em>„Wenn etwas schiefgeht“</em>-Kästen — dort steht, woran es typischerweise liegt.
+        aussieht als beschrieben, lies die <em>„Wenn etwas schiefgeht“</em>-Kästen. Dort steht, woran es typischerweise liegt.
       </div>
 
-      <h2>Das Ziel — so sieht der fertige Workflow aus</h2>
+      <h2>Das Ziel: So sieht der fertige Workflow aus</h2>
       <p>Damit du weißt, wohin die Reise geht: Am Ende hast du genau diese drei verbundenen Nodes gebaut und erfolgreich
-        ausgeführt. Achte auf die <strong>Pfeile</strong> zwischen den Nodes — sie zeigen die Richtung, in die die Daten fließen
-        (immer von links nach rechts).</p>
+        ausgeführt. Achte auf die Pfeile zwischen den Nodes. Sie zeigen die Richtung, in die die Daten fließen, immer von
+        links nach rechts.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -66,31 +66,37 @@
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 4.1</span>Dein Ziel: <b>Manueller Test</b> → <b>Wetter holen</b> (HTTP) →
-          <b>Nachricht bauen</b> (Edit Fields). Die grünen Häkchen erscheinen erst, nachdem du ausgeführt hast.</figcaption>
+          <b>Nachricht bauen</b> (Edit Fields). Die Namen unter den Nodes sind hier sprechend gewählt. n8n selbst vergibt
+          beim Anlegen eigene Vorgabenamen, beim manuellen Trigger etwa <code>When clicking ‘Execute workflow’</code>.
+          Die grünen Häkchen erscheinen erst, nachdem du ausgeführt hast.</figcaption>
       </figure>
 
       <hr>
 
-      <h2>Schritt 1 — Einen neuen, leeren Workflow anlegen</h2>
+      <h2>Schritt 1: Einen neuen, leeren Workflow anlegen</h2>
       <ol class="steps">
         <li><h4>Zur Workflow-Übersicht gehen</h4>
-          <p>Klicke <strong>oben links auf das schwarze n8-Logo</strong>. Du landest auf der Übersichtsseite, die alle deine
-            Workflows auflistet. Beim allerersten Mal ist diese Liste leer — das ist völlig normal.</p></li>
-        <li><h4>Den „Neu“-Knopf finden</h4>
-          <p>Schau in die <strong>obere rechte Ecke</strong>. Dort ist ein auffälliger Knopf <strong>„Create Workflow“</strong>
-            (auf Deutsch „Workflow erstellen“ / „+ Neuer Workflow“). Klicke ihn an.</p></li>
+          <p>Klicke in der linken Seitenleiste ganz oben auf <strong>„Overview“</strong> (der Eintrag mit dem Haus-Symbol).
+            Du landest auf der Übersichtsseite, die alle deine Workflows auflistet. Beim allerersten Mal ist diese Liste
+            leer. Völlig normal.</p></li>
+        <li><h4>Den Knopf zum Anlegen finden</h4>
+          <p>Schau in die <strong>obere rechte Ecke</strong>. Dort sitzt der Knopf <strong>„Create workflow“</strong>
+            (auf Deutsch etwa „Workflow erstellen“). Klicke ihn an. Neben dem Knopf gibt es noch einen kleinen Pfeil für
+            andere Dinge wie Credential oder Ordner. Den ignorierst du hier.</p></li>
         <li><h4>Was du jetzt siehst</h4>
-          <p>Es öffnet sich eine <strong>leere, gepunktete Arbeitsfläche</strong> (der Canvas) mit einem großen
-            <span class="kbd">+</span> in der Mitte. Oben links steht der vorläufige Name „My workflow“. Genau hier bauen wir.</p></li>
+          <p>Es öffnet sich eine leere, gepunktete Arbeitsfläche (der Canvas). In der Mitte steht ein großes
+            <span class="kbd">+</span> mit der Beschriftung <strong>„Add first step…“</strong>. Oben links steht der
+            vorläufige Name „My workflow“. Genau hier bauen wir.</p></li>
       </ol>
 
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
-        Siehst du keinen „Create Workflow“-Knopf, bist du vermutlich schon <em>in</em> einem Workflow. Klicke erst auf das
-        n8-Logo oben links, um zur Übersicht zu kommen — dort erscheint der Knopf rechts oben.
+        Siehst du keinen „Create workflow“-Knopf, bist du vermutlich schon <em>in</em> einem Workflow. Geh über
+        <strong>„Overview“</strong> in der linken Seitenleiste zurück zur Übersicht. Dort erscheint der Knopf rechts oben.
+        Ist die Seitenleiste eingeklappt, fahr mit der Maus an den linken Bildschirmrand, dann klappt sie auf.
       </div>
 
-      <h2>Schritt 2 — Den Workflow sofort sinnvoll benennen</h2>
+      <h2>Schritt 2: Den Workflow sofort sinnvoll benennen</h2>
       <p>Wir benennen ihn gleich am Anfang, damit du ihn später wiederfindest (zwanzig Workflows namens „My workflow“ sind ein Albtraum).</p>
       <ol class="steps">
         <li><h4>Auf den Namen klicken</h4>
@@ -103,11 +109,12 @@
           <p>Drücke <span class="kbd">Enter</span> oder klicke irgendwo auf die leere Fläche. Der Name oben steht jetzt fest.</p></li>
       </ol>
 
-      <h2>Schritt 3 — Auto-Save und Draft verstehen</h2>
+      <h2>Schritt 3: Auto-Save und Draft verstehen</h2>
       <ol class="steps">
         <li><h4>Auto-Save abwarten</h4>
-          <p>n8n speichert deine Bearbeitungen automatisch als Draft. Warte nach dem Umbenennen kurz, bis oben der gespeicherte
-            Draft angezeigt wird.</p></li>
+          <p>n8n speichert deine Bearbeitungen automatisch als Draft, laut Doku innerhalb von einer bis fünf Sekunden.
+            Warte nach dem Umbenennen kurz. Oben im Kopf steht der Knopf erst auf <strong>„Save“</strong>, danach
+            wechselt die Beschriftung auf <strong>„Saved“</strong>. Von Hand speichern musst du also nichts.</p></li>
         <li><h4>Publish noch nicht klicken</h4>
           <p>In diesem Kapitel bauen und testen wir nur. <strong>Publish</strong> brauchst du erst, wenn ein Trigger später
             automatisch produktiv laufen soll.</p></li>
@@ -115,20 +122,24 @@
       <div class="callout callout--tip">
         <b class="t">⚡ Gespeichert ist nicht veröffentlicht</b>
         Auto-Save schützt deine Arbeit. Publish ist ein anderer Schritt: Er macht eine getestete Version produktiv.
+        Mit <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span> gibst du dem aktuellen Stand zusätzlich einen
+        Versionsnamen. Publish liegt auf <span class="kbd">Shift</span> + <span class="kbd">P</span>.
       </div>
 
       <hr>
 
-      <h2>Schritt 4 — Den Start-Trigger hinzufügen</h2>
+      <h2>Schritt 4: Den Start-Trigger hinzufügen</h2>
       <p>Jeder Workflow braucht einen ersten Node, der bestimmt, <em>wann</em> er loslegt. Zum Bauen nehmen wir den
-        einfachsten: einen, der nur dann feuert, wenn <em>du</em> auf „Test“ klickst.</p>
+        einfachsten: einen, der nur dann feuert, wenn <em>du</em> den Workflow von Hand startest.</p>
       <ol class="steps">
-        <li><h4>Auf das große + klicken</h4>
-          <p>Klicke einmal auf das große <span class="kbd">+</span> in der Mitte des Canvas. <strong>Rechts</strong> schiebt sich
-            ein Panel herein mit der Überschrift „Wie soll der Workflow starten?“ und einem Suchfeld ganz oben.</p></li>
+        <li><h4>Auf „Add first step…“ klicken</h4>
+          <p>Klicke einmal auf das große <span class="kbd">+</span> in der Mitte des Canvas, also auf
+            <strong>„Add first step…“</strong>. <strong>Rechts</strong> schiebt sich ein Panel herein. Oben steht die Frage
+            <strong>„What triggers this workflow?“</strong>, sinngemäß „Wie soll der Workflow starten?“, darunter ein
+            Suchfeld.</p></li>
         <li><h4>Suchen (optional) oder direkt wählen</h4>
-          <p>Der erste Eintrag in der Liste heißt <strong>„Trigger manually“</strong>. Du kannst ihn direkt anklicken — oder ins
-            Suchfeld <code>manual</code> tippen, dann steht er sicher ganz oben.</p></li>
+          <p>Der erste Eintrag in der Liste heißt <strong>„Trigger manually“</strong>. Du kannst ihn direkt anklicken. Oder du
+            tippst ins Suchfeld <code>manual</code>, dann steht er sicher ganz oben.</p></li>
         <li><h4>Auswählen</h4>
           <p>Klicke auf <strong>„Trigger manually“</strong> (alternativ mit <span class="kbd">↓</span>/<span class="kbd">↑</span>
             ansteuern und <span class="kbd">Enter</span> drücken).</p></li>
@@ -142,7 +153,7 @@
             <div class="nodes-panel__list">
               <div class="nodes-panel__item is-active">
                 <div class="nodes-panel__ic">🖐️</div>
-                <div class="nodes-panel__txt"><b>Trigger manually</b><small>Startet, wenn du auf „Test workflow“ klickst</small></div><span class="chev">›</span></div>
+                <div class="nodes-panel__txt"><b>Trigger manually</b><small>Startet, wenn du in n8n auf einen Knopf klickst</small></div><span class="chev">›</span></div>
               <div class="nodes-panel__item">
                 <div class="nodes-panel__ic">⏰</div>
                 <div class="nodes-panel__txt"><b>On a schedule</b><small>Startet nach Zeitplan (z. B. täglich 8 Uhr)</small></div><span class="chev">›</span></div>
@@ -157,20 +168,21 @@
 
       <ol class="steps" style="counter-reset: st 3;">
         <li><h4>Was jetzt passiert</h4>
-          <p>Das Panel schließt sich. Auf dem Canvas liegt nun <strong>ein Node mit abgerundeter linker Seite</strong> — daran
-            erkennst du einen Trigger. Er hat nur <strong>rechts</strong> einen kleinen Verbindungspunkt (Ausgang), aber
-            <strong>keinen</strong> Eingang links. Genau richtig, denn er ist der Anfang.</p></li>
+          <p>Das Panel schließt sich. Auf dem Canvas liegt nun ein Node mit abgerundeter linker Seite. Daran erkennst du
+            einen Trigger. Er hat nur <strong>rechts</strong> einen kleinen Verbindungspunkt (Ausgang) und
+            <strong>keinen</strong> Eingang links. Genau richtig, denn er ist der Anfang. Unter dem Node steht der
+            Vorgabename, den n8n vergibt: <code>When clicking ‘Execute workflow’</code>.</p></li>
       </ol>
 
       <div class="callout callout--info">
         <b class="t">Warum dieser Trigger?</b>
-        Beim Entwickeln willst du selbst bestimmen, wann es losgeht — nicht auf eine Uhrzeit warten. Der manuelle Trigger
-        ist dafür ideal. Später (Kapitel 7) tauschen wir ihn z. B. gegen einen Zeitplan, ohne den Rest zu ändern.
+        Beim Entwickeln willst du selbst bestimmen, wann es losgeht, statt auf eine Uhrzeit zu warten. Genau das macht der
+        manuelle Trigger. Später (Kapitel 7) tauschen wir ihn z. B. gegen einen Zeitplan, ohne den Rest zu ändern.
       </div>
 
       <hr>
 
-      <h2>Schritt 5 — Den HTTP-Request-Node anhängen</h2>
+      <h2>Schritt 5: Den HTTP-Request-Node anhängen</h2>
       <p>Jetzt holen wir echte Daten aus dem Internet. Dafür ziehen wir vom Trigger eine Verbindung zu einem neuen Node.</p>
 
       <ol class="steps">
@@ -181,11 +193,12 @@
           <p>Drücke die linke Maustaste auf diesem Kreis, <strong>halte gedrückt</strong> und ziehe nach rechts in eine leere
             Stelle des Canvas. Eine Linie folgt deinem Cursor. <strong>Lass dort los.</strong></p></li>
         <li><h4>Das Such-Panel öffnet sich automatisch</h4>
-          <p>Sobald du loslässt, erscheint rechts wieder das Node-Panel — diesmal mit der Frage „Was soll als Nächstes passieren?“.</p></li>
+          <p>Sobald du loslässt, erscheint rechts wieder das Node-Panel. Oben steht diesmal
+            <strong>„What happens next?“</strong>, sinngemäß „Was soll als Nächstes passieren?“.</p></li>
         <li><h4>HTTP Request suchen</h4>
           <p>Tippe ins Suchfeld <code>HTTP</code>. Der oberste Treffer heißt <strong>„HTTP Request“</strong>. Klicke ihn an.</p></li>
         <li><h4>Was jetzt passiert</h4>
-          <p>Ein neuer Node erscheint, und er ist <strong>bereits mit dem Trigger verbunden</strong> — eine Linie mit Pfeilspitze
+          <p>Ein neuer Node erscheint, und er ist <strong>bereits mit dem Trigger verbunden</strong>. Eine Linie mit Pfeilspitze
             zeigt vom Trigger auf den neuen Node. Du musst nichts mehr verdrahten.</p></li>
       </ol>
 
@@ -197,14 +210,14 @@
           Zieh erneut und lass über <em>leerer</em> Fläche los.</p>
       </div>
 
-      <h2>Schritt 6 — Den HTTP-Node öffnen und die URL eintragen</h2>
+      <h2>Schritt 6: Den HTTP-Node öffnen und die URL eintragen</h2>
       <ol class="steps">
         <li><h4>Node öffnen</h4>
           <p><strong>Doppelklicke</strong> den neuen „HTTP Request“-Node. Es öffnet sich die große Detailansicht (NDV) mit drei
             Spalten: links <em>Eingang</em>, Mitte <em>Parameter</em>, rechts <em>Ausgang</em>.</p></li>
         <li><h4>Die Methode prüfen</h4>
-          <p>In der mittleren Spalte steht ganz oben das Feld <strong>„Method“</strong>. Es steht bereits auf <strong>GET</strong> —
-            genau das wollen wir (GET = „hol mir Daten“). Nichts ändern.</p></li>
+          <p>In der mittleren Spalte steht ganz oben das Feld <strong>„Method“</strong>. Es steht bereits auf <strong>GET</strong>.
+            Genau das wollen wir (GET = „hol mir Daten“). Nichts ändern.</p></li>
         <li><h4>Das URL-Feld finden</h4>
           <p>Direkt darunter ist das Feld <strong>„URL“</strong> mit einem roten Sternchen <span style="color:#e03e52">*</span>
             (Pflichtfeld). Klicke in dieses Feld.</p></li>
@@ -222,7 +235,7 @@
         Alles vor dem <code>?</code> ist die Adresse des Dienstes. Alles danach sind <em>Parameter</em>, getrennt durch
         <code>&amp;</code>: <code>latitude</code>/<code>longitude</code> sind die Koordinaten (hier Berlin), und
         <code>current=…</code> sagt „gib mir die aktuellen Werte für Temperatur und Windgeschwindigkeit“. Du musst das
-        nicht auswendig können — in Kapitel 8 nehmen wir den HTTP-Node gründlich auseinander.
+        nicht auswendig können. In Kapitel 8 nehmen wir den HTTP-Node gründlich auseinander.
       </div>
 
       <figure class="figure">
@@ -258,10 +271,11 @@
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 4.3</span>So sieht der Node jetzt aus: Method <b>GET</b>, URL eingefügt,
-          Authentication <b>None</b>. Den Reiter über dem URL-Feld lassen wir auf <b>Fest</b>.</figcaption>
+          Authentication <b>None</b>. Den Reiter über dem URL-Feld lassen wir auf <b>Fest</b> (in der englischen
+          Oberfläche <b>Fixed</b>).</figcaption>
       </figure>
 
-      <h2>Schritt 7 — Den HTTP-Node testen und das Ergebnis lesen</h2>
+      <h2>Schritt 7: Den HTTP-Node testen und das Ergebnis lesen</h2>
       <ol class="steps">
         <li><h4>Schritt ausführen</h4>
           <p>Klicke <strong>oben rechts im NDV</strong> auf <strong>„▶ Schritt ausführen“</strong> (engl. <em>Execute step</em>).
@@ -270,8 +284,8 @@
           <p>In der <strong>rechten Spalte (Ausgang)</strong> taucht JSON auf. Oben rechts steht <strong>„1 Item“</strong>. Stell
             sicher, dass der Reiter auf <strong>„JSON“</strong> steht (Reiter: Tabelle / JSON / Schema).</p></li>
         <li><h4>Den wichtigen Wert finden</h4>
-          <p>Such im Ergebnis das Objekt <code>current</code> und darin <code>temperature_2m</code>. Genau diesen Pfad —
-            <strong><code>current.temperature_2m</code></strong> — brauchen wir gleich. Merk ihn dir.</p></li>
+          <p>Such im Ergebnis das Objekt <code>current</code> und darin <code>temperature_2m</code>. Genau diesen Pfad
+            brauchen wir gleich: <strong><code>current.temperature_2m</code></strong>. Merk ihn dir.</p></li>
       </ol>
 
       <figure class="figure">
@@ -318,57 +332,64 @@
         rechts anschauen. Bau immer nur einen Node, teste ihn sofort, geh dann zum nächsten.
       </div>
 
-      <h2>Schritt 8 — Die NDV schließen</h2>
+      <h2>Schritt 8: Die NDV schließen</h2>
       <ol class="steps">
         <li><h4>Zurück zum Canvas</h4>
-          <p>Drücke <span class="kbd">Esc</span> oder klicke auf das <strong>×</strong> oben rechts in der NDV. Du siehst wieder
-            den ganzen Canvas — jetzt mit zwei verbundenen Nodes.</p></li>
+          <p>Drücke <span class="kbd">Esc</span> oder klicke <strong>oben links</strong> auf
+            <strong>„← Back to canvas“</strong>. Du siehst wieder den ganzen Canvas, jetzt mit zwei verbundenen Nodes.</p></li>
         <li><h4>Auto-Save prüfen</h4>
-          <p>Warte kurz, bis der Draft gespeichert ist.</p></li>
+          <p>Warte kurz, bis im Kopf wieder <strong>„Saved“</strong> steht.</p></li>
       </ol>
 
       <hr>
 
-      <h2>Schritt 9 — Aus den Daten einen lesbaren Satz bauen</h2>
-      <p>Rohes JSON verschickt man niemandem. Mit dem <strong>Edit-Fields-Node</strong> (im Panel: „Edit Fields (Set)“) basteln
-        wir daraus einen schönen Satz — und schreiben dabei deine erste <strong>Expression</strong>.</p>
+      <h2>Schritt 9: Aus den Daten einen lesbaren Satz bauen</h2>
+      <p>Rohes JSON verschickt man niemandem. Mit dem <strong>Edit-Fields-Node</strong> (im Panel: „Edit Fields (Set)“) bauen
+        wir daraus einen fertigen Satz. Dabei schreibst du deine erste <strong>Expression</strong>.</p>
 
       <ol class="steps">
         <li><h4>Den nächsten Node anhängen</h4>
-          <p>Ziehe — genau wie in Schritt 5 — vom <strong>Ausgangspunkt rechts</strong> des HTTP-Nodes eine Linie ins Leere und
-            lass los. Das Panel öffnet sich.</p></li>
+          <p>Ziehe vom <strong>Ausgangspunkt rechts</strong> des HTTP-Nodes eine Linie ins Leere und lass los, genau wie in
+            Schritt 5. Das Panel öffnet sich.</p></li>
         <li><h4>Edit Fields suchen</h4>
           <p>Tippe <code>edit fields</code> (oder einfach <code>set</code>). Wähle <strong>„Edit Fields (Set)“</strong>. Der Node
             erscheint, verbunden mit dem HTTP-Node.</p></li>
         <li><h4>Node öffnen</h4>
           <p><strong>Doppelklick</strong> auf den neuen Node. Die NDV öffnet sich. Im <strong>Eingang</strong> (linke Spalte) siehst
-            du jetzt die Daten, die aus dem HTTP-Node kommen — perfekt, denn die brauchen wir gleich.</p></li>
+            du jetzt die Daten, die aus dem HTTP-Node kommen. Perfekt, denn die brauchen wir gleich.</p></li>
         <li><h4>Den Modus prüfen</h4>
           <p>Oben in der Parameter-Spalte steht <strong>„Mode“</strong> auf <strong>„Manual Mapping“</strong> (Felder von Hand setzen).
-            Genau richtig, nichts ändern.</p></li>
+            Genau richtig, nichts ändern. Die zweite Option heißt <strong>„JSON“</strong>, die lassen wir hier links liegen.</p></li>
         <li><h4>Ein neues Feld hinzufügen</h4>
-          <p>Klicke auf <strong>„Add Field“</strong> bzw. <strong>„+ Add value“</strong>. Es erscheinen zwei Eingaben: links der
-            <em>Feldname</em>, rechts der <em>Wert</em>.</p></li>
+          <p>Darunter liegt der Bereich <strong>„Fields to Set“</strong>. Er ist noch leer und zeigt untereinander drei
+            Zeilen: den Hinweis <em>„Drag input fields here“</em>, ein kleines <em>„or“</em> und darunter blau
+            <strong>„Add Field“</strong>. Klicke auf <strong>„Add Field“</strong>. Es erscheint eine Zeile mit drei
+            Teilen: links der <em>Name</em>, in der Mitte der <em>Type</em>, rechts der <em>Value</em>.</p></li>
         <li><h4>Den Feldnamen eintragen</h4>
-          <p>Tippe in das linke Feld (Name): <code>nachricht</code></p></li>
+          <p>Tippe in das linke Feld (<strong>Name</strong>): <code>nachricht</code></p></li>
+        <li><h4>Den Typ stehen lassen</h4>
+          <p>In der Mitte steht <strong>Type</strong> auf <strong>String</strong>. Unser Ergebnis ist Text, also passt das.
+            Nichts ändern.</p></li>
         <li><h4>Auf „Expression“ umschalten</h4>
-          <p>Über dem rechten Wert-Feld sind zwei kleine Reiter: <strong>Fest</strong> und <strong>Expression</strong>. Klicke auf
-            <strong>Expression</strong>. Das Feld bekommt einen <strong>leicht bläulichen</strong> Hintergrund — jetzt versteht es
-            Platzhalter in doppelten geschweiften Klammern <code>{{ }}</code>.</p></li>
+          <p>Über dem rechten <strong>Value</strong>-Feld erscheinen zwei kleine Reiter: <strong>Fest</strong> (englisch
+            <strong>Fixed</strong>) und <strong>Expression</strong>. Klicke auf <strong>Expression</strong>. Das Feld bekommt
+            einen leicht bläulichen Hintergrund. Jetzt versteht es Platzhalter in doppelten geschweiften Klammern
+            <code>{{ }}</code>.</p></li>
         <li><h4>Die Expression eintippen</h4>
-          <p>Trage in das (jetzt bläuliche) Wert-Feld genau Folgendes ein:</p></li>
+          <p>Trage in das (jetzt bläuliche) Value-Feld genau Folgendes ein:</p></li>
       </ol>
 
       <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Wert des Feldes „nachricht“ — Modus: Expression</div>
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Wert des Feldes „nachricht“ (Modus: Expression)</div>
 <pre>🌤️ In Berlin sind es gerade {{ $json.current.temperature_2m }} °C bei {{ $json.current.wind_speed_10m }} km/h Wind.</pre>
       </div>
 
       <div class="callout callout--tip">
         <b class="t">⚡ Profi-Abkürzung statt Abtippen</b>
-        Du musst <code>{{ $json.current.temperature_2m }}</code> nicht von Hand schreiben. Wechsle in der <strong>linken
-        Spalte (Eingang)</strong> auf den Reiter <strong>„Schema“</strong>, such das Feld <code>temperature_2m</code> und
-        <strong>zieh es per Drag-and-drop direkt in das Wert-Feld</strong>. n8n fügt die fertige Expression automatisch ein.
+        Du musst <code>{{ $json.current.temperature_2m }}</code> nicht von Hand schreiben. Wechsle in der linken Spalte
+        (Eingang) auf den Reiter <strong>„Schema“</strong>, such das Feld <code>temperature_2m</code> und zieh es per
+        Drag-and-drop direkt in das Value-Feld. n8n fügt die fertige Expression automatisch ein. Genau dafür ist der
+        Hinweis <em>„Drag input fields here“</em> da, den du eben gesehen hast.
       </div>
 
       <figure class="figure">
@@ -389,11 +410,12 @@
                 <div class="ndv-panel__body">
                   <div class="row"><label>Mode</label><div class="n8n-select">Manual Mapping <span class="chev">▾</span></div></div>
                   <div class="row">
-                    <label>Feldname</label>
+                    <label>Name</label>
                     <input class="n8n-input" value="nachricht">
                   </div>
+                  <div class="row"><label>Type</label><div class="n8n-select">String <span class="chev">▾</span></div></div>
                   <div class="row">
-                    <label>Wert</label>
+                    <label>Value</label>
                     <div class="ndv-fxtab"><b>Fest</b><b class="is-active">Expression</b></div>
                     <input class="n8n-input is-expr" value="🌤️ In Berlin sind es {{ $json.current.temperature_2m }} °C …">
                   </div>
@@ -412,15 +434,15 @@
           schon der fertige Satz <em>mit den echten Werten</em> eingesetzt.</figcaption>
       </figure>
 
-      <ol class="steps" style="counter-reset: st 8;">
+      <ol class="steps" style="counter-reset: st 9;">
         <li><h4>Diesen Schritt ausführen</h4>
-          <p>Klick auf <strong>„▶ Schritt ausführen“</strong>. Rechts erscheint dein fertiger Satz im Feld <code>nachricht</code> —
+          <p>Klick auf <strong>„▶ Schritt ausführen“</strong>. Rechts erscheint dein fertiger Satz im Feld <code>nachricht</code>,
             mit eingesetzter Temperatur und Windgeschwindigkeit.</p></li>
       </ol>
 
       <div class="callout callout--info">
         <b class="t">Was bedeutet <code>$json</code> genau?</b>
-        <code>$json</code> heißt immer „die Daten, die gerade in <em>diesen</em> Node hereinkommen“ — also die Ausgabe des
+        <code>$json</code> heißt immer „die Daten, die gerade in <em>diesen</em> Node hereinkommen“, also die Ausgabe des
         direkt davor liegenden HTTP-Nodes. Mit den Punkten hangelst du dich durch die Verschachtelung:
         <code>$json.current.temperature_2m</code> = „nimm <code>current</code>, darin <code>temperature_2m</code>“. Genau das
         vertiefen wir im nächsten Kapitel.
@@ -429,7 +451,7 @@
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
         <p style="margin:0 0 6px">• <strong>Im Ergebnis steht <code>[undefined]</code> oder leer?</strong> Dann stimmt der Pfad nicht.
-          Kontrolliere in der Schema-Ansicht links die genaue Schreibweise — z. B. <code>current.temperature_2m</code>,
+          Kontrolliere in der Schema-Ansicht links die genaue Schreibweise, also <code>current.temperature_2m</code> und
           nicht <code>temperature</code>.</p>
         <p style="margin:0">• <strong>Die <code>{{ }}</code> erscheinen wörtlich im Ergebnis?</strong> Dann steht das Feld noch auf
           <strong>Fest</strong> statt <strong>Expression</strong>. Schalte oben den Reiter um.</p>
@@ -437,62 +459,65 @@
 
       <hr>
 
-      <h2>Schritt 10 — Den ganzen Workflow auf einmal ausführen</h2>
+      <h2>Schritt 10: Den ganzen Workflow auf einmal ausführen</h2>
       <p>Bisher haben wir Node für Node einzeln getestet. Jetzt lassen wir den kompletten Ablauf von vorne durchlaufen.</p>
       <ol class="steps">
         <li><h4>NDV schließen</h4><p><span class="kbd">Esc</span> drücken. Du siehst alle drei Nodes auf dem Canvas.</p></li>
-        <li><h4>Auto-Save prüfen</h4><p>Warte kurz, bis der Draft gespeichert ist.</p></li>
-        <li><h4>Test starten</h4>
-          <p>Klicke auf den großen Knopf <strong>„Test workflow“</strong> (meist unten mittig, manchmal oben). Alternativ
+        <li><h4>Auto-Save prüfen</h4><p>Warte kurz, bis im Kopf wieder <strong>„Saved“</strong> steht.</p></li>
+        <li><h4>Ausführung starten</h4>
+          <p>Klicke unten mittig auf den großen Knopf <strong>„Execute workflow“</strong>. In älteren n8n-Versionen hieß
+            derselbe Knopf „Test workflow“; wenn du ältere Anleitungen liest, ist damit dieser Knopf gemeint. Alternativ
             <span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span>.</p></li>
         <li><h4>Beobachten, wie die Daten fließen</h4>
-          <p>n8n läuft von links nach rechts durch. Die <strong>Verbindungslinien färben sich kurz ein</strong> (der Datenfluss
-            wird sichtbar), und jeder Node bekommt oben rechts ein grünes <strong>✓</strong> sowie eine kleine Zahl, wie viele
+          <p>n8n läuft von links nach rechts durch. Die Verbindungslinien färben sich kurz ein, so wird der Datenfluss
+            sichtbar. Jeder Node bekommt oben rechts ein grünes <strong>✓</strong> und eine kleine Zahl, wie viele
             Items er ausgegeben hat.</p></li>
       </ol>
 
       <div class="callout callout--pareto">
         <b class="t">⚡ Das Grundmuster trägt weit</b>
-        Du hast einen vollständigen Workflow gebaut, der echte Daten aus dem Internet holt, sie verarbeitet und ein sauberes
-        Ergebnis erzeugt. Genau dieses Skelett — <em>Trigger → Daten holen → umformen</em> — steckt in der Mehrheit aller
-        Automatisierungen, die du je bauen wirst.
+        Du hast einen vollständigen Workflow gebaut: Er holt echte Daten aus dem Internet und formt sie in einen Satz um.
+        Genau dieses Skelett (<em>Trigger → Daten holen → umformen</em>) steckt in der Mehrheit aller Automatisierungen,
+        die du je bauen wirst.
       </div>
 
       <h2>Optionaler Blick: die Ausführung in der Historie</h2>
-      <p>Wechsle oben auf den Tab <strong>„Executions“</strong> (Ausführungen). Dort steht dein gerade gelaufener Test mit grünem
-        „Success“. Ein Klick auf die Zeile öffnet den Workflow mit den Daten genau dieses Laufs — dein wichtigstes
-        Werkzeug, wenn später mal etwas schiefgeht (mehr in Kapitel 11).</p>
+      <p>Wechsle oben im Workflow-Kopf auf den Tab <strong>„Executions“</strong> (Ausführungen). Dort steht dein gerade
+        gelaufener Test mit grünem „Success“. Ein Klick auf die Zeile öffnet den Workflow mit den Daten genau dieses
+        Laufs. Wenn später mal etwas schiefgeht, schaust du zuerst hierher (mehr in Kapitel 11).</p>
 
       <hr>
 
-      <h2>Kür — das Ergebnis aufs Handy schicken (optional)</h2>
+      <h2>Kür: das Ergebnis aufs Handy schicken (optional)</h2>
       <p>Wenn du magst, hängen wir einen vierten Node an, der den Satz per Telegram verschickt. Das braucht einen kostenlosen
-        Telegram-Bot. <strong>Wenn dir das jetzt zu viel ist: lass es weg</strong> — wir bauen so etwas in Kapitel 13 in aller Ruhe.</p>
+        Telegram-Bot. <strong>Wenn dir das jetzt zu viel ist: lass es weg.</strong> In Kapitel 13 bauen wir so etwas in aller Ruhe.</p>
 
       <ol class="steps">
         <li><h4>Einen Bot erstellen</h4>
           <p>Öffne Telegram, such den Kontakt <strong>@BotFather</strong>, starte den Chat und sende <code>/newbot</code>.
             Beantworte die zwei Fragen (Anzeigename + Benutzername, der auf <code>bot</code> enden muss). Am Ende bekommst du
-            ein <strong>Token</strong> — eine lange Zeichenkette wie <code>123456:ABC-DEF…</code>. Kopiere sie.</p></li>
+            ein <strong>Token</strong>, eine lange Zeichenkette wie <code>123456:ABC-DEF…</code>. Kopiere sie.</p></li>
         <li><h4>Dem Bot einmal schreiben</h4>
           <p>Öffne den Chat mit deinem neuen Bot und sende ihm irgendeine Nachricht (z. B. „Hallo“). Erst danach darf er dir
-            antworten — das ist eine Telegram-Regel.</p></li>
+            antworten. So will es Telegram.</p></li>
         <li><h4>Deine Chat-ID herausfinden</h4>
           <p>Schreibe dem Bot <strong>@userinfobot</strong>; er antwortet sofort mit deiner numerischen <strong>Id</strong>. Notiere sie.</p></li>
         <li><h4>Den Telegram-Node anhängen</h4>
           <p>Zieh im n8n-Canvas vom Edit-Fields-Node eine Linie ins Leere, such <code>telegram</code> und wähle
             <strong>„Telegram“</strong>. Wähle als Aktion <strong>„Send a text message“</strong>.</p></li>
         <li><h4>Das Credential anlegen</h4>
-          <p>Im Node-Feld <strong>„Credential to connect with“</strong> auf <strong>„+ Create new credential“</strong> klicken.
-            Füge dein Bot-Token ein und speichere. (Was Credentials genau sind, klärt Kapitel 12 — fürs Erste reicht: hier
-            wird dein Zugang sicher hinterlegt.)</p></li>
+          <p>Ganz oben in der Parameter-Spalte steht die Zeile <strong>„Credential for Telegram API“</strong> (in älteren
+            n8n-Versionen hieß sie „Credential to connect with“). Öffne das Auswahlfeld und klicke auf
+            <strong>„Create new credential“</strong>. Füge dein Bot-Token in das Feld <strong>„Access Token“</strong> ein
+            und speichere. (Was Credentials genau sind, klärt Kapitel 12. Fürs Erste reicht: hier wird dein Zugang sicher
+            hinterlegt.)</p></li>
         <li><h4>Empfänger eintragen</h4>
           <p>Trage bei <strong>„Chat ID“</strong> die Zahl ein, die dir @userinfobot genannt hat.</p></li>
         <li><h4>Den Text einsetzen</h4>
           <p>Beim Feld <strong>„Text“</strong> oben auf <strong>Expression</strong> schalten und eintippen:
-            <code>{{ $json.nachricht }}</code> — das ist genau der Satz aus dem vorherigen Node.</p></li>
+            <code>{{ $json.nachricht }}</code>. Das ist genau der Satz aus dem vorherigen Node.</p></li>
         <li><h4>Ausführen</h4>
-          <p>Auto-Save abwarten und <strong>„Test workflow“</strong> klicken. Sekunden später ploppt deine Wetter-Nachricht im
+          <p>Auto-Save abwarten und <strong>„Execute workflow“</strong> klicken. Sekunden später ploppt deine Wetter-Nachricht im
             Telegram-Chat auf. 🎉</p></li>
       </ol>
 
@@ -508,22 +533,23 @@
         <tbody>
           <tr><td>HTTP-Test</td><td>HTTP-Node einzeln ausführen</td><td>Output enthält <code>current.temperature_2m</code></td></tr>
           <tr><td>Expression-Test</td><td>Edit-Fields-Node ausführen</td><td><code>nachricht</code> enthält echte Wetterwerte</td></tr>
-          <tr><td>Workflow-Test</td><td><strong>Test workflow</strong> starten</td><td>alle Nodes werden grün ausgeführt</td></tr>
+          <tr><td>Workflow-Test</td><td><strong>Execute workflow</strong> starten</td><td>alle Nodes werden grün ausgeführt</td></tr>
           <tr><td>Optionaler Telegram-Test</td><td>Telegram-Node mit Testchat ausführen</td><td>genau eine Nachricht kommt an</td></tr>
         </tbody>
       </table>
 
       <h2>Was du in diesem Kapitel gelernt hast</h2>
       <ul>
-        <li>Einen Workflow <strong>anlegen, benennen und als Draft speichern lassen</strong> — ohne ihn zu publishen.</li>
-        <li>Einen <strong>Trigger</strong> setzen und Nodes durch <strong>Ziehen vom Ausgangspunkt</strong> verbinden.</li>
+        <li>Einen Workflow anlegen, benennen und als Draft speichern lassen, ohne ihn zu publishen.</li>
+        <li>Einen Trigger setzen und Nodes durch Ziehen vom Ausgangspunkt verbinden.</li>
         <li>Mit dem <strong>HTTP-Request-Node</strong> echte Daten aus einer API holen und das JSON-Ergebnis lesen.</li>
-        <li>Mit <strong>Edit Fields</strong> Daten umformen und deine erste <strong>Expression</strong> (<code>{{ $json… }}</code>) schreiben.</li>
-        <li>Den <strong>einzelnen Schritt</strong> und den <strong>ganzen Workflow</strong> ausführen und das Ergebnis prüfen.</li>
+        <li>Mit <strong>Edit Fields</strong> Daten umformen und deine erste Expression (<code>{{ $json… }}</code>) schreiben.</li>
+        <li>Einen einzelnen Schritt und den ganzen Workflow ausführen und das Ergebnis prüfen.</li>
       </ul>
 
-      <p>Die Expression hat sich fast wie Zauberei angefühlt? Ist sie nicht — sie ist das Herz von n8n. Das nächste Kapitel
-        macht aus dem Bauchgefühl echtes Verständnis: <strong>Items, JSON und der Datenfluss</strong>.</p>
+      <p>Die Expression hat sich fast wie Zauberei angefühlt? Sie ist eine Rechenvorschrift, die n8n vor jedem Lauf frisch
+        einsetzt. Mehr nicht. Das nächste Kapitel macht aus dem Bauchgefühl echtes Verständnis: Items, JSON und der
+        Datenfluss.</p>
 
     </article>
     <nav id="prevnext"></nav>

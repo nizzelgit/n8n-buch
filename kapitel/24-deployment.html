@@ -116,7 +116,7 @@
 
       <hr>
 
-      <h2>Schritt 1 — Umgebungen benennen</h2>
+      <h2>Schritt 1: Umgebungen benennen</h2>
       <p>Ein Deployment wird unklar, wenn du nur „meine n8n-Instanz“ sagst. Du brauchst mindestens zwei Rollen:
         Entwicklung und Produktion. Das kann am Anfang auch dieselbe Maschine mit zwei getrennten Workflows sein.</p>
 
@@ -147,7 +147,7 @@
         Einstellung echte Nachrichten oder Datensätze erzeugen kann. Trenne Umgebungen lieber sichtbar.
       </div>
 
-      <h2>Schritt 2 — Secrets aus der Logik entfernen</h2>
+      <h2>Schritt 2: Secrets aus der Logik entfernen</h2>
       <p>Secrets gehören in n8n-Credentials oder in die Umgebungsverwaltung deiner Instanz. Nicht in Code-Nodes, nicht
         in HTTP-Header-Felder als Klartext und nicht in Git.</p>
 
@@ -194,7 +194,7 @@
         keine Secrets.
       </div>
 
-      <h2>Schritt 3 — Self-hosting minimal konfigurieren</h2>
+      <h2>Schritt 3: Self-hosting minimal konfigurieren</h2>
       <p>Wenn du n8n selbst hostest, kommen mehrere Betriebswerte aus Umgebungsvariablen. Das folgende Beispiel ist
         bewusst ein Lern-Skelett. Es ersetzt kein gehärtetes Server-Setup, zeigt aber die entscheidenden Stellen.</p>
 
@@ -206,6 +206,8 @@ N8N_PORT=5678
 N8N_EDITOR_BASE_URL=https://n8n.example.com/
 WEBHOOK_URL=https://n8n.example.com/
 GENERIC_TIMEZONE=Europe/Berlin
+TZ=Europe/Berlin
+N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
 N8N_ENCRYPTION_KEY=hier-einen-langen-zufaelligen-wert-setzen
 DB_TYPE=postgresdb
 DB_POSTGRESDB_HOST=postgres
@@ -237,17 +239,22 @@ DB_POSTGRESDB_PASSWORD=auch-dieser-wert-gehoert-nicht-in-git</pre>
       N8N_EDITOR_BASE_URL: ${N8N_EDITOR_BASE_URL}
       WEBHOOK_URL: ${WEBHOOK_URL}
       GENERIC_TIMEZONE: ${GENERIC_TIMEZONE}
+      TZ: ${TZ}
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: ${N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS}
       N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
       DB_TYPE: ${DB_TYPE}
       DB_POSTGRESDB_HOST: ${DB_POSTGRESDB_HOST}
       DB_POSTGRESDB_DATABASE: ${DB_POSTGRESDB_DATABASE}
       DB_POSTGRESDB_USER: ${DB_POSTGRESDB_USER}
       DB_POSTGRESDB_PASSWORD: ${DB_POSTGRESDB_PASSWORD}
+    volumes:
+      - n8n_data:/home/node/.n8n
     depends_on:
       - postgres
 
 volumes:
-  postgres_data:</pre>
+  postgres_data:
+  n8n_data:</pre>
       </div>
 
       <div class="callout callout--warn">
@@ -256,7 +263,16 @@ volumes:
         änderst, können Credentials unbrauchbar werden. Sichere ihn getrennt von Git, wie ein echtes Secret.
       </div>
 
-      <h2>Schritt 4 — Webhook-URL prüfen</h2>
+      <div class="callout callout--info">
+        <b class="t">Warum das Volume für <code>/home/node/.n8n</code> dazugehört</b>
+        Die Workflows liegen zwar in Postgres, aber n8n legt dort weitere Dateien ab. Seit n8n 2.0 gilt das auch für
+        Binärdaten: Der frühere In-Memory-Modus wurde entfernt, Anhänge und Dateien laufen jetzt immer über das
+        Dateisystem. Ohne eigenes Volume wären sie nach einem Neustart des Containers weg.
+        <code>TZ</code> setzt du zusätzlich zu <code>GENERIC_TIMEZONE</code>, damit auch Systemzeit und
+        Container-Logs dieselbe Zeitzone benutzen wie deine Schedule-Trigger.
+      </div>
+
+      <h2>Schritt 4: Webhook-URL prüfen</h2>
       <p>Viele Deployment-Fehler zeigen sich zuerst bei Webhooks. Intern läuft n8n vielleicht auf Port 5678, extern
         muss aber eine stabile HTTPS-Adresse erreichbar sein.</p>
 
@@ -300,7 +316,7 @@ volumes:
           erreichbar sein, nicht nur innerhalb des Containers.</figcaption>
       </figure>
 
-      <h2>Schritt 5 — Git-Strategie wählen</h2>
+      <h2>Schritt 5: Git-Strategie wählen</h2>
       <p>n8n kann Workflow-Versionen je nach Edition und Plan direkt mit Git verbinden. Wenn diese Funktion in deiner
         Umgebung nicht verfügbar ist, ist der Workaround einfach: Workflow-JSON exportieren und sauber in Git ablegen.</p>
 
@@ -319,7 +335,7 @@ volumes:
         ein Git-Repository. Das ist weniger elegant, aber deutlich besser als gar keine Historie.
       </div>
 
-      <h2>Schritt 6 — Source Control in n8n nutzen</h2>
+      <h2>Schritt 6: Source Control in n8n nutzen</h2>
       <p>Falls deine n8n-Edition Source Control unterstützt, läuft der Ablauf grob so: Git-Zugang verbinden, Änderungen
         aus der Entwicklungsinstanz pushen, in Produktion pullen und danach erst publishen.</p>
 
@@ -341,6 +357,14 @@ volumes:
         <b class="t">Source Control ersetzt keine Freigabe</b>
         Ein Pull in Produktion ist noch kein erfolgreiches Deployment. Erst wenn Credentials, Webhook-URL, Variablen
         und Testlauf stimmen, ist die Änderung betriebsbereit.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Zwei Helfer aus 2026</b>
+        Die Versionshistorie zeigt inzwischen ein <strong>visuelles Diff</strong>: zwei Stände nebeneinander, mit
+        hervorgehobenen Unterschieden. Das beantwortet die Frage „was hat sich seit gestern geändert?" schneller als
+        ein JSON-Vergleich. Und wenn du Umgebungen eingerichtet hast, kannst du die Push- und Pull-Dialoge
+        <strong>nach Ordnern filtern</strong>, statt jedes Mal die ganze Instanz zu übertragen.
       </div>
 
       <h2>Workaround: JSON-Export in Git</h2>

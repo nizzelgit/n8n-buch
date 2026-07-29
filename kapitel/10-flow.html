@@ -17,8 +17,8 @@
       <div class="chap-eyebrow"><span class="knum">10</span> Bausteine im Detail</div>
       <h1 class="chap-title">Flow-Logik: IF, Switch, Merge & Loops</h1>
       <p class="chap-lede">Bisher liefen unsere Workflows schnurgerade von links nach rechts. Jetzt bringen wir
-        <strong>Entscheidungen</strong> hinein: verschiedene Wege je nach Daten, getrennte Zweige wieder zusammenführen — und die
-        Frage klären, wann du wirklich eine Schleife brauchst.</p>
+        <strong>Entscheidungen</strong> hinein: verschiedene Wege je nach Daten, getrennte Zweige wieder zusammenführen. Und wir
+        klären die Frage, wann du wirklich eine Schleife brauchst.</p>
       <div class="chap-meta">
         <span>⏱ ca. 22 Minuten</span>
         <span>🎯 Niveau: Mittel</span>
@@ -28,7 +28,7 @@
       <div class="prereq">
         <h4>📋 Was du mitbringen solltest</h4>
         <ul>
-          <li>Das „läuft pro Item"-Prinzip (Kapitel 5) — es erklärt, warum du Schleifen <em>selten</em> brauchst.</li>
+          <li>Das „läuft pro Item"-Prinzip (Kapitel 5). Es erklärt, warum du Schleifen <em>selten</em> brauchst.</li>
           <li>Bedingungen aus Kapitel 6 (<code>&gt;</code>, <code>||</code>, …) und dem Filter (Kapitel 9).</li>
         </ul>
       </div>
@@ -36,7 +36,8 @@
       <h2>IF: die Weiche mit zwei Ausgängen</h2>
       <p>Der <strong>IF</strong>-Node prüft eine Bedingung und schickt jedes Item in <strong>einen von zwei Ausgängen</strong>:
         <strong>true</strong> (Bedingung erfüllt) oder <strong>false</strong> (nicht erfüllt). Anders als der Filter wirft er nichts
-        weg — beide Gruppen laufen in <em>getrennten Zweigen</em> weiter.</p>
+        weg. Beide Gruppen laufen in <em>getrennten Zweigen</em> weiter. Im Node-Panel steht er übrigens als <strong>If</strong>,
+        nicht in Großbuchstaben.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -64,40 +65,53 @@
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 10.1</span>Der IF-Node hat zwei Ausgänge: oben <b>true</b> (pinke, aktive Linie),
-          unten <b>false</b>. Jedes Item geht genau einen Weg — beide Zweige existieren weiter.</figcaption>
+          unten <b>false</b>. Jedes Item geht genau einen Weg, beide Zweige existieren weiter.</figcaption>
       </figure>
 
       <ol class="steps">
         <li><h4>IF anlegen &amp; öffnen</h4>
-          <p>„IF" anhängen, öffnen. Der Bereich <strong>Conditions</strong> sieht aus wie beim Filter (Kapitel 9).</p></li>
+          <p>Im Node-Panel nach „If" suchen, anhängen, öffnen. Der Bereich <strong>Conditions</strong> sieht aus wie beim Filter
+            (Kapitel 9). Weitere Zeilen legst du mit <strong>Add Condition</strong> an.</p></li>
         <li><h4>Bedingung setzen</h4>
-          <p>Wert <code>{{ $json.tempC }}</code>, Operator <em>is greater than</em>, Vergleich <code>20</code>.</p></li>
+          <p>Links den Wert <code>{{ $json.tempC }}</code> eintragen. In der Mitte klappst du das Dropdown auf und wählst erst den
+            Datentyp <strong>Number</strong>, dann die Operation <em>is greater than</em>. Rechts <code>20</code> eintragen.</p></li>
         <li><h4>Die zwei Ausgänge verbinden</h4>
           <p>Vom <strong>oberen</strong> Ausgang (true) ziehst du zum „warm"-Zweig, vom <strong>unteren</strong> (false) zum
             „kühl"-Zweig. Fertig ist die Verzweigung.</p></li>
       </ol>
 
+      <p>Ein Stolperstein in n8n 2.x: Der Vergleich ist typstreng. Kommt <code>tempC</code> als Text aus der API, bricht der Node mit
+        einer Typmeldung ab, statt still <code>false</code> zu liefern. Du hast zwei Auswege. Entweder du wandelst den Wert vorher
+        um (Kapitel 9), oder du schaltest im Node den Regler <strong>Convert types where required</strong> ein. In der Doku steht
+        dieselbe Einstellung stellenweise noch unter ihrem alten Namen <em>Less Strict Type Validation</em>.</p>
+
       <h2>Switch: die Weiche mit vielen Ausgängen</h2>
-      <p>Brauchst du mehr als zwei Wege, nimm den <strong>Switch</strong>. Du legst mehrere <strong>Routing Rules</strong> an — jede
-        bekommt einen eigenen Ausgang. So sortierst du z. B. nach Kategorie, Status oder Sprache.</p>
+      <p>Brauchst du mehr als zwei Wege, nimm den <strong>Switch</strong>. Du legst mit <strong>Add Routing Rule</strong> mehrere
+        <strong>Routing Rules</strong> an, und jede Regel bekommt ihren eigenen Ausgang. So sortierst du z. B. nach Kategorie, Status
+        oder Sprache. Schaltest du in einer Regel <strong>Rename Output</strong> ein, trägt der Ausgang statt einer Nummer den Namen,
+        den du unter <strong>Output Name</strong> vergibst.</p>
 
       <table class="btable">
         <thead><tr><th>Switch-Modus</th><th>Sortiert nach …</th></tr></thead>
         <tbody>
-          <tr><td><strong>Rules</strong></td><td>frei definierten Bedingungen — ein Ausgang pro Regel (wie mehrere IFs)</td></tr>
-          <tr><td><strong>Expression</strong></td><td>einem Wert/Index, den du per Expression berechnest (für Fortgeschrittene)</td></tr>
+          <tr><td><strong>Rules</strong></td><td>frei definierten Bedingungen: ein Ausgang pro Regel (wie mehrere IFs)</td></tr>
+          <tr><td><strong>Expression</strong></td><td>einem Index, den du berechnest. Du setzt <strong>Number of Outputs</strong> und schreibst in <strong>Output Index</strong> eine Expression, die eine Zahl ab 0 zurückgibt (für Fortgeschrittene)</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--info">
         <b class="t">Switch = IF mit mehr Türen</b>
-        Denk an Switch als IF mit beliebig vielen Ausgängen. Zwei Wege → IF. Drei oder mehr → Switch. Optional gibt es einen
-        <strong>Fallback</strong>-Ausgang für alles, was zu keiner Regel passt.
+        Denk an Switch als IF mit beliebig vielen Ausgängen. Zwei Wege → IF. Drei oder mehr → Switch. Für alles, was zu keiner Regel
+        passt, gibt es einen <strong>Fallback</strong>-Ausgang. Du holst ihn dir über <strong>Options</strong> →
+        <strong>Add option</strong> → <strong>Fallback Output</strong> → <strong>Extra Output</strong>. Lässt du die Einstellung auf
+        <em>None</em>, verschwinden nicht passende Items lautlos.
       </div>
 
       <h2>Merge: getrennte Zweige zusammenführen</h2>
-      <p>Hast du verzweigt, willst du oft später wieder <strong>zusammenführen</strong>. Das macht der <strong>Merge</strong>-Node:
-        Er hat <strong>zwei Eingänge</strong> und einen Ausgang.</p>
+      <p>Hast du verzweigt, willst du oft später wieder <strong>zusammenführen</strong>. Das macht der <strong>Merge</strong>-Node.
+        Er startet mit <strong>zwei Eingängen</strong> und einem Ausgang. In den Modi <strong>Append</strong> und
+        <strong>SQL Query</strong> kannst du über das Feld <strong>Number of Inputs</strong> weitere Eingänge dazunehmen; der Modus
+        <strong>Combine</strong> arbeitet weiterhin mit genau zwei.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -131,21 +145,28 @@
       <table class="btable">
         <thead><tr><th>Merge-Modus</th><th>Macht</th></tr></thead>
         <tbody>
-          <tr><td><strong>Append</strong></td><td>hängt einfach beide Listen hintereinander (erst A, dann B)</td></tr>
-          <tr><td><strong>Combine</strong> (by Matching Fields)</td><td>verbindet Items, die in einem Feld übereinstimmen (z. B. gleiche <code>id</code>)</td></tr>
-          <tr><td><strong>Combine</strong> (by Position)</td><td>verbindet das 1. mit dem 1., das 2. mit dem 2. Item usw.</td></tr>
+          <tr><td><strong>Append</strong></td><td>hängt die Listen einfach hintereinander (erst Input 1, dann Input 2)</td></tr>
+          <tr><td><strong>Combine</strong> → <strong>Combine By: Matching Fields</strong></td><td>verbindet Items, die in einem Feld übereinstimmen (z. B. gleiche <code>id</code>)</td></tr>
+          <tr><td><strong>Combine</strong> → <strong>Combine By: Position</strong></td><td>verbindet das 1. mit dem 1., das 2. mit dem 2. Item usw.</td></tr>
+          <tr><td><strong>Combine</strong> → <strong>Combine By: All Possible Combinations</strong></td><td>paart jedes Item aus Input 1 mit jedem aus Input 2 (Kreuzprodukt)</td></tr>
+          <tr><td><strong>SQL Query</strong></td><td>du schreibst den Join selbst; die Eingänge heißen in der Abfrage <code>input1</code>, <code>input2</code> und so weiter</td></tr>
+          <tr><td><strong>Choose Branch</strong></td><td>wartet auf beide Eingänge und reicht danach nur die Daten eines Eingangs unverändert weiter</td></tr>
         </tbody>
       </table>
 
+      <p>Die drei <strong>Combine By</strong>-Varianten stehen im Node nicht direkt unter <strong>Mode</strong>. Erst
+        <strong>Mode</strong> auf <strong>Combine</strong> stellen, danach erscheint das zweite Dropdown <strong>Combine By</strong>.
+        Beim ersten Mal habe ich dort lange gesucht.</p>
+
       <div class="callout callout--pareto">
         <b class="t">⚡ IF + Merge sind die Arbeitspferde</b>
-        Verzweigen mit <strong>IF</strong>, später mit <strong>Merge</strong> wieder zusammen — dieses Paar deckt fast alle
+        Verzweigen mit <strong>IF</strong>, später mit <strong>Merge</strong> wieder zusammen: Dieses Paar deckt fast alle
         „mal so, mal so"-Abläufe ab. Switch nur, wenn es wirklich mehr als zwei Wege sind.
       </div>
 
       <h2>Loops: meistens brauchst du sie nicht</h2>
       <p>Der häufigste Anfänger-Reflex: „Ich habe eine Liste, ich brauche eine Schleife." Fast nie! Erinnere dich an Kapitel 5:
-        <strong>Ein Node läuft automatisch pro Item.</strong> Hast du 100 Items, läuft der nächste Node 100-mal — ganz ohne
+        <strong>Ein Node läuft automatisch pro Item.</strong> Hast du 100 Items, läuft der nächste Node 100-mal, ganz ohne
         Schleife.</p>
 
       <div class="callout callout--pareto">
@@ -154,9 +175,12 @@
         aus Kapitel 9). Den Rest macht n8n durch Wiederholung pro Item von selbst.
       </div>
 
-      <p>Eine echte Schleife — den <strong>„Loop Over Items (Split in Batches)"</strong>-Node — brauchst du nur in Sonderfällen:</p>
+      <p>Eine echte Schleife brauchst du nur in Sonderfällen. Im Node-Panel heißt sie
+        <strong>„Loop Over Items (Split in Batches)"</strong>, auf dem Canvas trägt der Node danach den kurzen Namen
+        „Loop Over Items". Diese Fälle gibt es:</p>
       <ul>
-        <li><strong>Batching:</strong> eine API erlaubt nur 10 Einträge pro Aufruf — du arbeitest sie in Häppchen ab.</li>
+        <li><strong>Batching:</strong> Eine API erlaubt nur 10 Einträge pro Aufruf. Du setzt <strong>Batch Size</strong> auf 10 und
+          arbeitest die Liste in Häppchen ab.</li>
         <li><strong>Rate-Limits / Pausen:</strong> du willst zwischen den Durchläufen warten (Kapitel 23).</li>
         <li><strong>Zustand über Runden:</strong> jeder Durchlauf baut auf dem vorherigen auf.</li>
       </ul>
@@ -187,16 +211,22 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 10.3</span>„Loop Over Items" hat zwei Ausgänge: <b>loop</b> (oben, führt nach der
-          Verarbeitung zurück) und <b>done</b> (unten, wenn alle Batches durch sind). Die zurücklaufende Linie ist die Schleife.</figcaption>
+        <figcaption><span class="fig-tag">Abb. 10.3</span>„Loop Over Items" hat zwei Ausgänge: <b>loop</b> führt in die Verarbeitung
+          und von dort zurück zum Node, <b>done</b> läuft erst, wenn alle Batches durch sind. Die zurücklaufende Linie ist die
+          Schleife. Die Skizze zeigt den Datenfluss; die Reihenfolge der beiden Anschlüsse steht im Text darunter.</figcaption>
       </figure>
+
+      <p>Diese Reihenfolge musst du dir merken: In n8n 2.x sitzt <b>done</b> oben und <b>loop</b> darunter. Bis n8n 1.x war es
+        umgekehrt, deshalb zeigen ältere Anleitungen und Screenshots die andere Belegung. Wenn deine Schleife nach dem ersten Klick
+        sofort „fertig" meldet, hängt der Verarbeitungszweig fast immer am falschen Ausgang.</p>
 
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
-        <p style="margin:0 0 6px">• <strong>Endlosschleife?</strong> Der verarbeitende Zweig muss <em>zurück</em> zum
-          Loop-Node führen, sonst wird nicht weitergezählt. Prüfe, dass die Rücklinie wirklich am Loop-Node endet.</p>
+        <p style="margin:0 0 6px">• <strong>Schleife bleibt nach dem ersten Batch stehen?</strong> Der verarbeitende Zweig muss
+          <em>zurück</em> zum Loop-Node führen, sonst wird nicht weitergezählt. Prüfe, dass die Rücklinie wirklich am Loop-Node
+          endet.</p>
         <p style="margin:0">• <strong>Schleife, die gar nicht nötig war?</strong> Wenn jeder Node ohnehin pro Item läuft, lös den
-          Loop wieder auf — er macht den Workflow nur komplizierter.</p>
+          Loop wieder auf. Er macht den Workflow nur komplizierter und langsamer.</p>
       </div>
 
       <hr>
@@ -215,13 +245,14 @@
           <p>Vom <strong>unteren</strong> Ausgang einen Set-Node: Feld <code>text</code> =
             <code>🧥 Eher kühl: {{ $json.tempC }} °C.</code></p></li>
         <li><h4>Testen</h4>
-          <p>„Test workflow" — beobachte, welcher Zweig sich pink einfärbt. Das ist der Weg, den dein Item genommen hat.</p></li>
+          <p>Auf <strong>Execute workflow</strong> klicken. Bis n8n 1.x hieß derselbe Knopf „Test workflow". Beobachte, welcher
+            Zweig sich pink einfärbt. Das ist der Weg, den dein Item genommen hat.</p></li>
       </ol>
 
       <div class="callout callout--tip">
         <b class="t">💡 Später wieder zusammenführen</b>
         Wenn beide Zweige am Ende dasselbe tun (z. B. die Nachricht verschicken), häng einen <strong>Merge</strong> dahinter und
-        führe sie zusammen — dann brauchst du den Versand-Node nur <em>einmal</em>.
+        führe sie zusammen. Dann brauchst du den Versand-Node nur <em>einmal</em>. Der Modus <strong>Append</strong> reicht dafür.
       </div>
 
       <h2>Konkrete Testfälle</h2>
@@ -231,7 +262,7 @@
           <tr><td>true-Zweig</td><td><code>tempC</code> auf über 20 setzen</td><td>warmer Text läuft oben weiter</td></tr>
           <tr><td>false-Zweig</td><td><code>tempC</code> auf 20 oder weniger setzen</td><td>kühler Text läuft unten weiter</td></tr>
           <tr><td>Merge</td><td>beide Zweige vor einem gemeinsamen Versand zusammenführen</td><td>nach dem Merge gibt es wieder einen gemeinsamen Pfad</td></tr>
-          <tr><td>Loop-Kontrolle</td><td>Loop-Verbindung im Test beobachten</td><td>Loop endet am Done-Ausgang statt endlos zu laufen</td></tr>
+          <tr><td>Loop-Kontrolle</td><td>Loop-Verbindung im Test beobachten</td><td>Loop endet am <code>done</code>-Ausgang statt endlos zu laufen</td></tr>
         </tbody>
       </table>
 
@@ -241,7 +272,7 @@
           <li>Was ist der Unterschied zwischen IF und Filter?</li>
           <li>Ab wie vielen Wegen lohnt sich ein Switch statt mehrerer IFs?</li>
           <li>Welcher Merge-Modus hängt zwei Listen einfach hintereinander?</li>
-          <li>Du willst „für jedes der 50 Items eine E-Mail" — brauchst du dafür einen Loop?</li>
+          <li>Du willst „für jedes der 50 Items eine E-Mail". Brauchst du dafür einen Loop?</li>
           <li>Woran erkennst du im Test, welchen Zweig ein Item genommen hat?</li>
         </ul>
       </div>
@@ -251,12 +282,12 @@
         1) IF hat zwei Ausgänge (true/false) und behält beide Gruppen; Filter wirft Nicht-Treffer weg. ·
         2) Ab drei. ·
         3) <strong>Append</strong>. ·
-        4) Nein — der E-Mail-Node läuft automatisch pro Item. ·
+        4) Nein, der E-Mail-Node läuft automatisch pro Item. ·
         5) An der pink eingefärbten (aktiven) Verbindungslinie.
       </div>
 
-      <p>Dein Werkzeugkasten für den Datenfluss ist jetzt komplett. Doch was, wenn unterwegs etwas <em>schiefgeht</em> — eine API
-        antwortet nicht, ein Feld fehlt? Im nächsten Kapitel bauen wir Workflows, die Fehler <strong>abfangen</strong> und sauber
+      <p>Dein Werkzeugkasten für den Datenfluss ist jetzt komplett. Doch was, wenn unterwegs etwas <em>schiefgeht</em>? Eine API
+        antwortet nicht, ein Feld fehlt. Im nächsten Kapitel bauen wir Workflows, die Fehler <strong>abfangen</strong> und sauber
         darauf reagieren.</p>
 
     </article>

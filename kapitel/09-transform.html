@@ -17,7 +17,7 @@
       <div class="chap-eyebrow"><span class="knum">9</span> Bausteine im Detail</div>
       <h1 class="chap-title">Daten transformieren: Set, Code & Filter</h1>
       <p class="chap-lede">Daten kommen selten genau in der Form, die du brauchst. Mal sind Felder zu viel, mal fehlt eins,
-        mal soll etwas berechnet oder aussortiert werden. Dafür gibt es drei Werkzeuge — und in 90 % der Fälle reicht schon
+        mal soll etwas berechnet oder aussortiert werden. Dafür gibt es drei Werkzeuge. In 90 % der Fälle reicht schon
         das erste.</p>
       <div class="chap-meta">
         <span>⏱ ca. 20 Minuten</span>
@@ -29,7 +29,7 @@
         <h4>📋 Was du mitbringen solltest</h4>
         <ul>
           <li><strong>Items</strong> und das „läuft pro Item"-Prinzip (Kapitel 5).</li>
-          <li><strong>Expressions</strong> (Kapitel 6) — sie sind in Set und Filter überall im Einsatz.</li>
+          <li><strong>Expressions</strong> (Kapitel 6): In Set und Filter brauchst du sie ständig.</li>
           <li>Den <strong>Edit-Fields-Node</strong> hast du in Kapitel 4 schon kurz benutzt.</li>
         </ul>
       </div>
@@ -38,7 +38,7 @@
       <table class="btable">
         <thead><tr><th>Node</th><th>Wofür</th><th>Wann</th></tr></thead>
         <tbody>
-          <tr><td><strong>Edit Fields (Set)</strong></td><td>Felder setzen, umbenennen, ein sauberes Ausgabe-Objekt bauen</td><td>fast immer — dein Alltagswerkzeug</td></tr>
+          <tr><td><strong>Edit Fields (Set)</strong></td><td>Felder setzen, umbenennen, ein sauberes Ausgabe-Objekt bauen</td><td>fast immer, dein Alltagswerkzeug</td></tr>
           <tr><td><strong>Filter</strong></td><td>Items aussortieren, die eine Bedingung nicht erfüllen</td><td>wenn du eine Liste eindampfen willst</td></tr>
           <tr><td><strong>Code</strong></td><td>alles, was Set/Filter nicht können (echte Logik, Schleifen)</td><td>nur als letzter Ausweg</td></tr>
         </tbody>
@@ -46,24 +46,31 @@
 
       <div class="callout callout--pareto">
         <b class="t">⚡ Erst no-code, dann Code</b>
-        Greif zum <strong>Code</strong>-Node erst, wenn es mit Set, Filter &amp; Co. wirklich nicht geht. Visuelle Nodes sind
-        leichter zu lesen, zu testen und für andere nachvollziehbar. Sehr vieles, was nach „da brauche ich Code" aussieht, löst
+        Greif zum <strong>Code</strong>-Node erst, wenn es mit Set, Filter &amp; Co. wirklich nicht geht. Einen visuellen Node
+        versteht auch jemand, der kein JavaScript kann. Sehr vieles, was nach „da brauche ich Code" aussieht, löst
         eine Expression in einem Set-Node.
       </div>
 
       <h2>Edit Fields (Set): das Arbeitspferd</h2>
-      <p>Der Set-Node baut ein <strong>neues, sauberes Objekt</strong> aus dem, was hereinkommt. Du legst Felder an, gibst jedem
-        einen Wert (fest oder Expression) — und entscheidest, ob die übrigen Eingangsfelder mitlaufen oder wegfallen.</p>
+      <p>Der Set-Node baut ein neues, sauberes Objekt aus dem, was hereinkommt. Du legst Felder an und gibst jedem
+        einen Wert, fest getippt oder als Expression. Danach entscheidest du, ob die übrigen Eingangsfelder mitlaufen
+        oder wegfallen.</p>
 
       <ol class="steps">
         <li><h4>Node anlegen &amp; öffnen</h4>
-          <p>Häng „Edit Fields (Set)" an und öffne ihn. <strong>Mode</strong> steht auf <em>Manual Mapping</em>.</p></li>
+          <p>Häng „Edit Fields (Set)" an und öffne ihn. <strong>Mode</strong> steht auf <em>Manual Mapping</em>. Die zweite
+            Möglichkeit im selben Dropdown heißt <em>JSON</em>; dort tippst du das Ausgabe-Objekt als JSON. Wir bleiben bei
+            Manual Mapping.</p></li>
         <li><h4>Felder hinzufügen</h4>
-          <p>Klick <strong>„Add Field"</strong>. Wähle links den <strong>Typ</strong> (String, Number, Boolean …), tippe den
-            <strong>Namen</strong> und setze rechts den <strong>Wert</strong> — per Reiter „Fest" oder „Expression".</p></li>
+          <p>Der Bereich heißt <strong>„Fields to Set"</strong>. Klick dort auf <strong>„Add Field"</strong>. Jeder Eintrag hat
+            drei Angaben: <strong>Name</strong> (z. B. <code>stadt</code>), <strong>Type</strong> (String, Number, Boolean …)
+            und <strong>Value</strong>. Beim Wert schaltest du wie gewohnt zwischen <strong>Fest</strong> (engl. <em>Fixed</em>)
+            und <strong>Expression</strong> um.</p></li>
         <li><h4>Nur gesetzte Felder behalten</h4>
-          <p>Ganz unten gibt es <strong>„Include Other Input Fields"</strong>. Lässt du es <strong>aus</strong>, enthält die
-            Ausgabe <em>nur</em> deine neuen Felder — perfekt, um Ballast loszuwerden.</p></li>
+          <p>Ganz unten gibt es den Schalter <strong>„Include Other Input Fields"</strong>. Er ist von Haus aus <strong>aus</strong>,
+            und dann enthält die Ausgabe <em>nur</em> deine neuen Felder. So wirst du den Ballast los. Schaltest du ihn ein,
+            erscheint darunter <strong>„Input Fields to Include"</strong> mit den Möglichkeiten <em>All</em>, <em>Selected</em>
+            und <em>All Except</em>.</p></li>
       </ol>
 
       <figure class="figure">
@@ -85,17 +92,17 @@
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 9.1</span>Aus dem großen Wetter-JSON wird ein schlankes Objekt mit genau drei
-          Feldern. „Include Other Input Fields" ist aus — alles andere fällt weg.</figcaption>
+          Feldern. „Include Other Input Fields" ist aus, alles andere fällt weg.</figcaption>
       </figure>
 
       <div class="callout callout--tip">
         <b class="t">💡 Sauberes Objekt = ruhiger Workflow</b>
-        Reduziere früh auf die Felder, die du wirklich weitergibst. Das macht spätere Nodes übersichtlicher und Fehler seltener —
-        du siehst auf einen Blick, womit du arbeitest.
+        Reduziere früh auf die Felder, die du wirklich weitergibst. Das macht spätere Nodes übersichtlicher und Fehler seltener.
+        Du siehst auf einen Blick, womit du arbeitest.
       </div>
 
       <h2>Filter: Items aussortieren</h2>
-      <p>Der <strong>Filter</strong>-Node lässt nur die Items durch, die eine Bedingung erfüllen — der Rest wird verworfen. Bekommt
+      <p>Der <strong>Filter</strong>-Node lässt nur die Items durch, die eine Bedingung erfüllen. Der Rest wird verworfen. Bekommt
         er fünf Items und drei erfüllen die Regel, kommen drei heraus.</p>
 
       <ol class="steps">
@@ -103,7 +110,9 @@
           <p>„Filter" anhängen und öffnen. Du siehst einen Bereich <strong>„Conditions"</strong>.</p></li>
         <li><h4>Eine Bedingung bauen</h4>
           <p>Links der <strong>Wert</strong> (per Expression, z. B. <code>{{ $json.tempC }}</code>), in der Mitte der
-            <strong>Operator</strong> (z. B. <em>is greater than</em>), rechts der <strong>Vergleichswert</strong> (z. B. <code>20</code>).</p></li>
+            <strong>Operator</strong> (z. B. <em>is greater than</em>), rechts der <strong>Vergleichswert</strong> (z. B. <code>20</code>).
+            Welche Operatoren dir angeboten werden, hängt am gewählten Datentyp: bei Zahlen <em>is greater than</em>, bei Text
+            <em>contains</em>, bei Datum <em>is after</em>.</p></li>
         <li><h4>Mehrere Bedingungen kombinieren</h4>
           <p>Mit <strong>AND</strong>/<strong>OR</strong> verknüpfst du Bedingungen, z. B. „tempC &gt; 20 <em>UND</em> windKmh &lt; 15".</p></li>
       </ol>
@@ -128,19 +137,28 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 9.2</span>Fünf Städte rein, der Filter behält nur die warmen (tempC &gt; 20) —
-          zwei Items laufen weiter. Die anderen drei werden still verworfen.</figcaption>
+        <figcaption><span class="fig-tag">Abb. 9.2</span>Fünf Städte rein, der Filter behält nur die warmen (tempC &gt; 20).
+          Zwei Items laufen weiter. Die anderen drei werden still verworfen.</figcaption>
       </figure>
+
+      <div class="callout callout--tip">
+        <b class="t">💡 Wenn plötzlich gar nichts durchkommt</b>
+        Dann passt meist der Datentyp nicht. Der Text <code>"20"</code> ist für n8n etwas anderes als die Zahl <code>20</code>,
+        und die Bedingung greift nicht. Unter <strong>Options</strong> findest du <strong>„Convert types where required"</strong>.
+        Damit rechnet n8n den Wert vor dem Vergleich in den passenden Typ um.
+      </div>
 
       <div class="callout callout--info">
         <b class="t">Filter vs. IF</b>
-        <strong>Filter</strong> wirft Nicht-Treffer einfach weg (ein Ausgang). Brauchst du <em>beide</em> Gruppen — Treffer
-        <em>und</em> Nicht-Treffer in getrennten Zweigen — nimm den <strong>IF</strong>-Node (nächstes Kapitel).
+        <strong>Filter</strong> wirft Nicht-Treffer einfach weg (ein Ausgang). Brauchst du <em>beide</em> Gruppen, Treffer
+        <em>und</em> Nicht-Treffer in getrennten Zweigen, dann nimm den <strong>IF</strong>-Node (nächstes Kapitel).
       </div>
 
       <h2>Code: der letzte Ausweg (mit Bedacht)</h2>
-      <p>Wenn wirklich kein no-code-Node reicht, schreibst du im <strong>Code</strong>-Node ein paar Zeilen JavaScript (oder Python).
-        Wichtig ist der <strong>Modus</strong> oben:</p>
+      <p>Wenn wirklich kein no-code-Node reicht, schreibst du im <strong>Code</strong>-Node ein paar Zeilen. Oben wählst du unter
+        <strong>Language</strong> zwischen <em>JavaScript</em> und <em>Python</em>. Wir bleiben bei JavaScript. Seit n8n 2.0 läuft
+        Python nativ über die Task Runner; auf n8n Cloud kannst du dort keine Python-Bibliotheken importieren. Direkt darunter
+        steht der <strong>Mode</strong>, und der ist die eigentlich wichtige Entscheidung:</p>
       <ul>
         <li><strong>Run Once for All Items:</strong> Dein Code läuft <em>einmal</em> und bekommt <em>alle</em> Items über
           <code>$input.all()</code>. Du gibst eine <strong>Liste</strong> von Items zurück.</li>
@@ -173,16 +191,34 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 9.3</span>Der Code-Node im Modus „pro Item". Beachte das <code>return</code> — es
+        <figcaption><span class="fig-tag">Abb. 9.3</span>Der Code-Node im Modus „pro Item". Beachte das <code>return</code>: Es
           bestimmt, was als neues Item herauskommt.</figcaption>
       </figure>
+
+      <div class="callout callout--info">
+        <b class="t">Der Code-Node sitzt seit n8n 2.0 im Sandkasten</b>
+        <p style="margin:0 0 6px">Ab Version 2.0 laufen Code-Nodes standardmäßig in sogenannten <strong>Task Runnern</strong>, also
+          in einem abgeschotteten Prozess neben n8n. Du merkst davon im Alltag nichts, bis du etwas versuchst, was dort verboten ist.</p>
+        <p style="margin:0 0 6px">• <strong>Keine Umgebungsvariablen.</strong> <code>process.env</code> im Code-Node und
+          <code>$env</code> in Expressions sind ab 2.0 blockiert. Auf einer selbst gehosteten Instanz kannst du das mit
+          <code>N8N_BLOCK_ENV_ACCESS_IN_NODE=false</code> wieder öffnen. n8n rät davon ab: Zugangsdaten gehören in Credentials.</p>
+        <p style="margin:0 0 6px">• <strong>Keine Module ohne Freigabe.</strong> Auf n8n Cloud stehen dir das Node.js-Modul
+          <code>crypto</code> und das npm-Paket <code>moment</code> zur Verfügung, sonst nichts. Selbst gehostet gibst du Module
+          über <code>NODE_FUNCTION_ALLOW_BUILTIN</code> und <code>NODE_FUNCTION_ALLOW_EXTERNAL</code> frei, und zwar an den Task
+          Runnern, nicht am n8n-Hauptprozess.</p>
+        <p style="margin:0">• <strong>Kein HTTP, keine Dateien, keine Credentials.</strong> Willst du eine API rufen, nimm den
+          HTTP-Request-Node. Willst du eine Datei lesen, nimm „Read/Write Files from Disk".</p>
+      </div>
 
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
         <p style="margin:0 0 6px">• <strong>„Code doesn't return items properly"?</strong> Im Modus „All Items" musst du eine
           <em>Liste</em> zurückgeben (<code>return [...]</code>), nicht ein einzelnes Objekt.</p>
-        <p style="margin:0">• <strong>Falscher Modus.</strong> Greifst du auf <code>$json</code> zu, brauchst du „Run Once for Each
+        <p style="margin:0 0 6px">• <strong>Falscher Modus.</strong> Greifst du auf <code>$json</code> zu, brauchst du „Run Once for Each
           Item". Willst du alle Items auf einmal sehen, nimm „All Items" mit <code>$input.all()</code>.</p>
+        <p style="margin:0">• <strong>„Cannot find module …"?</strong> Das Modul ist nicht freigegeben. Auf n8n Cloud kannst du daran
+          nichts ändern und musst ohne auskommen. Selbst gehostet trägst du es in
+          <code>NODE_FUNCTION_ALLOW_BUILTIN</code> bzw. <code>NODE_FUNCTION_ALLOW_EXTERNAL</code> ein.</p>
       </div>
 
       <h2>Noch mehr Transform-Nodes (zum Merken)</h2>
@@ -194,6 +230,7 @@
           <tr><td><strong>Remove Duplicates</strong></td><td>doppelte Items entfernen</td></tr>
           <tr><td><strong>Aggregate</strong></td><td>viele Items zu einem zusammenfassen (z. B. alle Namen in eine Liste)</td></tr>
           <tr><td><strong>Split Out</strong></td><td>ein Feld, das eine Liste ist, in einzelne Items aufspalten</td></tr>
+          <tr><td><strong>Summarize</strong></td><td>Items gruppieren und auswerten, ähnlich einer Pivot-Tabelle</td></tr>
         </tbody>
       </table>
 
@@ -210,7 +247,7 @@
         <li><h4>„Include Other Input Fields" ausschalten</h4>
           <p>Damit nur deine drei Felder übrig bleiben.</p></li>
         <li><h4>Ausführen &amp; prüfen</h4>
-          <p>„▶ Schritt ausführen": Im Ausgang steht jetzt ein knappes Objekt <code>{ stadt, tempC, windKmh }</code> — viel
+          <p>„▶ Schritt ausführen": Im Ausgang steht jetzt ein knappes Objekt <code>{ stadt, tempC, windKmh }</code>. Viel
             angenehmer als das große Roh-JSON.</p></li>
       </ol>
 
@@ -222,32 +259,35 @@
           <tr><td>Filter</td><td>Filter mit passenden und unpassenden Items testen</td><td>nur passende Items laufen weiter</td></tr>
           <tr><td>Code pro Item</td><td>Code-Node im Modus Each Item ausführen</td><td>jedes Item bekommt berechnete Felder</td></tr>
           <tr><td>Falscher Modus</td><td>Code-Modus bewusst wechseln</td><td>Fehlermeldung erklärt Rückgabeformat oder Zugriff</td></tr>
+          <tr><td>Sandkasten</td><td>im Code-Node auf <code>process.env</code> zugreifen</td><td>kein Zugriff, ab n8n 2.0 ist das standardmäßig blockiert</td></tr>
         </tbody>
       </table>
 
       <div class="prereq">
         <h4>✅ Selbsttest</h4>
         <ul>
-          <li>Welches der drei Werkzeuge nimmst du zuerst — und warum?</li>
+          <li>Welches der drei Werkzeuge nimmst du zuerst, und warum?</li>
           <li>Wie sorgst du dafür, dass ein Set-Node <em>nur</em> deine neuen Felder ausgibt?</li>
-          <li>Du hast 8 Items, der Filter lässt 3 durch — was passiert mit den anderen 5?</li>
+          <li>Du hast 8 Items, der Filter lässt 3 durch. Was passiert mit den anderen 5?</li>
           <li>Welcher Code-Modus gibt eine <em>Liste</em> zurück, welcher ein einzelnes Objekt?</li>
-          <li>Du brauchst Treffer <em>und</em> Nicht-Treffer getrennt — Filter oder IF?</li>
+          <li>Du brauchst Treffer <em>und</em> Nicht-Treffer getrennt: Filter oder IF?</li>
+          <li>Warum kommst du im Code-Node seit n8n 2.0 nicht mehr an <code>process.env</code>?</li>
         </ul>
       </div>
 
       <div class="callout callout--info">
         <b class="t">Antworten</b>
-        1) Edit Fields (Set) — visuell, leicht zu testen, deckt das meiste ab. ·
+        1) Edit Fields (Set): visuell, leicht zu testen, deckt das meiste ab. ·
         2) „Include Other Input Fields" ausschalten. ·
         3) Sie werden verworfen (Filter hat nur einen Ausgang). ·
         4) „Run Once for All Items" → Liste; „Run Once for Each Item" → ein Objekt. ·
-        5) IF (zwei Ausgänge).
+        5) IF (zwei Ausgänge). ·
+        6) Der Code-Node läuft im Task Runner, und der Zugriff auf Umgebungsvariablen ist dort standardmäßig blockiert.
       </div>
 
       <p>Du kannst Daten jetzt holen, senden und umformen. Als Nächstes bringen wir <strong>Logik</strong> in den Ablauf:
-        verzweigen mit <strong>IF</strong> und <strong>Switch</strong>, Zweige wieder zusammenführen mit <strong>Merge</strong> —
-        und klären, wann du wirklich eine <strong>Schleife</strong> brauchst (Spoiler: seltener, als du denkst).</p>
+        verzweigen mit <strong>IF</strong> und <strong>Switch</strong>, Zweige wieder zusammenführen mit <strong>Merge</strong>.
+        Und wir klären, wann du wirklich eine <strong>Schleife</strong> brauchst. Spoiler: seltener, als du denkst.</p>
 
     </article>
     <nav id="prevnext"></nav>

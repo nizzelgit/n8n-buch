@@ -16,7 +16,7 @@
 
       <div class="chap-eyebrow"><span class="knum">6</span> Grundlagen</div>
       <h1 class="chap-title">Expressions & der Ausdruckseditor</h1>
-      <p class="chap-lede">In Kapitel 5 hast du Expressions kennengelernt — jetzt machen wir daraus dein schärfstes Werkzeug.
+      <p class="chap-lede">In Kapitel 5 hast du Expressions kennengelernt. Jetzt holen wir mehr aus ihnen heraus.
         Texte zusammenbauen, Zahlen runden, mit Datum und Uhrzeit rechnen, Entscheidungen treffen: All das passiert in
         diesen kleinen <code>{{ }}</code>-Klammern. Und du lernst den <strong>Ausdruckseditor</strong> kennen, der dir live
         zeigt, was herauskommt.</p>
@@ -31,8 +31,8 @@
         <ul>
           <li>Das mentale Modell aus Kapitel 5: ein <strong>Item</strong>, das Fach <code>json</code> und der Zugriff über
             <code>$json.feld</code>.</li>
-          <li>n8n geöffnet. Ideal: der <strong>Wetter-Workflow</strong> aus Kapitel 4 liegt noch da — daran probieren wir alles aus.</li>
-          <li><strong>Keine</strong> JavaScript-Kenntnisse nötig. Wir kopieren Muster und passen sie an — verstehen kommt von selbst.</li>
+          <li>n8n geöffnet. Ideal: der <strong>Wetter-Workflow</strong> aus Kapitel 4 liegt noch da. Daran probieren wir alles aus.</li>
+          <li><strong>Keine</strong> JavaScript-Kenntnisse nötig. Wir kopieren Muster und passen sie an. Das Verständnis kommt beim Tippen.</li>
         </ul>
       </div>
 
@@ -43,20 +43,24 @@
         dann verschickt n8n „Anna“. Genau das bauen wir jetzt aus.
       </div>
 
-      <h2>Fest oder Expression? Der eine Schalter, der alles entscheidet</h2>
-      <p>Fast jedes Eingabefeld in n8n hat zwei Modi. Du wechselst sie über zwei winzige Reiter direkt über (oder neben) dem Feld:</p>
+      <h2>Fest oder Expression? Der Schalter, den du ständig brauchst</h2>
+      <p>Fast jedes Eingabefeld in n8n hat zwei Modi. Fahr mit der Maus über das Feld, dann erscheinen zwei winzige Reiter
+        direkt darüber (bei schmalen Feldern auch daneben):</p>
       <ul>
         <li><strong>Fest</strong> (engl. <em>Fixed</em>): Was du tippst, bleibt wörtlich stehen. <code>{{ }}</code> wäre hier nur Text.</li>
-        <li><strong>Expression</strong>: Das Feld wertet <code>{{ }}</code> aus. Es wird einfarbig <strong>bläulich</strong> und in Monospace-Schrift dargestellt.</li>
+        <li><strong>Expression</strong>: Das Feld wertet <code>{{ }}</code> aus. Es bekommt einen leicht bläulichen Hintergrund und Monospace-Schrift.</li>
       </ul>
 
       <ol class="steps">
         <li><h4>Ein Feld in den Expression-Modus schalten</h4>
           <p>Klicke auf den Reiter <strong>Expression</strong> über dem Feld. Der Hintergrund wird leicht blau, die Schrift
-            wechselt zu Monospace — dein Zeichen: „Hier verstehe ich jetzt <code>{{ }}</code>.“</p></li>
+            wechselt zu Monospace. Das ist dein Zeichen: „Hier verstehe ich jetzt <code>{{ }}</code>.“</p>
+          <p>Abkürzung für Tastatur-Menschen: Ist das Feld noch leer, tippst du einfach ein
+            <span class="kbd">=</span>. n8n schaltet dann von selbst in den Expression-Modus.</p></li>
         <li><h4>Was du jetzt zusätzlich siehst</h4>
-          <p>Direkt <strong>unter dem Feld</strong> erscheint eine schmale Zeile <strong>„Ergebnis“</strong>. Sie zeigt dir
-            <em>live</em>, was deine Expression gerade ergibt — noch <em>bevor</em> du den Node ausführst. Das ist dein Sicherheitsnetz.</p></li>
+          <p>Unter dem Feld klappt eine schmale Zeile <strong>„Ergebnis“</strong> auf (in der englischen Oberfläche
+            <strong>Result</strong>). Sie zeigt dir <em>live</em>, was deine Expression gerade ergibt, noch bevor du den Node
+            ausführst. Das ist dein Sicherheitsnetz.</p></li>
       </ol>
 
       <figure class="figure">
@@ -89,9 +93,9 @@
       </div>
 
       <h2>Wie eine Expression aufgebaut ist</h2>
-      <p>Eine Expression ist eine Mischung aus <strong>festem Text</strong> und <strong>Platzhaltern</strong>. Alles außerhalb
-        der <code>{{ }}</code> bleibt, wie es ist. Alles <em>innerhalb</em> wird gerechnet, ausgelesen oder umgeformt — und durch
-        das Ergebnis ersetzt. Du darfst beliebig viele Platzhalter in einem Feld mischen:</p>
+      <p>Eine Expression ist eine Mischung aus festem Text und Platzhaltern. Alles außerhalb
+        der <code>{{ }}</code> bleibt, wie es ist. Alles <em>innerhalb</em> wird gerechnet, ausgelesen oder umgeformt und danach
+        durch das Ergebnis ersetzt. Du darfst beliebig viele Platzhalter in einem Feld mischen:</p>
 
       <figure class="figure">
         <div class="frame">
@@ -106,15 +110,16 @@
       </figure>
 
       <div class="callout callout--info">
-        <b class="t">Innendrin ist es JavaScript — aber keine Angst</b>
+        <b class="t">Innendrin ist es JavaScript, aber keine Angst</b>
         Was zwischen den Klammern steht, ist technisch JavaScript. Das heißt <em>nicht</em>, dass du programmieren lernen musst.
-        Du brauchst eine Handvoll Muster — Felder lesen, Texte verbinden, runden, ein <code>?</code> für Entscheidungen. Genau die
+        Du brauchst eine Handvoll Muster: Felder lesen, Texte verbinden, runden, ein <code>?</code> für Entscheidungen. Genau die
         sammeln wir gleich. Den Rest schlägst du nach.
       </div>
 
       <h2>Dein Werkzeugkasten: die wichtigsten Variablen</h2>
       <p>In jeder Expression stehen dir besondere Variablen zur Verfügung (sie beginnen mit <code>$</code>). Zwei kennst du schon
-        aus Kapitel 5. Hier die vollständige Liste der wirklich nützlichen:</p>
+        aus Kapitel 5. Hier stehen die, die du im Alltag wirklich brauchst. Die vollständige Aufstellung führt die n8n-Doku
+        unter „Expression reference“:</p>
 
       <table class="btable">
         <thead><tr><th>Variable</th><th>Was sie liefert</th></tr></thead>
@@ -123,48 +128,58 @@
           <tr><td><code>$json.feld</code></td><td>Ein bestimmtes Feld; mit Punkten in die Tiefe: <code>$json.current.temperature_2m</code>.</td></tr>
           <tr><td><code>$('Node-Name')</code></td><td>Greift auf einen <strong>beliebigen früheren</strong> Node zu, z. B. <code>$('Webhook').item.json.email</code>.</td></tr>
           <tr><td><code>$now</code></td><td>Der aktuelle Zeitpunkt als <strong>Datum-Objekt</strong> (damit lässt sich rechnen &amp; formatieren).</td></tr>
-          <tr><td><code>$today</code></td><td>Heute um 00:00 Uhr — praktisch für „ab heute“-Vergleiche.</td></tr>
+          <tr><td><code>$today</code></td><td>Heute um 00:00 Uhr, ebenfalls als Datum-Objekt. Praktisch für „ab heute“-Vergleiche.</td></tr>
           <tr><td><code>$input.all()</code></td><td><strong>Alle</strong> Items, die hereinkommen, als Liste. <code>$input.first()</code> / <code>$input.last()</code> für das erste/letzte.</td></tr>
           <tr><td><code>$itemIndex</code></td><td>Die Position des aktuellen Items: 0, 1, 2 … (Zählung beginnt bei 0).</td></tr>
-          <tr><td><code>$runIndex</code></td><td>Wie oft der Node in diesem Lauf schon lief (relevant in Schleifen, Kapitel 10).</td></tr>
+          <tr><td><code>$runIndex</code></td><td>Der wievielte Durchlauf des Nodes gerade läuft, ab 0 gezählt (relevant in Schleifen, Kapitel 10).</td></tr>
           <tr><td><code>$workflow.name</code></td><td>Name des laufenden Workflows. Auch da: <code>$execution.id</code> (ID des Laufs).</td></tr>
-          <tr><td><code>$vars.name</code></td><td>Selbst angelegte Variablen (für Werte, die du an mehreren Stellen brauchst).</td></tr>
+          <tr><td><code>$vars.name</code></td><td>Selbst angelegte Variablen für Werte, die du an mehreren Stellen brauchst. Anlegen lassen sie sich nur in der Self-hosted-Enterprise-Version und im Pro-Plan der Cloud, und auch dort nur als Owner oder Admin.</td></tr>
         </tbody>
       </table>
 
+      <div class="callout callout--info">
+        <b class="t">Ältere Anleitungen schreiben das anders</b>
+        In Tutorials aus der n8n-0.x-Zeit siehst du oft <code>$node["Webhook"].json.email</code> oder <code>$items()</code>.
+        Diese Schreibweisen stammen aus alten Versionen und stehen in der aktuellen Doku nicht mehr. Nimm für neue Workflows
+        <code>$('Webhook').item.json.email</code> und <code>$input.all()</code>.
+      </div>
+
       <div class="callout callout--pareto">
-        <b class="t">⚡ Die vier, die 90 % abdecken</b>
+        <b class="t">⚡ Die vier, mit denen du fast alles baust</b>
         <code>$json.feld</code> · <code>$('Node').item.json.feld</code> · <code>$now</code> · und ein <code>?</code> für
         Entscheidungen. Wenn du <em>diese</em> sicher beherrschst, baust du fast jeden Workflow. Den Rest holst du dir bei Bedarf.
       </div>
 
       <h2>Mit Text arbeiten (das brauchst du am häufigsten)</h2>
-      <p>Texte zusammensetzen, Groß-/Kleinschreibung anpassen, Teile herausschneiden — das ist Alltag. An einen Wert hängst du
+      <p>Texte zusammensetzen, Groß-/Kleinschreibung anpassen, Teile herausschneiden. Das ist Alltag. An einen Wert hängst du
         dafür mit einem Punkt eine <strong>Funktion</strong> an. Nimm als Beispiel ein Item mit
         <code>name = "anna schmidt"</code> und <code>email = "Anna@Example.com "</code> (mit Leerzeichen am Ende):</p>
 
       <table class="btable">
         <thead><tr><th>Expression</th><th>Ergebnis</th></tr></thead>
         <tbody>
-          <tr><td><code>{{ 'Hallo ' + $json.name }}</code></td><td>„Hallo anna schmidt“ — Texte verbindest du mit <code>+</code></td></tr>
+          <tr><td><code>{{ 'Hallo ' + $json.name }}</code></td><td>„Hallo anna schmidt“. Texte verbindest du mit <code>+</code></td></tr>
           <tr><td><code>{{ $json.name.toUpperCase() }}</code></td><td>„ANNA SCHMIDT“</td></tr>
-          <tr><td><code>{{ $json.name.split(' ')[0] }}</code></td><td>„anna“ — am Leerzeichen trennen, erstes Stück nehmen</td></tr>
-          <tr><td><code>{{ $json.email.trim().toLowerCase() }}</code></td><td>„anna@example.com“ — Funktionen lassen sich <strong>verketten</strong></td></tr>
-          <tr><td><code>{{ $json.name.length }}</code></td><td>12 — die Anzahl der Zeichen</td></tr>
-          <tr><td><code>{{ $json.name.toTitleCase() }}</code></td><td>„Anna Schmidt“ — <span class="hint">n8n-Helfer</span></td></tr>
-          <tr><td><code>{{ $json.email.trim().extractDomain() }}</code></td><td>„example.com“ — <span class="hint">n8n-Helfer</span></td></tr>
+          <tr><td><code>{{ $json.name.split(' ')[0] }}</code></td><td>„anna“: am Leerzeichen trennen, erstes Stück nehmen</td></tr>
+          <tr><td><code>{{ $json.email.trim().toLowerCase() }}</code></td><td>„anna@example.com“: Funktionen lassen sich verketten</td></tr>
+          <tr><td><code>{{ $json.name.length }}</code></td><td>12, die Anzahl der Zeichen</td></tr>
+          <tr><td><code>{{ $json.name.toTitleCase() }}</code></td><td>„Anna Schmidt“ <span class="hint">n8n-Helfer</span></td></tr>
+          <tr><td><code>{{ $json.email.trim().extractDomain() }}</code></td><td>„Example.com“, die Groß-/Kleinschreibung bleibt unverändert <span class="hint">n8n-Helfer</span></td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--tip">
-        <b class="t">💡 Funktionen verketten — der wichtigste Trick</b>
+        <b class="t">💡 Funktionen verketten: der wichtigste Trick</b>
         Du darfst mehrere Funktionen hintereinander hängen: <code>$json.email.trim().toLowerCase()</code> entfernt erst die
         Leerzeichen und macht <em>dann</em> alles klein. Von links nach rechts gelesen, eine Stufe nach der anderen.
+        Genau deshalb ergibt <code>.trim().extractDomain()</code> noch „Example.com“: <code>extractDomain</code> schneidet
+        nur die Domain heraus, es schreibt sie nicht klein. Willst du „example.com“, hängst du
+        <code>.toLowerCase()</code> davor.
       </div>
 
       <div class="callout callout--info">
         <b class="t">Was sind „n8n-Helfer“?</b>
-        n8n bringt über das normale JavaScript hinaus eigene, praktische Funktionen mit — etwa <code>.toTitleCase()</code>,
+        n8n bringt über das normale JavaScript hinaus eigene Funktionen mit: <code>.toTitleCase()</code>,
         <code>.extractDomain()</code>, <code>.extractEmail()</code> oder <code>.isEmpty()</code>. Die Autovervollständigung
         (gleich mehr dazu) schlägt sie dir vor, sobald du hinter einen Text einen Punkt tippst.
       </div>
@@ -176,11 +191,11 @@
       <table class="btable">
         <thead><tr><th>Expression</th><th>Ergebnis</th></tr></thead>
         <tbody>
-          <tr><td><code>{{ $json.temperature_2m + 5 }}</code></td><td>22.456 — ganz normal rechnen</td></tr>
-          <tr><td><code>{{ Math.round($json.temperature_2m) }}</code></td><td>17 — auf eine ganze Zahl runden</td></tr>
-          <tr><td><code>{{ $json.temperature_2m.round(1) }}</code></td><td>17.5 — auf 1 Nachkommastelle <span class="hint">(n8n-Helfer)</span></td></tr>
-          <tr><td><code>{{ $json.temperature_2m.toFixed(1) }}</code></td><td>„17.5“ — Achtung: das Ergebnis ist <strong>Text</strong>, keine Zahl!</td></tr>
-          <tr><td><code>{{ Math.round($json.temperature_2m) + ' °C' }}</code></td><td>„17 °C“ — runden und Einheit anhängen</td></tr>
+          <tr><td><code>{{ $json.temperature_2m + 5 }}</code></td><td>22.456, ganz normal gerechnet</td></tr>
+          <tr><td><code>{{ Math.round($json.temperature_2m) }}</code></td><td>17, auf eine ganze Zahl gerundet</td></tr>
+          <tr><td><code>{{ $json.temperature_2m.round(1) }}</code></td><td>17.5, auf 1 Nachkommastelle <span class="hint">(n8n-Helfer)</span></td></tr>
+          <tr><td><code>{{ $json.temperature_2m.toFixed(1) }}</code></td><td>„17.5“. Achtung: das Ergebnis ist <strong>Text</strong>, keine Zahl!</td></tr>
+          <tr><td><code>{{ Math.round($json.temperature_2m) + ' °C' }}</code></td><td>„17 °C“, gerundet und mit angehängter Einheit</td></tr>
           <tr><td><code>{{ ($json.preis * 1.19).round(2) }}</code></td><td>Bruttopreis (19 % drauf), auf 2 Stellen gerundet</td></tr>
         </tbody>
       </table>
@@ -188,24 +203,25 @@
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
         <p style="margin:0 0 6px">• <strong><code>NaN</code> im Ergebnis</strong> (engl. „not a number“)? Dann rechnest du mit
-          etwas, das gar keine Zahl ist — oft kommt eine Zahl als Text an. Wandle sie mit <code>Number($json.feld)</code> um.</p>
+          etwas, das gar keine Zahl ist. Oft kommt eine Zahl als Text an. Wandle sie mit <code>Number($json.feld)</code> um.</p>
         <p style="margin:0">• <strong><code>toFixed</code> macht aus deiner Zahl Text.</strong> Willst du danach noch rechnen,
           nimm lieber <code>.round(1)</code> oder <code>Math.round()</code>.</p>
       </div>
 
       <h2>Mit Datum &amp; Uhrzeit arbeiten</h2>
-      <p>Datum ist das Thema, an dem die meisten Einsteiger:innen hängenbleiben — dabei ist es mit n8n richtig angenehm.
-        <code>$now</code> und <code>$today</code> sind keine simplen Texte, sondern <strong>Datum-Objekte</strong>. Damit kannst du
-        <em>rechnen</em> (Tage addieren) und sie in <em>jedes Format</em> bringen:</p>
+      <p>Datum ist das Thema, an dem die meisten Einsteiger:innen hängenbleiben — zu Unrecht.
+        <code>$now</code> und <code>$today</code> sind keine simplen Texte, sondern <strong>Datum-Objekte</strong> aus der
+        Bibliothek Luxon, die n8n mitbringt. Damit kannst du <em>rechnen</em> (Tage addieren) und sie in <em>jedes Format</em>
+        bringen:</p>
 
       <table class="btable">
         <thead><tr><th>Expression</th><th>Ergebnis (Beispiel)</th></tr></thead>
         <tbody>
-          <tr><td><code>{{ $now }}</code></td><td>2026-05-29T14:30:00.000+02:00 — das volle Datum-Objekt</td></tr>
-          <tr><td><code>{{ $now.toFormat('dd.MM.yyyy') }}</code></td><td>„29.05.2026“ — deutsches Datumsformat</td></tr>
-          <tr><td><code>{{ $now.toFormat('HH:mm') }}</code></td><td>„14:30“ — nur die Uhrzeit</td></tr>
-          <tr><td><code>{{ $now.plus({ days: 7 }).toFormat('dd.MM.yyyy') }}</code></td><td>„05.06.2026“ — in einer Woche</td></tr>
-          <tr><td><code>{{ $now.minus({ hours: 2 }).toFormat('HH:mm') }}</code></td><td>„12:30“ — vor zwei Stunden</td></tr>
+          <tr><td><code>{{ $now }}</code></td><td>2026-05-29T14:30:00.000+02:00, das volle Datum-Objekt</td></tr>
+          <tr><td><code>{{ $now.toFormat('dd.MM.yyyy') }}</code></td><td>„29.05.2026“, deutsches Datumsformat</td></tr>
+          <tr><td><code>{{ $now.toFormat('HH:mm') }}</code></td><td>„14:30“, nur die Uhrzeit</td></tr>
+          <tr><td><code>{{ $now.plus({ days: 7 }).toFormat('dd.MM.yyyy') }}</code></td><td>„05.06.2026“, also in einer Woche</td></tr>
+          <tr><td><code>{{ $now.minus({ hours: 2 }).toFormat('HH:mm') }}</code></td><td>„12:30“, also vor zwei Stunden</td></tr>
           <tr><td><code>{{ $json.current.time.toDateTime().toFormat('dd.MM.yyyy HH:mm') }}</code></td><td>einen ISO-Text (z. B. aus der Wetter-API) lesbar machen</td></tr>
         </tbody>
       </table>
@@ -215,17 +231,23 @@
         Leerzeichen dazwischen.</p>
 
       <div class="callout callout--warn">
-        <b class="t">Wenn etwas schiefgeht — die Format-Falle</b>
-        Groß und klein sind <strong>nicht</strong> dasselbe! <code>MM</code> ist der Monat, <code>mm</code> die Minute. Und es
-        heißt <code>yyyy</code> (klein) und <code>dd</code> — nicht <code>YYYY</code> oder <code>DD</code>. Schreibt man die falsch,
-        kommt entweder Unsinn oder ein Fehler heraus.
+        <b class="t">Wenn etwas schiefgeht: die Format-Falle</b>
+        <p style="margin:0 0 6px">• <strong>Groß und klein sind nicht dasselbe.</strong> <code>MM</code> ist der Monat,
+          <code>mm</code> die Minute. Und es heißt <code>yyyy</code> (klein) und <code>dd</code>, nicht <code>YYYY</code>
+          oder <code>DD</code>. Schreibt man die falsch, kommt entweder Unsinn oder ein Fehler heraus.</p>
+        <p style="margin:0">• <strong>Häng <code>$now</code> nie roh an einen Text.</strong> <code>{{ $now }}</code> allein
+          liefert das ISO-Datum. <code>{{ 'Heute ist ' + $now }}</code> liefert dagegen eine lange Zahl, nämlich den
+          Unix-Zeitstempel in Millisekunden. Formatiere zuerst, verbinde dann:
+          <code>{{ 'Heute ist ' + $now.toFormat('dd.MM.yyyy') }}</code>.</p>
       </div>
 
       <div class="callout callout--tip">
         <b class="t">💡 Eingehende Datums-Texte „aufwecken“</b>
         Werte aus APIs sind oft Text wie <code>"2026-05-29T10:00"</code>. Häng <code>.toDateTime()</code> an, und n8n macht daraus
         ein echtes Datum-Objekt, das du dann mit <code>.toFormat(...)</code> hübsch darstellst oder mit <code>.plus(...)</code>
-        verrechnest.
+        verrechnest. In der Doku begegnet dir daneben <code>.format(...)</code>. Das ist eine n8n-eigene Zugabe und gilt nur in
+        Expressions. <code>.toFormat(...)</code> kommt aus Luxon und läuft zusätzlich im Code-Node (Kapitel 9). Deshalb bleiben
+        wir im ganzen Buch bei <code>.toFormat(...)</code>.
       </div>
 
       <h2>Entscheidungen treffen (ohne IF-Node)</h2>
@@ -238,7 +260,8 @@
           <tr><td><code>{{ $json.temp &gt; 20 ? 'warm' : 'kühl' }}</code></td><td>bei temp = 17.5 → „kühl“</td></tr>
           <tr><td><code>{{ $json.temp &gt; 25 ? '🔥 heiß' : $json.temp &gt; 15 ? '😎 mild' : '🧥 kalt' }}</code></td><td>verkettet für drei Stufen → „😎 mild“</td></tr>
           <tr><td><code>{{ $json.name || 'Unbekannt' }}</code></td><td>nimm <code>name</code>, und falls leer/fehlt → „Unbekannt“</td></tr>
-          <tr><td><code>{{ $json.user?.email }}</code></td><td>kein Absturz, wenn <code>user</code> fehlt — liefert dann einfach nichts</td></tr>
+          <tr><td><code>{{ $ifEmpty($json.name, 'Unbekannt') }}</code></td><td>dieselbe Idee als <span class="hint">n8n-Helfer</span>: leerer Text, <code>null</code> oder fehlender Wert werden ersetzt</td></tr>
+          <tr><td><code>{{ $json.user?.email }}</code></td><td>kein Absturz, wenn <code>user</code> fehlt; die Expression liefert dann einfach nichts</td></tr>
         </tbody>
       </table>
 
@@ -253,7 +276,7 @@
       <p>Du musst Feldnamen weder auswendig wissen noch fehlerfrei abtippen. n8n hilft dir auf zwei Wegen.</p>
 
       <h3>1) Autovervollständigung</h3>
-      <p>Tippe in einem Expression-Feld <code>{{ $json.</code> — und n8n klappt eine Liste mit genau den Feldern auf, die gerade
+      <p>Tippe in einem Expression-Feld <code>{{ $json.</code>, und n8n klappt eine Liste mit genau den Feldern auf, die gerade
         hereinkommen, samt Datentyp. Mit den Pfeiltasten auswählen, <span class="kbd">Enter</span> übernimmt:</p>
 
       <figure class="figure">
@@ -274,8 +297,8 @@
 
       <h3>2) Drag-and-drop aus dem Schema</h3>
       <p>Noch bequemer: Wechsle im <strong>Eingangspanel</strong> (linke Spalte der NDV) auf den Reiter <strong>Schema</strong>,
-        pack dir ein Feld und <strong>zieh es direkt ins Expression-Feld</strong>. n8n fügt die komplette, korrekte Expression
-        automatisch ein — inklusive <code>{{ }}</code> und richtigem Pfad.</p>
+        pack dir ein Feld und zieh es direkt ins Expression-Feld. n8n baut die Expression dann selbst, inklusive
+        <code>{{ }}</code> und richtigem Pfad.</p>
 
       <div class="clickpath">
         <span class="step"><span class="n">1</span> Feld auf „Expression“ schalten</span>
@@ -291,12 +314,12 @@
 
       <h2>Mini-Übung: aus rohen Daten eine richtig schöne Nachricht</h2>
       <p>Jetzt führen wir alles zusammen. Wir nehmen den Wetter-Workflow aus Kapitel 4 und bauen den Satz im
-        <strong>Edit-Fields-Node</strong> deutlich auf: mit gerundeter Temperatur, einer Wenn-dann-Entscheidung und dem heutigen Datum.</p>
+        <strong>Edit-Fields-Node</strong> deutlich aus: mit gerundeter Temperatur, einer Wenn-dann-Entscheidung und dem heutigen Datum.</p>
 
       <ol class="steps">
         <li><h4>Den Edit-Fields-Node öffnen</h4>
           <p><strong>Doppelklick</strong> auf den Node „Nachricht bauen“. In der linken Spalte (Eingang) liegen die Wetterdaten
-            aus dem HTTP-Node — die brauchen wir gleich.</p></li>
+            aus dem HTTP-Node. Die brauchen wir gleich.</p></li>
         <li><h4>Sicherstellen, dass der Wert auf „Expression“ steht</h4>
           <p>Beim Feld <code>nachricht</code> oben den Reiter <strong>Expression</strong> wählen (bläulicher Hintergrund).</p></li>
         <li><h4>Die erweiterte Expression eintragen</h4>
@@ -305,23 +328,23 @@
       </ol>
 
       <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Wert des Feldes „nachricht“ — Modus: Expression</div>
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Wert des Feldes „nachricht“, Modus: Expression</div>
 <pre>🌤️ Wetter für Berlin am {{ $now.toFormat('dd.MM.yyyy') }}:
-Es sind {{ Math.round($json.current.temperature_2m) }} °C — {{ $json.current.temperature_2m &gt; 18 ? 'angenehm 😎' : 'eher frisch 🧥' }}.
+Es sind {{ Math.round($json.current.temperature_2m) }} °C, {{ $json.current.temperature_2m &gt; 18 ? 'angenehm 😎' : 'eher frisch 🧥' }}.
 Wind: {{ Math.round($json.current.wind_speed_10m) }} km/h.</pre>
       </div>
 
-      <p>Schau auf die <strong>Ergebnis</strong>-Vorschau, während du tippst — sie setzt sofort die echten Werte ein:</p>
+      <p>Schau auf die <strong>Ergebnis</strong>-Vorschau, während du tippst. Sie setzt sofort die echten Werte ein:</p>
 
       <figure class="figure">
         <div class="frame">
           <div class="n8n-expr" style="max-width:620px; margin:0 auto;">
             <div class="n8n-expr__head"><span class="ic">𝑓𝑥</span> Ausdruckseditor — Feld „nachricht“</div>
             <div class="n8n-expr__code">🌤️ Wetter für Berlin am <span class="expr-tok">{{ <span class="expr-var">$now</span>.toFormat('dd.MM.yyyy') }}</span>:
-Es sind <span class="expr-tok">{{ Math.round(<span class="expr-var">$json</span>.current.temperature_2m) }}</span> °C — <span class="expr-tok">{{ <span class="expr-var">$json</span>.current.temperature_2m &gt; 18 ? 'angenehm 😎' : 'eher frisch 🧥' }}</span>.
+Es sind <span class="expr-tok">{{ Math.round(<span class="expr-var">$json</span>.current.temperature_2m) }}</span> °C, <span class="expr-tok">{{ <span class="expr-var">$json</span>.current.temperature_2m &gt; 18 ? 'angenehm 😎' : 'eher frisch 🧥' }}</span>.
 Wind: <span class="expr-tok">{{ Math.round(<span class="expr-var">$json</span>.current.wind_speed_10m) }}</span> km/h.</div>
             <div class="n8n-expr__result"><span class="lbl">Ergebnis</span><span>🌤️ Wetter für Berlin am 29.05.2026:
-Es sind 17 °C — eher frisch 🧥.
+Es sind 17 °C, eher frisch 🧥.
 Wind: 12 km/h.</span></div>
           </div>
         </div>
@@ -331,19 +354,19 @@ Wind: 12 km/h.</span></div>
 
       <ol class="steps" style="counter-reset: st 3;">
         <li><h4>Ausführen und prüfen</h4>
-          <p>Klick auf <strong>„▶ Schritt ausführen“</strong>. Im Ausgang steht jetzt deine mehrzeilige, schön formatierte
-            Nachricht — bereit, um sie z. B. per Telegram oder E-Mail zu verschicken.</p></li>
+          <p>Klick auf <strong>„▶ Schritt ausführen“</strong>. Im Ausgang steht jetzt deine mehrzeilige Nachricht. Von dort
+            kannst du sie später weiterreichen, etwa per Telegram oder E-Mail.</p></li>
         <li><h4>Speichern</h4>
           <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Geschafft.</p></li>
       </ol>
 
       <div class="callout callout--tip">
         <b class="t">🎉 Das war ein großer Schritt</b>
-        Du hast in <em>einem einzigen Feld</em> ein Datum formatiert, eine Zahl gerundet und eine Bedingung ausgewertet — ganz
-        ohne extra Nodes. Genau diese Verdichtung macht Expressions so mächtig.
+        Du hast in <em>einem einzigen Feld</em> ein Datum formatiert, eine Zahl gerundet und eine Bedingung ausgewertet, ganz
+        ohne zusätzliche Nodes. Ohne Expressions hättest du dafür drei weitere Nodes auf dem Canvas.
       </div>
 
-      <h2>Wenn etwas schiefgeht — die vier häufigsten Expression-Fehler</h2>
+      <h2>Wenn etwas schiefgeht: die vier häufigsten Expression-Fehler</h2>
       <table class="btable">
         <thead><tr><th>Du siehst …</th><th>Ursache</th><th>Lösung</th></tr></thead>
         <tbody>
@@ -356,8 +379,9 @@ Wind: 12 km/h.</span></div>
 
       <div class="callout callout--info">
         <b class="t">Goldene Regel beim Fehlersuchen</b>
-        Vertrau der <strong>Ergebnis</strong>-Vorschau und der <strong>Schema</strong>-Ansicht links. 95 % aller Expression-Probleme
-        sind ein falsch geschriebener Feldname — und beides zeigt dir die Wahrheit in Sekunden.
+        Vertrau der <strong>Ergebnis</strong>-Vorschau und der <strong>Schema</strong>-Ansicht links. Die allermeisten
+        Expression-Probleme sind ein falsch geschriebener Feldname. Beide Ansichten zeigen dir in Sekunden, wie das Feld
+        wirklich heißt.
       </div>
 
       <h2>Konkrete Testfälle</h2>
@@ -372,13 +396,13 @@ Wind: 12 km/h.</span></div>
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest — sitzt das Wichtigste?</h4>
+        <h4>✅ Selbsttest: sitzt das Wichtigste?</h4>
         <ul>
           <li>Wodurch erkennst du auf einen Blick, dass ein Feld im <em>Expression</em>-Modus ist?</li>
           <li>Wie rundest du <code>$json.preis</code> auf zwei Nachkommastellen?</li>
           <li>Wie schreibst du „heutiges Datum als TT.MM.JJJJ“?</li>
           <li>Welche Expression setzt „Gast“ ein, falls das Feld <code>name</code> leer ist?</li>
-          <li>Du tippst <code>$json.</code> — was passiert, und warum ist das praktisch?</li>
+          <li>Du tippst <code>$json.</code> in ein Expression-Feld: was passiert, und warum ist das praktisch?</li>
         </ul>
       </div>
 
@@ -392,8 +416,8 @@ Wind: 12 km/h.</span></div>
       </div>
 
       <p>Du hast jetzt das Werkzeug, mit dem du Daten in jede gewünschte Form bringst. Ab hier nehmen wir die einzelnen
-        <strong>Bausteine</strong> gründlich auseinander. Den Anfang macht die Frage, <em>wann</em> ein Workflow überhaupt loslegt:
-        die <strong>Trigger-Nodes</strong> — manuell, nach Zeitplan oder per Webhook.</p>
+        Bausteine gründlich auseinander. Den Anfang macht die Frage, <em>wann</em> ein Workflow überhaupt loslegt:
+        die <strong>Trigger-Nodes</strong>, manuell, nach Zeitplan oder per Webhook.</p>
 
     </article>
     <nav id="prevnext"></nav>

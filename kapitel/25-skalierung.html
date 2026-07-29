@@ -138,6 +138,17 @@
         </tbody>
       </table>
 
+      <div class="callout callout--info">
+        <b class="t">Wo diese Einstellungen inzwischen liegen</b>
+        n8n hat 2026 einen eigenen Einstellungsbereich <strong>Security &amp; policies</strong> bekommen. Dort setzt
+        du instanzweit fest, was Nutzer:innen in ihren persönlichen Bereichen dürfen, etwa Workflows teilen oder
+        publizieren. Zwei weitere Punkte lohnen einen Blick, sobald echte Kundendaten durch die Instanz laufen: Die
+        Rechte <code>workflow:publish</code> und <code>workflow:unpublish</code> lassen sich getrennt vom
+        Bearbeitungsrecht vergeben, und Ausführungsdaten können so verwahrt werden, dass sensible Inhalte erst nach
+        einer ausdrücklichen Freigabe sichtbar werden. Die Rechte-Feinsteuerung gehört zu den kostenpflichtigen
+        Editionen; die Denkfrage dahinter gilt trotzdem für jede Instanz.
+      </div>
+
       <h2>Der einfache Betrieb</h2>
       <p>Eine einzelne n8n-Instanz ist nicht falsch. Für kleine interne Automationen ist sie oft die vernünftige Wahl:
         weniger Teile, weniger Konfiguration, weniger Fehlerquellen. Sie wird problematisch, wenn dieselbe Instanz
@@ -239,13 +250,19 @@
       <h2>Task Runner für Code-Nodes</h2>
       <p>Task Runner führen Code-Node-Aufgaben getrennt vom n8n-Hauptprozess aus. Das ist kein Ersatz für Queue-Mode:
         Queue-Mode verteilt Workflow-Ausführungen, Task Runner isolieren JavaScript- und Python-Code innerhalb einer
-        Ausführung. Für Produktion ist der externe Modus die skeptischere Wahl, weil der Runner als eigener Prozess oder
+        Ausführung. Für Produktion ist der externe Modus die sicherere Wahl, weil der Runner als eigener Prozess oder
         Sidecar läuft.</p>
+
+      <p>Seit n8n 2.0 musst du Task Runner nicht mehr einschalten: Sie sind der Standard, und Code-Nodes laufen
+        von Haus aus isoliert. Zu konfigurieren bleibt der <em>Modus</em>. Eine Nebenwirkung, über die viele beim
+        Umstieg stolpern: Der Zugriff auf Umgebungsvariablen über <code>process.env</code> ist im Code-Node
+        standardmäßig gesperrt. Das ist Absicht, denn ein Code-Node soll nicht die Betriebsgeheimnisse der Instanz
+        auslesen können.</p>
 
       <table class="btable">
         <thead><tr><th>Variable</th><th>Beispiel</th><th>Wofür?</th></tr></thead>
         <tbody>
-          <tr><td><code>N8N_RUNNERS_ENABLED</code></td><td><code>true</code></td><td>Task Runner einschalten</td></tr>
+          <tr><td><code>N8N_RUNNERS_ENABLED</code></td><td><code>true</code></td><td>seit n8n 2.0 überflüssig, weil Runner der Standard sind. Nur für 1.x nötig</td></tr>
           <tr><td><code>N8N_RUNNERS_MODE</code></td><td><code>external</code></td><td>Runner außerhalb des n8n-Prozesses betreiben</td></tr>
           <tr><td><code>N8N_RUNNERS_AUTH_TOKEN</code></td><td><code>lange-zufaellige-zeichenfolge</code></td><td>Runner und Broker gegenseitig absichern</td></tr>
           <tr><td><code>N8N_RUNNERS_BROKER_LISTEN_ADDRESS</code></td><td><code>0.0.0.0</code></td><td>Broker für Sidecar/Container erreichbar machen</td></tr>

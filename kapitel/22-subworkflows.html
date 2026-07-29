@@ -17,8 +17,8 @@
       <div class="chap-eyebrow"><span class="knum">22</span> Profi &amp; Betrieb</div>
       <h1 class="chap-title">Sub-Workflows &amp; Modularisierung</h1>
       <p class="chap-lede">In diesem Kapitel zerlegst du einen Workflow in einen Haupt-Workflow und einen
-        wiederverwendbaren Sub-Workflow. Das Ziel ist nicht „mehr Architektur“, sondern weniger Kopieren:
-        gleiche Logik an einer Stelle, klare Eingaben, klare Rückgaben.</p>
+        wiederverwendbaren Sub-Workflow. Es geht dabei um weniger Kopieren: Dieselbe Logik liegt an einer Stelle,
+        und der Aufrufer weiß, welche Felder er hineingibt und welche er zurückbekommt.</p>
       <div class="chap-meta">
         <span>⏱ ca. 18 Minuten</span>
         <span>🎯 Niveau: Fortgeschrittene Grundlagen</span>
@@ -120,7 +120,7 @@
 
       <hr>
 
-      <h2>Schritt 1 — Sub-Workflow anlegen</h2>
+      <h2>Schritt 1: Sub-Workflow anlegen</h2>
       <p>Wir beginnen mit dem wiederverwendbaren Teil. Der Sub-Workflow soll später von anderen Workflows aufgerufen
         werden, aber zunächst testest du ihn isoliert.</p>
 
@@ -128,13 +128,22 @@
         <li><h4>Neuen Workflow erstellen</h4>
           <p>Erstelle einen neuen Workflow und nenne ihn <code>Baustein · Lead normalisieren</code>.</p></li>
         <li><h4>Execute Sub-workflow Trigger hinzufügen</h4>
-          <p>Klicke auf <strong>Add first step</strong>, suche <code>execute sub-workflow trigger</code> und wähle
-            <strong>Execute Sub-workflow Trigger</strong>.</p></li>
-        <li><h4>Eingaben definieren</h4>
-          <p>Stelle die Eingabe so ein, dass die Felder explizit definiert werden. Lege diese Felder an:
-            <code>name</code>, <code>email</code>, <code>company</code>, <code>source</code>.</p></li>
-        <li><h4>Auto-Save prüfen</h4>
-          <p>Warte, bis der Draft gespeichert ist. Erst gespeicherte Workflows lassen sich sauber aus dem Haupt-Workflow auswählen.</p></li>
+          <p>Klicke auf <strong>Add first step…</strong>, suche <code>execute sub-workflow</code> und wähle den Trigger
+            <strong>Execute Sub-workflow Trigger</strong>. In der Trigger-Liste und auf dem Canvas trägt derselbe Node
+            den Namen <strong>When Executed by Another Workflow</strong>. Beide Bezeichnungen meinen denselben Node.</p></li>
+        <li><h4>Input data mode setzen</h4>
+          <p>Stelle <strong>Input data mode</strong> auf <strong>Define using fields below</strong>. Daneben gibt es
+            <strong>Define using JSON example</strong> für ein Beispiel-JSON und <strong>Accept all data</strong> für
+            „nimm einfach alles“. Für einen Baustein mit festem Vertrag willst du den ersten Modus.</p></li>
+        <li><h4>Vier Eingabefelder anlegen</h4>
+          <p>Klicke unter <strong>Workflow Input Schema</strong> viermal auf <strong>Add field</strong>. Trage als
+            <strong>Name</strong> nacheinander <code>name</code>, <code>email</code>, <code>company</code> und
+            <code>source</code> ein. <strong>Type</strong> bleibt bei allen vier auf <code>String</code>.</p></li>
+        <li><h4>Speichern lassen, Publish merken</h4>
+          <p>Einen Save-Button gibt es seit n8n 2.0 nicht mehr. n8n speichert automatisch, meist innerhalb von 1 bis
+            5 Sekunden. Alle Änderungen bleiben allerdings ein Draft, bis du auf <strong>Publish</strong> klickst. Zum
+            Üben genügt der Draft, denn ein manuell gestarteter Haupt-Workflow ruft die Draft-Version des Sub-Workflows
+            auf. Produktive Läufe brauchen dagegen eine publizierte Version.</p></li>
       </ol>
 
       <figure class="figure">
@@ -159,7 +168,7 @@
           Der Aufrufer sieht sofort, was der Baustein erwartet.</figcaption>
       </figure>
 
-      <h2>Schritt 2 — Normalisierung einbauen</h2>
+      <h2>Schritt 2: Normalisierung einbauen</h2>
       <p>Der Sub-Workflow soll alle eingehenden Items bearbeiten. Deshalb bleibt die Logik klein und deterministisch:
         Leerzeichen entfernen, E-Mail kleinschreiben, Pflichtfelder prüfen, Score berechnen.</p>
 
@@ -230,9 +239,20 @@ return inputItems.map((item) =&gt; {
         <code>is_valid_email</code>, <code>quality_score</code>. Ein geworfener Fehler stoppt den aufrufenden Workflow.
       </div>
 
-      <h2>Schritt 3 — Rückgabe sichtbar machen</h2>
-      <p>Der aufrufende Workflow erhält die Ausgabe des letzten ausgeführten Nodes im Sub-Workflow. Du könntest den
-        Code-Node direkt als letzten Node lassen. Für Anfänger ist ein eigener Rückgabe-Node aber lesbarer.</p>
+      <h2>Schritt 3: Rückgabe sichtbar machen</h2>
+      <p>Der aufrufende Workflow bekommt zurück, was der letzte Node des Sub-Workflows ausgibt. Du könntest den
+        Code-Node einfach als letzten Node stehen lassen. Ein eigener Rückgabe-Node liest sich später aber
+        eindeutiger.</p>
+
+      <div class="callout callout--warn">
+        <b class="t">Geändert in n8n 2.0: Rückgabe nach einer Wartepause</b>
+        Enthält dein Sub-Workflow einen Node, der ihn in den Wartezustand schickt, bekommt der Haupt-Workflow seit
+        n8n 2.0 die Daten vom Ende des Sub-Workflows. In n8n 1.x kam an dieser Stelle noch der Input des wartenden
+        Nodes zurück. Auslöser sind zum Beispiel ein Wait-Node mit mehr als 65 Sekunden Wartezeit, ein Webhook-Aufruf,
+        eine Formulareingabe oder ein Human-in-the-Loop-Node. Erst dadurch kannst du eine Freigabe im Sub-Workflow
+        einholen und das Ergebnis im Haupt-Workflow auswerten. Wenn du einen alten Workflow migrierst, der sich auf das
+        1.x-Verhalten verlassen hat, musst du ihn umbauen.
+      </div>
 
       <ol class="steps">
         <li><h4>Edit-Fields-Node anhängen</h4>
@@ -257,19 +277,23 @@ return inputItems.map((item) =&gt; {
         </tbody>
       </table>
 
-      <h2>Schritt 4 — Sub-Workflow berechtigen</h2>
+      <h2>Schritt 4: Sub-Workflow berechtigen</h2>
       <p>Ein Sub-Workflow ist nur dann sinnvoll wiederverwendbar, wenn klar ist, wer ihn aufrufen darf. Das ist eine
-        Betriebsfrage, keine Kosmetik.</p>
+        Betriebsfrage.</p>
 
       <ol class="steps">
         <li><h4>Workflow-Einstellungen öffnen</h4>
-          <p>Öffne im Sub-Workflow die Workflow-Einstellungen.</p></li>
+          <p>Öffne im Sub-Workflow oben rechts das <strong>Options</strong>-Menü, also die drei Punkte, und wähle
+            <strong>Settings</strong>. n8n zeigt jetzt das Fenster <strong>Workflow settings</strong>.</p></li>
         <li><h4>Aufrufrechte prüfen</h4>
-          <p>Suche die Einstellung, welche Workflows diesen Workflow aufrufen dürfen.</p></li>
+          <p>Suche die Einstellung <strong>This workflow can be called by</strong>. Zur Auswahl stehen unter anderem
+            <strong>Any workflow</strong>, <strong>Only workflows in the same project</strong>,
+            <strong>Selected workflows</strong> und <strong>No other workflows</strong>.</p></li>
         <li><h4>Für das Lernen offen lassen</h4>
-          <p>Für dieses Kapitel reicht die allgemeine Aufrufbarkeit in deiner Testumgebung.</p></li>
+          <p>Für dieses Kapitel reicht <strong>Any workflow</strong> in deiner Testumgebung.</p></li>
         <li><h4>Produktiv einschränken</h4>
-          <p>In produktiven Projekten wählst du gezielt die Workflows aus, die diesen Baustein aufrufen dürfen.</p></li>
+          <p>In produktiven Projekten stellst du auf <strong>Selected workflows</strong> um und trägst dort genau die
+            Workflows ein, die diesen Baustein aufrufen dürfen.</p></li>
       </ol>
 
       <div class="callout callout--info">
@@ -278,7 +302,7 @@ return inputItems.map((item) =&gt; {
         liest, darf er nicht beliebig aufrufbar sein.
       </div>
 
-      <h2>Schritt 5 — Haupt-Workflow anlegen</h2>
+      <h2>Schritt 5: Haupt-Workflow anlegen</h2>
       <p>Jetzt baust du den Aufrufer. Er erzeugt drei Leads, ruft den Baustein auf und verzweigt danach nach
         <code>is_valid_email</code>.</p>
 
@@ -286,7 +310,8 @@ return inputItems.map((item) =&gt; {
         <li><h4>Neuen Workflow erstellen</h4>
           <p>Erstelle einen Workflow und nenne ihn <code>Lead-Import mit Baustein</code>.</p></li>
         <li><h4>Manual Trigger hinzufügen</h4>
-          <p>Füge als ersten Node einen <strong>Manual Trigger</strong> hinzu.</p></li>
+          <p>Füge als ersten Node einen <strong>Manual Trigger</strong> hinzu. Auf dem Canvas beschriftet n8n ihn mit
+            <strong>When clicking ‘Execute workflow’</strong>.</p></li>
         <li><h4>Code-Node anhängen</h4>
           <p>Hänge einen <strong>Code</strong>-Node an und nenne ihn <code>Demo-Leads</code>.</p></li>
         <li><h4>Modus setzen</h4>
@@ -325,31 +350,41 @@ return inputItems.map((item) =&gt; {
 
       <ol class="steps" style="counter-reset: st 4;">
         <li><h4>Schritt ausführen</h4>
-          <p>Führe den Code-Node aus. Du solltest drei Items sehen.</p></li>
+          <p>Klicke im Node auf <strong>Execute step</strong>. Du solltest drei Items sehen.</p></li>
       </ol>
 
-      <h2>Schritt 6 — Sub-Workflow aufrufen</h2>
+      <h2>Schritt 6: Sub-Workflow aufrufen</h2>
       <p>Der Execute-Node ist die Brücke. Er nimmt die Items aus dem Haupt-Workflow, übergibt sie an den Baustein und
         wartet auf die Rückgabe.</p>
 
       <ol class="steps">
         <li><h4>Execute Sub-workflow anhängen</h4>
-          <p>Ziehe vom Node <code>Demo-Leads</code> eine Verbindung ins Leere und suche
-            <code>execute sub-workflow</code>.</p></li>
+          <p>Ziehe vom Node <code>Demo-Leads</code> eine Verbindung ins Leere, suche
+            <code>execute sub-workflow</code> und wähle den Node <strong>Execute Sub-workflow</strong>.</p></li>
         <li><h4>Workflow auswählen</h4>
-          <p>Wähle <code>Baustein · Lead normalisieren</code>.</p></li>
+          <p>Lass <strong>Source</strong> auf <strong>Database</strong> und <strong>From list</strong> stehen. Wähle
+            in der Liste <code>Baustein · Lead normalisieren</code>.</p></li>
         <li><h4>Auf Abschluss warten</h4>
-          <p>Lasse die Option aktiv, dass der Haupt-Workflow auf das Ergebnis wartet. Sonst könntest du danach nicht
-            nach <code>is_valid_email</code> verzweigen.</p></li>
+          <p>Die zuständige Option heißt <strong>Wait For Sub-Workflow Completion</strong> und steckt unten unter
+            <strong>Options</strong>. Sie ist standardmäßig eingeschaltet, du musst sie also nur anfassen, wenn du sie
+            ausschalten willst. Ausgeschaltet könntest du danach nicht nach <code>is_valid_email</code> verzweigen.</p></li>
         <li><h4>Alle Items gemeinsam übergeben</h4>
           <p>Nutze für dieses Beispiel den Modus <strong>Run once with all items</strong>. So verarbeitet der Baustein
-            die komplette Liste und gibt wieder eine Liste zurück.</p></li>
+            die komplette Liste und gibt wieder eine Liste zurück. Den zweiten Modus
+            <strong>Run once for each item</strong> hat n8n mit 2.30 als deprecated markiert. Wählst du ihn, blendet
+            der Node einen Hinweis ein und empfiehlt stattdessen einen
+            <strong>Loop Over Items (Split in Batches)</strong>-Node vor dem Execute-Node.</p></li>
         <li><h4>Felder zuordnen</h4>
-          <p>Ordne die vier Eingaben zu:
+          <p>Unter <strong>Workflow Inputs</strong> zieht n8n die vier Felder aus dem Trigger automatisch herein.
+            Ordne sie zu:
             <code>name = {{$json.name}}</code>,
             <code>email = {{$json.email}}</code>,
             <code>company = {{$json.company}}</code>,
             <code>source = {{$json.source}}</code>.</p></li>
+        <li><h4>In die Sub-Ausführung springen</h4>
+          <p>Nach einem Lauf zeigt der Execute-Node den Link <strong>View sub-execution</strong>. Er bringt dich direkt
+            in die Ausführung des Bausteins. Von dort führt ein Link wieder zurück in die Ausführung des
+            Haupt-Workflows. Das ist der schnellste Weg, wenn eine Rückgabe nicht so aussieht wie erwartet.</p></li>
       </ol>
 
       <figure class="figure">
@@ -399,7 +434,7 @@ return inputItems.map((item) =&gt; {
         kontrolliert als fehlerhaft markiert wird.
       </div>
 
-      <h2>Schritt 7 — Nach Rückgabe verzweigen</h2>
+      <h2>Schritt 7: Nach Rückgabe verzweigen</h2>
       <p>Jetzt nutzt der Haupt-Workflow das Ergebnis. Gute Leads laufen weiter, fehlerhafte Leads gehen in eine
         Prüfschleife.</p>
 
@@ -415,7 +450,8 @@ return inputItems.map((item) =&gt; {
         <li><h4>False-Ausgang beschriften</h4>
           <p>Hänge an den False-Ausgang ebenfalls einen No-Op-Node und nenne ihn <code>prüfen</code>.</p></li>
         <li><h4>Workflow ausführen</h4>
-          <p>Führe den Haupt-Workflow aus. Zwei Items sollten zum True-Ausgang laufen, ein Item zum False-Ausgang.</p></li>
+          <p>Klicke unten auf dem Canvas auf <strong>Execute workflow</strong>. Zwei Items sollten zum True-Ausgang
+            laufen, ein Item zum False-Ausgang.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -424,7 +460,7 @@ return inputItems.map((item) =&gt; {
         der Lead wertvoll ist. Nutze solche Scores als Filterhilfe, nicht als automatisches Urteil.
       </div>
 
-      <h2>Schritt 8 — Vertrag dokumentieren</h2>
+      <h2>Schritt 8: Vertrag dokumentieren</h2>
       <p>Sub-Workflows werden schnell gefährlich, wenn niemand mehr weiß, welche Felder erwartet werden. Dokumentiere
         den Vertrag direkt im Workflow-Namen, in Node-Namen oder in einer kurzen Notiz.</p>
 
@@ -446,16 +482,16 @@ return inputItems.map((item) =&gt; {
         mehr, sondern ein schwer prüfbarer Prozess.
       </div>
 
-      <h2>Schritt 9 — Execute-Modi unterscheiden</h2>
-      <p>Der Aufrufmodus entscheidet, wie Items an den Sub-Workflow übergeben werden. Für Anfänger wirkt das klein,
-        aber es verändert Debugging, Performance und Fehlerbild.</p>
+      <h2>Schritt 9: Execute-Modi unterscheiden</h2>
+      <p>Der Aufrufmodus entscheidet, wie Items an den Sub-Workflow übergeben werden. Für Anfänger wirkt das wie eine
+        Kleinigkeit. Er ändert aber, wie lange ein Lauf dauert und wie du einen Fehler später wiederfindest.</p>
 
       <table class="btable">
         <thead><tr><th>Modus</th><th>Was passiert?</th><th>Wann sinnvoll?</th></tr></thead>
         <tbody>
           <tr><td>Run once with all items</td><td>Ein Aufruf mit der ganzen Item-Liste</td><td>Batch-Normalisierung, CSV-Importe, gemeinsame Berechnungen</td></tr>
-          <tr><td>Run once for each item</td><td>Ein Aufruf pro Item</td><td>isolierte Einzelverarbeitung, wenn ein Itemfehler nicht alle betreffen soll</td></tr>
-          <tr><td>Wait for completion aus</td><td>Haupt-Workflow läuft weiter, ohne Rückgabe zu nutzen</td><td>Logging, Benachrichtigung, Hintergrundaufgaben</td></tr>
+          <tr><td>Run once for each item</td><td>Ein Aufruf pro Item, seit n8n 2.30 als deprecated markiert</td><td>nur noch für Altbestand; für Neues nimmst du einen Loop Over Items (Split in Batches)-Node vor dem Execute-Node und bleibst bei Run once with all items</td></tr>
+          <tr><td>Wait For Sub-Workflow Completion aus</td><td>Haupt-Workflow läuft weiter, ohne Rückgabe zu nutzen</td><td>Logging, Benachrichtigung, Hintergrundaufgaben</td></tr>
         </tbody>
       </table>
 
@@ -469,10 +505,12 @@ return inputItems.map((item) =&gt; {
       <table class="btable">
         <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
         <tbody>
-          <tr><td>Sub-Workflow erscheint nicht in der Auswahl</td><td>Draft noch nicht gespeichert oder falscher Trigger</td><td>Auto-Save abwarten, Execute Sub-workflow Trigger prüfen</td></tr>
-          <tr><td>Aufruf schlägt mit fehlenden Feldern fehl</td><td>Eingabevertrag passt nicht zur Zuordnung</td><td>Feldnamen im Trigger und Execute-Node vergleichen</td></tr>
+          <tr><td>Sub-Workflow erscheint nicht in der Auswahl</td><td>kein Execute Sub-workflow Trigger im Workflow, oder die Aufrufrechte sperren ihn</td><td>Trigger prüfen und unter Settings die Einstellung <code>This workflow can be called by</code> kontrollieren</td></tr>
+          <tr><td>Aufruf schlägt mit fehlenden Feldern fehl</td><td>Eingabevertrag passt nicht zur Zuordnung</td><td>Feldnamen im Workflow Input Schema und unter Workflow Inputs vergleichen</td></tr>
           <tr><td>Es kommt nur ein Item zurück</td><td>Code verarbeitet nicht alle Items</td><td>Code-Node auf All Items stellen und <code>$input.all()</code> nutzen</td></tr>
-          <tr><td>Haupt-Workflow kann nicht verzweigen</td><td>er wartet nicht auf die Rückgabe</td><td>Wait for completion einschalten</td></tr>
+          <tr><td>Haupt-Workflow kann nicht verzweigen</td><td>er wartet nicht auf die Rückgabe</td><td>unter Options die Option Wait For Sub-Workflow Completion einschalten</td></tr>
+          <tr><td>Produktiver Lauf bricht mit „Workflow is not active and cannot be executed“ ab</td><td>der Sub-Workflow hat noch keine publizierte Version</td><td>Sub-Workflow einmal publizieren; manuelle Testläufe greifen dagegen auf den Draft zu</td></tr>
+          <tr><td>Sub-Workflow mit Wait- oder Freigabe-Node liefert etwas anderes als früher</td><td>n8n 2.0 gibt die Daten vom Ende des Sub-Workflows zurück, n8n 1.x gab den Input des wartenden Nodes zurück</td><td>Haupt-Workflow auf die Felder umbauen, die der letzte Node des Bausteins ausgibt</td></tr>
           <tr><td>Fehler stoppt den ganzen Haupt-Workflow</td><td>Sub-Workflow wirft einen technischen Fehler</td><td>Datenfehler als <code>errors</code> zurückgeben oder Fehlerbehandlung ergänzen</td></tr>
           <tr><td>Andere Workflows nutzen den Baustein falsch</td><td>Vertrag ist nicht dokumentiert</td><td>Eingaben explizit definieren und Beispiele im Workflow hinterlegen</td></tr>
         </tbody>

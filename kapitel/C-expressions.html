@@ -111,6 +111,28 @@
         </tbody>
       </table>
 
+      <h2>Kontext: Workflow und Ausführung</h2>
+      <p>Diese Werte beschreiben nicht deine Daten, sondern den Lauf selbst. Nützlich für Logmeldungen,
+        Fehlermeldungen und Dateinamen, die man später wiederfindet.</p>
+      <table class="btable">
+        <thead><tr><th>Ziel</th><th>Expression</th><th>Wofür?</th></tr></thead>
+        <tbody>
+          <tr><td>ID der Ausführung</td><td><code>{{ $execution.id }}</code></td><td>Logeintrag der konkreten Ausführung zuordnen</td></tr>
+          <tr><td>Name des Workflows</td><td><code>{{ $workflow.name }}</code></td><td>Fehlermeldungen lesbar machen</td></tr>
+          <tr><td>ID des Workflows</td><td><code>{{ $workflow.id }}</code></td><td>eindeutig, auch wenn jemand den Namen ändert</td></tr>
+          <tr><td>vorheriger Node</td><td><code>{{ $prevNode.name }}</code></td><td>hilfreich in generischen Fehlerpfaden</td></tr>
+          <tr><td>Durchlauf im Loop</td><td><code>{{ $runIndex }}</code></td><td>zählt die Durchläufe ab 0</td></tr>
+          <tr><td>Instanz-Variable</td><td><code>{{ $vars.crmBaseUrl }}</code></td><td>Werte, die sich je Umgebung unterscheiden</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout--info">
+        <b class="t">Variablen sind nicht überall verfügbar</b>
+        <code>$vars</code> setzt Variablen auf Instanzebene voraus, die zu den kostenpflichtigen Editionen gehören.
+        In der Community Edition nimmst du stattdessen Umgebungsvariablen beim Start der Instanz. Wie du Umgebungen
+        sauber trennst, steht in Kapitel 24.
+      </div>
+
       <h2>Arbeitsregel</h2>
       <ol class="steps">
         <li><h4>Input ansehen</h4><p>Öffne das Input-Panel und prüfe den echten Feldnamen. Nicht aus dem Gedächtnis raten.</p></li>

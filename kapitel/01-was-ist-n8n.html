@@ -17,8 +17,8 @@
       <div class="chap-eyebrow"><span class="knum">1</span> Grundlagen</div>
       <h1 class="chap-title">Was ist n8n? Konzept & Einsatzgebiete</h1>
       <p class="chap-lede">n8n (gesprochen „n-eight-n“, kurz für <em>nodemation</em>) ist ein Werkzeug, mit dem du
-        Software-Bausteine per Drag-and-drop zu automatischen Abläufen verbindest — ohne (oder mit nur wenig) Code.
-        Stand dieses Buchs: Mai 2026.</p>
+        Software-Bausteine per Drag-and-drop zu automatischen Abläufen verbindest, ohne (oder mit nur wenig) Code.
+        Stand dieses Buchs: Juli 2026, n8n 2.32.</p>
       <div class="chap-meta">
         <span>⏱ ca. 14 Minuten</span>
         <span>🎯 Niveau: Einstieg</span>
@@ -26,18 +26,23 @@
       </div>
 
       <h2>Die Idee in einem Bild</h2>
-      <p>Stell dir vor, du hättest einen sehr zuverlässigen, sehr schnellen Assistenten, dem du eine Abfolge von
-        Anweisungen gibst: „Hol jeden Morgen den Wechselkurs, rechne ihn um, und wenn er unter X fällt, schick mir
-        eine Nachricht.“ In n8n malst du genau diese Anweisungskette als Diagramm auf — und n8n führt sie aus,
-        so oft du willst, völlig automatisch.</p>
+      <p>Stell dir einen Assistenten vor, dem du einmal eine Abfolge von Anweisungen gibst: „Hol jeden Morgen den
+        Wechselkurs, rechne ihn um, und wenn er unter X fällt, schick mir eine Nachricht.“ In n8n malst du genau
+        diese Anweisungskette als Diagramm auf. Starten musst du sie danach nicht mehr selbst: Das übernimmt n8n,
+        jeden Tag um dieselbe Uhrzeit.</p>
 
       <p>Jeder Kasten in diesem Diagramm heißt <strong>Node</strong> und macht genau eine Sache. Die Linien dazwischen
         sind der Weg, den die Daten nehmen. Diese Kombination aus Nodes und Verbindungen ist ein <strong>Workflow</strong>.</p>
 
-      <p>Ein Workflow ist beim Bauen zunächst ein <strong>Draft</strong>. n8n speichert Änderungen automatisch. Erst wenn du
-        <strong>Publish</strong> klickst, wird eine bestimmte Version produktiv: Schedules laufen, Production-Webhooks
-        antworten und App-Trigger nehmen echte Ereignisse an. <strong>Unpublish</strong> nimmt diese produktive Version
-        wieder aus dem Betrieb.</p>
+      <p>Für die gängigen Dienste musst du dabei nichts selbst bauen. Die Integrationsliste auf n8n.io zählt derzeit
+        knapp 2000 Einträge, von Gmail über Slack bis PostgreSQL.</p>
+
+      <p>Ein Workflow ist beim Bauen zunächst ein <strong>Draft</strong>. Deine Änderungen speichert n8n automatisch,
+        in der Regel innerhalb von ein bis fünf Sekunden. Produktiv wird eine Version aber erst, wenn du
+        <strong>Publish</strong> klickst: Ab dann laufen Schedules, Webhook- und Form-Trigger antworten unter ihren
+        Production-URLs und App-Trigger nehmen echte Ereignisse an. <strong>Unpublish</strong> nimmt diese produktive
+        Version wieder aus dem Betrieb. Falls dir n8n 1.x noch vertraut ist: Publish und Unpublish haben den früheren
+        Schalter „Active“ abgelöst.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -75,7 +80,7 @@
         <li>Es verbindet <strong>mehrere Werkzeuge</strong> (E-Mail, Tabelle, Chat, Datenbank …).</li>
       </ul>
 
-      <h2>Wann lohnt sich n8n — und wann nicht?</h2>
+      <h2>Wann lohnt sich n8n, wann nicht?</h2>
       <div class="cards">
         <div class="card"><div class="ic">✅</div><b>Ideal für</b>
           <p>Daten zwischen Apps schaufeln, Benachrichtigungen, Reports, Lead-Verarbeitung, KI-Aufgaben, API-Integrationen, Prototypen.</p></div>
@@ -92,39 +97,45 @@
       <table class="btable">
         <thead><tr><th>Aspekt</th><th>n8n</th><th>Zapier</th><th>Make</th></tr></thead>
         <tbody>
-          <tr><td>Selbst hosten</td><td>✅ Ja (Open Source, fair-code)</td><td>❌ Nein</td><td>❌ Nein</td></tr>
-          <tr><td>Eigener Code möglich</td><td>✅ JS & Python im Code-Node</td><td>eingeschränkt</td><td>eingeschränkt</td></tr>
-          <tr><td>Beliebige API (HTTP)</td><td>✅ voll & komfortabel</td><td>möglich</td><td>möglich</td></tr>
+          <tr><td>Selbst hosten</td><td>✅ Ja (fair-code, Sustainable Use License)</td><td>❌ Nein</td><td>❌ Nein</td></tr>
+          <tr><td>Eigener Code möglich</td><td>✅ JavaScript & Python im Code-Node</td><td>eingeschränkt</td><td>eingeschränkt</td></tr>
+          <tr><td>Beliebige API (HTTP)</td><td>✅ HTTP-Request-Node für jede Web-API</td><td>möglich</td><td>möglich</td></tr>
           <tr><td>Verzweigungen/Loops</td><td>✅ frei verdrahtbar</td><td>begrenzt</td><td>✅ gut</td></tr>
-          <tr><td>KI-/Agenten-Bausteine</td><td>✅ stark integriert</td><td>vorhanden</td><td>vorhanden</td></tr>
-          <tr><td>Preismodell</td><td>pro Ausführung günstig / self-host kostenlos</td><td>pro Task</td><td>pro Operation</td></tr>
-          <tr><td>Einstiegshürde</td><td>etwas steiler, dafür mächtiger</td><td>sehr einfach</td><td>mittel</td></tr>
+          <tr><td>KI-/Agenten-Bausteine</td><td>✅ eigene Nodes für Agenten, Modelle, Memory</td><td>vorhanden</td><td>vorhanden</td></tr>
+          <tr><td>Preismodell</td><td>pro Execution (ein Workflow-Lauf), self-hosted kostenlos</td><td>pro Task (ein Schritt)</td><td>pro Credit (früher: Operation)</td></tr>
+          <tr><td>Einstiegshürde</td><td>etwas steiler, dafür freie Hand bei Logik und Code</td><td>sehr einfach</td><td>mittel</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--pareto">
         <b class="t">⚡ Die Entscheidung in einem Satz</b>
-        Willst du maximale Flexibilität, Kontrolle über deine Daten und niedrige Kosten bei viel Volumen — und scheust
-        eine etwas steilere Lernkurve nicht — ist n8n die richtige Wahl. Genau dafür ist dieses Buch da.
+        Wenn dir die Kontrolle über deine Daten wichtiger ist als der bequemste Einstieg und du bei viel Volumen nicht
+        pro Schritt zahlen willst, nimm n8n. Die Lernkurve ist dann steiler als bei Zapier. Genau dafür ist dieses Buch da.
       </div>
 
-      <h2>„Fair-Code“, Open Source & Cloud — was heißt das für dich?</h2>
-      <p>n8n ist <strong>quelloffen</strong> unter einer „fair-code“-Lizenz. Praktisch heißt das:</p>
+      <h2>„Fair-Code“, Open Source & Cloud: Was heißt das für dich?</h2>
+      <p>Der Quellcode von n8n liegt offen auf GitHub. Die Lizenz dazu heißt Sustainable Use License, und n8n nennt
+        dieses Modell <em>fair-code</em>. Open Source im Sinne der Open Source Initiative ist das nicht, denn die Lizenz
+        zieht eine Grenze bei der kommerziellen Weitergabe. Praktisch heißt das:</p>
       <ul>
-        <li>Du darfst n8n <strong>kostenlos selbst betreiben</strong> (lokal oder auf deinem Server) und intern frei nutzen.</li>
+        <li>Du darfst n8n <strong>kostenlos selbst betreiben</strong> (lokal oder auf deinem Server), privat und intern
+          in deiner Firma.</li>
         <li>Du kannst den Quellcode einsehen und anpassen.</li>
-        <li>Es gibt zusätzlich eine bezahlte <strong>Cloud-Variante</strong>, bei der n8n den Betrieb für dich übernimmt —
-          ideal zum Starten, weil du dich um nichts kümmern musst.</li>
+        <li>Was die Lizenz ausschließt: n8n als eigenen Dienst weiterverkaufen oder in ein kommerzielles Produkt
+          einbauen. Dafür verlangt n8n eine Enterprise-Lizenz.</li>
+        <li>Es gibt zusätzlich eine bezahlte <strong>Cloud-Variante</strong>, bei der n8n Hosting, Updates und
+          Skalierung übernimmt. Du startest mit einer kostenlosen Testphase und wählst danach einen Tarif.</li>
       </ul>
-      <p>Für dieses Buch ist beides gleichwertig: Die Oberfläche und die Workflows sind identisch. Im nächsten Kapitel
-        wählst du einfach den Weg, der dir lieber ist.</p>
+      <p>Für dieses Buch ist beides gleichwertig: Editor, Nodes und Workflows sind dieselben. Zusatzfunktionen wie
+        Projekte, SSO oder die Git-Versionierung brauchen einen bezahlten Plan, in der Cloud genauso wie beim
+        Self-Hosting. Im nächsten Kapitel wählst du einfach den Weg, der dir lieber ist.</p>
 
       <h2>Ein paar Begriffe, die ab jetzt ständig vorkommen</h2>
       <table class="btable">
         <tbody>
           <tr><td>Node</td><td>Ein einzelner Baustein, der eine Aufgabe erledigt (z. B. „E-Mail senden“).</td></tr>
           <tr><td>Workflow</td><td>Mehrere verbundene Nodes, die zusammen einen Ablauf bilden.</td></tr>
-          <tr><td>Trigger</td><td>Der erste Node — er bestimmt, wann der Workflow startet.</td></tr>
+          <tr><td>Trigger</td><td>Der erste Node. Er bestimmt, wann der Workflow startet.</td></tr>
           <tr><td>Draft</td><td>Automatisch gespeicherter Arbeitsstand, der noch nicht produktiv läuft.</td></tr>
           <tr><td>Publish</td><td>Veröffentlicht eine Workflow-Version für den Betrieb.</td></tr>
           <tr><td>Unpublish</td><td>Nimmt die veröffentlichte Version wieder aus dem Betrieb.</td></tr>
@@ -132,18 +143,19 @@
           <tr><td>Item</td><td>Ein einzelnes Datenpaket, das durch den Workflow fließt.</td></tr>
           <tr><td>Credential</td><td>Ein gespeicherter, sicher abgelegter Zugang (Passwort/API-Schlüssel) zu einem Dienst.</td></tr>
           <tr><td>Canvas</td><td>Die Arbeitsfläche, auf der du Nodes anordnest und verbindest.</td></tr>
-          <tr><td>Task Runner</td><td>Separater Ausführungsmechanismus für Code-Nodes; im Self-hosted-Betrieb relevant für Sicherheit und Skalierung.</td></tr>
+          <tr><td>Task Runner</td><td>Separater Prozess, der den JavaScript- und Python-Code aus dem Code-Node isoliert vom Rest der Instanz ausführt. Seit n8n 2.0 standardmäßig aktiv.</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--info">
         <b class="t">Keine Sorge, wenn noch nicht alles sitzt</b>
-        Diese Begriffe werden in den nächsten Kapiteln lebendig, sobald du sie anklickst. Du musst hier nichts auswendig lernen —
-        das Glossar im Anhang bleibt als Nachschlagewerk.
+        Diese Begriffe werden in den nächsten Kapiteln lebendig, sobald du sie anklickst. Auswendig lernen musst du hier
+        nichts. Das Glossar im Anhang bleibt als Nachschlagewerk.
       </div>
 
-      <p>Du weißt jetzt, <em>was</em> n8n ist und <em>wofür</em> es taugt. Im nächsten Kapitel bringen wir es bei dir zum Laufen —
-        wahlweise in der Cloud (Null Installation) oder lokal (ein Befehl).</p>
+      <p>Du weißt jetzt, <em>was</em> n8n ist und <em>wofür</em> es taugt. Im nächsten Kapitel bringen wir es bei dir zum Laufen:
+        wahlweise in der Cloud (keine Installation) oder lokal (ein Befehl). Für den lokalen Weg brauchst du ein
+        Terminal. Halte es bereit.</p>
 
     </article>
     <nav id="prevnext"></nav>

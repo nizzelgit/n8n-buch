@@ -17,11 +17,11 @@
       <div class="chap-eyebrow"><span class="knum">5</span> Grundlagen</div>
       <h1 class="chap-title">Kernkonzepte: Nodes, Items & Datenfluss</h1>
       <p class="chap-lede">Wenn ein einziges Kapitel dieses Buchs darüber entscheidet, ob du n8n wirklich verstehst,
-        dann dieses. Hier klären wir, <em>was genau</em> zwischen den Nodes hin- und herfließt — und wie du darauf zugreifst.</p>
+        dann dieses. Hier klären wir, <em>was genau</em> zwischen den Nodes hin- und herfließt und wie du darauf zugreifst.</p>
       <div class="chap-meta">
         <span>⏱ ca. 24 Minuten</span>
         <span>🎯 Niveau: Einstieg → Mittel</span>
-        <span>⚡ Das Herzstück des Buchs</span>
+        <span>🧩 Voraussetzung: Kapitel 4 (erster Workflow)</span>
       </div>
 
       <h2>Die eine Sache, die alles erklärt: das Item</h2>
@@ -37,13 +37,46 @@
 
       <p>Jedes Item hat zwei Fächer:</p>
       <ul>
-        <li><strong>json</strong> – die eigentlichen Daten als JSON-Objekt (Felder mit Werten). 95 % der Zeit arbeitest du hiermit.</li>
-        <li><strong>binary</strong> – optionale Dateianhänge (Bild, PDF, …). Brauchst du erst bei Datei-Workflows.</li>
+        <li><code>json</code> – die eigentlichen Daten als JSON-Objekt (Felder mit Werten). 95 % der Zeit arbeitest du hiermit.</li>
+        <li><code>binary</code> – optionale Dateianhänge (Bild, PDF, …). Brauchst du erst bei Datei-Workflows.</li>
       </ul>
 
+      <p>Technisch sieht ein Datenpaket zwischen zwei Nodes also so aus: eine Liste, darin Objekte mit dem Schlüssel
+        <code>json</code> und optional dem Schlüssel <code>binary</code>. Unter <code>binary</code> liegt jede Datei unter
+        einem eigenen Namen, mit den Feldern <code>data</code> (Base64), <code>mimeType</code>, <code>fileExtension</code>
+        und <code>fileName</code>. Nur <code>data</code> ist Pflicht.</p>
+
+      <div class="code">
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Der Aufbau eines Items</div>
+<pre>[
+  {
+    <span class="pr">"json"</span>: { <span class="cm">/* deine Daten */</span> },
+    <span class="pr">"binary"</span>: {
+      <span class="pr">"rechnung"</span>: {
+        <span class="pr">"data"</span>:          <span class="st">"JVBERi0xLjQK…"</span>,   <span class="cm">// Base64, Pflicht</span>
+        <span class="pr">"mimeType"</span>:      <span class="st">"application/pdf"</span>,
+        <span class="pr">"fileExtension"</span>: <span class="st">"pdf"</span>,
+        <span class="pr">"fileName"</span>:      <span class="st">"rechnung.pdf"</span>
+      }
+    }
+  }
+]</pre>
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Wo liegen Binärdaten wirklich?</b>
+        Die Base64-Zeichenkette oben ist die Sicht des Workflows auf die Datei. Wo die Bytes tatsächlich liegen, regelt
+        die Umgebungsvariable <code>N8N_DEFAULT_BINARY_DATA_MODE</code>. Seit n8n 2.0 landen sie nie mehr einfach im
+        Arbeitsspeicher: im Normalbetrieb im Dateisystem, im Queue-Modus in der Datenbank, auf Wunsch in einem
+        S3-kompatiblen Speicher. Der alte Wert <code>default</code>, der die Bytes während der Ausführung im Speicher
+        hielt, ist mit 2.0 weggefallen. Falls du ihn noch in einer <code>.env</code>-Datei stehen hast, wirf ihn raus.
+        An der Struktur des Items ändert das nichts. An deinem Speicherverbrauch schon: Eine 80 MB große PDF-Datei
+        bringt dir die Instanz jetzt nicht mehr so leicht zum Absturz.
+      </div>
+
       <h2>Wie Items in der Oberfläche aussehen</h2>
-      <p>n8n zeigt dieselben Items in drei Ansichten an — du wählst sie über die Reiter <strong>Tabelle / JSON / Schema</strong>
-        im Eingangs- und Ausgangspanel. Es ist immer dasselbe darunter, nur anders dargestellt:</p>
+      <p>n8n zeigt dieselben Items in drei Ansichten an. Du wählst sie über die Reiter <strong>Tabelle / JSON / Schema</strong>
+        im Eingangs- und Ausgangspanel. Darunter liegen immer dieselben Daten, nur anders dargestellt:</p>
 
       <figure class="figure">
         <div class="frame">
@@ -87,13 +120,16 @@
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 5.1</span><b>Tabelle:</b> eine Zeile = ein Item. <b>JSON:</b> die Rohdaten.
-          <b>Schema:</b> nur die Feldnamen und ihre Typen. Lerne, flink zwischen ihnen zu wechseln.</figcaption>
+          <b>Schema:</b> die Feldnamen und ihre Typen. Wechsle beim Bauen ständig zwischen den dreien.</figcaption>
       </figure>
 
       <div class="callout callout--tip">
         <b class="t">⚡ Tabelle zum Überblicken, JSON zum Verstehen, Schema zum Verdrahten</b>
-        Die <strong>Schema</strong>-Ansicht ist beim Bauen am wertvollsten: Du siehst alle verfügbaren Feldnamen — und kannst
-        sie per Drag-and-drop direkt in ein Expression-Feld ziehen, statt sie abzutippen.
+        <p style="margin:0 0 6px">Beim Bauen hilft dir die <strong>Schema</strong>-Ansicht am meisten. Du siehst dort die
+        Feldnamen und kannst sie per Drag-and-drop in ein Expression-Feld ziehen, statt sie abzutippen.</p>
+        Ein Detail, über das viele stolpern: Tabelle und JSON zeigen alle Items, das Schema baut n8n dagegen nur aus dem
+        <em>ersten</em> Item. Ein Feld, das erst im dritten Item auftaucht, fehlt dort. Wenn du ein Feld vermisst, schau
+        zur Kontrolle in die JSON-Ansicht.
       </div>
 
       <h2>JSON in 3 Minuten (für alle, die unsicher sind)</h2>
@@ -114,7 +150,7 @@
 }</pre>
       </div>
 
-      <p>Das Wichtigste ist <strong>Verschachtelung</strong>: Objekte können in Objekten stecken. Um an
+      <p>Das Wichtigste ist die <em>Verschachtelung</em>: Objekte können in Objekten stecken. Um an
         <code>Berlin</code> heranzukommen, schreibst du den Pfad mit Punkten: <code>objekt.stadt</code>. Genau das machst
         du in Expressions ständig.</p>
 
@@ -130,20 +166,20 @@
           <tr><td><code>{{ $json.liste[0] }}</code></td><td>Das erste Element einer Liste (Zählung beginnt bei 0!)</td></tr>
           <tr><td><code>{{ $json.alter + 1 }}</code></td><td>Rechnen geht auch → 30</td></tr>
           <tr><td><code>{{ $json.name.toUpperCase() }}</code></td><td>Funktionen anwenden → „ANNA“</td></tr>
-          <tr><td><code>{{ $now }}</code></td><td>Aktuelles Datum/Uhrzeit</td></tr>
+          <tr><td><code>{{ $now }}</code></td><td>Aktuelles Datum mit Uhrzeit, in der Zeitzone des Workflows</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--info">
         <b class="t">Woher weiß ich die Feldnamen?</b>
         Aus dem <strong>Eingangspanel</strong> des Nodes (Schema-Ansicht). n8n zeigt dir dort genau die Felder, die gerade
-        ankommen. Du musst nichts raten — und kannst Felder per Drag-and-drop ins Feld ziehen.
+        ankommen. Du musst nichts raten. Zieh die Felder per Drag-and-drop direkt ins Eingabefeld.
       </div>
 
       <h2>Auf <em>andere</em> Nodes zugreifen: <code>$('Node-Name')</code></h2>
-      <p><code>$json</code> bezieht sich immer auf den <strong>direkt vorherigen</strong> Node. Manchmal brauchst du aber einen
-        Wert aus einem weiter zurückliegenden Node — etwa die ursprüngliche E-Mail aus dem Trigger, nachdem schon drei
-        Nodes dazwischenliegen. Dafür gibt es:</p>
+      <p><code>$json</code> meint immer das <code>json</code>-Fach des Items, das gerade in den Node hineinläuft, also
+        das Ergebnis des direkt vorherigen Nodes. Manchmal brauchst du einen Wert von weiter vorn in der Kette, etwa die
+        ursprüngliche E-Mail aus dem Trigger, wenn schon drei Nodes dazwischenliegen. Dafür gibt es:</p>
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Zugriff auf einen benannten Node</div>
@@ -159,8 +195,11 @@
       </div>
 
       <h2>Ein Item oder viele? Das „läuft pro Item“-Prinzip</h2>
-      <p>Hier passiert der häufigste Aha-Moment. Bekommt ein Node <strong>mehrere</strong> Items, führt er seine Aktion
-        <strong>für jedes Item einzeln</strong> aus. Drei Items rein → Aktion läuft dreimal → drei Items raus.</p>
+      <p>Hier passiert der häufigste Aha-Moment. Bekommt ein Node <em>mehrere</em> Items, führt er seine Aktion
+        für jedes Item einzeln aus. Drei Items rein → Aktion läuft dreimal → drei Items raus.</p>
+      <p>Ausnahmen gibt es. Summarize, Aggregate und Merge fassen mehrere Items zu weniger Items zusammen. Alle anderen
+        Nodes arbeiten die Liste stumpf von oben nach unten durch. Was das Zusammenfassen für deine Expressions
+        bedeutet, siehst du gleich im nächsten Abschnitt.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -183,56 +222,100 @@
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 5.2</span>Drei Kontakte kommen aus dem ersten Node. Der E-Mail-Node verschickt
-          automatisch <b>drei</b> E-Mails — eine pro Item. Du baust den Node nur <em>einmal</em>.</figcaption>
+          automatisch <b>drei</b> E-Mails, eine pro Item. Du baust den Node nur <em>einmal</em>.</figcaption>
       </figure>
 
       <div class="callout callout--tip">
-        <b class="t">⚡ Warum das so genial ist</b>
-        Du musst keine Schleife programmieren. Willst du „für jede Zeile in der Tabelle eine Nachricht“, sorgst du
-        einfach dafür, dass jede Zeile ein Item ist — den Rest erledigt n8n automatisch durch Wiederholung pro Item.
+        <b class="t">⚡ Du brauchst keine Schleife</b>
+        Willst du „für jede Zeile in der Tabelle eine Nachricht“, sorgst du dafür, dass jede Zeile ein eigenes Item ist.
+        Den Rest macht n8n von allein, indem es den Node pro Item wiederholt. Kein <code>for</code>, kein Zähler.
       </div>
+
+      <h2>Woher <code>.item</code> weiß, welches Item gemeint ist (Item-Linking)</h2>
+      <p>Jetzt, wo klar ist, dass ein Node dieselbe Aktion 50-mal ausführen kann, stellt sich eine Frage: Welchen der
+        50 Webhook-Datensätze meint eigentlich <code>$('Webhook').item</code>? Genau den, aus dem das Item entstanden
+        ist, das der Node gerade bearbeitet. Dafür hängt n8n an jedes Ausgabe-Item eine Notiz, aus welchem Eingabe-Item
+        es hervorgegangen ist. Diese Notiz heißt <strong>paired item</strong>, das Verfahren heißt
+        <strong>Item-Linking</strong>. Bei gleich vielen Ein- und Ausgabe-Items verknüpft n8n der Reihe nach:
+        Ausgabe 1 zu Eingabe 1, Ausgabe 2 zu Eingabe 2, und so fort.</p>
+      <p>Meistens merkst du davon nichts. Auffallen wird es dir an dem Tag, an dem eine Expression mit einer dieser
+        beiden Meldungen abbricht:</p>
+
+      <table class="btable">
+        <thead><tr><th>Meldung</th><th>Ursache</th><th>Was hilft</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>Multiple matching items for expression</code></td>
+            <td>Mehrere Items wurden zu einem zusammengefasst, typisch nach Summarize, Aggregate oder Merge. Die Zuordnung ist nicht mehr eindeutig.</td>
+            <td>Statt <code>.item</code> genauer werden: <code>.first()</code>, <code>.last()</code> oder <code>.all()[0]</code>. Oder einen anderen Node ansprechen, der denselben Wert eindeutig führt.</td>
+          </tr>
+          <tr>
+            <td><code>Info for expression missing from previous node</code></td>
+            <td>Ein Node in der Kette liefert die Paarungs-Notiz gar nicht mit. Das passiert bei Code-Nodes, die Items selbst zusammenbauen, und bei manchen Community-Nodes.</td>
+            <td>Im Code-Node die Paarung mitgeben (<code>pairedItem</code>). Bei fremden Nodes bleibt der Umweg über <code>.first()</code> oder <code>.all()</code>, weil beide ohne Paarungs-Notiz auskommen.</td>
+          </tr>
+        </tbody>
+      </table>
 
       <h2>Daten „festpinnen“ zum Testen (Pinning)</h2>
       <p>Beim Entwickeln willst du nicht bei jedem Test echte E-Mails verschicken oder eine API hundertmal aufrufen.
-        Lösung: <strong>Pin Data</strong>. Du führst einen Node einmal aus und „pinnst“ sein Ergebnis fest — bei den nächsten
-        Tests benutzt n8n diese gespeicherten Daten, statt neu abzurufen. Ein angepinnter Node bekommt ein 📌-Symbol.</p>
+        Lösung: <strong>Pin data</strong>. Du führst einen Node einmal aus und pinnst sein Ergebnis fest. Bei den nächsten
+        Tests nimmt n8n diese gespeicherten Daten, statt neu abzurufen. Ein angepinnter Node bekommt ein 📌-Symbol, und
+        im Ausgangspanel steht das Banner <strong>„This data is pinned“</strong>. Über den Link <strong>„Unpin“</strong>
+        darin holst du beim nächsten Lauf wieder frische Daten.</p>
       <div class="clickpath">
         <span class="step"><span class="n">1</span> Node ausführen</span>
         <span class="arrow">→</span>
-        <span class="step"><span class="n">2</span> im Ausgangspanel auf 📌 „Pin“ klicken</span>
+        <span class="step"><span class="n">2</span> im Ausgangspanel auf 📌 „Pin data“ klicken</span>
         <span class="arrow">→</span>
         <span class="step"><span class="n">3</span> ab jetzt fixe Testdaten</span>
       </div>
 
-      <h2>Wie das alles zusammenspielt — ein Durchlauf</h2>
-      <p>Fügen wir das Wissen zusammen. So „denkt“ n8n, wenn du auf Test klickst:</p>
+      <div class="callout callout--warn">
+        <b class="t">Drei Grenzen, die du kennen solltest</b>
+        Pinnen geht nur bei Nodes mit einem einzigen Hauptausgang. Enthält der Ausgang Binärdaten, geht es gar nicht.
+        Und gepinnte Daten gelten ausschließlich beim Entwickeln: Läuft der Workflow produktiv, ignoriert n8n sie und
+        ruft die echte Quelle ab. Wer das vergisst, wundert sich später über Testdaten, die im Live-Betrieb plötzlich
+        nicht mehr auftauchen.
+      </div>
+
+      <h2>Wie das alles zusammenspielt: ein Durchlauf</h2>
+      <p>Fügen wir das Wissen zusammen. So „denkt“ n8n, wenn du unten am Canvas auf <strong>„Execute workflow“</strong>
+        klickst (in älteren Versionen hieß der Knopf „Test workflow“):</p>
       <ol class="steps">
         <li><h4>Trigger erzeugt das/die Start-Item(s)</h4><p>Beim manuellen Trigger ist das ein leeres Item, bei „Sheets lesen“ z. B. eine Zeile pro Item.</p></li>
         <li><h4>Items wandern in den nächsten Node</h4><p>Der nimmt sie als <em>Eingang</em> (linkes Panel).</p></li>
-        <li><h4>Der Node arbeitet — pro Item</h4><p>Er wendet seine Einstellungen an; Expressions werden jetzt zu echten Werten ausgewertet.</p></li>
+        <li><h4>Der Node arbeitet, Item für Item</h4><p>Er wendet seine Einstellungen an; Expressions werden jetzt zu echten Werten ausgewertet.</p></li>
         <li><h4>Er gibt neue Items aus</h4><p>Diese erscheinen im <em>Ausgang</em> (rechtes Panel) und sind der Eingang des nächsten Nodes.</p></li>
         <li><h4>… und so weiter bis zum Ende</h4><p>Bis kein Node mehr folgt. Jeder Schritt ist in den Ausführungen nachvollziehbar.</p></li>
       </ol>
 
       <div class="prereq">
-        <h4>✅ Selbsttest — verstehst du den Kern?</h4>
+        <h4>✅ Selbsttest: verstehst du den Kern?</h4>
         <ul>
           <li>Was ist der Unterschied zwischen <code>$json</code> und <code>$('Trigger').item.json</code>?</li>
           <li>Du hast 5 Items im Eingang eines „Slack senden“-Nodes. Wie viele Nachrichten gehen raus?</li>
-          <li>Welche Ansicht (Tabelle/JSON/Schema) nutzt du, um schnell alle Feldnamen zu sehen?</li>
+          <li>Welche Ansicht (Tabelle/JSON/Schema) nutzt du, um die Feldnamen mit ihren Typen zu sehen? Und warum reicht sie nicht immer?</li>
           <li>Wozu pinnst du Daten?</li>
+          <li>Warum kann <code>$('Webhook').item</code> hinter einem Merge-Node scheitern?</li>
         </ul>
       </div>
 
       <div class="callout callout--info">
         <b class="t">Antworten</b>
         1) <code>$json</code> = vorheriger Node, <code>$('Trigger')…</code> = ein bestimmter, beliebiger Node. ·
-        2) Fünf — der Node läuft pro Item. · 3) Schema. · 4) Um beim Testen keine echten Aktionen auszulösen und APIs zu schonen.
+        2) Fünf, der Node läuft pro Item. · 3) Schema. Sie zeigt aber nur die Felder des ersten Items, für den vollen
+        Datensatz musst du in JSON oder Tabelle schauen. · 4) Um beim Testen keine echten Aktionen auszulösen und APIs zu
+        schonen. · 5) Merge fasst mehrere Eingabe-Items zu einem Ausgabe-Item zusammen, die Paarung ist dann nicht mehr
+        eindeutig. Nimm <code>.first()</code>, <code>.last()</code> oder <code>.all()[0]</code>.
       </div>
 
-      <p>Damit hast du das mentale Modell, auf dem alles andere aufbaut. Im nächsten Kapitel machen wir Expressions zur
-        echten Stärke: Datumsrechnen, Texte bauen, Bedingungen, kleine Tricks — der Werkzeugkasten, mit dem du Daten
-        in jede gewünschte Form bringst.</p>
+      <p>Das mentale Modell steht. Bevor du weiterliest, spiel den Item-Linking-Fall ruhig einmal selbst durch: Führe
+        zwei Zweige über einen Merge-Node zusammen und greif in einem Node dahinter mit
+        <code>{{ $('Webhook').item.json.email }}</code> auf den Anfang zurück. Kommt eine der beiden Meldungen aus der
+        Tabelle, weißt du jetzt, woran es liegt. Im nächsten Kapitel gehen wir tiefer in Expressions, mit Datumsrechnen,
+        zusammengesetzten Texten und Bedingungen. Damit bringst du Daten in genau die Form, die der nächste Node
+        braucht.</p>
 
     </article>
     <nav id="prevnext"></nav>

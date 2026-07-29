@@ -30,17 +30,21 @@
         <ul>
           <li>Eine n8n-Instanz mit den AI-/LangChain-Nodes.</li>
           <li>Eine Chat-Model-Credential für die Antworten.</li>
-          <li>Eine Embeddings-Credential, z. B. OpenAI Embeddings oder ein anderer unterstützter Anbieter.</li>
+          <li>Eine Embeddings-Credential, z. B. für den Node <strong>Embeddings OpenAI</strong> oder einen anderen unterstützten Anbieter.</li>
           <li>Für das Beispiel keine echten internen Dateien: Wir erzeugen fiktive Teamhandbuch-Texte direkt im Workflow.</li>
         </ul>
       </div>
 
       <div class="callout callout--warn">
         <b class="t">Simple Vector Store nur als Lernspeicher</b>
-        Der Simple Vector Store speichert Daten in der n8n-App-Memory. Das ist praktisch zum Lernen, aber nicht robust:
-        Neustarts, Speicherlimits und gemeinsame Memory Keys können Daten verschwinden lassen oder für andere Instanznutzer
-        sichtbar machen. Für echte Dokumente nimm später Qdrant, PGVector, Pinecone, Supabase oder einen anderen
-        persistenten Vector Store.
+        Der <strong>Simple Vector Store</strong> hieß bis Februar 2025 <strong>In-Memory Vector Store</strong> und hält
+        alle Vektoren im Arbeitsspeicher der n8n-Instanz. Zum Lernen ist das ideal. Für echte Dokumente nicht: Nach einem
+        Neustart ist der Inhalt weg, bei knappem Speicher räumt n8n ältere Stores selbst ab, und die Memory Keys gelten
+        instanzweit. Wer auf derselben Instanz einen Simple Vector Store einfügt, sieht deinen Key in der Auswahlliste und
+        kann mitlesen. Auf n8n Cloud gelten rund 100 MB (etwa 8000 Dokumente) und sieben Tage ohne Zugriff als Grenze;
+        selbst gehostet stellst du das über <code>N8N_VECTOR_STORE_MAX_MEMORY</code> und
+        <code>N8N_VECTOR_STORE_TTL_HOURS</code> ein. Für echte Dokumente nimm später Qdrant, PGVector, Pinecone, Supabase
+        oder einen anderen persistenten Vector Store.
       </div>
 
       <h2>Das Ziel</h2>
@@ -113,7 +117,7 @@
       <table class="btable">
         <thead><tr><th>Baustein</th><th>Aufgabe</th><th>Typischer Fehler</th></tr></thead>
         <tbody>
-          <tr><td><strong>Document Loader</strong></td><td>macht aus Datei oder JSON ein Dokument</td><td>falsches Feld wird geladen</td></tr>
+          <tr><td><strong>Default Data Loader</strong></td><td>macht aus Datei oder JSON ein Dokument</td><td>falsches Feld wird geladen</td></tr>
           <tr><td><strong>Text Splitter</strong></td><td>zerlegt lange Texte in Chunks</td><td>Chunks sind zu groß oder ohne Überlappung</td></tr>
           <tr><td><strong>Embeddings</strong></td><td>wandelt Text in Zahlenvektoren um</td><td>anderes Modell beim Laden als beim Suchen</td></tr>
           <tr><td><strong>Vector Store</strong></td><td>speichert und findet ähnliche Chunks</td><td>alte und neue Daten werden versehentlich gemischt</td></tr>
@@ -125,12 +129,13 @@
       <div class="callout callout--info">
         <b class="t">Skeptische Einordnung</b>
         RAG ist keine Wahrheitsmaschine. Es erhöht nur die Chance, dass die Antwort aus deinen Dokumenten stammt.
-        Qualität entsteht durch gute Daten, gute Chunking-Regeln, sichtbare Quellen und Tests mit Gegenfragen.
+        Ob sie am Ende stimmt, hängt an vier Dingen: was in den Dokumenten steht, wo du die Chunks trennst, ob du die
+        Quelle mit ausgibst und ob du mit Fragen testest, die nicht beantwortbar sein dürfen.
       </div>
 
       <hr>
 
-      <h2>Schritt 1 — Lade-Workflow erstellen</h2>
+      <h2>Schritt 1: Lade-Workflow erstellen</h2>
       <p>Der Lade-Workflow füllt den Vector Store. Er wird nicht bei jeder Nutzerfrage ausgeführt, sondern nur, wenn du
         Dokumente neu einliest.</p>
 
@@ -149,7 +154,7 @@
         Ladeprozess. Automatisierung kommt danach.
       </div>
 
-      <h2>Schritt 2 — Demo-Dokumente erzeugen</h2>
+      <h2>Schritt 2: Demo-Dokumente erzeugen</h2>
       <p>Für das Lernen nutzen wir fiktive Mini-Dokumente. Das ist didaktisch sauberer als echte interne Dateien:
         Du siehst genau, was im Store landet.</p>
 
@@ -239,66 +244,75 @@ return docs.map((doc) =&gt; ({ json: doc }));</pre>
         <figcaption><span class="fig-tag">Abb. 21.2</span>Vier kleine JSON-Items reichen, um RAG kontrolliert zu lernen.</figcaption>
       </figure>
 
-      <h2>Schritt 3 — Simple Vector Store zum Einfügen anlegen</h2>
+      <h2>Schritt 3: Simple Vector Store zum Einfügen anlegen</h2>
       <p>Jetzt speicherst du die Dokumente als Vektoren. Der Vector Store ist hier ein Root-Node mit Unter-Nodes für
         Embeddings, Data Loader und Text Splitter.</p>
 
       <ol class="steps">
         <li><h4>Vector Store anhängen</h4>
           <p>Ziehe von <strong>Demo-Dokumente</strong> eine Linie ins Leere und suche <code>simple vector store</code>.</p></li>
-        <li><h4>Operation wählen</h4>
-          <p>Wähle <strong>Insert Documents</strong>.</p></li>
+        <li><h4>Operation Mode wählen</h4>
+          <p>Das oberste Feld heißt <strong>Operation Mode</strong>. Ab Werk steht dort
+            <strong>Retrieve Documents (As Vector Store for Chain/Tool)</strong>; hast du den Node über die Aktion
+            <strong>Add documents to vector store</strong> eingefügt, steht schon das Richtige drin. Sorge so oder so
+            dafür, dass <strong>Insert Documents</strong> ausgewählt ist.</p></li>
         <li><h4>Memory Key setzen</h4>
-          <p>Setze <strong>Memory Key</strong> auf <code>werkbuch-teamhandbuch-demo</code>. Nutze exakt denselben Key später
-            beim Abfragen.</p></li>
+          <p><strong>Memory Key</strong> ist ein Auswahlfeld mit zwei Modi. Schalte links auf <strong>Manual</strong> und
+            tippe <code>werkbuch-teamhandbuch-demo</code> ein. Über <strong>From List</strong> würdest du einen bereits
+            vorhandenen Key wählen; den gibt es beim ersten Mal noch nicht. Nutze exakt denselben Key später beim Abfragen.</p></li>
         <li><h4>Clear Store einschalten</h4>
-          <p>Lass <strong>Clear Store</strong> beim Lernbeispiel eingeschaltet. So ersetzt jeder Testlauf den alten Demo-Store.</p></li>
+          <p>Schalte <strong>Clear Store</strong> ein. Der Schalter ist ab Werk aus, und beim Lernbeispiel willst du ihn an
+            haben: So ersetzt jeder Testlauf den alten Demo-Store, statt Chunks zu verdoppeln.</p></li>
         <li><h4>Node benennen</h4>
           <p>Nenne den Node <code>Teamhandbuch speichern</code>.</p></li>
       </ol>
 
       <div class="callout callout--pareto">
         <b class="t">⚡ Memory Key ist die Datenbankadresse</b>
-        Der Memory Key verbindet Laden und Abfragen. Ein Tippfehler erzeugt nicht unbedingt einen sichtbaren Fehler,
-        sondern einen leeren Suchraum.
+        Der Memory Key verbindet Laden und Abfragen. Ein Tippfehler wirft dabei meist gar keinen Fehler. Er legt einfach
+        einen zweiten, leeren Store an, und die Chain antwortet brav, sie wisse nichts.
       </div>
 
-      <h2>Schritt 4 — Embeddings verbinden</h2>
+      <h2>Schritt 4: Embeddings verbinden</h2>
       <p>Embeddings übersetzen Text in Zahlen. Suche und Speicherung müssen dasselbe Embedding-Verfahren verwenden,
         sonst vergleichst du unterschiedliche Koordinatensysteme.</p>
 
       <ol class="steps">
         <li><h4>Embedding-Anschluss öffnen</h4>
-          <p>Klicke am Vector-Store-Node auf den Anschluss <strong>Embeddings</strong>.</p></li>
+          <p>Unter dem Vector-Store-Node hängt ein Anschluss mit dem Namen <strong>Embedding</strong>, im Singular.
+            Klicke auf das <span class="kbd">+</span> darunter.</p></li>
         <li><h4>Embedding-Node wählen</h4>
           <p>Wähle z. B. <strong>Embeddings OpenAI</strong> oder einen anderen von dir eingerichteten Anbieter.</p></li>
         <li><h4>Credential wählen</h4>
           <p>Wähle deine Credential. Lege API-Keys nicht als Text in Nodes ab.</p></li>
         <li><h4>Modell stabil halten</h4>
-          <p>Nutze für dieses Demo-Kapitel ein kleines, günstiges Embedding-Modell und ändere es nicht zwischen Laden und
+          <p>Im Feld <strong>Model</strong> steht beim Node Embeddings OpenAI ab Werk <code>text-embedding-3-small</code>.
+            Für vier kurze Texte reicht das mit Abstand. Lass den Wert stehen und ändere ihn nicht zwischen Laden und
             Abfragen.</p></li>
       </ol>
 
       <div class="callout callout--warn">
         <b class="t">Modellwechsel heißt meist neu indexieren</b>
-        Wenn du später das Embedding-Modell wechselst, lade die Dokumente neu in den Store. Alte Vektoren und neue Vektoren
-        sollten nicht gemischt werden.
+        Wenn du später das Embedding-Modell wechselst, lade die Dokumente neu in den Store. Misch alte und neue Vektoren
+        nicht: Sie liegen in verschiedenen Räumen, und die Ähnlichkeitswerte dazwischen bedeuten nichts.
       </div>
 
-      <h2>Schritt 5 — Data Loader konfigurieren</h2>
+      <h2>Schritt 5: Data Loader konfigurieren</h2>
       <p>Der Data Loader entscheidet, welcher Teil deiner Items überhaupt als Dokumenttext in den Store geht. Das ist
         wichtiger als es aussieht.</p>
 
       <ol class="steps">
         <li><h4>Data-Loader-Anschluss öffnen</h4>
-          <p>Klicke am Vector-Store-Node auf <strong>Document</strong> oder <strong>Document Loader</strong> und wähle
+          <p>Klicke am Vector-Store-Node auf den Anschluss <strong>Document</strong> und wähle
             <strong>Default Data Loader</strong>.</p></li>
         <li><h4>Type of Data setzen</h4>
-          <p>Setze <strong>Type of Data</strong> auf <strong>JSON</strong>.</p></li>
+          <p><strong>Type of Data</strong> steht schon auf <strong>JSON</strong>. Die zweite Option wäre
+            <strong>Binary</strong>, die brauchst du erst bei PDFs.</p></li>
         <li><h4>Mode setzen</h4>
-          <p>Setze <strong>Mode</strong> auf <strong>Load Specific Data</strong>. Wir laden nicht blind das ganze JSON.</p></li>
+          <p>Setze <strong>Mode</strong> von <strong>Load All Input Data</strong> auf
+            <strong>Load Specific Data</strong>. Wir laden nicht blind das ganze JSON.</p></li>
         <li><h4>Textvorlage eintragen</h4>
-          <p>Trage als geladene Daten die folgende Vorlage ein.</p></li>
+          <p>Jetzt erscheint das Feld <strong>Data</strong>. Trage dort die folgende Vorlage ein.</p></li>
       </ol>
 
       <div class="code">
@@ -312,11 +326,13 @@ Quelle: {{ $json.source }}
 
       <ol class="steps" style="counter-reset: st 4;">
         <li><h4>Metadaten ergänzen</h4>
-          <p>Füge beim Data Loader Metadaten hinzu. Nutze mindestens die folgenden Felder.</p></li>
+          <p>Scrolle im Default Data Loader nach unten zu <strong>Options</strong>, klicke <strong>Add Option</strong> und
+            wähle <strong>Metadata</strong>. Über <strong>Add property</strong> legst du je einen Eintrag mit
+            <strong>Name</strong> und <strong>Value</strong> an. Nutze mindestens die folgenden vier.</p></li>
       </ol>
 
       <table class="btable">
-        <thead><tr><th>Metadata Key</th><th>Wert</th><th>Warum</th></tr></thead>
+        <thead><tr><th>Name</th><th>Value</th><th>Warum</th></tr></thead>
         <tbody>
           <tr><td><code>doc_id</code></td><td><code>{{ $json.id }}</code></td><td>eindeutige Quelle</td></tr>
           <tr><td><code>title</code></td><td><code>{{ $json.title }}</code></td><td>lesbare Quellenangabe</td></tr>
@@ -346,18 +362,22 @@ Quelle: {{ $json.source }}
           als schlechte Antworten sichtbar.</figcaption>
       </figure>
 
-      <h2>Schritt 6 — Text Splitter anschließen</h2>
+      <h2>Schritt 6: Text Splitter anschließen</h2>
       <p>Unsere Demo-Texte sind kurz. Trotzdem bauen wir den Splitter bewusst ein, weil echte Dokumente selten kurz sind.</p>
 
       <ol class="steps">
         <li><h4>Text Splitting auf Custom setzen</h4>
-          <p>Setze im Default Data Loader <strong>Text Splitting</strong> auf <strong>Custom</strong>.</p></li>
+          <p>Setze im Default Data Loader <strong>Text Splitting</strong> von <strong>Simple</strong> auf
+            <strong>Custom</strong>. <strong>Simple</strong> würde stumm mit 1000 Zeichen und 200 Überlappung schneiden,
+            ohne dass du einen Node dafür siehst.</p></li>
         <li><h4>Splitter verbinden</h4>
-          <p>Klicke auf den Text-Splitter-Anschluss und wähle <strong>Recursive Character Text Splitter</strong>.</p></li>
+          <p>Jetzt taucht am Data Loader der Anschluss <strong>Text Splitter</strong> auf. Klicke darauf und wähle
+            <strong>Recursive Character Text Splitter</strong>.</p></li>
         <li><h4>Chunk Size setzen</h4>
-          <p>Setze <strong>Chunk Size</strong> für das Demo auf <code>600</code>.</p></li>
+          <p>Setze <strong>Chunk Size</strong> für das Demo von <code>1000</code> auf <code>600</code>.</p></li>
         <li><h4>Chunk Overlap setzen</h4>
-          <p>Setze <strong>Chunk Overlap</strong> auf <code>80</code>. So gehen Begriffe an Chunk-Grenzen nicht sofort verloren.</p></li>
+          <p>Setze <strong>Chunk Overlap</strong> auf <code>80</code>. Achtung, hier steht ab Werk <code>0</code>. Mit
+            Überlappung gehen Begriffe an Chunk-Grenzen nicht sofort verloren.</p></li>
       </ol>
 
       <div class="callout callout--info">
@@ -366,7 +386,7 @@ Quelle: {{ $json.source }}
         ein besserer Startpunkt als stumpfes Schneiden nach fester Zeichenlänge.
       </div>
 
-      <h2>Schritt 7 — Dokumente in den Store laden</h2>
+      <h2>Schritt 7: Dokumente in den Store laden</h2>
       <p>Jetzt führst du den kompletten Lade-Workflow aus.</p>
 
       <ol class="steps">
@@ -374,10 +394,13 @@ Quelle: {{ $json.source }}
           <p>Schließe die Detailansichten, damit du den Lade-Workflow vollständig siehst.</p></li>
         <li><h4>Auto-Save prüfen</h4>
           <p>Warte, bis der Draft gespeichert ist.</p></li>
-        <li><h4>Test workflow starten</h4>
-          <p>Klicke auf <strong>Test workflow</strong>. Die Nodes sollten nacheinander grün werden.</p></li>
+        <li><h4>Workflow starten</h4>
+          <p>Klicke unten am Canvas auf <strong>Execute workflow</strong>, in n8n 1.x hieß der Knopf noch
+            <strong>Test workflow</strong>. Die Nodes sollten nacheinander grün werden.</p></li>
         <li><h4>Output prüfen</h4>
-          <p>Öffne <strong>Teamhandbuch speichern</strong>. Prüfe, ob vier Dokumente verarbeitet wurden.</p></li>
+          <p>Öffne <strong>Teamhandbuch speichern</strong>. Rechts steht pro gespeichertem Chunk ein Item mit den Feldern
+            <code>pageContent</code> und <code>metadata</code>. Bei vier kurzen Demo-Texten und Chunk Size 600 sind das
+            genau vier Items.</p></li>
         <li><h4>Keine echten Geheimnisse laden</h4>
           <p>Prüfe noch einmal: Im Demo-Store stehen nur fiktive Daten. Keine echten Kundendaten, Tokens oder Personalakten.</p></li>
       </ol>
@@ -390,7 +413,7 @@ Quelle: {{ $json.source }}
 
       <hr>
 
-      <h2>Schritt 8 — Frage-Workflow erstellen</h2>
+      <h2>Schritt 8: Frage-Workflow erstellen</h2>
       <p>Der zweite Workflow fragt den Store ab. Er läuft bei jeder Chatnachricht.</p>
 
       <ol class="steps">
@@ -399,12 +422,16 @@ Quelle: {{ $json.source }}
         <li><h4>Chat Trigger hinzufügen</h4>
           <p>Füge als ersten Node einen <strong>Chat Trigger</strong> hinzu.</p></li>
         <li><h4>Chat privat lassen</h4>
-          <p>Lasse <strong>Make Chat Publicly Available</strong> zunächst ausgeschaltet.</p></li>
-        <li><h4>Initial Message setzen</h4>
-          <p>Setze den Starttext auf <code>Frag mich etwas zum fiktiven Teamhandbuch.</code></p></li>
+          <p>Lasse <strong>Make Chat Publicly Available</strong> zunächst ausgeschaltet. Du testest im internen Chat
+            von n8n.</p></li>
+        <li><h4>Startnachricht später setzen</h4>
+          <p>Das Feld <strong>Initial Message(s)</strong> siehst du im privaten Modus noch nicht. Es erscheint erst, wenn
+            <strong>Make Chat Publicly Available</strong> an ist und <strong>Mode</strong> auf <strong>Hosted Chat</strong>
+            steht. Merk dir den Satz <code>Frag mich etwas zum fiktiven Teamhandbuch.</code> für später und tippe deine
+            Testfragen bis dahin selbst ein.</p></li>
       </ol>
 
-      <h2>Schritt 9 — Question and Answer Chain einbauen</h2>
+      <h2>Schritt 9: Question and Answer Chain einbauen</h2>
       <p>Für ein reines Dokumenten-Q&amp;A ist eine Chain oft besser als ein Agent. Die Chain entscheidet nicht frei über
         Tools. Sie bekommt eine Frage, nutzt den Retriever und formuliert eine Antwort.</p>
 
@@ -414,55 +441,75 @@ Quelle: {{ $json.source }}
             <strong>Question and Answer Chain</strong>.</p></li>
         <li><h4>Node benennen</h4>
           <p>Nenne den Node <code>Teamhandbuch beantworten</code>.</p></li>
-        <li><h4>Query eintragen</h4>
-          <p>Setze das Query-Feld nicht nur auf die Frage, sondern auf eine kleine Antwortregel plus Frage.</p></li>
+        <li><h4>Prompt-Quelle prüfen</h4>
+          <p><strong>Source for Prompt (User Message)</strong> steht schon auf <strong>Connected Chat Trigger Node</strong>.
+            Lass es so. Die Chain holt sich dann das Feld <code>chatInput</code> vom Chat Trigger, und das Feld
+            <strong>Prompt (User Message)</strong> darunter zeigt ausgegraut <code>{{ $json.chatInput }}</code>. Ein
+            einzelnes Feld namens <strong>Query</strong> gab es nur bis zur Node-Version 1.2.</p></li>
+        <li><h4>Antwortregel eintragen</h4>
+          <p>Klicke unten auf <strong>Options</strong>, dann auf <strong>Add Option</strong>, und wähle
+            <strong>System Prompt Template</strong>. Im Feld steht bereits eine englische Standardregel. Ersetze sie durch
+            den folgenden Text. Der Platzhalter <code>{context}</code> muss drinbleiben: Dort setzt n8n die gefundenen
+            Chunks ein.</p></li>
       </ol>
 
       <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Query · Q&amp;A Chain</div>
-<pre>Beantworte die Frage ausschließlich mit dem gefundenen Kontext aus dem Teamhandbuch.
-Wenn die Antwort nicht im Kontext steht, sage genau:
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; System Prompt Template · Q&amp;A Chain</div>
+<pre>Du beantwortest Fragen zu einem Teamhandbuch.
+Nutze ausschließlich die folgenden gefundenen Textstellen.
+Wenn die Antwort dort nicht steht, sage genau:
 "Das steht nicht in den geladenen Dokumenten."
-
-Frage:
-{{ $json.chatInput }}</pre>
+----------------
+Context: {context}</pre>
       </div>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Antwortregel in die Query</b>
+        <b class="t">⚡ Antwortregel ins System Prompt Template</b>
         Eine RAG-Antwort braucht eine klare Bremse. Sonst nutzt das Modell sein Allgemeinwissen, sobald der Retriever
-        nichts Passendes findet.
+        nichts Passendes findet. Die mitgelieferte Standardregel sagt zwar auch schon „just say that you don't know“,
+        aber sie ist englisch und weich formuliert. Ein eigener, deutscher Satz ist im Test besser prüfbar.
       </div>
 
-      <h2>Schritt 10 — Chat Model verbinden</h2>
-      <p>Die Q&amp;A Chain braucht ein Chat Model, um aus den gefundenen Chunks eine Antwort zu formulieren.</p>
+      <h2>Schritt 10: Model verbinden</h2>
+      <p>Die Q&amp;A Chain braucht ein Sprachmodell, um aus den gefundenen Chunks eine Antwort zu formulieren.</p>
 
       <ol class="steps">
-        <li><h4>Chat-Model-Anschluss öffnen</h4>
-          <p>Klicke an der Q&amp;A Chain auf <strong>Chat Model</strong>.</p></li>
+        <li><h4>Model-Anschluss öffnen</h4>
+          <p>Unter der Q&amp;A Chain hängt ein Anschluss mit dem Namen <strong>Model</strong>. Beim AI Agent heißt derselbe
+            Anschluss <strong>Chat Model</strong>; bei den Chains steht dort nur <strong>Model</strong>. Klicke auf das
+            <span class="kbd">+</span> darunter.</p></li>
         <li><h4>Modell wählen</h4>
-          <p>Wähle dasselbe Chat-Model-System, das du schon in Kapitel 20 genutzt hast, oder ein anderes eingerichtetes
-            Chat Model.</p></li>
+          <p>Wähle dasselbe Chat Model, das du schon in Kapitel 20 genutzt hast, etwa
+            <strong>OpenAI Chat Model</strong>, und dann deine Credential.</p></li>
         <li><h4>Temperatur niedrig setzen</h4>
-          <p>Setze die Temperatur etwa auf <code>0.1</code> bis <code>0.3</code>. Dokumenten-Q&amp;A soll präzise sein.</p></li>
+          <p>Klicke im Model-Node auf <strong>Add Option</strong>, wähle <strong>Sampling Temperature</strong> und setze
+            den Wert auf <code>0.2</code>. Voreingestellt sind <code>0.7</code>. Dokumenten-Q&amp;A soll präzise sein.</p></li>
       </ol>
 
-      <h2>Schritt 11 — Retriever und Vector Store verbinden</h2>
+      <h2>Schritt 11: Retriever und Vector Store verbinden</h2>
       <p>Jetzt bekommt die Chain Zugriff auf die gespeicherten Dokumente.</p>
 
       <ol class="steps">
         <li><h4>Retriever-Anschluss öffnen</h4>
           <p>Klicke an der Q&amp;A Chain auf <strong>Retriever</strong> und wähle <strong>Vector Store Retriever</strong>.</p></li>
+        <li><h4>Limit prüfen</h4>
+          <p>Der Vector Store Retriever hat genau ein Feld: <strong>Limit</strong>, ab Werk <code>4</code>. Für vier
+            Demo-Dokumente passt das. Lass es stehen.</p></li>
         <li><h4>Vector Store anschließen</h4>
           <p>Klicke am Retriever auf <strong>Vector Store</strong> und wähle <strong>Simple Vector Store</strong>.</p></li>
-        <li><h4>Operation wählen</h4>
-          <p>Setze den Simple Vector Store auf <strong>Retrieve Documents (As Vector Store for Chain/Tool)</strong>.</p></li>
+        <li><h4>Operation Mode wählen</h4>
+          <p>Setze <strong>Operation Mode</strong> auf <strong>Retrieve Documents (As Vector Store for Chain/Tool)</strong>.
+            Das ist hier bereits die Voreinstellung. In diesem Modus hat der Vector Store selbst kein Limit-Feld, die
+            Trefferzahl kommt vom Retriever.</p></li>
         <li><h4>Memory Key wiederholen</h4>
-          <p>Setze <strong>Memory Key</strong> exakt auf <code>werkbuch-teamhandbuch-demo</code>.</p></li>
+          <p>Setze <strong>Memory Key</strong> exakt auf <code>werkbuch-teamhandbuch-demo</code>. Weil der Lade-Workflow
+            schon gelaufen ist, findest du den Key jetzt auch über <strong>From List</strong>.</p></li>
         <li><h4>Embeddings verbinden</h4>
-          <p>Verbinde auch beim abfragenden Vector Store denselben Embedding-Typ wie im Lade-Workflow.</p></li>
-        <li><h4>Limit setzen</h4>
-          <p>Setze im Retriever oder Vector Store ein kleines Limit, z. B. <code>4</code>. Für vier Demo-Dokumente reicht das.</p></li>
+          <p>Verbinde auch beim abfragenden Vector Store denselben Embedding-Node wie im Lade-Workflow, also
+            <strong>Embeddings OpenAI</strong> mit <code>text-embedding-3-small</code>.</p></li>
+        <li><h4>Rerank Results aus lassen</h4>
+          <p>Der Schalter <strong>Rerank Results</strong> bleibt aus. Er verlangt einen zusätzlichen Reranker-Sub-Node,
+            und bei vier Dokumenten gibt es nichts umzusortieren.</p></li>
       </ol>
 
       <figure class="figure">
@@ -477,28 +524,30 @@ Frage:
 }</div></div></div>
               <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Chain</div>
                 <div class="ndv-panel__body">
-                  <div class="row"><label>Query</label><input class="n8n-input is-expr" value="Beantworte ausschließlich mit Kontext ... {{ $json.chatInput }}"></div>
-                  <div class="row"><label>Chat Model</label><div class="n8n-select">verbunden <span class="chev">▾</span></div></div>
+                  <div class="row"><label>System Prompt Template</label><input class="n8n-input is-expr" value="Nutze ausschließlich ... Context: {context}"></div>
+                  <div class="row"><label>Model</label><div class="n8n-select">verbunden <span class="chev">▾</span></div></div>
                   <div class="row"><label>Retriever</label><div class="n8n-select">Vector Store Retriever verbunden <span class="chev">▾</span></div></div>
                 </div></div>
               <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body"><div class="n8n-json">{
-  <span class="k">"text"</span>: <span class="s">"P1 wird innerhalb von 15 Minuten ..."</span>
+  <span class="k">"response"</span>: <span class="s">"P1 wird innerhalb von 15 Minuten ..."</span>
 }</div></div></div>
             </div>
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 21.4</span>Die Chain nutzt Modell und Retriever. Sie ist enger geführt als
-          ein Agent mit mehreren Tools.</figcaption>
+          ein Agent mit mehreren Tools. Die Antwort steht ab Node-Version 1.5 im Feld <code>response</code>, früher in
+          <code>text</code>.</figcaption>
       </figure>
 
-      <h2>Schritt 12 — Erste Fragen testen</h2>
+      <h2>Schritt 12: Erste Fragen testen</h2>
       <p>Teste nicht nur den Erfolgsfall. Ein RAG-System muss auch sauber sagen können, dass etwas nicht in den Dokumenten
         steht.</p>
 
       <ol class="steps">
         <li><h4>Chat öffnen</h4>
-          <p>Öffne den Testchat des Chat Triggers.</p></li>
+          <p>Doppelklicke den Chat Trigger und klicke auf <strong>Open Chat Window</strong>. Alternativ nutzt du den
+            Chat-Knopf unten am Canvas.</p></li>
         <li><h4>P1-Frage stellen</h4>
           <p>Schreibe: <code>Wie schnell muss P1 eskaliert werden?</code></p></li>
         <li><h4>Antwort prüfen</h4>
@@ -516,11 +565,11 @@ Frage:
 
       <div class="callout callout--warn">
         <b class="t">Wenn die Gegenfrage trotzdem beantwortet wird</b>
-        Dann nutzt das Modell Allgemeinwissen. Verschärfe die Query-Regel, senke die Temperatur und prüfe, ob der
-        Retriever irrelevante Chunks liefert.
+        Dann nutzt das Modell Allgemeinwissen. Verschärfe das System Prompt Template, senke die Sampling Temperature und
+        prüfe, ob der Retriever irrelevante Chunks liefert.
       </div>
 
-      <h2>Schritt 13 — Execution statt nur Chat lesen</h2>
+      <h2>Schritt 13: Execution statt nur Chat lesen</h2>
       <p>Eine gute Antwort im Chat beweist nicht, dass RAG korrekt gearbeitet hat. Öffne die Execution und prüfe die
         Zwischenschritte.</p>
 
@@ -528,7 +577,8 @@ Frage:
         <li><h4>Execution öffnen</h4>
           <p>Öffne nach einer Testfrage die Ausführung des Frage-Workflows.</p></li>
         <li><h4>Q&amp;A Chain prüfen</h4>
-          <p>Prüfe die Eingabe: Kommt wirklich <code>chatInput</code> in der Query an?</p></li>
+          <p>Prüfe die Eingabe: Kommt wirklich ein gefülltes <code>chatInput</code> an? Ist es leer oder <code>null</code>,
+            meldet die Chain „No prompt specified“.</p></li>
         <li><h4>Retriever prüfen</h4>
           <p>Öffne den Vector Store Retriever oder den angeschlossenen Vector Store. Prüfe, welche Dokumente zurückkamen.</p></li>
         <li><h4>Metadaten prüfen</h4>
@@ -542,7 +592,7 @@ Frage:
         dann den Prompt.
       </div>
 
-      <h2>Schritt 14 — Quellen sichtbarer machen</h2>
+      <h2>Schritt 14: Quellen sichtbarer machen</h2>
       <p>Die einfache Q&amp;A Chain ist bequem, aber nicht immer transparent genug. Wenn du Quellen zwingend anzeigen willst,
         baue eine explizitere Variante: erst suchen, dann Kontext und Quellen an das Modell geben.</p>
 
@@ -561,32 +611,37 @@ Frage:
         Werkzeuge: Agent mit Vector-Store-Tool.
       </div>
 
-      <h2>Schritt 15 — Agent-Variante einordnen</h2>
+      <h2>Schritt 15: Agent-Variante einordnen</h2>
       <p>Wenn du an den Agenten aus Kapitel 20 anknüpfst, nutzt du nicht die Q&amp;A Chain als Hauptknoten, sondern ein
         Tool am Agenten.</p>
 
       <ol class="steps">
         <li><h4>AI Agent verwenden</h4>
           <p>Nutze einen <strong>AI Agent</strong> nur dann, wenn der Chat außer RAG noch weitere Entscheidungen treffen muss.
-            Stand Mai 2026 braucht der Agent ein Chat Model und mindestens ein Tool; für reines Q&amp;A bleibt die Chain einfacher.</p></li>
+            Stand Juli 2026 (n8n 2.32.x) braucht der Agent ein Chat Model und mindestens ein Tool; für reines Q&amp;A bleibt
+            die Chain einfacher.</p></li>
         <li><h4>Vector Store Question Answer Tool anschließen</h4>
           <p>Verbinde am Tool-Anschluss des Agenten das <strong>Vector Store Question Answer Tool</strong>.</p></li>
         <li><h4>Beschreibung präzise setzen</h4>
           <p>Setze <strong>Description of Data</strong> z. B. auf
             <code>fiktive Teamhandbuch-Regeln zu Urlaub, Spesen, Onboarding und Support</code>.</p></li>
         <li><h4>Limit setzen</h4>
-          <p>Setze <strong>Limit</strong> auf <code>4</code>.</p></li>
+          <p><strong>Limit</strong> steht ab Werk auf <code>4</code>. Für unsere vier Dokumente passt das.</p></li>
         <li><h4>Vector Store verbinden</h4>
           <p>Verbinde das Tool mit demselben Simple Vector Store und demselben Memory Key.</p></li>
+        <li><h4>Eigenes Model verbinden</h4>
+          <p>Das Tool hat einen zweiten Pflichtanschluss: <strong>Model</strong>. Es fasst die gefundenen Chunks nämlich
+            selbst zusammen, bevor es dem Agenten antwortet. Hänge dort ein Chat Model an, sonst bricht der Lauf ab.</p></li>
       </ol>
 
       <div class="callout callout--warn">
         <b class="t">Tool-Namen nüchtern halten</b>
-        Nutze für Tool-Namen einfache Buchstaben, Zahlen, Leerzeichen, Bindestriche oder Unterstriche. Sonderzeichen in
-        Tool-Namen können Modell- oder Tool-Aufruffehler verursachen.
+        Seit Node-Version 1.1 nimmt das Tool seinen Namen vom Node auf dem Canvas; ein eigenes Feld <strong>Data Name</strong>
+        gab es nur in Version 1. Nutze für den Node-Namen einfache Buchstaben, Zahlen, Leerzeichen, Bindestriche oder
+        Unterstriche. Sonderzeichen können Modell- oder Tool-Aufruffehler verursachen.
       </div>
 
-      <h2>Schritt 16 — Chunking bewusst verbessern</h2>
+      <h2>Schritt 16: Chunking bewusst verbessern</h2>
       <p>Chunking entscheidet, ob relevante Zusammenhänge gemeinsam gefunden werden. Zu kleine Chunks verlieren Kontext.
         Zu große Chunks verwässern die Suche.</p>
 
@@ -603,13 +658,15 @@ Frage:
       <div class="callout callout--info">
         <b class="t">Mathematische Sicht</b>
         Ein Chunk ist ein Informationsvektor. Wenn ein Chunk mehrere Themen mischt, wird sein Vektor unscharf. Wenn ein
-        Thema über zu viele Chunks zerfällt, fehlt beim Antworten Kontext. Chunking ist also eine Bias-Varianz-Abwägung,
-        keine kosmetische Einstellung.
+        Thema über zu viele Chunks zerfällt, fehlt beim Antworten Kontext. Chunking ist damit eine Bias-Varianz-Abwägung.
+        Wer Chunk Size und Overlap nach Gefühl setzt, dreht an dieser Abwägung mit, ohne es zu merken.
       </div>
 
-      <h2>Schritt 17 — Produktionsspeicher auswählen</h2>
-      <p>Für echte Daten brauchst du meist einen persistenten Vector Store. Die Entscheidung ist weniger glamourös als
-        wichtig: Wer darf lesen? Wie wird gelöscht? Wie wird neu indexiert?</p>
+      <h2>Schritt 17: Produktionsspeicher auswählen</h2>
+      <p>Für echte Daten brauchst du einen persistenten Vector Store. n8n bringt dafür fertige Nodes mit, unter anderem
+        für Qdrant, PGVector, Pinecone, Supabase, Chroma, Redis, Milvus, Weaviate, MongoDB Atlas und Azure AI Search.
+        Die Auswahl fühlt sich technisch an, entschieden wird sie aber an drei betrieblichen Fragen: Wer darf lesen?
+        Wie wird gelöscht? Wie wird neu indexiert?</p>
 
       <table class="btable">
         <thead><tr><th>Store</th><th>Geeignet für</th><th>Skeptische Frage</th></tr></thead>
@@ -624,10 +681,13 @@ Frage:
       <div class="callout callout--warn">
         <b class="t">Löschen mitdenken</b>
         RAG-Systeme vergessen nicht automatisch. Wenn ein Dokument veraltet oder rechtlich zu löschen ist, brauchst du
-        eine Strategie für Löschung, Neuindexierung und Versionierung.
+        eine Strategie für Löschung, Neuindexierung und Versionierung. Der Simple Vector Store kennt dafür nur
+        <strong>Clear Store</strong>, also alles oder nichts. Manche persistenten Stores, etwa Pinecone, haben zusätzlich
+        den Operation Mode <strong>Update Documents</strong> mit einem Feld <strong>ID</strong>. Prüf das, bevor du dich
+        für einen Store entscheidest.
       </div>
 
-      <h2>Schritt 18 — Konkrete Testfälle anlegen</h2>
+      <h2>Schritt 18: Konkrete Testfälle anlegen</h2>
       <p>RAG ohne Testfragen ist Bauchgefühl. Lege eine kleine Testmatrix an und prüfe sie nach jedem Daten- oder
         Promptwechsel.</p>
 
@@ -653,7 +713,7 @@ Frage:
         <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
         <tbody>
           <tr><td>jede Antwort sagt „nicht in den Dokumenten“</td><td>falscher Memory Key oder leerer Store</td><td>Lade-Workflow erneut ausführen, Key vergleichen</td></tr>
-          <tr><td>Antwort ist plausibel, aber nicht aus dem Text</td><td>Antwortregel zu weich</td><td>Query schärfen, Temperatur senken, Gegenfragen testen</td></tr>
+          <tr><td>Antwort ist plausibel, aber nicht aus dem Text</td><td>Antwortregel zu weich</td><td>System Prompt Template schärfen, Sampling Temperature senken, Gegenfragen testen</td></tr>
           <tr><td>falsches Dokument wird gefunden</td><td>Chunks zu groß, Metadaten fehlen, Frage zu vage</td><td>Chunking ändern, Metadata Filter nutzen, Testfrage präzisieren</td></tr>
           <tr><td>Embedding-Fehler</td><td>Credential, Modell oder Rate-Limit</td><td>Credential prüfen, kleineres Modell wählen, später erneut ausführen</td></tr>
           <tr><td>doppelte oder alte Antworten</td><td>Store wurde nicht geleert oder Dokumente doppelt geladen</td><td>Clear Store im Demo aktivieren oder produktiv Upsert/Löschstrategie bauen</td></tr>
@@ -664,11 +724,11 @@ Frage:
       <table class="btable">
         <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
         <tbody>
-          <tr><td>PDFs laden</td><td>Input-Dateien mit Default Data Loader als Binary einlesen und Metadaten pro Datei setzen.</td></tr>
+          <tr><td>PDFs laden</td><td>Im Default Data Loader <strong>Type of Data</strong> auf <strong>Binary</strong> stellen, <strong>Data Format</strong> auf <strong>Automatically Detect by Mime Type</strong> lassen und Metadaten pro Datei setzen.</td></tr>
           <tr><td>Google Drive anbinden</td><td>Drive-Trigger oder regelmäßiger Lade-Workflow, aber mit Versions- und Löschstrategie.</td></tr>
           <tr><td>Quellen ausgeben</td><td>Direkte Vector-Store-Suche verwenden und <code>title</code>/<code>source</code> in die Antwort schreiben.</td></tr>
           <tr><td>Metadata Filter</td><td>Nur bestimmte Themen, Versionen oder Kundensegmente suchen lassen.</td></tr>
-          <tr><td>Reranking</td><td>Bei vielen ähnlichen Treffern einen Reranker ergänzen, wenn dein n8n-Setup das unterstützt.</td></tr>
+          <tr><td>Reranking</td><td>Bei vielen ähnlichen Treffern <code>Rerank Results</code> am Vector Store einschalten und einen Reranker-Sub-Node anhängen, etwa <strong>Reranker Cohere</strong>.</td></tr>
           <tr><td>Human Review</td><td>Antworten mit niedriger Sicherheit an Slack oder ein Ticket-System schicken statt automatisch zu senden.</td></tr>
         </tbody>
       </table>
@@ -693,9 +753,12 @@ Frage:
         5) Weil Nichtwissen der wichtigste Test gegen Halluzination ist.
       </div>
 
-      <p>Du hast jetzt ein minimales RAG-System gebaut: kontrolliert geladen, abgefragt und mit Gegenfragen getestet.
-        Der nächste große Schritt ist nicht „mehr KI“, sondern bessere Betriebsstruktur: wiederverwendbare
-        Sub-Workflows, saubere Grenzen und weniger Kopieren.</p>
+      <p>Eine Übung zum Schluss. Ändere im Data Loader die Vorlage im Feld <strong>Data</strong> so, dass Titel, Thema
+        und Quelle nicht mehr im Dokumenttext stehen, sondern nur noch als Metadaten. Lade den Store neu und stelle
+        dieselben fünf Testfragen aus Schritt 18. Notiere, welche Antworten kippen. Du hast an keinem Prompt gedreht,
+        nur drei Zeilen im Loader gelöscht. Genau darum geht in der Praxis so viel Zeit in die Loader-Vorlage. Das nächste
+        Kapitel lässt die KI wieder liegen und kümmert sich um Betriebsstruktur: wiederverwendbare Sub-Workflows und
+        saubere Grenzen zwischen ihnen.</p>
 
     </article>
     <nav id="prevnext"></nav>

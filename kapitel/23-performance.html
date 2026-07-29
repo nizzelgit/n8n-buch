@@ -16,9 +16,10 @@
 
       <div class="chap-eyebrow"><span class="knum">23</span> Profi &amp; Betrieb</div>
       <h1 class="chap-title">Performance, Batching &amp; Rate-Limits</h1>
-      <p class="chap-lede">In diesem Kapitel lernst du, Workflows nicht nur korrekt, sondern berechenbar laufen zu
-        lassen. Der Kern ist einfach: n8n verarbeitet Items meistens automatisch. Batching brauchst du dann, wenn ein
-        Dienst langsam ist, Limits setzt oder große Datenmengen sonst unkontrolliert durch den Workflow laufen.</p>
+      <p class="chap-lede">Korrekt laufen deine Workflows inzwischen. In diesem Kapitel geht es darum, sie auch
+        berechenbar laufen zu lassen. Der Kern ist einfach: n8n verarbeitet Items meistens automatisch. Batching
+        brauchst du dann, wenn ein Dienst langsam ist, Limits setzt oder große Datenmengen sonst unkontrolliert
+        durch den Workflow laufen.</p>
       <div class="chap-meta">
         <span>⏱ ca. 18 Minuten</span>
         <span>🎯 Niveau: Fortgeschrittene Grundlagen</span>
@@ -42,10 +43,12 @@
       </div>
 
       <div class="callout callout--info">
-        <b class="t">Stand Mai 2026: Code-Nodes und Task Runner</b>
-        Die Beispiele nutzen Code-Nodes, nicht die alten Function-Nodes. In self-hosted Produktivumgebungen werden
-        Code-Nodes über Task Runner ausgeführt; externe Task Runner sind die robustere Betriebsform. Für das lokale
-        Lernsetup musst du daran noch nichts konfigurieren.
+        <b class="t">Stand Juli 2026: Code-Nodes und Task Runner</b>
+        Die Beispiele nutzen Code-Nodes, nicht die alten Function-Nodes. Seit n8n 2.0 laufen Code-Nodes
+        standardmäßig in Task Runnern, also in einer abgeschotteten Umgebung. Du musst dafür nichts einschalten;
+        die frühere Variable <code>N8N_RUNNERS_ENABLED</code> ist seit 2.0 überflüssig. Eine Folge davon merkst du
+        beim Schreiben von Code: Der Zugriff auf Umgebungsvariablen über <code>process.env</code> ist im Code-Node
+        standardmäßig gesperrt. Wie du ihn bei Bedarf gezielt freigibst, steht in Kapitel 24.
       </div>
 
       <h2>Das Ziel</h2>
@@ -114,7 +117,7 @@
 
       <hr>
 
-      <h2>Schritt 1 — Workflow anlegen</h2>
+      <h2>Schritt 1: Workflow anlegen</h2>
       <p>Wir starten mit einem künstlichen Datenstrom. Das ist didaktisch sauberer als ein echter Dienst, weil du
         Batchgröße und Fehlerbild kontrollierst.</p>
 
@@ -151,7 +154,7 @@ return jobs;</pre>
           <p>Klicke auf <strong>Schritt ausführen</strong>. Rechts sollten 23 Items sichtbar sein.</p></li>
       </ol>
 
-      <h2>Schritt 2 — Loop Over Items hinzufügen</h2>
+      <h2>Schritt 2: Loop Over Items hinzufügen</h2>
       <p>Der Loop-Node teilt die 23 Items in kleinere Gruppen. Bei Batchgröße 5 entstehen vier volle Batches und ein
         Rest-Batch mit drei Items.</p>
 
@@ -193,7 +196,7 @@ return jobs;</pre>
         Done-Ausgang. Einen Abbruch-IF brauchst du nur bei selbstgebauten Schleifen, etwa bei unbekannter Pagination.
       </div>
 
-      <h2>Schritt 3 — API-Aufruf simulieren</h2>
+      <h2>Schritt 3: API-Aufruf simulieren</h2>
       <p>Statt eine echte API aufzurufen, simuliert ein Code-Node eine Antwort. So siehst du, wie aus Roh-Items
         verarbeitete Items werden.</p>
 
@@ -239,7 +242,7 @@ return batch.map((item, index) =&gt; {
         Anfragen pro Sekunde, pro Minute, pro Tag oder maximale Datengröße pro Anfrage.
       </div>
 
-      <h2>Schritt 4 — Wartezeit einbauen</h2>
+      <h2>Schritt 4: Wartezeit einbauen</h2>
       <p>Eine Pause nach jedem Batch senkt die Anfragefrequenz. Das ist das einfachste Muster gegen Rate-Limits:
         Batch verarbeiten, warten, nächsten Batch holen.</p>
 
@@ -262,7 +265,7 @@ return batch.map((item, index) =&gt; {
         Sekunde, ohne Node-Laufzeit mitzuzählen.
       </div>
 
-      <h2>Schritt 5 — Zusammenfassung am Done-Ausgang</h2>
+      <h2>Schritt 5: Zusammenfassung am Done-Ausgang</h2>
       <p>Die fertigen Items kommen am Done-Ausgang des Loop-Nodes zusammen. Dort ergänzt du eine kleine Auswertung:
         Anzahl, Statuscodes, Dauerhinweis.</p>
 
@@ -335,7 +338,7 @@ return [{
           Zusammenfassung über alle verarbeiteten Items.</figcaption>
       </figure>
 
-      <h2>Schritt 6 — Grenzwert absichtlich brechen</h2>
+      <h2>Schritt 6: Grenzwert absichtlich brechen</h2>
       <p>Ein Test ohne Fehlerfall ist zu schwach. Erhöhe die Batchgröße kurz, um zu sehen, ob dein Workflow die
         simulierte Grenze erkennt.</p>
 
@@ -377,8 +380,8 @@ return [{
       </div>
 
       <h2>Execution-Daten klein halten</h2>
-      <p>Performance ist nicht nur Laufzeit. Jede Execution kann Daten speichern. Große JSON-Objekte, PDFs, Bilder oder
-        vollständige API-Antworten machen Debugging bequem, aber Datenbank und Browser schwerfällig.</p>
+      <p>Zur Performance gehört auch, was liegen bleibt. Jede Execution kann Daten speichern. Große JSON-Objekte, PDFs,
+        Bilder oder vollständige API-Antworten machen Debugging bequem, aber Datenbank und Browser schwerfällig.</p>
 
       <table class="btable">
         <thead><tr><th>Problem</th><th>Gegenmaßnahme</th><th>Begründung</th></tr></thead>
@@ -393,6 +396,16 @@ return [{
       <div class="callout callout--pareto">
         <b class="t">⚡ Frühes Reduzieren schlägt spätes Aufräumen</b>
         Wenn ein Workflow 10 MB pro Item durch zehn Nodes trägt, hast du kein Anzeigeproblem. Du hast ein Datenmodellproblem.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Was n8n 2.x beim Betrieb übernimmt</b>
+        Ein paar Dinge musst du seit 2.0 nicht mehr selbst lösen. Der SQLite-Treiber arbeitet jetzt mit einem
+        Verbindungspool, was kleine Instanzen laut n8n deutlich beschleunigt. Für größere Setups emittiert n8n
+        <strong>OpenTelemetry</strong>-Traces: Jede Ausführung wird zu einem Trace in dem Werkzeug, das ihr ohnehin
+        nutzt, ohne Sidecar oder eigenen Exporter. Und wenn du Auswertungen über längere Zeiträume brauchst, steuerst
+        du die Aufbewahrung der Insights-Daten über <code>N8N_INSIGHTS_MAX_AGE_DAYS</code>. Für dein Lernsetup ist
+        nichts davon nötig, aber es lohnt sich zu wissen, bevor du eigene Messungen baust.
       </div>
 
       <h2>Konkrete Testfälle</h2>

@@ -16,9 +16,9 @@
 
       <div class="chap-eyebrow"><span class="knum">8</span> Bausteine im Detail</div>
       <h1 class="chap-title">Der HTTP-Request-Node: jede API ansprechen</h1>
-      <p class="chap-lede">Es gibt zwar fertige Nodes für hunderte Dienste — aber der HTTP-Request-Node ist der
-        <strong>Generalschlüssel</strong>: Mit ihm sprichst du jeden Webdienst an, der eine Schnittstelle (API) hat, auch wenn
-        es keinen eigenen Node dafür gibt. Verstehst du diesen einen Node, steht dir das halbe Internet offen.</p>
+      <p class="chap-lede">Für hunderte Dienste gibt es fertige Nodes. Für alle anderen gibt es den HTTP-Request-Node: Mit ihm
+        sprichst du jeden Webdienst an, der eine Schnittstelle (API) hat, auch wenn es keinen eigenen Node dafür gibt.
+        Verstehst du diesen einen Node, kommst du an fast jede Web-API heran.</p>
       <div class="chap-meta">
         <span>⏱ ca. 22 Minuten</span>
         <span>🎯 Niveau: Mittel</span>
@@ -30,23 +30,23 @@
         <ul>
           <li>Du hast in Kapitel 4 schon einen einfachen GET-Request gebaut (Wetter holen).</li>
           <li>JSON lesen und Pfade wie <code>$json.current.temperature_2m</code> (Kapitel 5) sind dir vertraut.</li>
-          <li>Für die Übung brauchst du <strong>keinen</strong> Account — wir nutzen einen offenen Echo-Dienst.</li>
+          <li>Für die Übung brauchst du <strong>keinen</strong> Account. Wir nutzen einen offenen Echo-Dienst.</li>
         </ul>
       </div>
 
       <h2>Was bei einem HTTP-Request passiert</h2>
-      <p>Ein HTTP-Request ist wie ein adressierter Brief an einen Server. Er besteht immer aus denselben Teilen — und genau die
+      <p>Ein HTTP-Request ist wie ein adressierter Brief an einen Server. Er besteht immer aus denselben Teilen, und genau die
         füllst du im Node aus:</p>
 
       <table class="btable">
         <thead><tr><th>Teil</th><th>Wofür</th></tr></thead>
         <tbody>
           <tr><td><strong>Method</strong></td><td>Die Absicht: <em>holen, senden, ändern, löschen</em> (siehe Tabelle unten).</td></tr>
-          <tr><td><strong>URL</strong></td><td>Die Adresse des Dienstes — wohin der Brief geht.</td></tr>
+          <tr><td><strong>URL</strong></td><td>Die Adresse des Dienstes: wohin der Brief geht.</td></tr>
           <tr><td><strong>Query-Parameter</strong></td><td>Zusätze an der URL nach dem <code>?</code>, z. B. <code>?stadt=Berlin</code>.</td></tr>
           <tr><td><strong>Headers</strong></td><td>Metadaten, z. B. „ich erwarte JSON" oder ein Zugangsschlüssel.</td></tr>
-          <tr><td><strong>Body</strong></td><td>Der eigentliche Inhalt — nur beim <em>Senden</em> (POST/PUT), meist als JSON.</td></tr>
-          <tr><td><strong>Authentication</strong></td><td>Wer du bist — falls der Dienst einen Login verlangt (Kapitel 12).</td></tr>
+          <tr><td><strong>Body</strong></td><td>Der eigentliche Inhalt, nur beim <em>Senden</em> (POST/PUT), meist als JSON.</td></tr>
+          <tr><td><strong>Authentication</strong></td><td>Wer du bist, falls der Dienst einen Login verlangt (Kapitel 12).</td></tr>
         </tbody>
       </table>
 
@@ -68,9 +68,11 @@
       </div>
 
       <h2>Der Node im Detail</h2>
-      <p>Öffne einen frischen HTTP-Request-Node (Doppelklick). Oben stehen <strong>Method</strong> und <strong>URL</strong>,
-        darunter die <strong>Authentication</strong> und dann drei Schalter, die je einen Bereich aufklappen:
-        <strong>Send Query Parameters</strong>, <strong>Send Headers</strong> und <strong>Send Body</strong>.</p>
+      <p>Öffne einen frischen HTTP-Request-Node (Doppelklick). Ganz oben rechts im Parameter-Bereich sitzt der Knopf
+        <strong>Import cURL</strong>. Darunter stehen <strong>Method</strong> und <strong>URL</strong>, dann die
+        <strong>Authentication</strong> und dann drei Schalter, die je einen Bereich aufklappen:
+        <strong>Send Query Parameters</strong>, <strong>Send Headers</strong> und <strong>Send Body</strong>. Am Fuß der Liste
+        steht <strong>Add option</strong>. Darüber blendest du die Zusatzoptionen ein, um die es weiter unten geht.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -92,13 +94,15 @@
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 8.1</span>Das Grundgerüst: Method, URL, Authentication und die drei Send-Schalter.
-          Oben rechts der praktische <b>Import-cURL</b>-Knopf (gleich mehr dazu).</figcaption>
+          Oben rechts, direkt über <code>Method</code>, sitzt der Knopf <b>Import cURL</b>. Gleich mehr dazu.</figcaption>
       </figure>
 
       <h2>Query-Parameter sauber setzen</h2>
       <p>In Kapitel 4 haben wir die Parameter direkt in die URL geschrieben (<code>…/forecast?latitude=52.52&amp;longitude=13.41</code>).
-        Das geht — aber es gibt einen aufgeräumteren Weg: Schalte <strong>„Send Query Parameters"</strong> ein und trag jeden
-        Parameter als <strong>Name/Wert-Paar</strong> ein. Vorteil: übersichtlich, und jeder Wert kann eine <strong>Expression</strong> sein.</p>
+        Das funktioniert. Aufgeräumter geht es so: Schalte <strong>Send Query Parameters</strong> ein. Darunter erscheint das
+        Feld <strong>Specify Query Parameters</strong>, dort bleibt <em>Using Fields Below</em> stehen. Jetzt trägst du jeden
+        Parameter als Name/Wert-Paar ein; weitere Zeilen holst du dir über <strong>Add Query Parameter</strong>. Das bleibt
+        übersichtlich, und jeder Wert kann eine Expression sein.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -111,7 +115,7 @@
                   <div class="row"><label>Name / Value</label><input class="n8n-input" value="latitude  =  52.52"></div>
                   <div class="row"><label>Name / Value</label><input class="n8n-input" value="longitude  =  13.41"></div>
                   <div class="row"><label>Name / Value</label><input class="n8n-input is-expr" value="current  =  {{ $json.felder }}"></div>
-                  <div class="row"><div class="n8n-select" style="border-style:dashed; color:var(--n8n-primary);">＋ Add Parameter</div></div>
+                  <div class="row"><div class="n8n-select" style="border-style:dashed; color:var(--n8n-primary);">＋ Add Query Parameter</div></div>
                 </div>
               </div>
             </div>
@@ -122,18 +126,22 @@
       </figure>
 
       <div class="callout callout--tip">
-        <b class="t">💡 Import cURL — der größte Zeitsparer</b>
-        Viele API-Dokus zeigen Beispiele als <code>curl</code>-Befehl. Klick oben im Node auf <strong>„Import cURL"</strong>, füge
-        den Befehl ein — und n8n füllt Method, URL, Header und Body <em>automatisch</em> aus. Danach nur noch anpassen, fertig.
+        <b class="t">💡 Import cURL: der größte Zeitsparer</b>
+        Viele API-Dokus zeigen ihre Beispiele als <code>curl</code>-Befehl. Klick oben rechts im Node auf
+        <strong>Import cURL</strong>. Es öffnet sich das Fenster <strong>Import cURL command</strong> mit dem Feld
+        <strong>cURL Command</strong>. Befehl hineinkopieren, auf <strong>Import</strong> klicken, fertig: n8n füllt Method, URL,
+        Query-Parameter, Header und Body aus. Lies den Hinweis im Fenster mit. Der Import überschreibt alles, was du im Node
+        vorher eingestellt hast.
       </div>
 
       <h2>Daten senden: der Body bei POST</h2>
-      <p>Beim <strong>POST</strong> schickst du Inhalt mit. Stell <strong>Method</strong> auf <code>POST</code>, schalte
-        <strong>„Send Body"</strong> ein und wähle als <strong>Body Content Type</strong> meist <code>JSON</code>. Dann gibst du
-        den Body als JSON ein — und darfst überall Expressions verwenden:</p>
+      <p>Beim POST schickst du Inhalt mit. Stell <strong>Method</strong> auf <code>POST</code>, schalte <strong>Send Body</strong>
+        ein und wähle als <strong>Body Content Type</strong> den Eintrag <code>JSON</code>. Darunter erscheint
+        <strong>Specify Body</strong>; stell es auf <em>Using JSON</em>. Jetzt tippst du den Body in das Feld darunter.
+        Expressions sind darin überall erlaubt:</p>
 
       <div class="code">
-        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Body (JSON) — mit eingebetteter Expression</div>
+        <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Body (JSON) mit eingebetteter Expression</div>
 <pre>{
   <span class="pr">"stadt"</span>: <span class="st">"Berlin"</span>,
   <span class="pr">"temperatur"</span>: {{ $json.current.temperature_2m }},
@@ -142,45 +150,82 @@
       </div>
 
       <div class="callout callout--warn">
-        <b class="t">Wenn etwas schiefgeht — Zahl vs. Text im Body</b>
-        Eine <strong>Zahl</strong> steht ohne Anführungszeichen (<code>"temperatur": {{ … }}</code>), ein <strong>Text</strong>
-        <em>mit</em> (<code>"gemeldet_am": "{{ … }}"</code>). Vergisst du die Quotes bei Text, wird das JSON ungültig — die
-        Vorschau zeigt dann einen roten Fehler.
+        <b class="t">Wenn etwas schiefgeht: Zahl oder Text im Body</b>
+        Eine Zahl steht ohne Anführungszeichen (<code>"temperatur": {{ … }}</code>), ein Text steht <em>mit</em>
+        (<code>"gemeldet_am": "{{ … }}"</code>). Vergisst du die Quotes beim Text, wird das JSON ungültig. Die Vorschau zeigt
+        dann einen roten Fehler.
       </div>
 
       <h2>Die Antwort lesen</h2>
-      <p>Nach „▶ Schritt ausführen" steht die Antwort im Ausgang — meist als ein Item mit JSON. Zwei nützliche Optionen findest du
-        ganz unten unter <strong>„Options"</strong>:</p>
+      <p>Nach „▶ Schritt ausführen" steht die Antwort im Ausgang, meist als ein Item mit JSON. Wie n8n sie behandelt, stellst du
+        ganz unten im Node ein: Klick auf <strong>Add option</strong> und wähle <strong>Response</strong>. Der Eintrag klappt drei
+        Felder auf:</p>
       <ul>
-        <li><strong>Response → Response Format:</strong> <em>Autodetect</em> reicht fast immer; für Dateien (PDF/Bild) wählst du <em>File</em>.</li>
-        <li><strong>Split Into Items:</strong> Liefert die API eine <em>Liste</em>, kannst du sie hier in <strong>ein Item pro Eintrag</strong> aufteilen — dann läuft der nächste Node automatisch pro Eintrag (Kapitel 5).</li>
+        <li><strong>Response Format:</strong> <em>Autodetect</em> reicht fast immer. Für Dateien (PDF, Bild) nimmst du <em>File</em>,
+          für Antworten, die kein sauberes JSON sind, <em>Text</em>. Bei <em>File</em> und <em>Text</em> kommt das Feld
+          <strong>Put Output in Field</strong> dazu; es steht auf <code>data</code>.</li>
+        <li><strong>Include Response Headers and Status:</strong> legt neben dem Body auch Statuscode und Header ins Item. Praktisch,
+          wenn du den Code später auswerten willst.</li>
+        <li><strong>Never Error:</strong> der Node bricht auch bei 404 oder 500 nicht ab, sondern reicht die Antwort weiter. Nimm
+          das nur, wenn du den Statuscode danach wirklich selbst prüfst.</li>
       </ul>
+      <p>Eines suchst du hier vergeblich: ein Feld, das eine Liste in einzelne Items zerlegt. Das hat der Node nicht mehr. In
+        n8n 1.x hieß die Option <em>Split Into Items</em>; heute steckt sie nur noch in den alten Node-Versionen 1 und 2. Neue
+        HTTP-Request-Nodes legt n8n als Version 4.x an. Liefert dir eine API also ein Array, häng den Node
+        <strong>Split Out</strong> dahinter und trag unter <strong>Fields To Split Out</strong> den Feldnamen ein. Danach läuft
+        der nächste Node pro Eintrag (Kapitel 9).</p>
+
+      <h2>Viele Seiten, viele Items: Pagination und Batching</h2>
+      <p>Zwei weitere Einträge unter <strong>Add option</strong> lösen die häufigsten Probleme mit echten APIs.</p>
+      <p><strong>Pagination</strong> holt Ergebnisseiten nach. Viele Dienste geben pro Aufruf nur 50 oder 100 Einträge zurück und
+        verstecken den Rest hinter einer zweiten, dritten, vierten Seite. Füg die Option <strong>Pagination</strong> hinzu und
+        stell den <strong>Pagination Mode</strong> ein. Zwei Wege stehen zur Wahl.
+        <em>Update a Parameter in Each Request</em> zählt bei jedem Aufruf einen Parameter hoch; als Wert trägst du
+        <code>{{ $pageCount + 1 }}</code> ein. <em>Response Contains Next URL</em> folgt der Adresse, die die Antwort selbst
+        mitliefert; die trägst du unter <strong>Next URL</strong> als Expression ein, in der Form
+        <code>{{ $response.body["next-page"] }}</code>. Wie das Feld bei deiner API heißt, steht in deren Doku. Wann Schluss ist,
+        entscheidet <strong>Pagination Complete When</strong>, voreingestellt auf <em>Response Is Empty</em>.</p>
+      <p>Stell beim ersten Ausprobieren <strong>Limit Pages Fetched</strong> auf an und <strong>Max Pages</strong> auf 3. Sonst
+        dreht der Node Runde um Runde, falls die Abbruchbedingung nicht greift. Das habe ich beim ersten Mal falsch gemacht und
+        einer fremden API 4000 Requests geschickt.</p>
+      <p><strong>Batching</strong> bremst dich absichtlich aus. Bekommt der Node 500 Items herein, feuert er ohne Batching 500
+        Requests hintereinander ab, und viele Dienste antworten darauf mit <code>429</code>. Füg die Option
+        <strong>Batching</strong> hinzu. <strong>Items per Batch</strong> steht dann auf 50, <strong>Batch Interval (ms)</strong>
+        auf 1000. Übersetzt: 50 Anfragen, eine Sekunde Pause, die nächsten 50. Bei einer strengen API setzt du
+        <strong>Items per Batch</strong> auf 1 und das Intervall hoch. Langsam, aber es kommt an. Kapitel 23 geht das im
+        Zusammenhang durch.</p>
 
       <div class="callout callout--info">
-        <b class="t">Authentication — kurz angerissen</b>
-        Verlangt ein Dienst Login, stell <strong>Authentication</strong> nicht auf „None". Kennt n8n den Dienst, wähle
-        <strong>„Predefined Credential Type"</strong> und such ihn aus. Sonst <strong>„Generic Credential Type" → Header Auth</strong>
-        (z. B. Header <code>Authorization</code> mit Wert <code>Bearer DEIN_TOKEN</code>). <strong>Niemals</strong> den Token offen in
-        die URL schreiben. Wie Credentials sicher gespeichert werden, ist Thema von Kapitel 12.
+        <b class="t">Authentication: kurz angerissen</b>
+        <p style="margin:0 0 6px">Verlangt ein Dienst einen Login, lass <strong>Authentication</strong> nicht auf <em>None</em>
+          stehen. Kennt n8n den Dienst bereits, wähle <strong>Predefined Credential Type</strong>. Darunter erscheint das Feld
+          <strong>Credential Type</strong>, dort suchst du den Dienst aus der Liste.</p>
+        <p style="margin:0 0 6px">Kennt n8n ihn nicht, wähle <strong>Generic Credential Type</strong>. Darunter erscheint
+          <strong>Generic Auth Type</strong>. Schickt die API ihren Schlüssel als <code>Authorization: Bearer …</code>, nimm
+          <em>Bearer Auth</em> und trag den Schlüssel unter <strong>Bearer Token</strong> ein. Das Wort „Bearer" setzt n8n selbst
+          davor. Braucht die API einen eigenen Header wie <code>X-API-Key</code>, nimm <em>Header Auth</em> und füll
+          <strong>Name</strong> und <strong>Value</strong> aus.</p>
+        <p style="margin:0"><strong>Niemals</strong> den Token offen in die URL schreiben. Wie Credentials sicher gespeichert
+          werden, ist Thema von Kapitel 12.</p>
       </div>
 
       <h2>Typische Fehlercodes deuten</h2>
       <table class="btable">
         <thead><tr><th>Code</th><th>Bedeutung</th><th>Was tun</th></tr></thead>
         <tbody>
-          <tr><td><code>401</code> / <code>403</code></td><td>Nicht angemeldet / keine Berechtigung</td><td>Authentication prüfen — Token fehlt, falsch oder abgelaufen</td></tr>
+          <tr><td><code>401</code> / <code>403</code></td><td>Nicht angemeldet / keine Berechtigung</td><td>Authentication prüfen: Token fehlt, falsch oder abgelaufen</td></tr>
           <tr><td><code>404</code></td><td>Adresse gibt es nicht</td><td>URL und Pfad kontrollieren (Tippfehler, falsche Version)</td></tr>
-          <tr><td><code>429</code></td><td>Zu viele Anfragen (Rate-Limit)</td><td>Langsamer senden — Batching/Wartezeit (Kapitel 23)</td></tr>
-          <tr><td><code>400</code></td><td>Anfrage fehlerhaft</td><td>Body/Parameter prüfen — oft ungültiges JSON oder Pflichtfeld fehlt</td></tr>
-          <tr><td><code>500</code> / <code>503</code></td><td>Fehler/Überlastung beim Server</td><td>Nicht dein Fehler — später erneut versuchen (Retry, Kapitel 11)</td></tr>
+          <tr><td><code>429</code></td><td>Zu viele Anfragen (Rate-Limit)</td><td>Langsamer senden: Option <strong>Batching</strong> (Kapitel 23)</td></tr>
+          <tr><td><code>400</code></td><td>Anfrage fehlerhaft</td><td>Body/Parameter prüfen: oft ungültiges JSON oder ein Pflichtfeld fehlt</td></tr>
+          <tr><td><code>500</code> / <code>503</code></td><td>Fehler/Überlastung beim Server</td><td>Nicht dein Fehler. Später erneut versuchen (Retry, Kapitel 11)</td></tr>
         </tbody>
       </table>
 
       <hr>
 
       <h2>Mini-Übung: einen POST senden und die Antwort lesen</h2>
-      <p>Wir schicken Daten an einen offenen <strong>Echo-Dienst</strong> (er spiegelt einfach zurück, was er bekommt) — ideal
-        zum Üben, ganz ohne Account. So siehst du genau, was du gesendet hast.</p>
+      <p>Wir schicken Daten an einen offenen <strong>Echo-Dienst</strong>. Der spiegelt zurück, was er bekommt, und verlangt
+        keinen Account. So siehst du genau, was bei ihm angekommen ist.</p>
 
       <ol class="steps">
         <li><h4>Einen HTTP-Node anlegen</h4>
@@ -208,8 +253,9 @@
         <li><h4>Ausführen</h4>
           <p>„▶ Schritt ausführen" klicken. Rechts erscheint die Antwort.</p></li>
         <li><h4>Die Spiegelung finden</h4>
-          <p>Such im Ergebnis das Feld <code>data</code> — der Echo-Dienst gibt dort exakt deinen Body zurück. Damit ist bewiesen,
-            dass dein POST samt JSON sauber angekommen ist.</p></li>
+          <p>Such im Ergebnis das Feld <code>data</code>. Der Echo-Dienst gibt dort exakt deinen Body zurück. Damit ist bewiesen,
+            dass dein POST samt JSON sauber angekommen ist. Daneben liegen noch <code>args</code>, <code>headers</code>,
+            <code>json</code> und <code>url</code>. Die kannst du fürs Erste übergehen.</p></li>
       </ol>
 
       <figure class="figure">
@@ -240,13 +286,16 @@
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 8.3</span>Der Echo-Dienst spiegelt unter <code>data</code> exakt den gesendeten
-          Body zurück — der Beweis, dass dein POST funktioniert hat.</figcaption>
+          Body zurück. Das ist der Beweis, dass dein POST funktioniert hat. Die Abbildung zeigt nur die beiden wichtigen Felder;
+          in der echten Antwort stehen zusätzlich <code>args</code>, <code>form</code>, <code>headers</code> und
+          <code>json</code>.</figcaption>
       </figure>
 
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
-        <p style="margin:0 0 6px">• <strong>Roter Fehler „JSON parameter needs to be valid JSON"?</strong> Im Body fehlt ein
-          Komma, eine Klammer oder Anführungszeichen. Die Vorschau zeigt dir die Stelle.</p>
+        <p style="margin:0 0 6px">• <strong>Roter Fehler „The value in the 'JSON Body' field is not valid JSON"?</strong> Im Body
+          fehlt ein Komma, eine Klammer oder ein Anführungszeichen. Die Vorschau zeigt dir die Stelle. In n8n 1.x hieß dieselbe
+          Meldung noch „JSON parameter need to be an valid JSON".</p>
         <p style="margin:0">• <strong>Code 405 (Method Not Allowed)?</strong> Du sendest GET an eine Adresse, die POST erwartet
           (oder umgekehrt). Method anpassen.</p>
       </div>
@@ -258,6 +307,7 @@
           <tr><td>GET</td><td>einen offenen Beispiel-Endpunkt lesen</td><td>Status 200 und JSON-Ausgabe</td></tr>
           <tr><td>POST</td><td>Echo-Dienst mit JSON-Body ausführen</td><td><code>data</code> spiegelt den Body</td></tr>
           <tr><td>Query</td><td>Parameter in der Parameterliste setzen</td><td>URL wird korrekt zusammengesetzt</td></tr>
+          <tr><td>Liste</td><td>Antwort mit Array an einen Split-Out-Node geben</td><td>ein Item pro Eintrag im Ausgang</td></tr>
           <tr><td>Fehler</td><td>Method absichtlich falsch wählen</td><td>Statuscode macht die Ursache sichtbar</td></tr>
         </tbody>
       </table>
@@ -267,9 +317,10 @@
         <ul>
           <li>Welche Method nimmst du zum <em>Lesen</em>, welche zum <em>Senden</em>?</li>
           <li>Was ist der Vorteil der „Send Query Parameters"-Liste gegenüber Parametern direkt in der URL?</li>
-          <li>Wie schaltest du eine API-Liste in „ein Item pro Eintrag" um?</li>
-          <li>Was bedeutet ein Antwortcode <code>401</code> — und woran liegt es meist?</li>
+          <li>Wie machst du aus einer API-Liste „ein Item pro Eintrag"?</li>
+          <li>Was bedeutet ein Antwortcode <code>401</code>, und woran liegt es meist?</li>
           <li>Wofür ist „Import cURL" gut?</li>
+          <li>Welche Option holst du dir, wenn eine API pro Aufruf nur 100 Einträge liefert?</li>
         </ul>
       </div>
 
@@ -277,14 +328,18 @@
         <b class="t">Antworten</b>
         1) GET zum Lesen, POST zum Senden. ·
         2) Übersichtlich, und jeder Wert kann eine Expression sein; n8n baut die URL korrekt zusammen. ·
-        3) Unter „Options" → <strong>Split Into Items</strong>. ·
-        4) Nicht angemeldet/keine Berechtigung — meist fehlt oder stimmt das Auth-Token nicht. ·
-        5) Einen <code>curl</code>-Befehl aus einer API-Doku einfügen, n8n füllt den Node automatisch aus.
+        3) Mit dem Node <strong>Split Out</strong> dahinter, Feld <strong>Fields To Split Out</strong>. Im HTTP-Request-Node
+        selbst gibt es dafür keine Option mehr. ·
+        4) Nicht angemeldet oder keine Berechtigung. Meist fehlt das Auth-Token oder es ist abgelaufen. ·
+        5) Einen <code>curl</code>-Befehl aus einer API-Doku einfügen, n8n füllt den Node automatisch aus. ·
+        6) Unter <strong>Add option</strong> den Eintrag <strong>Pagination</strong>.
       </div>
 
-      <p>Du kannst jetzt Daten holen <em>und</em> senden. Doch zwischen „rein" und „raus" liegt die eigentliche Arbeit: Daten
-        <strong>umformen</strong>. Im nächsten Kapitel lernst du die Werkzeuge dafür kennen — <strong>Edit Fields (Set)</strong>,
-        <strong>Code</strong> und <strong>Filter</strong>.</p>
+      <p>Du kannst jetzt Daten holen <em>und</em> senden. Zwischen „rein" und „raus" liegt aber die eigentliche Arbeit: Daten
+        umformen. Im nächsten Kapitel lernst du die Werkzeuge dafür kennen: <strong>Edit Fields (Set)</strong>,
+        <strong>Code</strong> und <strong>Filter</strong>. Bevor du weiterblätterst, schick den Echo-Request noch einmal mit
+        einem absichtlich kaputten Body los, etwa ohne das Komma zwischen den beiden Zeilen. Die Fehlermeldung wirst du im Lauf
+        dieses Buchs noch oft sehen; es hilft, sie einmal bewusst ausgelöst zu haben.</p>
 
     </article>
     <nav id="prevnext"></nav>

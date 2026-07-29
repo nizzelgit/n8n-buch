@@ -34,7 +34,8 @@
       <table class="btable">
         <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
         <tbody>
-          <tr><td>Activation</td><td>ein Workflow ist für automatische Ausführung eingeschaltet</td><td>Ist der Workflow wirklich aktiv?</td></tr>
+          <tr><td>Activation</td><td>älterer Begriff dafür, dass ein Workflow automatisch läuft. Seit n8n 2.0 heißt der Schritt <em>Publish</em></td><td>Ist der Workflow wirklich publiziert?</td></tr>
+          <tr><td>Agent Builder</td><td>Oberfläche, in der KI-Agenten als eigenständige Objekte entstehen, statt nur als Node im Workflow</td><td>Baue ich den Agenten inline oder als eigenes Objekt?</td></tr>
           <tr><td>API</td><td>Schnittstelle, über die Systeme Daten austauschen</td><td>Welche URL, Methode und Authentifizierung?</td></tr>
           <tr><td>API-Key</td><td>geheimer Schlüssel für einen Dienst</td><td>Liegt er in Credentials statt im Workflow?</td></tr>
           <tr><td>Batching</td><td>Items in kleineren Gruppen verarbeiten</td><td>Wie groß darf eine Gruppe sein?</td></tr>
@@ -57,6 +58,7 @@
           <tr><td>Execution</td><td>eine konkrete Ausführung eines Workflows</td><td>Welche Items kamen rein, welche gingen raus?</td></tr>
           <tr><td>Expression</td><td>dynamischer Ausdruck in einem Node-Feld</td><td>Aus welchem Item kommt der Wert?</td></tr>
           <tr><td>Idempotenz</td><td>mehrfaches Ausführen erzeugt kein mehrfaches Ergebnis</td><td>Wie verhindere ich Dubletten?</td></tr>
+          <tr><td>Insights</td><td>Auswertung über Erfolge, Fehler und Laufzeiten deiner Ausführungen</td><td>Welcher Workflow schlägt am häufigsten fehl?</td></tr>
           <tr><td>Item</td><td>ein Datensatz, der durch den Workflow läuft</td><td>Wie sieht das aktuelle JSON aus?</td></tr>
         </tbody>
       </table>
@@ -67,11 +69,13 @@
         <tbody>
           <tr><td>JSON</td><td>strukturierte Daten aus Objekten, Feldern und Listen</td><td>Ist das Feld wirklich dort, wo ich es suche?</td></tr>
           <tr><td>Loop</td><td>wiederholte Verarbeitung von Items oder Gruppen</td><td>Wann endet die Schleife?</td></tr>
+          <tr><td>MCP</td><td>Protokoll, über das ein Agent externe Werkzeuge anspricht</td><td>Welche Werkzeuge gibt der Server frei?</td></tr>
           <tr><td>Merge</td><td>Zusammenführen mehrerer Datenströme</td><td>Nach Position oder nach Schlüssel?</td></tr>
           <tr><td>NDV</td><td>Node-Detailansicht mit Parametern, Input und Output</td><td>Welche Einstellung verändert das Verhalten?</td></tr>
           <tr><td>Node</td><td>ein einzelner Baustein im Workflow</td><td>Was ist seine Eingabe, was seine Ausgabe?</td></tr>
           <tr><td>Output</td><td>Daten, die ein Node nach der Ausführung weitergibt</td><td>Welche Felder sind ab jetzt verfügbar?</td></tr>
           <tr><td>Pagination</td><td>API-Daten seitenweise abrufen</td><td>Wo steht die nächste Seite?</td></tr>
+          <tr><td>Publish</td><td>den gespeicherten Stand eines Workflows live schalten. <em>Save</em> sichert nur, ohne die Produktion zu verändern</td><td>Habe ich gespeichert oder auch publiziert?</td></tr>
           <tr><td>Queue-Mode</td><td>Ausführungen werden über Redis an Worker verteilt</td><td>Brauche ich wirklich mehrere Worker?</td></tr>
         </tbody>
       </table>
@@ -86,6 +90,7 @@
           <tr><td>RAG</td><td>KI-Muster: eigene Dokumente suchen und als Kontext nutzen</td><td>Welche Quelle darf die Antwort stützen?</td></tr>
           <tr><td>Secret</td><td>sensibler Wert wie Token, Passwort oder Schlüssel</td><td>Ist er aus Exporten und Logs herausgehalten?</td></tr>
           <tr><td>Sub-Workflow</td><td>wiederverwendbarer Workflow als Baustein</td><td>Welche Eingaben erwartet er?</td></tr>
+          <tr><td>Task Runner</td><td>abgeschottete Umgebung, in der Code-Nodes ausgeführt werden. Seit n8n 2.0 der Normalfall</td><td>Warum sieht mein Code die Umgebungsvariable nicht?</td></tr>
           <tr><td>Trigger</td><td>Node, der eine Ausführung startet</td><td>Wann und wodurch startet der Workflow?</td></tr>
           <tr><td>Webhook</td><td>URL, die externe Systeme aufrufen können</td><td>Ist es Test-URL oder Produktions-URL?</td></tr>
           <tr><td>Workflow</td><td>verbundene Nodes, die eine Automatisierung beschreiben</td><td>Welches fachliche Ziel erfüllt er?</td></tr>
@@ -111,7 +116,7 @@
           <tr><td>Workflow vs. Execution</td><td>du änderst Logik, obwohl nur ein Lauf fehlerhaft war</td><td>erst die konkrete Ausführung ansehen</td></tr>
           <tr><td>Credential vs. Secret</td><td>Secret wird eventuell im Workflow gespeichert</td><td>Secret gehört in Credential oder Secret-Verwaltung</td></tr>
           <tr><td>Item vs. Feld</td><td>du suchst Daten auf der falschen Ebene</td><td>JSON-Struktur vollständig öffnen</td></tr>
-          <tr><td>Webhook Test vs. Produktion</td><td>Tests funktionieren, echte Aufrufe nicht</td><td>richtige URL und Aktivierung prüfen</td></tr>
+          <tr><td>Webhook Test vs. Produktion</td><td>Tests funktionieren, echte Aufrufe nicht</td><td>richtige URL prüfen und sicherstellen, dass der Workflow publiziert ist</td></tr>
           <tr><td>Retry vs. Idempotenz</td><td>erneuter Versuch erzeugt Dubletten</td><td>vor schreibenden Aktionen Dublettenprüfung ergänzen</td></tr>
         </tbody>
       </table>
