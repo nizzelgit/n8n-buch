@@ -108,12 +108,13 @@
       </div>
 
       <h2>Zwei Wege zu einem Agenten</h2>
-      <p>Seit 2026 gibt es neben dem AI-Agent-Node auch den <strong>Agent Builder</strong>. Dort ist ein Agent kein Node,
-        sondern ein eigenes Objekt im Projekt, gleichrangig neben den Workflows. Du legst ihn im Projekt unter
-        <strong>Agents</strong> mit <strong>Create Agent</strong> an und konfigurierst Model, Instructions, Tools, Skills,
-        Knowledge und Memory. Testen kannst du mit <strong>Preview</strong>, live geht der Agent über
-        <strong>Publish</strong>. Das Ganze ist noch jung. n8n führt die Agenten als Preview, selbst gehostet laufen sie
-        ab n8n 2.32.3, und dafür muss <code>agents</code> in <code>N8N_ENABLED_MODULES</code> stehen.</p>
+      <p>Seit 2026 gibt es neben dem AI-Agent-Node auch den <strong>Agent Builder</strong>. Dort ist ein Agent ein
+        eigenes Objekt im Projekt, gleichrangig neben den Workflows. Er steckt also in keinem Workflow. Du wählst links
+        dein Projekt, gehst auf den Tab <strong>Agents</strong> und klickst <strong>Create Agent</strong>. Danach
+        konfigurierst du Model, Instructions, Tools, Skills, Knowledge und Memory. Über <strong>Preview</strong> testest
+        du den Entwurf, mit <strong>Publish</strong> geht er live. Das Ganze ist noch jung: n8n bezeichnet die Agenten
+        selbst als Preview-Funktion. Selbst gehostet laufen sie ab n8n 2.32.3, und dafür muss <code>agents</code> in
+        <code>N8N_ENABLED_MODULES</code> stehen.</p>
       <p>Aus einem Workflow heraus nutzt du solche Agenten auf zwei Arten. „Create agents inline“ setzt einen Agenten
         direkt als Node in den Workflow. „Message existing agents“ schickt eine Nachricht an einen bereits veröffentlichten
         Agenten und holt dessen Antwort zurück. Wir bleiben hier trotzdem beim AI-Agent-Node, denn dort siehst du jeden
@@ -131,14 +132,18 @@
         <li><h4>Chat Trigger hinzufügen</h4>
           <p>Klicke auf <strong>Add first step…</strong>, suche <code>chat trigger</code> und wähle
             <strong>Chat Trigger</strong>.</p></li>
-        <li><h4>Öffentlichkeit aus lassen</h4>
-          <p>Lasse <strong>Make Chat Publicly Available</strong> zunächst ausgeschaltet. Du testest im n8n-internen Chat.</p></li>
-        <li><h4>Hosted Chat vormerken</h4>
-          <p>Wenn du später veröffentlichst, wähle unter <strong>Mode</strong> den Eintrag <strong>Hosted Chat</strong>.
-            Für dieses Kapitel brauchst du keinen eigenen Chat-Client.</p></li>
+        <li><h4>Öffentlichkeit kurz einschalten</h4>
+          <p>Setze <strong>Make Chat Publicly Available</strong> für einen Moment auf an. Solange der Schalter aus ist,
+            blendet n8n die beiden nächsten Felder gar nicht erst ein.</p></li>
+        <li><h4>Hosted Chat wählen</h4>
+          <p>Wähle unter <strong>Mode</strong> den Eintrag <strong>Hosted Chat</strong>. n8n liefert die Chat-Seite dann
+            selbst aus, und du brauchst für dieses Kapitel keinen eigenen Chat-Client.</p></li>
         <li><h4>Starttext setzen</h4>
-          <p>Das Feld heißt <strong>Initial Message(s)</strong> und erscheint nur im Modus Hosted Chat. Trage z. B.
-            <code>Frag mich nach dem Wetter in einer Stadt.</code> ein.</p></li>
+          <p>Trage in <strong>Initial Message(s)</strong> z. B. <code>Frag mich nach dem Wetter in einer Stadt.</code>
+            ein. Jede Zeile in diesem Feld wird eine eigene Startnachricht.</p></li>
+        <li><h4>Öffentlichkeit wieder ausschalten</h4>
+          <p>Setze <strong>Make Chat Publicly Available</strong> zurück auf aus. Getestet wird im n8n-internen Chat.
+            Veröffentlichen kommt in Schritt 13, wenn die Tools laufen.</p></li>
       </ol>
 
       <figure class="figure">
@@ -149,7 +154,7 @@
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
                 <div class="ndv-panel__body">
-                  <div class="row"><label>Make Chat Publicly Available</label><div class="n8n-select">aus <span class="chev">▾</span></div></div>
+                  <div class="row"><label>Make Chat Publicly Available</label><div class="n8n-select">an <span class="chev">▾</span></div></div>
                   <div class="row"><label>Mode</label><div class="n8n-select">Hosted Chat <span class="chev">▾</span></div></div>
                   <div class="row"><label>Initial Message(s)</label><input class="n8n-input" value="Frag mich nach dem Wetter in einer Stadt."></div>
                   <div class="row"><label>Response Mode</label><div class="n8n-select">When Last Node Finishes <span class="chev">▾</span></div></div>
@@ -158,8 +163,8 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 20.2</span>Beim Bauen bleibt der Chat privat. Veröffentlichen kommt erst
-          nach den Tests.</figcaption>
+        <figcaption><span class="fig-tag">Abb. 20.2</span>Mode und Initial Message(s) erscheinen erst, wenn Make Chat
+          Publicly Available an ist. Für die Tests schaltest du danach wieder aus.</figcaption>
       </figure>
 
       <div class="callout callout--warn">
@@ -179,8 +184,9 @@
           <p>Schließe die Detailansicht. Ziehe vom Chat Trigger eine Linie ins Leere, suche <code>ai agent</code> und wähle
             <strong>AI Agent</strong>.</p></li>
         <li><h4>Prompt aus dem Chat übernehmen</h4>
-          <p>Setze <strong>Source for Prompt (User Message)</strong> auf <strong>Connected Chat Trigger Node</strong>. Der
-            Agent liest dann das Feld <code>chatInput</code> aus dem direkt verbundenen Chat Trigger. In älteren Versionen
+          <p>Setze <strong>Source for Prompt (User Message)</strong> auf <strong>Connected Chat Trigger Node</strong>.
+            Das ist die Voreinstellung, meist musst du also nichts ändern. Der Agent liest dann das Feld
+            <code>chatInput</code> aus dem direkt verbundenen Chat Trigger. In älteren Versionen
             hieß dieses Feld schlicht <strong>Prompt</strong> und die Option <strong>Take from previous node
             automatically</strong>. Die zweite Option heißt <strong>Define below</strong>; dann tippst du den Text selbst
             in das Feld <strong>Prompt (User Message)</strong>.</p></li>
@@ -216,9 +222,10 @@ Regeln:
       <div class="callout callout--info">
         <b class="t">Streaming ist voreingestellt an</b>
         In den Optionen des Agenten steht <strong>Enable Streaming</strong> standardmäßig auf an. Die Antwort läuft dann
-        Stück für Stück in den Chat. Damit das greift, muss der Chat Trigger unter <strong>Options</strong> den
-        <strong>Response Mode</strong> auf <strong>Streaming</strong> stehen haben. Passt beides nicht zusammen, zeigt
-        n8n nach der Ausführung einen Hinweis im Ausgabe-Bereich an.
+        Stück für Stück in den Chat. Damit das greift, muss im Chat Trigger der <strong>Response Mode</strong> auf
+        <strong>Streaming</strong> stehen. Du findest ihn dort unten unter <strong>Options</strong>, hinter der
+        Schaltfläche <strong>Add Field</strong>. Voreingestellt ist <strong>When Last Node Finishes</strong>. Passt
+        beides nicht zusammen, zeigt n8n nach der Ausführung einen Hinweis im Ausgabe-Bereich an.
       </div>
 
       <h2>Schritt 3: Chat Model verbinden</h2>
@@ -482,7 +489,8 @@ Regeln:
         Agenten noch Nodes laufen. Dann hast du zwei Möglichkeiten. Entweder liefert der letzte Node ein Feld
         <code>output</code> oder <code>text</code>. Oder du stellst im Chat Trigger unter <strong>Options</strong> den
         <strong>Response Mode</strong> auf <strong>Using Response Nodes</strong> und schickst die Antwort über einen
-        Chat-Node. Der Modus hieß bis Version 1.2 des Chat Triggers noch <strong>Using Respond to Webhook Node</strong>.</p>
+        Chat-Node. Diese Option siehst du beim Hosted Chat. Im Modus <strong>Embedded Chat</strong> heißt das Gegenstück
+        <strong>Using 'Respond to Webhook' Node</strong>.</p>
 
       <ol class="steps">
         <li><h4>Direktantwort beibehalten</h4>
@@ -503,7 +511,7 @@ Regeln:
 };</pre>
       </div>
 
-      <h2>Schritt 11: Fehlerfälle sichtbar machen, wenn etwas schiefgeht</h2>
+      <h2>Schritt 11: Fehlerfälle sichtbar machen</h2>
       <p>Agentenfehler sind oft leise: falscher Ort, falscher Tool-Parameter, leere API-Antwort. Baue deshalb kleine
         Kontrollfragen ein.</p>
 
@@ -535,10 +543,11 @@ Regeln:
             das <strong>+</strong>-Symbol. Der Tooltip dazu lautet <strong>Add human review step</strong>. Der zweite Weg
             führt über den Anschluss <strong>Tool</strong> am Agenten, dort findest du dieselbe Rubrik.</p></li>
         <li><h4>Kanal auswählen</h4>
-          <p>n8n öffnet das Tools-Panel mit der Rubrik <strong>Human review</strong>. Zur Auswahl stehen unter anderem
-            <strong>Chat</strong>, <strong>Slack</strong>, <strong>Telegram</strong>, <strong>Discord</strong>,
-            <strong>Gmail</strong>, <strong>Microsoft Teams</strong> und <strong>WhatsApp Business Cloud</strong>. Die
-            Freigabe darf über einen anderen Kanal laufen als das Gespräch selbst: Nutzer im Chat, Freigabe in Slack.</p></li>
+          <p>n8n öffnet das Tools-Panel mit der Rubrik <strong>Human review</strong>. Zur Auswahl stehen
+            <strong>Chat</strong>, <strong>Slack</strong>, <strong>Discord</strong>, <strong>Telegram</strong>,
+            <strong>Microsoft Teams</strong>, <strong>Gmail</strong>, <strong>WhatsApp Business Cloud</strong>,
+            <strong>Google Chat</strong> und <strong>Microsoft Outlook</strong>. Die Freigabe darf über einen anderen
+            Kanal laufen als das Gespräch selbst: Nutzer im Chat, Freigabe in Slack.</p></li>
         <li><h4>Tools hinter den Review-Schritt hängen</h4>
           <p>Verbinde die Tools, die eine Freigabe brauchen, mit dem Tool-Anschluss des Review-Schritts. Alle übrigen
             Tools bleiben direkt am Agenten und laufen weiterhin ohne Rückfrage.</p></li>
@@ -560,10 +569,9 @@ Regeln:
         <b class="t">Rückfragen mitten im Gespräch</b>
         Neben der Tool-Freigabe gibt es den <strong>Chat</strong>-Node mit den Operationen <strong>Send Message</strong>
         und <strong>Send and Wait for Response</strong>. Damit hält der Workflow an und wartet auf eine Antwort im Chat,
-        entweder als freier Text oder über Approve-Buttons. Der Chat-Node braucht dafür im Chat Trigger den
-        <strong>Response Mode</strong> <strong>Using Response Nodes</strong> und funktioniert nicht im Modus
-        <strong>Embedded Chat</strong>. Hängst du ihn als Tool an den Agenten, kann der Agent von sich aus nachfragen,
-        statt zu raten.
+        entweder als freier Text oder über Approve-Buttons. Dafür muss im Chat Trigger der <strong>Response Mode</strong>
+        auf <strong>Using Response Nodes</strong> stehen. Im Modus <strong>Embedded Chat</strong> läuft der Chat-Node
+        nicht. Hängst du ihn als Tool an den Agenten, kann der Agent von sich aus nachfragen, statt zu raten.
       </div>
 
       <h2>Schritt 13: Chat sicher veröffentlichen</h2>
@@ -609,11 +617,11 @@ Regeln:
         <thead><tr><th>Erweiterung</th><th>Wie</th></tr></thead>
         <tbody>
           <tr><td>Human Review</td><td>Schreibende Tools hinter eine Freigabe per Slack, Chat oder E-Mail hängen.</td></tr>
-          <tr><td>MCP-Server</td><td>Seit n8n 2.22.0 wählst du Apify, Linear, monday.com, Notion oder PostHog direkt im Nodes-Panel aus und meldest dich an. Für alles andere bleibt der MCP Client Tool-Node mit SSE Endpoint und Credential.</td></tr>
+          <tr><td>MCP-Server</td><td>Seit n8n 2.22.0 wählst du Apify, Linear, monday.com, Notion oder PostHog direkt im Nodes-Panel aus und meldest dich an. Für alles andere bleibt der MCP Client Tool-Node: dort trägst du unter <strong>Endpoint</strong> die Server-URL ein und wählst darunter den <strong>Server Transport</strong>, voreingestellt <strong>HTTP Streamable</strong>.</td></tr>
           <tr><td>Call n8n Workflow Tool</td><td>Komplexe Logik als eigenes Workflow-Tool kapseln statt alles in den Agenten zu legen.</td></tr>
           <tr><td>Redis/Postgres Memory</td><td>Für produktive oder skalierte Chats statt Simple Memory nutzen.</td></tr>
           <tr><td>Antwortqualität messen</td><td>Testfragen in einem Sheet sammeln und regelmäßig gegen den Agenten laufen lassen.</td></tr>
-          <tr><td>Agent Builder</td><td>Wiederkehrende Agenten als eigenes Projekt-Objekt anlegen und aus Workflows heraus anmessagen.</td></tr>
+          <tr><td>Agent Builder</td><td>Wiederkehrende Agenten als eigenes Projekt-Objekt anlegen und aus einem Workflow heraus ansprechen.</td></tr>
           <tr><td>RAG</td><td>Eigene Dokumente über einen Vector Store anbinden. Das kommt im nächsten Kapitel.</td></tr>
         </tbody>
       </table>
