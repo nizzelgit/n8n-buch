@@ -58,7 +58,7 @@ const cover = `<section class="page" id="home" hidden>
   <div class="cover-hero">
     <div class="logo-big">n8</div>
     <h1>Das <b>n8n</b>-Werkbuch</h1>
-    <p class="sub">Workflows bauen — vom ersten Klick bis zum KI-Agenten. Jeder Schritt so beschrieben und
+    <p class="sub">Workflows bauen, vom ersten Klick bis zum KI-Agenten. Jeder Schritt so beschrieben und
       bebildert, dass du ihn parallel am Bildschirm nachbauen kannst.</p>
     <a class="cta" href="#00-vorwort">Buch öffnen →</a>
   </div>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Das n8n-Werkbuch — Workflows bauen vom ersten Klick bis zum KI-Agenten</title>
-<meta name="description" content="Ein praktisches Lehrbuch, um n8n-Workflows Schritt für Schritt nachzubauen — mit detailgetreuen Nachbauten der n8n-Oberfläche.">
+<meta name="description" content="Ein praktisches Lehrbuch, um n8n-Workflows Schritt für Schritt nachzubauen, mit detailgetreuen Nachbauten der n8n-Oberfläche.">
 <link rel="stylesheet" href="assets/css/book.css">
 <link rel="stylesheet" href="assets/css/n8n-ui.css">
 <style>
@@ -64,14 +64,14 @@
   <div class="cover-inner">
     <div class="logo">n8</div>
     <h1>Das <b>n8n</b>-Werkbuch</h1>
-    <p class="sub">Lerne, automatisierte Workflows zu bauen — vom allerersten Klick bis zum KI-Agenten.
+    <p class="sub">Lerne, automatisierte Workflows zu bauen: vom allerersten Klick bis zum KI-Agenten.
       Jeder Schritt ist so beschrieben und bebildert, dass du ihn <em>parallel am Bildschirm nachbauen</em> kannst.</p>
     <div class="cta">
       <a class="btn-main" href="kapitel/00-vorwort.html">Buch öffnen →</a>
       <a class="btn-ghost" href="#inhalt">Inhaltsverzeichnis</a>
     </div>
     <div class="stats">
-      <div><b>25+</b>Kapitel & Projekte</div>
+      <div><b>31</b>Kapitel & Anhänge</div>
       <div><b>6</b>vollständige Praxis-Projekte</div>
       <div><b>0→KI</b>vom Nullpunkt zum Agenten</div>
       <div><b>1:1</b>Oberfläche nachgebaut</div>
@@ -89,8 +89,8 @@
       <span class="n8n-tag">demo</span>
       <div class="n8n-topbar__right">
         <span class="n8n-saved">Gespeichert</span>
-        <div class="n8n-toggle"><span>Inaktiv</span><span class="n8n-switch"></span></div>
         <button class="n8n-btn n8n-btn--sm">Teilen</button>
+        <button class="n8n-btn n8n-btn--sm n8n-btn--primary">Publish</button>
       </div>
     </div>
     <div class="n8n-tabs"><span class="n8n-tab is-active">Editor</span><span class="n8n-tab">Ausführungen</span></div>
@@ -124,7 +124,7 @@
       </div>
       <div class="n8n-sticky" style="right:22px; top:18px;">
         <b>👋 So sieht n8n aus</b>
-        Genau diese Oberfläche bauen wir im Buch Schritt für Schritt nach — als echte, scharfe HTML-Nachbildung.
+        Genau diese Oberfläche bauen wir im Buch Schritt für Schritt nach. Als scharfe HTML-Nachbildung, nicht als Screenshot.
       </div>
       <div class="n8n-zoom"><b>+</b><b>−</b><b>⊡</b></div>
     </div>
@@ -136,11 +136,11 @@
   <section class="block">
     <h2>Der Lernpfad</h2>
     <p class="intro">Vier Stufen führen dich vom Verständnis der Grundbegriffe bis zu produktionsreifen,
-      KI-gestützten Automatisierungen. Du musst <strong>nicht programmieren können</strong> — die wenigen Stellen,
+      KI-gestützten Automatisierungen. Du musst <strong>nicht programmieren können</strong>. Die wenigen Stellen,
       an denen etwas Code hilft, erkläre ich von Grund auf.</p>
     <div class="path">
       <div class="step"><div class="badge">1</div><b>Verstehen</b><p>Was ist n8n, wann lohnt es sich, und wie ist die Oberfläche aufgebaut?</p></div>
-      <div class="step"><div class="badge">2</div><b>Bauen</b><p>Dein erster Workflow, Kernkonzepte, Daten & Expressions — die wichtigen 35 %.</p></div>
+      <div class="step"><div class="badge">2</div><b>Bauen</b><p>Dein erster Workflow, Kernkonzepte, Daten und Expressions: die wichtigen 35 %.</p></div>
       <div class="step"><div class="badge">3</div><b>Anwenden</b><p>Sechs vollständige Projekte, vom Wetter-Report bis zum CRM-Lead-Routing.</p></div>
       <div class="step"><div class="badge">4</div><b>Skalieren</b><p>KI-Agenten, Sub-Workflows, Deployment und Betrieb im Team.</p></div>
     </div>
@@ -149,16 +149,16 @@
   <section class="block">
     <div class="callout callout--pareto">
       <b class="t">⚡ Das Versprechen dieses Buchs</b>
-      Es gibt in n8n hunderte Nodes und tausende Optionen — aber du brauchst nur einen kleinen Kern davon
-      für 80 % aller realen Automatisierungen. Dieses Buch macht genau diesen Kern zur Priorität und
+      Es gibt in n8n hunderte Nodes und tausende Optionen. Für 80 % aller realen Automatisierungen brauchst
+      du davon nur einen kleinen Kern. Dieses Buch macht genau diesen Kern zur Priorität und
       kennzeichnet ihn überall mit dem <b style="color:var(--book-accent)">⚡-Symbol</b>. Lerne zuerst das, dann den Rest bei Bedarf.
     </div>
   </section>
 
   <section class="block" id="inhalt">
     <h2>Inhaltsverzeichnis</h2>
-    <p class="intro">Kapitel mit dem Hinweis <span class="pill" style="background:#fff3e8;color:#c47f17">bald</span>
-      werden in den nächsten Ausbaustufen ergänzt. Die Grundlagen-Kapitel sind vollständig und sofort lesbar.</p>
+    <p class="intro">Alle Kapitel und Anhänge sind fertig und sofort lesbar. Der Reihe nach durchzugehen lohnt sich,
+      aber die Projektkapitel funktionieren auch einzeln, wenn du die Voraussetzungs-Box am Anfang beachtest.</p>
     <div class="toc" id="toc"></div>
   </section>
 
@@ -166,7 +166,7 @@
 
 <footer class="foot">
   Das n8n-Werkbuch · ein unabhängiges Lernprojekt · „n8n“ ist eine Marke der n8n GmbH.<br>
-  Erstellt als didaktischer Nachbau — kein offizielles Produkt von n8n.
+  Erstellt als didaktischer Nachbau. Kein offizielles Produkt von n8n.
 </footer>
 
 <script src="assets/js/chapters.js"></script>
