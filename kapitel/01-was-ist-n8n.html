@@ -20,9 +20,9 @@
         Software-Bausteine per Drag-and-drop zu automatischen Abläufen verbindest, ohne (oder mit nur wenig) Code.
         Stand dieses Buchs: Juli 2026, n8n 2.32.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 14 Minuten</span>
-        <span>🎯 Niveau: Einstieg</span>
-        <span>🧩 Voraussetzung: Kapitel 0.1</span>
+        <span><i class="vic vic-clock"></i> ca. 14 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Einstieg</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 0.1</span>
       </div>
 
       <h2>Die Idee in einem Bild</h2>
@@ -54,15 +54,15 @@
                 <path d="M 412 160 C 490 160, 500 160, 560 160"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:42px; top:114px;">
-                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-clock"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Jeden Morgen 8 Uhr</span>
               </div>
               <div class="n8n-node" style="left:320px; top:114px;">
-                <span class="n8n-node__icon">💱</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Wechselkurs holen</span>
               </div>
               <div class="n8n-node" style="left:560px; top:114px;">
-                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chat"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Nachricht senden</span>
               </div>
             </div>
@@ -82,11 +82,11 @@
 
       <h2>Wann lohnt sich n8n, wann nicht?</h2>
       <div class="cards">
-        <div class="card"><div class="ic">✅</div><b>Ideal für</b>
+        <div class="card"><div class="ic"><i class="vic vic-check-circle"></i></div><b>Ideal für</b>
           <p>Daten zwischen Apps schaufeln, Benachrichtigungen, Reports, Lead-Verarbeitung, KI-Aufgaben, API-Integrationen, Prototypen.</p></div>
-        <div class="card"><div class="ic">🤔</div><b>Geht auch, aber überleg</b>
+        <div class="card"><div class="ic"><i class="vic vic-help"></i></div><b>Geht auch, aber überleg</b>
           <p>Sehr rechenintensive Datenverarbeitung großer Mengen, harte Echtzeit-Anforderungen im Millisekunden-Bereich.</p></div>
-        <div class="card"><div class="ic">🚫</div><b>Eher nicht</b>
+        <div class="card"><div class="ic"><i class="vic vic-ban"></i></div><b>Eher nicht</b>
           <p>Komplette Endnutzer-Apps mit Oberfläche, sicherheitskritische Systeme ohne Aufsicht, Dinge mit nur einem einzigen Schritt.</p></div>
       </div>
 
@@ -97,18 +97,18 @@
       <table class="btable">
         <thead><tr><th>Aspekt</th><th>n8n</th><th>Zapier</th><th>Make</th></tr></thead>
         <tbody>
-          <tr><td>Selbst hosten</td><td>✅ Ja (fair-code, Sustainable Use License)</td><td>❌ Nein</td><td>❌ Nein</td></tr>
-          <tr><td>Eigener Code möglich</td><td>✅ JavaScript & Python im Code-Node</td><td>eingeschränkt</td><td>eingeschränkt</td></tr>
-          <tr><td>Beliebige API (HTTP)</td><td>✅ HTTP-Request-Node für jede Web-API</td><td>möglich</td><td>möglich</td></tr>
-          <tr><td>Verzweigungen/Loops</td><td>✅ frei verdrahtbar</td><td>begrenzt</td><td>✅ gut</td></tr>
-          <tr><td>KI-/Agenten-Bausteine</td><td>✅ eigene Nodes für Agenten, Modelle, Memory</td><td>vorhanden</td><td>vorhanden</td></tr>
+          <tr><td>Selbst hosten</td><td><i class="vic vic-check-circle"></i> Ja (fair-code, Sustainable Use License)</td><td><i class="vic vic-x-circle"></i> Nein</td><td><i class="vic vic-x-circle"></i> Nein</td></tr>
+          <tr><td>Eigener Code möglich</td><td><i class="vic vic-check-circle"></i> JavaScript & Python im Code-Node</td><td>eingeschränkt</td><td>eingeschränkt</td></tr>
+          <tr><td>Beliebige API (HTTP)</td><td><i class="vic vic-check-circle"></i> HTTP-Request-Node für jede Web-API</td><td>möglich</td><td>möglich</td></tr>
+          <tr><td>Verzweigungen/Loops</td><td><i class="vic vic-check-circle"></i> frei verdrahtbar</td><td>begrenzt</td><td><i class="vic vic-check-circle"></i> gut</td></tr>
+          <tr><td>KI-/Agenten-Bausteine</td><td><i class="vic vic-check-circle"></i> eigene Nodes für Agenten, Modelle, Memory</td><td>vorhanden</td><td>vorhanden</td></tr>
           <tr><td>Preismodell</td><td>pro Execution (ein Workflow-Lauf), self-hosted kostenlos</td><td>pro Task (ein Schritt)</td><td>pro Credit (früher: Operation)</td></tr>
           <tr><td>Einstiegshürde</td><td>etwas steiler, dafür freie Hand bei Logik und Code</td><td>sehr einfach</td><td>mittel</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Die Entscheidung in einem Satz</b>
+        <b class="t">Die Entscheidung in einem Satz</b>
         Wenn dir die Kontrolle über deine Daten wichtiger ist als der bequemste Einstieg und du bei viel Volumen nicht
         pro Schritt zahlen willst, nimm n8n. Die Lernkurve ist dann steiler als bei Zapier. Genau dafür ist dieses Buch da.
       </div>

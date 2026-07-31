@@ -21,13 +21,13 @@
         protokollieren. Sechs Stationen, zwei Workflows. Die KI sitzt nur an einer davon. Spannend sind die Übergänge
         dazwischen, weil sich dort entscheidet, ob ein halbfertiger Text versehentlich rausgeht.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 70 Minuten</span>
-        <span>🎯 Niveau: Mittel bis fortgeschritten</span>
-        <span>🧩 Voraussetzung: Kapitel 7–17</span>
+        <span><i class="vic vic-clock"></i> ca. 70 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Mittel bis fortgeschritten</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 7–17</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>Ein Google-Sheet als Content-Backlog und Prüfprotokoll.</li>
           <li>Eine Google-Sheets-Credential in n8n.</li>
@@ -64,35 +64,35 @@
                 <path class="is-active" d="M 830 300 C 890 300, 910 300, 968 300"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:28px; top:74px;">
-                <span class="n8n-node__icon">🧪</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-flask"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Draft-Test</span></div>
               <div class="n8n-node" style="left:278px; top:74px;">
-                <span class="n8n-node__icon">📋</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-table"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Backlog lesen</span></div>
               <div class="n8n-node" style="left:508px; top:74px;">
-                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Recherche holen</span></div>
               <div class="n8n-node n8n-node--ai" style="left:738px; top:74px;">
-                <span class="n8n-node__icon">🤖</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-bot"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Entwurf bauen</span></div>
               <div class="n8n-node" style="left:968px; top:74px;">
-                <span class="n8n-node__icon">✅</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-check-circle"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Review melden</span><span class="badge badge--ok">✓</span></div>
 
               <div class="n8n-node n8n-node--trigger" style="left:28px; top:254px;">
-                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-clock"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Publish-Check</span></div>
               <div class="n8n-node" style="left:278px; top:254px;">
-                <span class="n8n-node__icon">📋</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-table"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">approved lesen</span></div>
               <div class="n8n-node n8n-node--code" style="left:508px; top:254px;">
-                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-pencil"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Post formatieren</span></div>
               <div class="n8n-node" style="left:738px; top:254px;">
-                <span class="n8n-node__icon">📣</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-megaphone"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">veröffentlichen</span></div>
               <div class="n8n-node" style="left:968px; top:254px;">
-                <span class="n8n-node__icon">🧾</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-file"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Status setzen</span><span class="items">1 Item</span></div>
             </div>
           </div>
@@ -102,7 +102,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Das Muster</b>
+        <b class="t">Das Muster</b>
         Große Workflows werden stabiler, wenn du sie in Zustände zerlegst: <code>ready</code> → <code>review</code> →
         <code>approved</code> → <code>published</code>. Du siehst jederzeit im Sheet, wo ein Beitrag gerade steht. Und ein
         abgebrochener Lauf setzt beim nächsten Mal wieder an derselben Stelle an.
@@ -199,7 +199,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">📋</span><b>Backlog lesen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-table"></i></span><b>Backlog lesen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body"><div class="ndv-empty">Der manuelle Trigger liefert nur den Startimpuls.</div></div></div>
@@ -241,7 +241,7 @@
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Status vor Inhalt</b>
+        <b class="t">Status vor Inhalt</b>
         Prüfe erst, <em>ob</em> eine Zeile verarbeitet werden darf. Erst danach lohnt sich die Frage, <em>was</em> darin
         steht. Diese Reihenfolge verhindert die meisten versehentlichen Massenläufe.
       </div>
@@ -296,7 +296,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">🌐</span><b>Recherche holen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-globe"></i></span><b>Recherche holen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body"><div class="n8n-json">{
@@ -376,7 +376,7 @@ return {
       </div>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Rohdaten reduzieren</b>
+        <b class="t">Rohdaten reduzieren</b>
         Gib einem KI-Schritt nur die Daten, die er wirklich braucht. Das spart Kosten. Vor allem bleibt der Fehlerfall
         lesbar, weil du im Ausgang des Nodes nicht 40 Felder durchsuchen musst.
       </div>
@@ -441,7 +441,7 @@ Regeln:
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:720px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">🤖</span><b>Entwurf bauen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-bot"></i></span><b>Entwurf bauen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Chain</div>
@@ -586,7 +586,7 @@ Bitte im Sheet prüfen und status auf approved setzen, wenn der Entwurf veröffe
       </div>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Menschliche Freigabe ist ein Datenpunkt</b>
+        <b class="t">Menschliche Freigabe ist ein Datenpunkt</b>
         Schreibe Freigaben nicht in Chat-Floskeln fest. Ein Statusfeld wie <code>approved</code> ist maschinenlesbar und
         für n8n eindeutig.
       </div>
@@ -665,16 +665,16 @@ Bitte im Sheet prüfen und status auf approved setzen, wenn der Entwurf veröffe
                 <path class="is-active" d="M 610 150 C 670 150, 690 150, 748 150"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:32px; top:104px;">
-                <span class="n8n-node__icon">🧪</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-flask"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Publish-Test</span></div>
               <div class="n8n-node" style="left:288px; top:104px;">
-                <span class="n8n-node__icon">📋</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-table"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">approved lesen</span></div>
               <div class="n8n-node n8n-node--code" style="left:518px; top:104px;">
-                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-pencil"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Post formatieren</span></div>
               <div class="n8n-node" style="left:748px; top:104px;">
-                <span class="n8n-node__icon">📣</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-megaphone"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Slack Publish</span><span class="badge badge--ok">✓</span></div>
             </div>
           </div>
@@ -759,7 +759,7 @@ return {
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Erfolg erst nach dem letzten Schritt</b>
+        <b class="t">Erfolg erst nach dem letzten Schritt</b>
         Setze <code>published</code> erst, nachdem die Veröffentlichung erfolgreich war. Wenn du den Status vorher setzt und
         der letzte Node scheitert, sieht das Sheet fälschlich fertig aus.
       </div>
@@ -820,7 +820,7 @@ return {
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:660px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">⏰</span><b>Draft-Schedule</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-clock"></i></span><b>Draft-Schedule</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -854,7 +854,7 @@ return {
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Der wichtigste Test ist der Nicht-Lauf</b>
+        <b class="t">Der wichtigste Test ist der Nicht-Lauf</b>
         Dass der Normalfall durchläuft, siehst du schnell. Schwerer zu prüfen ist der Fall, der stillstehen soll: die
         Zeile auf <code>idea</code>, der Entwurf mit <code>parse_error</code>, der leere Publish-Text. Genau diese Fälle
         dürfen <strong>nicht</strong> laufen, und genau die testest du am seltensten.
@@ -876,7 +876,7 @@ return {
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Warum besteht die Pipeline aus zwei Workflows statt aus einem einzigen langen Ablauf?</li>
           <li>Warum ist <code>approved</code> ein besseres Freigabesignal als eine Slack-Nachricht?</li>

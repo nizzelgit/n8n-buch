@@ -20,13 +20,13 @@
         Der wichtige Unterschied zu Memory aus Kapitel 20: Memory merkt sich ein Gespräch. RAG sucht in einem
         Wissensbestand. Das ist eine andere Aufgabe und braucht eine andere Kontrolle.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 45 Minuten</span>
-        <span>🎯 Niveau: Fortgeschrittene Grundlagen</span>
-        <span>🧩 Voraussetzung: Kapitel 6, 9, 12, 20</span>
+        <span><i class="vic vic-clock"></i> ca. 45 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Fortgeschrittene Grundlagen</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 6, 9, 12, 20</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>Eine n8n-Instanz mit den AI-/LangChain-Nodes.</li>
           <li>Eine Chat-Model-Credential für die Antworten.</li>
@@ -68,38 +68,38 @@
                 <path class="is-active" d="M 370 332 C 430 332, 450 332, 508 332"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:28px; top:70px;">
-                <span class="n8n-node__icon">🧪</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-flask"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Manual Trigger</span></div>
               <div class="n8n-node n8n-node--code" style="left:278px; top:70px;">
-                <span class="n8n-node__icon">📄</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-file"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Demo-Dokumente</span><span class="items">4 Items</span></div>
               <div class="n8n-node n8n-node--ai" style="left:508px; top:70px;">
-                <span class="n8n-node__icon">🗄</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-database"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Simple Vector Store</span><span class="badge badge--ok">Insert</span></div>
               <div class="n8n-node" style="left:850px; top:0;">
-                <span class="n8n-node__icon">🔢</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-hash"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Embeddings</span></div>
               <div class="n8n-node" style="left:850px; top:70px;">
-                <span class="n8n-node__icon">📥</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-download"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Data Loader</span></div>
               <div class="n8n-node" style="left:850px; top:148px;">
-                <span class="n8n-node__icon">✂</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-scissors"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Text Splitter</span></div>
 
               <div class="n8n-node n8n-node--trigger" style="left:28px; top:286px;">
-                <span class="n8n-node__icon">💬</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chat"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Chat Trigger</span></div>
               <div class="n8n-node n8n-node--ai" style="left:278px; top:286px;">
-                <span class="n8n-node__icon">❓</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-help"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Q&amp;A Chain</span></div>
               <div class="n8n-node" style="left:508px; top:286px;">
                 <span class="n8n-node__icon">↩</span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Chatantwort</span></div>
               <div class="n8n-node" style="left:708px; top:204px;">
-                <span class="n8n-node__icon">🔎</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-search"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Vector Retriever</span></div>
               <div class="n8n-node" style="left:708px; top:286px;">
-                <span class="n8n-node__icon">🗄</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-database"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Simple Vector Store</span><span class="badge badge--ok">Retrieve</span></div>
             </div>
           </div>
@@ -109,7 +109,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ RAG in einem Satz</b>
+        <b class="t">RAG in einem Satz</b>
         RAG heißt: erst passende Textstellen suchen, dann das Modell mit diesen Textstellen antworten lassen.
         Ohne Suche ist es nur ein normaler Chat. Ohne strenge Antwortregel halluziniert der Chat trotzdem.
       </div>
@@ -217,7 +217,7 @@ return docs.map((doc) =&gt; ({ json: doc }));</pre>
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">📄</span><b>Demo-Dokumente</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-file"></i></span><b>Demo-Dokumente</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body"><div class="ndv-empty">Der manuelle Trigger liefert nur den Startimpuls.</div></div></div>
@@ -269,7 +269,7 @@ return docs.map((doc) =&gt; ({ json: doc }));</pre>
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Memory Key ist die Datenbankadresse</b>
+        <b class="t">Memory Key ist die Datenbankadresse</b>
         Der Memory Key verbindet Laden und Abfragen. Ein Tippfehler wirft dabei meist gar keinen Fehler. Er legt einfach
         einen zweiten, leeren Store an, und die Chain antwortet brav, sie wisse nichts.
       </div>
@@ -345,7 +345,7 @@ Quelle: {{ $json.source }}
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:780px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">📥</span><b>Default Data Loader</b><span class="ndv__exec-step">Sub-Node</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-download"></i></span><b>Default Data Loader</b><span class="ndv__exec-step">Sub-Node</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -465,7 +465,7 @@ Context: {context}</pre>
       </div>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Antwortregel ins System Prompt Template</b>
+        <b class="t">Antwortregel ins System Prompt Template</b>
         Eine RAG-Antwort braucht eine klare Bremse. Sonst nutzt das Modell sein Allgemeinwissen, sobald der Retriever
         nichts Passendes findet. Die mitgelieferte Standardregel sagt zwar auch schon „just say that you don't know“,
         aber sie ist englisch und weich formuliert. Ein eigener, deutscher Satz ist im Test besser prüfbar.
@@ -516,7 +516,7 @@ Context: {context}</pre>
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">❓</span><b>Teamhandbuch beantworten</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-help"></i></span><b>Teamhandbuch beantworten</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body"><div class="n8n-json">{
@@ -588,7 +588,7 @@ Context: {context}</pre>
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Trefferqualität vor Antwortqualität</b>
+        <b class="t">Trefferqualität vor Antwortqualität</b>
         Wenn der Retriever falsche Chunks liefert, kann das Modell die Antwort kaum retten. Debugge erst die Suche,
         dann den Prompt.
       </div>
@@ -704,7 +704,7 @@ Context: {context}</pre>
       </table>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Teste auch Nichtwissen</b>
+        <b class="t">Teste auch Nichtwissen</b>
         Ein RAG-System, das alles beantwortet, ist nicht hilfreich. Es ist gefährlich plausibel. Die beste Schutzfrage ist
         oft eine Frage, deren Antwort absichtlich nicht im Store steht.
       </div>
@@ -735,7 +735,7 @@ Context: {context}</pre>
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Warum ist Memory kein Ersatz für RAG?</li>
           <li>Warum braucht der Frage-Workflow denselben Memory Key wie der Lade-Workflow?</li>

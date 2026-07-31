@@ -20,13 +20,13 @@
         baut daraus eine lesbare Nachricht und schickt sie dir per Telegram. Vier Nodes, mehr braucht es nicht. Am Ende
         hast du eine Vorlage, die du für fast jeden wiederkehrenden Report weiterverwenden kannst.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 36 Minuten</span>
-        <span>🎯 Niveau: Einstieg → Mittel</span>
-        <span>🧩 Voraussetzung: Kapitel 7–12</span>
+        <span><i class="vic vic-clock"></i> ca. 36 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Einstieg → Mittel</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 7–12</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>n8n läuft, und du kannst einen neuen Workflow erstellen.</li>
           <li>Einen Telegram-Account und einen Telegram-Bot. Falls du noch keinen hast: Schritt 1 führt dich durch.</li>
@@ -50,16 +50,16 @@
                 <path class="is-active" d="M 624 150 C 700 150, 710 150, 760 150"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:50px; top:104px;">
-                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-clock"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Täglich 8 Uhr</span><span class="badge badge--ok">✓</span></div>
               <div class="n8n-node" style="left:300px; top:104px;">
-                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Wetter holen</span><span class="items">1 Item</span></div>
               <div class="n8n-node n8n-node--code" style="left:532px; top:104px;">
-                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-pencil"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Report bauen</span><span class="items">1 Item</span></div>
               <div class="n8n-node" style="left:760px; top:104px;">
-                <span class="n8n-node__icon">✈️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-send"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Telegram senden</span><span class="badge badge--ok">✓</span></div>
             </div>
           </div>
@@ -69,7 +69,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Warum genau dieses Projekt?</b>
+        <b class="t">Warum genau dieses Projekt?</b>
         Sechs Bausteine stecken in diesem einen Workflow: Zeitplan, API-Aufruf, Expressions, Credential, Versand
         und Publish. Nebengeräusche gibt es keine. Dasselbe Muster verwendest du später für Tagesberichte,
         Kontrolllisten, Monitoring-Meldungen oder Team-Updates.
@@ -143,7 +143,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:560px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">⏰</span><b>Schedule Trigger</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-clock"></i></span><b>Schedule Trigger</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -217,7 +217,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">🌐</span><b>Wetter holen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-globe"></i></span><b>Wetter holen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body"><div class="ndv-empty">Zeitplan-Item</div></div></div>
@@ -302,7 +302,7 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Arrays bewusst lesen</b>
+        <b class="t">Arrays bewusst lesen</b>
         Die Tageswerte von Open-Meteo sind Listen. <code>temperature_2m_max[0]</code> heißt:
         „Nimm den ersten Tageswert“. Ohne <code>[0]</code> würdest du die ganze Liste in den Text schreiben.
         Welcher Tag gemeint ist, steht an derselben Position in <code>daily.time</code>: <code>daily.time[0]</code>
@@ -352,7 +352,7 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:560px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">✈️</span><b>Telegram — Send a text message</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-send"></i></span><b>Telegram — Send a text message</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -415,7 +415,7 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Produktiv heißt: beobachten</b>
+        <b class="t">Produktiv heißt: beobachten</b>
         Publish ist nicht das Ende. Prüfe nach dem ersten echten Lauf die Ausführungshistorie. Erst danach darfst du
         annehmen, dass der Workflow im Alltag zuverlässig läuft.
       </div>
@@ -449,7 +449,7 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Welcher Node entscheidet, wann der Report startet?</li>
           <li>Warum stehen Open-Meteo-Parameter als Query-Liste statt in einer langen URL?</li>

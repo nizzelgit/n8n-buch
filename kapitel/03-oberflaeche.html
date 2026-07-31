@@ -19,9 +19,9 @@
       <p class="chap-lede">Dieses Kapitel ist deine Landkarte des n8n-Editors. Danach erkennst du jeden Bereich und
         jeden wichtigen Knopf sofort wieder. Genau das brauchst du, um in Kapitel 4 zügig zu bauen.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 22 Minuten</span>
-        <span>🎯 Niveau: Einstieg</span>
-        <span>🧩 Voraussetzung: n8n läuft (Kapitel 2)</span>
+        <span><i class="vic vic-clock"></i> ca. 22 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Einstieg</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: n8n läuft (Kapitel 2)</span>
       </div>
 
       <h2>Die fünf Bereiche im Überblick</h2>
@@ -52,13 +52,13 @@
                 <path d="M 412 170 C 480 170, 490 170, 540 170"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:52px; top:124px;">
-                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-clock"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Zeitplan</span></div>
               <div class="n8n-node" style="left:320px; top:124px;">
-                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chart"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Sheets lesen</span></div>
               <div class="n8n-node" style="left:540px; top:124px;">
-                <span class="n8n-node__icon">✉️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-mail"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">E-Mail senden</span></div>
               <div class="n8n-sticky" style="right:18px; bottom:54px; max-width:170px;">
                 <b>A</b> Top-Toolbar · <b>B</b> Tabs · <b>C</b> Canvas · <b>D</b> Nodes · <b>E</b> Zoom
@@ -111,7 +111,7 @@
       </table>
 
       <div class="callout callout--warn">
-        <b class="t">⚡ Der wichtigste Unterschied: Draft vs. Published</b>
+        <b class="t">Der wichtigste Unterschied: Draft vs. Published</b>
         <p style="margin:0 0 8px"><strong>Draft:</strong> Deine Änderungen sind gespeichert, aber noch nicht produktiv. Zum Bauen genau richtig.</p>
         <p style="margin:0"><strong>Published:</strong> Diese Version läuft in Produktion. Schedules feuern, Production-Webhooks antworten
         und App-Trigger nehmen echte Ereignisse an. Erst veröffentlichen, wenn der Workflow getestet ist.</p>
@@ -193,12 +193,12 @@
           <div class="n8n">
             <div class="n8n-canvas">
               <div class="n8n-node n8n-node--selected" style="left:330px; top:96px;">
-                <span class="n8n-node__icon">🌐</span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span>
                 <span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">HTTP Request</span>
                 <span class="items">1 Item</span>
                 <span class="badge badge--ok">✓</span>
-                <div class="n8n-node__tools"><b>▶</b><b>⏻</b><b>🗑</b><b>⋯</b></div>
+                <div class="n8n-node__tools"><b>▶</b><b>⏻</b><b><i class="vic vic-trash"></i></b><b>⋯</b></div>
               </div>
               <div class="n8n-sticky" style="left:40px; top:40px; max-width:230px;">
                 <b>So liest du einen Node</b>
@@ -218,14 +218,14 @@
           <tr><td>Ausgang (rechts) ●</td><td>Hier verlassen die Daten den Node Richtung nächstem Node. Von hier ziehst du eine Verbindung.</td></tr>
           <tr><td>▶ Ausführen (Execute step)</td><td>Führt nur diesen Node aus, samt allem, was davor nötig ist. Zum schrittweisen Testen ist das dein wichtigster Knopf.</td></tr>
           <tr><td>⏻ Deaktivieren</td><td>Schaltet den Node stumm, ohne ihn zu löschen (Daten fließen durch ihn hindurch). Tastenkürzel: <span class="kbd">D</span>.</td></tr>
-          <tr><td>🗑 Löschen</td><td>Entfernt den Node vom Canvas.</td></tr>
+          <tr><td><i class="vic vic-trash"></i> Löschen</td><td>Entfernt den Node vom Canvas.</td></tr>
           <tr><td>⋯ Kontextmenü</td><td>Alles Weitere: Rename node, Pin node, Copy node, Duplicate node, Tidy up workflow, Convert node to sub-workflow. Duplizieren liegt hier, nicht mehr direkt in der Werkzeugleiste.</td></tr>
           <tr><td>✓ / ✕ Badge</td><td>Ergebnis des letzten Laufs: grün = ok, rot = Fehler.</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--tip">
-        <b class="t">⚡ Trigger erkennst du an der Form</b>
+        <b class="t">Trigger erkennst du an der Form</b>
         Trigger-Nodes haben eine charakteristisch <strong>abgerundete linke Seite</strong> (wie in Abb. 3.1 der „Zeitplan“-Node)
         und besitzen keinen Eingangspunkt. So unterscheidest du auf einen Blick, wo ein Workflow beginnt.
       </div>
@@ -251,30 +251,30 @@
         <div class="frame" style="display:flex; justify-content:center; padding:24px; background:#eef0f4; border-radius:12px;">
           <div class="nodes-panel">
             <div class="nodes-panel__head"><h5>Was soll als Nächstes passieren?</h5></div>
-            <div class="nodes-panel__search"><span>🔎</span><span>Nodes durchsuchen…</span><span class="cursor"></span></div>
+            <div class="nodes-panel__search"><span><i class="vic vic-search"></i></span><span>Nodes durchsuchen…</span><span class="cursor"></span></div>
             <div class="nodes-panel__list">
               <div class="nodes-panel__item is-active">
-                <div class="nodes-panel__ic">🌐</div>
+                <div class="nodes-panel__ic"><i class="vic vic-globe"></i></div>
                 <div class="nodes-panel__txt"><b>HTTP Request</b><small>Beliebige API/URL aufrufen</small></div>
                 <span class="chev">›</span>
               </div>
               <div class="nodes-panel__item">
-                <div class="nodes-panel__ic">✏️</div>
+                <div class="nodes-panel__ic"><i class="vic vic-pencil"></i></div>
                 <div class="nodes-panel__txt"><b>Edit Fields (Set)</b><small>Felder setzen, umbenennen, bereinigen</small></div>
                 <span class="chev">›</span>
               </div>
               <div class="nodes-panel__item">
-                <div class="nodes-panel__ic">🔀</div>
+                <div class="nodes-panel__ic"><i class="vic vic-shuffle"></i></div>
                 <div class="nodes-panel__txt"><b>IF</b><small>Verzweigung nach einer Bedingung</small></div>
                 <span class="chev">›</span>
               </div>
               <div class="nodes-panel__item">
-                <div class="nodes-panel__ic">🤖</div>
+                <div class="nodes-panel__ic"><i class="vic vic-bot"></i></div>
                 <div class="nodes-panel__txt"><b>AI Agent</b><small>KI-Agent mit Werkzeugen & Gedächtnis</small></div>
                 <span class="chev">›</span>
               </div>
               <div class="nodes-panel__item">
-                <div class="nodes-panel__ic">💬</div>
+                <div class="nodes-panel__ic"><i class="vic vic-chat"></i></div>
                 <div class="nodes-panel__txt"><b>Telegram</b><small>Nachrichten senden/empfangen</small></div>
                 <span class="chev">›</span>
               </div>
@@ -296,7 +296,7 @@
         <div class="frame">
           <div class="ndv">
             <div class="ndv__bar">
-              <span class="ndvic">🌐</span><b>HTTP Request</b>
+              <span class="ndvic"><i class="vic vic-globe"></i></span><b>HTTP Request</b>
               <span class="ndv-docs">Doku ↗</span>
               <span class="ndv__exec-step">▶ Schritt ausführen</span>
             </div>
@@ -351,7 +351,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Das wichtigste Arbeitsmuster in n8n</b>
+        <b class="t">Das wichtigste Arbeitsmuster in n8n</b>
         Du baust einen Node, klickst <strong>▶ Schritt ausführen</strong>, siehst rechts das Ergebnis, korrigierst und
         führst erneut aus. Node für Node. Dieses „bauen → ausführen → schauen“ ist der Rhythmus, in dem fast jeder
         Workflow entsteht.
@@ -386,7 +386,7 @@
       </table>
 
       <div class="prereq">
-        <h4>✅ Bevor du weiterblätterst</h4>
+        <h4><i class="vic vic-check-circle"></i> Bevor du weiterblätterst</h4>
         <ul>
           <li>Du kannst die fünf Bereiche (Toolbar, Tabs, Canvas, Nodes, Zoom) benennen.</li>
           <li>Du weißt, was „Published“ bedeutet und warum ein Draft noch nicht produktiv läuft.</li>

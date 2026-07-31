@@ -20,13 +20,13 @@
         wiederverwendbaren Sub-Workflow. Es geht dabei um weniger Kopieren: Dieselbe Logik liegt an einer Stelle,
         und der Aufrufer weiß, welche Felder er hineingibt und welche er zurückbekommt.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 18 Minuten</span>
-        <span>🎯 Niveau: Fortgeschrittene Grundlagen</span>
-        <span>🧩 Voraussetzung: Kapitel 4, 5, 9, 10</span>
+        <span><i class="vic vic-clock"></i> ca. 18 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Fortgeschrittene Grundlagen</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 4, 5, 9, 10</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>Eine n8n-Instanz, lokal oder in der Cloud.</li>
           <li>Keine externen Credentials: Das Beispiel arbeitet mit Demo-Daten im Code-Node.</li>
@@ -61,32 +61,32 @@
                 <path class="is-active" d="M 398 356 C 462 356, 488 356, 552 356"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:28px; top:66px;">
-                <span class="n8n-node__icon">🧪</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-flask"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Manual Trigger</span></div>
               <div class="n8n-node n8n-node--code" style="left:278px; top:66px;">
-                <span class="n8n-node__icon">👥</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-users"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Demo-Leads</span><span class="items">3 Items</span></div>
               <div class="n8n-node" style="left:520px; top:66px;">
                 <span class="n8n-node__icon">↪</span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Lead normalisieren</span><span class="badge badge--ok">Sub</span></div>
               <div class="n8n-node" style="left:780px; top:66px;">
-                <span class="n8n-node__icon">🔀</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-shuffle"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">E-Mail gültig?</span></div>
               <div class="n8n-node" style="left:1030px; top:0;">
-                <span class="n8n-node__icon">✅</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-check-circle"></i></span><span class="ep in"></span>
                 <span class="n8n-node__label">gute Leads</span></div>
               <div class="n8n-node" style="left:1030px; top:146px;">
-                <span class="n8n-node__icon">⚠</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-alert"></i></span><span class="ep in"></span>
                 <span class="n8n-node__label">prüfen</span></div>
 
               <div class="n8n-node n8n-node--trigger" style="left:28px; top:310px;">
-                <span class="n8n-node__icon">📥</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-download"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Execute Sub-workflow Trigger</span></div>
               <div class="n8n-node n8n-node--code" style="left:306px; top:310px;">
-                <span class="n8n-node__icon">🧹</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-code"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Felder normalisieren</span></div>
               <div class="n8n-node" style="left:552px; top:310px;">
-                <span class="n8n-node__icon">📤</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-upload"></i></span><span class="ep in"></span>
                 <span class="n8n-node__label">Rückgabe</span></div>
             </div>
           </div>
@@ -96,7 +96,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ 80/20-Regel für Modularisierung</b>
+        <b class="t">80/20-Regel für Modularisierung</b>
         Erstelle einen Sub-Workflow erst, wenn dieselbe Logik mindestens ein zweites Mal gebraucht wird oder wenn sie
         im Haupt-Workflow das Verständnis stört. Ein einzelner kurzer Node braucht keine Architektur.
       </div>
@@ -153,7 +153,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:760px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">📥</span><b>Execute Sub-workflow Trigger</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-download"></i></span><b>Execute Sub-workflow Trigger</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -435,7 +435,7 @@ return inputItems.map((item) =&gt; {
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Der wichtigste Test</b>
+        <b class="t">Der wichtigste Test</b>
         Prüfe nach dem Execute-Node nicht nur, ob Items zurückkommen. Prüfe, ob ein absichtlich kaputtes Item
         kontrolliert als fehlerhaft markiert wird.
       </div>
@@ -547,7 +547,7 @@ return inputItems.map((item) =&gt; {
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Welche vier Eingabefelder erwartet der Sub-Workflow?</li>
           <li>Warum geben wir Datenfehler als <code>errors</code> zurück, statt sofort den Workflow zu stoppen?</li>

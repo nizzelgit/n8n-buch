@@ -20,13 +20,13 @@
         produktive Umgebung. Der Kern: Workflow-Logik, geheime Zugangsdaten und Umgebungseinstellungen gehören an
         verschiedene Orte.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 25 Minuten</span>
-        <span>🎯 Niveau: Fortgeschrittene Grundlagen</span>
-        <span>🧩 Voraussetzung: Kapitel 2, 12, 22, 23</span>
+        <span><i class="vic vic-clock"></i> ca. 25 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Fortgeschrittene Grundlagen</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 2, 12, 22, 23</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>Eine n8n-Testinstanz. n8n Cloud oder eine lokale Self-hosted-Instanz reicht.</li>
           <li>Grundverständnis für Credentials aus Kapitel 12.</li>
@@ -60,29 +60,29 @@
                 <path d="M 1058 190 C 1026 316, 836 352, 694 352"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:28px; top:96px;">
-                <span class="n8n-node__icon">🧪</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-flask"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Dev-Instanz</span></div>
               <div class="n8n-node n8n-node--code" style="left:292px; top:96px;">
-                <span class="n8n-node__icon">🧩</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-layers"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Workflow bauen</span></div>
               <div class="n8n-node" style="left:532px; top:96px;">
-                <span class="n8n-node__icon">🌿</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-leaf"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Git-Version</span><span class="badge badge--ok">reviewbar</span></div>
               <div class="n8n-node" style="left:780px; top:96px;">
-                <span class="n8n-node__icon">⬇</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-download"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Pull in Produktion</span></div>
               <div class="n8n-node" style="left:1028px; top:96px;">
-                <span class="n8n-node__icon">🚀</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-rocket"></i></span><span class="ep in"></span>
                 <span class="n8n-node__label">Published Workflow</span></div>
 
               <div class="n8n-node" style="left:180px; top:256px;">
-                <span class="n8n-node__icon">🔐</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-lock"></i></span><span class="ep in"></span>
                 <span class="n8n-node__label">Credentials pro Umgebung</span></div>
               <div class="n8n-node" style="left:440px; top:256px;">
-                <span class="n8n-node__icon">⚙</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-gear"></i></span><span class="ep in"></span>
                 <span class="n8n-node__label">Variablen pro Umgebung</span></div>
               <div class="n8n-node" style="left:694px; top:306px;">
-                <span class="n8n-node__icon">🌐</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep in"></span>
                 <span class="n8n-node__label">Webhook-URL stabil</span></div>
             </div>
           </div>
@@ -92,7 +92,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ 80/20-Regel für Deployment</b>
+        <b class="t">80/20-Regel für Deployment</b>
         Versioniere die Logik, nicht die Geheimnisse. Prüfe Webhook-URL, Credentials und Umgebungswerte getrennt.
         Mehr Betriebstechnik brauchst du erst, wenn diese drei Dinge sauber sind.
       </div>
@@ -168,7 +168,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:840px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request · CRM schreiben</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-globe"></i></span><b>HTTP Request · CRM schreiben</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -320,7 +320,7 @@ volumes:
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:860px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">📨</span><b>Webhook · deployment-test</b><span class="ndv__exec-step">⦿ Listen for test event</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-mail"></i></span><b>Webhook · deployment-test</b><span class="ndv__exec-step">⦿ Listen for test event</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel ndv-params"><div class="ndv-panel__head">Parameter</div>
                 <div class="ndv-panel__body">
@@ -356,7 +356,7 @@ volumes:
       </table>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Pragmatische Empfehlung</b>
+        <b class="t">Pragmatische Empfehlung</b>
         Wenn Source Control verfügbar ist: nutze es. Wenn nicht: exportiere jede stabile Workflow-Version als JSON in
         ein Git-Repository. Das ist Handarbeit, aber deutlich besser als gar keine Historie.
       </div>
@@ -530,7 +530,7 @@ volumes:
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Warum gehören API-Tokens nicht in Workflow-JSON?</li>
           <li>Was ist der Unterschied zwischen Workflow-Logik und Umgebungswert?</li>

@@ -20,9 +20,9 @@
         Die gute Nachricht: Ein kleiner Kern erklärt fast alles, was du je bauen wirst. Dieses Kapitel ist die
         Landkarte dazu. Der Rest des Buchs füllt sie aus.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 12 Minuten</span>
-        <span>🎯 Niveau: Einstieg</span>
-        <span>⚡ Grundlage für alle weiteren Kapitel</span>
+        <span><i class="vic vic-clock"></i> ca. 12 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Einstieg</span>
+        <span><i class="vic vic-zap"></i> Grundlage für alle weiteren Kapitel</span>
       </div>
 
       <p>Bevor wir irgendetwas installieren oder klicken, lohnt sich eine mentale Landkarte. Wenn du die folgenden
@@ -30,7 +30,7 @@
         Buch gar nicht vorkommen. Alles andere sind Varianten und Spezialfälle.</p>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Die Kernidee in einem Satz</b>
+        <b class="t">Die Kernidee in einem Satz</b>
         Ein n8n-Workflow ist eine <strong>Kette von Bausteinen (Nodes)</strong>, durch die <strong>Daten (Items)</strong>
         von links nach rechts fließen; jeder Node bekommt Daten herein, tut <em>eine</em> Sache und gibt Daten weiter.
       </div>
@@ -53,7 +53,7 @@
         nur als <strong>Draft</strong>, und ein Draft ändert am Produktivbetrieb nichts. Erst <strong>Publish</strong>
         schiebt genau diesen Stand live. Solange du nicht publiziert hast, startest du jede Ausführung selbst.
         Den alten Schalter „Active“ aus n8n 1.x gibt es dafür nicht mehr.</p>
-      <div class="callout callout--pareto"><b class="t">⚡ Merke</b>Schedule + Webhook decken geschätzt 80 % aller realen Startpunkte ab.</div>
+      <div class="callout callout--pareto"><b class="t">Merke</b>Schedule + Webhook decken geschätzt 80 % aller realen Startpunkte ab.</div>
 
       <h3>2. Daten holen: der HTTP-Request-Node</h3>
       <p>n8n hat fertige Nodes für Google Sheets, Slack, Telegram, Notion und hunderte mehr. Der wichtigste einzelne
@@ -99,26 +99,26 @@
                 <path d="M 572 200 C 620 200, 625 280, 680 280"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:32px; top:154px;">
-                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-clock"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">1 · Trigger</span>
                 <span class="n8n-node__sublabel">wann?</span>
               </div>
               <div class="n8n-node" style="left:270px; top:154px;">
-                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">2 · Daten holen</span>
                 <span class="n8n-node__sublabel">HTTP Request</span>
               </div>
               <div class="n8n-node n8n-node--code" style="left:480px; top:154px;">
-                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-pencil"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">3 · Umformen</span>
                 <span class="n8n-node__sublabel">Edit Fields / Code</span>
               </div>
               <div class="n8n-node" style="left:680px; top:84px;">
-                <span class="n8n-node__icon">✉️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-mail"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">5 · Aktion A</span>
               </div>
               <div class="n8n-node" style="left:680px; top:234px;">
-                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chat"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">5 · Aktion B</span>
               </div>
               <div class="n8n-sticky" style="left:475px; top:300px; max-width:210px;">
@@ -138,9 +138,9 @@
       <table class="btable">
         <thead><tr><th>Fähigkeit</th><th>Wie wichtig?</th><th>Wo im Buch</th></tr></thead>
         <tbody>
-          <tr><td>Logisch in „erst dies, dann das“ denken</td><td>⚡ Essenziell</td><td>überall</td></tr>
-          <tr><td>JSON lesen (geschweifte Klammern, Felder)</td><td>⚡ Sehr wichtig</td><td>Kapitel 5</td></tr>
-          <tr><td>Einfache Expressions schreiben (<code>{{ $json.x }}</code>)</td><td>⚡ Sehr wichtig</td><td>Kapitel 5 & 6</td></tr>
+          <tr><td>Logisch in „erst dies, dann das“ denken</td><td><i class="vic vic-zap"></i> Essenziell</td><td>überall</td></tr>
+          <tr><td>JSON lesen (geschweifte Klammern, Felder)</td><td><i class="vic vic-zap"></i> Sehr wichtig</td><td>Kapitel 5</td></tr>
+          <tr><td>Einfache Expressions schreiben (<code>{{ $json.x }}</code>)</td><td><i class="vic vic-zap"></i> Sehr wichtig</td><td>Kapitel 5 & 6</td></tr>
           <tr><td>Verstehen, was eine API / ein Webhook ist</td><td>Wichtig</td><td>Kapitel 7 & 8</td></tr>
           <tr><td>Ein paar Zeilen JavaScript im Code-Node</td><td>Nice-to-have</td><td>Kapitel 9</td></tr>
           <tr><td>Server/Docker administrieren</td><td>Nur für Self-Hosting</td><td>Kapitel 2 & 24</td></tr>

@@ -20,13 +20,13 @@
         schickt nur die relevanten Treffer weiter. Am Ende steht ein kleiner Aufmerksamkeitsfilter, der aus rund zwanzig
         Schlagzeilen die fünf herausholt, die dich wirklich betreffen.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 40 Minuten</span>
-        <span>🎯 Niveau: Mittel</span>
-        <span>🧩 Voraussetzung: Kapitel 7–12</span>
+        <span><i class="vic vic-clock"></i> ca. 40 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Mittel</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 7–12</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>n8n läuft und kann externe RSS-Feeds abrufen.</li>
           <li>Eine Slack-Credential oder alternativ einen Telegram-Node aus Kapitel 13. Wir zeigen Slack; Telegram funktioniert analog.</li>
@@ -58,19 +58,19 @@
                 <path class="is-active" d="M 842 150 C 900 150, 910 150, 930 150"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:40px; top:104px;">
-                <span class="n8n-node__icon">⏰</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-clock"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Täglich 9 Uhr</span></div>
               <div class="n8n-node" style="left:292px; top:104px;">
-                <span class="n8n-node__icon">📰</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-newspaper"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">RSS lesen</span><span class="items">20 Items</span></div>
               <div class="n8n-node" style="left:520px; top:104px;">
-                <span class="n8n-node__icon">🔎</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-search"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Filter</span><span class="items">5 Items</span></div>
               <div class="n8n-node n8n-node--code" style="left:750px; top:104px;">
-                <span class="n8n-node__icon">🧾</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-file"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Digest bauen</span><span class="items">1 Item</span></div>
               <div class="n8n-node" style="left:930px; top:104px;">
-                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chat"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Slack</span><span class="badge badge--ok">✓</span></div>
             </div>
           </div>
@@ -80,7 +80,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Der Kern dieses Projekts</b>
+        <b class="t">Der Kern dieses Projekts</b>
         RSS-Feeds liefern viele Items. Der Filter reduziert die Liste, der Digest-Node macht aus mehreren Items wieder
         <strong>ein</strong> Item. Dieses „viele → wenige → eins“-Muster brauchst du bei Reports genauso wie beim Monitoring.
       </div>
@@ -148,7 +148,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">📰</span><b>RSS lesen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-newspaper"></i></span><b>RSS lesen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body"><div class="ndv-empty">Zeitplan-Item</div></div></div>
@@ -224,7 +224,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:660px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">🔎</span><b>Interessante Titel</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-search"></i></span><b>Interessante Titel</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Conditions</div>
@@ -252,7 +252,7 @@
       </div>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Erst grob filtern, dann verfeinern</b>
+        <b class="t">Erst grob filtern, dann verfeinern</b>
         Ein grober Keyword-Filter ist besser als ein komplexer Filter, den du nicht mehr verstehst. Starte mit drei Keywords,
         beobachte eine Woche die Treffer und passe dann an.
       </div>
@@ -331,13 +331,13 @@
                 <path class="is-active" d="M 432 120 C 510 120, 520 120, 580 120"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:60px; top:74px;">
-                <span class="n8n-node__icon">🔎</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-search"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">5 Treffer</span><span class="items">5 Items</span></div>
               <div class="n8n-node n8n-node--code" style="left:340px; top:74px;">
-                <span class="n8n-node__icon">🧾</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-file"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Digest bauen</span><span class="items">1 Item</span></div>
               <div class="n8n-node" style="left:580px; top:74px;">
-                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chat"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">eine Nachricht</span></div>
             </div>
           </div>
@@ -402,7 +402,7 @@
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Beobachte Trefferqualität, nicht nur Technik</b>
+        <b class="t">Beobachte Trefferqualität, nicht nur Technik</b>
         Der Workflow kann technisch grün sein und trotzdem schlechte Treffer liefern. Sammle ein paar Tage Beispiele:
         Welche Keywords sind zu breit, welche fehlen? Danach schärfst du den Filter.
       </div>
@@ -445,7 +445,7 @@
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Warum gibt der RSS-Node mehrere Items aus?</li>
           <li>Warum kommt der Limit-Node nach dem Filter?</li>

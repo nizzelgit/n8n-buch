@@ -20,13 +20,13 @@
         einen lesbaren Satz macht. Dieses Kapitel ist bewusst <em>extrem</em> kleinschrittig. Jeder Klick bekommt seine
         eigene Zeile, und dazu steht jedes Mal, was du danach auf dem Bildschirm siehst.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 25 Minuten</span>
-        <span>🎯 Niveau: Einstieg</span>
-        <span>🧩 Voraussetzung: Kapitel 3 (Oberfläche)</span>
+        <span><i class="vic vic-clock"></i> ca. 25 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Einstieg</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 3 (Oberfläche)</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>n8n läuft, und du siehst den Editor (so wie am Ende von Kapitel 2).</li>
           <li><strong>Kein</strong> Konto und <strong>kein</strong> API-Schlüssel. Wir nutzen eine offene, kostenlose Wetter-API namens <em>Open-Meteo</em>.</li>
@@ -54,13 +54,13 @@
                 <path class="is-active" d="M 402 150 C 470 150, 485 150, 540 150"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:42px; top:104px;">
-                <span class="n8n-node__icon">🖐️</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-pointer"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Manueller Test</span><span class="badge badge--ok">✓</span></div>
               <div class="n8n-node" style="left:310px; top:104px;">
-                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Wetter holen</span><span class="badge badge--ok">✓</span><span class="items">1 Item</span></div>
               <div class="n8n-node n8n-node--code" style="left:545px; top:104px;">
-                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-pencil"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Nachricht bauen</span><span class="badge badge--ok">✓</span><span class="items">1 Item</span></div>
             </div>
           </div>
@@ -121,7 +121,7 @@
             automatisch produktiv laufen soll.</p></li>
       </ol>
       <div class="callout callout--tip">
-        <b class="t">⚡ Gespeichert ist nicht veröffentlicht</b>
+        <b class="t">Gespeichert ist nicht veröffentlicht</b>
         Auto-Save schützt deine Arbeit. Publish ist ein anderer Schritt: Er macht eine getestete Version produktiv.
         Mit <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span> gibst du dem aktuellen Stand zusätzlich einen
         Versionsnamen. Publish liegt auf <span class="kbd">Shift</span> + <span class="kbd">P</span>.
@@ -150,16 +150,16 @@
         <div class="frame" style="display:flex; justify-content:center; padding:24px; background:#eef0f4; border-radius:12px;">
           <div class="nodes-panel">
             <div class="nodes-panel__head"><h5>Wie soll der Workflow starten?</h5></div>
-            <div class="nodes-panel__search"><span>🔎</span><span>manual</span><span class="cursor"></span></div>
+            <div class="nodes-panel__search"><span><i class="vic vic-search"></i></span><span>manual</span><span class="cursor"></span></div>
             <div class="nodes-panel__list">
               <div class="nodes-panel__item is-active">
-                <div class="nodes-panel__ic">🖐️</div>
+                <div class="nodes-panel__ic"><i class="vic vic-pointer"></i></div>
                 <div class="nodes-panel__txt"><b>Trigger manually</b><small>Startet, wenn du in n8n auf einen Knopf klickst</small></div><span class="chev">›</span></div>
               <div class="nodes-panel__item">
-                <div class="nodes-panel__ic">⏰</div>
+                <div class="nodes-panel__ic"><i class="vic vic-clock"></i></div>
                 <div class="nodes-panel__txt"><b>On a schedule</b><small>Startet nach Zeitplan (z. B. täglich 8 Uhr)</small></div><span class="chev">›</span></div>
               <div class="nodes-panel__item">
-                <div class="nodes-panel__ic">🔗</div>
+                <div class="nodes-panel__ic"><i class="vic vic-link"></i></div>
                 <div class="nodes-panel__txt"><b>On webhook call</b><small>Startet bei einer eingehenden Anfrage</small></div><span class="chev">›</span></div>
             </div>
           </div>
@@ -243,7 +243,7 @@
         <div class="frame">
           <div class="ndv">
             <div class="ndv__bar">
-              <span class="ndvic">🌐</span><b>HTTP Request</b>
+              <span class="ndvic"><i class="vic vic-globe"></i></span><b>HTTP Request</b>
               <span class="ndv-docs">Doku ↗</span>
               <span class="ndv__exec-step">▶ Schritt ausführen</span>
             </div>
@@ -292,7 +292,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">🌐</span><b>HTTP Request</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-globe"></i></span><b>HTTP Request</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body"><div class="ndv-empty">leeres Start-Item</div></div></div>
@@ -328,7 +328,7 @@
       </div>
 
       <div class="callout callout--tip">
-        <b class="t">⚡ Das ist DAS Arbeitsmuster von n8n</b>
+        <b class="t">Das ist das Arbeitsmuster von n8n</b>
         Du hast gerade gemacht, was du tausendfach tun wirst: einen Node konfigurieren → <em>ausführen</em> → das Ergebnis
         rechts anschauen. Bau immer nur einen Node, teste ihn sofort, geh dann zum nächsten.
       </div>
@@ -386,7 +386,7 @@
       </div>
 
       <div class="callout callout--tip">
-        <b class="t">⚡ Profi-Abkürzung statt Abtippen</b>
+        <b class="t">Profi-Abkürzung statt Abtippen</b>
         Du musst <code>{{ $json.current.temperature_2m }}</code> nicht von Hand schreiben. Wechsle in der linken Spalte
         (Eingang) auf den Reiter <strong>„Schema“</strong>, such das Feld <code>temperature_2m</code> und zieh es per
         Drag-and-drop direkt in das Value-Feld. n8n fügt die fertige Expression automatisch ein. Genau dafür ist der
@@ -396,7 +396,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">✏️</span><b>Edit Fields (Set)</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-pencil"></i></span><b>Edit Fields (Set)</b><span class="ndv-docs">Doku ↗</span><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body">
@@ -476,7 +476,7 @@
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Das Grundmuster trägt weit</b>
+        <b class="t">Das Grundmuster trägt weit</b>
         Du hast einen vollständigen Workflow gebaut: Er holt echte Daten aus dem Internet und formt sie in einen Satz um.
         Genau dieses Skelett (<em>Trigger → Daten holen → umformen</em>) steckt in der Mehrheit aller Automatisierungen,
         die du je bauen wirst.
@@ -519,7 +519,7 @@
             <code>{{ $json.nachricht }}</code>. Das ist genau der Satz aus dem vorherigen Node.</p></li>
         <li><h4>Ausführen</h4>
           <p>Auto-Save abwarten und <strong>„Execute workflow“</strong> klicken. Sekunden später ploppt deine Wetter-Nachricht im
-            Telegram-Chat auf. 🎉</p></li>
+            Telegram-Chat auf.</p></li>
       </ol>
 
       <div class="callout callout--warn">

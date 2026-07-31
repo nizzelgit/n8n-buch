@@ -21,13 +21,13 @@
         brauchst du dann, wenn ein Dienst langsam ist, Limits setzt oder große Datenmengen sonst unkontrolliert
         durch den Workflow laufen.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 18 Minuten</span>
-        <span>🎯 Niveau: Fortgeschrittene Grundlagen</span>
-        <span>🧩 Voraussetzung: Kapitel 5, 8, 10, 22</span>
+        <span><i class="vic vic-clock"></i> ca. 18 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Fortgeschrittene Grundlagen</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 5, 8, 10, 22</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>Eine n8n-Instanz, lokal oder in der Cloud.</li>
           <li>Keine API-Credentials: Wir simulieren eine externe API mit Code-Nodes.</li>
@@ -71,22 +71,22 @@
                 <path d="M 624 212 C 694 286, 760 318, 846 318"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:28px; top:118px;">
-                <span class="n8n-node__icon">🧪</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-flask"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Manual Trigger</span></div>
               <div class="n8n-node n8n-node--code" style="left:288px; top:118px;">
-                <span class="n8n-node__icon">📦</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-package"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Demo-Aufträge</span><span class="items">23 Items</span></div>
               <div class="n8n-node" style="left:532px; top:118px;">
-                <span class="n8n-node__icon">🔁</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-repeat"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Loop Over Items</span><span class="badge badge--ok">5er Batches</span></div>
               <div class="n8n-node n8n-node--code" style="left:768px; top:40px;">
-                <span class="n8n-node__icon">🌐</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">API simulieren</span></div>
               <div class="n8n-node" style="left:1008px; top:40px;">
-                <span class="n8n-node__icon">⏱</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-clock"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">1 Sekunde warten</span></div>
               <div class="n8n-node" style="left:846px; top:272px;">
-                <span class="n8n-node__icon">📊</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chart"></i></span><span class="ep in"></span>
                 <span class="n8n-node__label">Zusammenfassung</span></div>
             </div>
           </div>
@@ -97,7 +97,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Performance in einem Satz</b>
+        <b class="t">Performance in einem Satz</b>
         Miss erst, bremse dann gezielt. Ohne Messpunkt weißt du nicht, ob dein Problem CPU, Speicher, API-Limit,
         Dateigröße, Netzwerk oder schlechte Workflow-Struktur ist.
       </div>
@@ -180,7 +180,7 @@ return jobs;</pre>
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:780px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">🔁</span><b>5er Batches</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-repeat"></i></span><b>5er Batches</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -272,7 +272,7 @@ return batch.map((item, index) =&gt; {
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Überschlagsrechnung</b>
+        <b class="t">Überschlagsrechnung</b>
         Durchsatz ≈ <code>Batchgröße / Wartezeit</code>. Bei 5 Items und 1 Sekunde Pause sind das grob 5 Items pro
         Sekunde, ohne Node-Laufzeit mitzuzählen.
       </div>
@@ -327,7 +327,7 @@ return [{
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">📊</span><b>Zusammenfassung</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-chart"></i></span><b>Zusammenfassung</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">23 Items</span></div>
                 <div class="ndv-panel__body">
@@ -424,7 +424,7 @@ return [{
       </table>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Frühes Reduzieren schlägt spätes Aufräumen</b>
+        <b class="t">Frühes Reduzieren schlägt spätes Aufräumen</b>
         Wenn ein Workflow 10 MB pro Item durch zehn Nodes trägt, hast du kein Anzeigeproblem. Du hast ein Datenmodellproblem.
       </div>
 
@@ -482,7 +482,7 @@ return [{
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Warum brauchst du in n8n nicht für jede Item-Liste einen Loop?</li>
           <li>Welcher der beiden Ausgänge sitzt oben, loop oder done, und was liefert er?</li>

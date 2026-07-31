@@ -20,13 +20,13 @@
         <strong>Entscheidungen</strong> hinein: verschiedene Wege je nach Daten, getrennte Zweige wieder zusammenführen. Und wir
         klären die Frage, wann du wirklich eine Schleife brauchst.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 22 Minuten</span>
-        <span>🎯 Niveau: Mittel</span>
-        <span>🧩 Voraussetzung: Kapitel 5, 6 &amp; 9</span>
+        <span><i class="vic vic-clock"></i> ca. 22 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Mittel</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 5, 6 &amp; 9</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du mitbringen solltest</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du mitbringen solltest</h4>
         <ul>
           <li>Das „läuft pro Item“-Prinzip (Kapitel 5). Es erklärt, warum du Schleifen <em>selten</em> brauchst.</li>
           <li>Bedingungen aus Kapitel 6 (<code>&gt;</code>, <code>||</code>, …) und dem Filter (Kapitel 9).</li>
@@ -49,17 +49,17 @@
                 <path d="M 422 205 C 510 205, 520 290, 592 290"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:60px; top:134px;">
-                <span class="n8n-node__icon">🌐</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Wetter holen</span></div>
               <div class="n8n-node" style="left:330px; top:134px;">
                 <span class="n8n-node__icon">⑂</span><span class="ep in"></span>
                 <span class="ep out" style="top:26px;"></span><span class="ep out" style="top:66px;"></span>
                 <span class="n8n-node__label">IF: tempC &gt; 20</span></div>
               <div class="n8n-node n8n-node--code" style="left:600px; top:64px;">
-                <span class="n8n-node__icon">🏖️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-sun"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">dann: „warm“</span></div>
               <div class="n8n-node n8n-node--code" style="left:600px; top:244px;">
-                <span class="n8n-node__icon">🧥</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-cloud"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">sonst: „kühl“</span></div>
             </div>
           </div>
@@ -123,17 +123,17 @@
                 <path class="is-active" d="M 474 190 C 540 190, 560 190, 620 190"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:60px; top:64px;">
-                <span class="n8n-node__icon">🟦</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><span style="display:inline-block;width:.7em;height:.7em;border-radius:2px;background:#6a4bff;vertical-align:baseline"></span></span><span class="ep out"></span>
                 <span class="n8n-node__label">Quelle A</span></div>
               <div class="n8n-node n8n-node--trigger" style="left:60px; top:244px;">
-                <span class="n8n-node__icon">🟧</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><span style="display:inline-block;width:.7em;height:.7em;border-radius:2px;background:#f6a609;vertical-align:baseline"></span></span><span class="ep out"></span>
                 <span class="n8n-node__label">Quelle B</span></div>
               <div class="n8n-node" style="left:380px; top:144px;">
                 <span class="n8n-node__icon">⥒</span>
                 <span class="ep in" style="top:26px;"></span><span class="ep in" style="top:66px;"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Merge</span></div>
               <div class="n8n-node n8n-node--code" style="left:628px; top:144px;">
-                <span class="n8n-node__icon">📦</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-package"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">weiter</span></div>
             </div>
           </div>
@@ -159,7 +159,7 @@
         Beim ersten Mal habe ich dort lange gesucht.</p>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ IF + Merge sind die Arbeitspferde</b>
+        <b class="t">IF + Merge sind die Arbeitspferde</b>
         Verzweigen mit <strong>IF</strong>, später mit <strong>Merge</strong> wieder zusammen: Dieses Paar deckt fast alle
         „mal so, mal so“-Abläufe ab. Switch nur, wenn es wirklich mehr als zwei Wege sind.
       </div>
@@ -170,7 +170,7 @@
         Schleife.</p>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Die Regel zuerst</b>
+        <b class="t">Die Regel zuerst</b>
         Willst du „für jede Zeile etwas tun“, sorg einfach dafür, dass jede Zeile ein <strong>Item</strong> ist (z. B. „Split Out“
         aus Kapitel 9). Den Rest macht n8n durch Wiederholung pro Item von selbst.
       </div>
@@ -196,17 +196,17 @@
                 <path class="is-active" d="M 414 222 C 470 280, 520 330, 600 330"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:60px; top:154px;">
-                <span class="n8n-node__icon">📋</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-clipboard"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">viele Items</span></div>
               <div class="n8n-node" style="left:322px; top:154px;">
-                <span class="n8n-node__icon">🔁</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-repeat"></i></span><span class="ep in"></span>
                 <span class="ep out" style="top:26px;"></span><span class="ep out" style="top:66px;"></span>
                 <span class="n8n-node__label">Loop Over Items</span></div>
               <div class="n8n-node n8n-node--code" style="left:560px; top:74px;">
-                <span class="n8n-node__icon">⚙️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-gear"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">pro Batch</span></div>
               <div class="n8n-node n8n-node--code" style="left:600px; top:284px;">
-                <span class="n8n-node__icon">✅</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-check-circle"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">done</span></div>
             </div>
           </div>
@@ -252,7 +252,7 @@
       </ol>
 
       <div class="callout callout--tip">
-        <b class="t">💡 Später wieder zusammenführen</b>
+        <b class="t">Später wieder zusammenführen</b>
         Wenn beide Zweige am Ende dasselbe tun (z. B. die Nachricht verschicken), häng einen <strong>Merge</strong> dahinter und
         führe sie zusammen. Dann brauchst du den Versand-Node nur <em>einmal</em>. Der Modus <strong>Append</strong> reicht dafür.
       </div>
@@ -269,7 +269,7 @@
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Was ist der Unterschied zwischen IF und Filter?</li>
           <li>Ab wie vielen Wegen lohnt sich ein Switch statt mehrerer IFs?</li>

@@ -20,13 +20,13 @@
         sich den Gesprächskontext merkt und bei Bedarf externe Werkzeuge nutzt. Der wichtige Unterschied zu Kapitel 17:
         Hier ist die KI nicht nur ein Klassifikator. Sie entscheidet, ob ein Tool gebraucht wird.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 45 Minuten</span>
-        <span>🎯 Niveau: Fortgeschrittene Grundlagen</span>
-        <span>🧩 Voraussetzung: Kapitel 6–12, 17</span>
+        <span><i class="vic vic-clock"></i> ca. 45 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Fortgeschrittene Grundlagen</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 6–12, 17</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>Eine n8n-Instanz mit den AI-/LangChain-Nodes.</li>
           <li>Eine Chat-Model-Credential, z. B. OpenAI, Anthropic, Mistral, Groq oder Azure OpenAI.</li>
@@ -60,22 +60,22 @@
                 <path d="M 312 242 C 410 328, 520 336, 620 326"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:24px; top:150px;">
-                <span class="n8n-node__icon">💬</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chat"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Chat Trigger</span><span class="items">1 Nachricht</span></div>
               <div class="n8n-node n8n-node--ai" style="left:220px; top:150px;">
-                <span class="n8n-node__icon">🤖</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-bot"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">AI Agent</span></div>
               <div class="n8n-node" style="left:430px; top:150px;">
                 <span class="n8n-node__icon">↩</span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Antwort im Chat</span><span class="badge badge--ok">✓</span></div>
               <div class="n8n-node" style="left:620px; top:20px;">
-                <span class="n8n-node__icon">🧠</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-brain"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Simple Memory</span></div>
               <div class="n8n-node" style="left:620px; top:150px;">
-                <span class="n8n-node__icon">🌍</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Ort suchen</span></div>
               <div class="n8n-node" style="left:620px; top:280px;">
-                <span class="n8n-node__icon">🌦</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-cloud-sun"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Wetter holen</span></div>
             </div>
           </div>
@@ -85,7 +85,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Agenten-Muster</b>
+        <b class="t">Agenten-Muster</b>
         Ein Agent besteht praktisch aus vier Dingen: Chat-Eingang, Modell, Memory und Tools. Ohne klare Tool-Grenzen wird
         aus Automatisierung schnell unkontrolliertes Raten.
       </div>
@@ -149,7 +149,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:720px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">💬</span><b>Chat Trigger</b><span class="ndv__exec-step">▶ Chat öffnen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-chat"></i></span><b>Chat Trigger</b><span class="ndv__exec-step">▶ Chat öffnen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -214,7 +214,7 @@ Regeln:
       </div>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Begrenze Iterationen</b>
+        <b class="t">Begrenze Iterationen</b>
         Ein Agent kann mehrmals denken, ein Tool aufrufen, Tool-Antwort lesen und erneut entscheiden. Das ist nützlich,
         aber nicht kostenlos. Setze beim Lernen ein niedriges Limit.
       </div>
@@ -248,7 +248,7 @@ Regeln:
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">🤖</span><b>AI Agent</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-bot"></i></span><b>AI Agent</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body"><div class="n8n-json">{
@@ -329,7 +329,7 @@ Regeln:
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:760px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">🌍</span><b>Ort suchen</b><span class="ndv__exec-step">Tool</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-globe"></i></span><b>Ort suchen</b><span class="ndv__exec-step">Tool</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">HTTP Request als Tool</div>
@@ -435,17 +435,17 @@ Regeln:
                 <path class="is-active" d="M 492 232 C 545 232, 570 160, 625 160"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:14px; top:114px;">
-                <span class="n8n-node__icon">💬</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chat"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Chatfrage</span></div>
               <div class="n8n-node n8n-node--ai n8n-node--selected" style="left:205px; top:114px;">
-                <span class="n8n-node__icon">🤖</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-bot"></i></span><span class="ep in"></span>
                 <span class="ep out" style="top:28px;"></span><span class="ep out" style="top:64px;"></span>
                 <span class="n8n-node__label">AI Agent</span><span class="items">2 Tool Calls</span></div>
               <div class="n8n-node" style="left:400px; top:42px;">
-                <span class="n8n-node__icon">🌍</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Ort suchen</span><span class="badge badge--ok">✓</span></div>
               <div class="n8n-node" style="left:400px; top:186px;">
-                <span class="n8n-node__icon">🌦</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-cloud-sun"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Wetter holen</span><span class="badge badge--ok">✓</span></div>
               <div class="n8n-node" style="left:625px; top:114px;">
                 <span class="n8n-node__icon">↩</span><span class="ep in"></span><span class="ep out"></span>
@@ -458,7 +458,7 @@ Regeln:
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Execution lesen, nicht nur Chat lesen</b>
+        <b class="t">Execution lesen, nicht nur Chat lesen</b>
         Eine plausible Chatantwort beweist wenig. Öffne die Ausführung und prüfe Tool-Aufrufe, Parameter und Rückgaben.
       </div>
 
@@ -627,7 +627,7 @@ Regeln:
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Wann ist ein AI Agent sinnvoller als eine Basic LLM Chain?</li>
           <li>Warum sollte der Wetter-Agent zuerst <code>Ort suchen</code> und erst danach <code>Wetter holen</code> nutzen?</li>

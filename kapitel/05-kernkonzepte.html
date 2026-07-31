@@ -19,9 +19,9 @@
       <p class="chap-lede">Wenn ein einziges Kapitel dieses Buchs darüber entscheidet, ob du n8n wirklich verstehst,
         dann dieses. Hier klären wir, <em>was genau</em> zwischen den Nodes hin- und herfließt und wie du darauf zugreifst.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 24 Minuten</span>
-        <span>🎯 Niveau: Einstieg → Mittel</span>
-        <span>🧩 Voraussetzung: Kapitel 4 (erster Workflow)</span>
+        <span><i class="vic vic-clock"></i> ca. 24 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Einstieg → Mittel</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 4 (erster Workflow)</span>
       </div>
 
       <h2>Die eine Sache, die alles erklärt: das Item</h2>
@@ -29,7 +29,7 @@
         Datenpaket. Und ganz wichtig:</p>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Die goldene Regel</b>
+        <b class="t">Die goldene Regel</b>
         Ein Node bekommt immer eine <strong>Liste von Items</strong> herein und gibt eine <strong>Liste von Items</strong> heraus.
         Auch wenn es nur ein einziges Item ist, ist es technisch eine Liste mit einem Eintrag. Verinnerliche das, und
         n8n wird durchschaubar.
@@ -81,7 +81,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">📊</span><b>Dieselben 3 Items, drei Ansichten</b></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-chart"></i></span><b>Dieselben 3 Items, drei Ansichten</b></div>
             <div class="ndv__cols">
               <div class="ndv-panel">
                 <div class="ndv-panel__head">Tabelle <span class="count">3 Items</span></div>
@@ -124,7 +124,7 @@
       </figure>
 
       <div class="callout callout--tip">
-        <b class="t">⚡ Tabelle zum Überblicken, JSON zum Verstehen, Schema zum Verdrahten</b>
+        <b class="t">Tabelle zum Überblicken, JSON zum Verstehen, Schema zum Verdrahten</b>
         <p style="margin:0 0 6px">Beim Bauen hilft dir die <strong>Schema</strong>-Ansicht am meisten. Du siehst dort die
         Feldnamen und kannst sie per Drag-and-drop in ein Expression-Feld ziehen, statt sie abzutippen.</p>
         Ein Detail, über das viele stolpern: Tabelle und JSON zeigen alle Items, das Schema baut n8n dagegen nur aus dem
@@ -188,7 +188,7 @@
       </div>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Die zwei Zugriffe, die du wirklich brauchst</b>
+        <b class="t">Die zwei Zugriffe, die du wirklich brauchst</b>
         <p style="margin:0 0 6px"><code>$json.feld</code> → Wert aus dem <strong>vorherigen</strong> Node.</p>
         <p style="margin:0"><code>$('Name').item.json.feld</code> → Wert aus einem <strong>beliebigen früheren</strong> Node.</p>
         Mit diesen beiden verdrahtest du gefühlt jeden Workflow.
@@ -210,13 +210,13 @@
                 <path d="M 432 140 C 510 140, 520 140, 580 140"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:60px; top:94px;">
-                <span class="n8n-node__icon">📊</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chart"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">3 Kontakte lesen</span><span class="items">3 Items</span></div>
               <div class="n8n-node" style="left:340px; top:94px;">
-                <span class="n8n-node__icon">✉️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-mail"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">E-Mail senden</span><span class="items">läuft 3×</span></div>
               <div class="n8n-node n8n-node--code" style="left:580px; top:94px;">
-                <span class="n8n-node__icon">📝</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-pencil"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Log</span><span class="items">3 Items</span></div>
             </div>
           </div>
@@ -226,7 +226,7 @@
       </figure>
 
       <div class="callout callout--tip">
-        <b class="t">⚡ Du brauchst keine Schleife</b>
+        <b class="t">Du brauchst keine Schleife</b>
         Willst du „für jede Zeile in der Tabelle eine Nachricht“, sorgst du dafür, dass jede Zeile ein eigenes Item ist.
         Den Rest macht n8n von allein, indem es den Node pro Item wiederholt. Kein <code>for</code>, kein Zähler.
       </div>
@@ -260,13 +260,13 @@
       <h2>Daten „festpinnen“ zum Testen (Pinning)</h2>
       <p>Beim Entwickeln willst du nicht bei jedem Test echte E-Mails verschicken oder eine API hundertmal aufrufen.
         Lösung: <strong>Pin data</strong>. Du führst einen Node einmal aus und pinnst sein Ergebnis fest. Bei den nächsten
-        Tests nimmt n8n diese gespeicherten Daten, statt neu abzurufen. Ein angepinnter Node bekommt ein 📌-Symbol, und
+        Tests nimmt n8n diese gespeicherten Daten, statt neu abzurufen. Ein angepinnter Node bekommt ein Pin-Symbol, und
         im Ausgangspanel steht das Banner <strong>„This data is pinned“</strong>. Über den Link <strong>„Unpin“</strong>
         darin holst du beim nächsten Lauf wieder frische Daten.</p>
       <div class="clickpath">
         <span class="step"><span class="n">1</span> Node ausführen</span>
         <span class="arrow">→</span>
-        <span class="step"><span class="n">2</span> im Ausgangspanel auf 📌 „Pin data“ klicken</span>
+        <span class="step"><span class="n">2</span> im Ausgangspanel auf „Pin data“ klicken</span>
         <span class="arrow">→</span>
         <span class="step"><span class="n">3</span> ab jetzt fixe Testdaten</span>
       </div>
@@ -291,7 +291,7 @@
       </ol>
 
       <div class="prereq">
-        <h4>✅ Selbsttest: verstehst du den Kern?</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest: verstehst du den Kern?</h4>
         <ul>
           <li>Was ist der Unterschied zwischen <code>$json</code> und <code>$('Trigger').item.json</code>?</li>
           <li>Du hast 5 Items im Eingang eines „Slack senden“-Nodes. Wie viele Nachrichten gehen raus?</li>

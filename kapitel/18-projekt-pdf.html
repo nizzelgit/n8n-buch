@@ -20,13 +20,13 @@
         Rechnungsnummer, Datum und Betrag zuerst mit einfachen Regeln. Für schwierige Layouts springt KI ein. Am Ende
         steht ein Rechnungseingang, den Buchhaltung oder Einkauf noch prüfen können. Gebucht wird hier nichts.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 55 Minuten</span>
-        <span>🎯 Niveau: Mittel bis fortgeschritten</span>
-        <span>🧩 Voraussetzung: Kapitel 7–12, 17</span>
+        <span><i class="vic vic-clock"></i> ca. 55 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Mittel bis fortgeschritten</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 7–12, 17</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>Ein Test-Postfach, das E-Mails mit PDF-Anhang empfangen kann. IMAP ist für dieses Kapitel am anschaulichsten.</li>
           <li>Eine selbst erstellte Testrechnung als PDF. Keine echten Rechnungen im ersten Durchlauf.</li>
@@ -62,23 +62,23 @@
                 <path class="is-active" d="M 1058.5 275 C 1098 275, 1098 105, 966.5 105"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:40px; top:144px;">
-                <span class="n8n-node__icon">✉️</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-mail"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Rechnungsmail</span><span class="items">1 Item</span></div>
               <div class="n8n-node" style="left:298px; top:144px;">
-                <span class="n8n-node__icon">📄</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-file"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">PDF-Text lesen</span></div>
               <div class="n8n-node n8n-node--code" style="left:528px; top:144px;">
-                <span class="n8n-node__icon">🔎</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-search"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Regeln</span><span class="items">0.75</span></div>
               <div class="n8n-node" style="left:748px; top:144px;">
-                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-shuffle"></i></span><span class="ep in"></span>
                 <span class="ep out" style="top:30px;"></span><span class="ep out" style="top:64px;"></span>
                 <span class="n8n-node__label">sicher?</span></div>
               <div class="n8n-node" style="left:968px; top:59px;">
-                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chart"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Tabelle</span><span class="badge badge--ok">✓</span></div>
               <div class="n8n-node n8n-node--ai" style="left:968px; top:229px;">
-                <span class="n8n-node__icon">🤖</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-bot"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">KI-Fallback</span></div>
             </div>
           </div>
@@ -88,7 +88,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Erst Regeln, dann KI</b>
+        <b class="t">Erst Regeln, dann KI</b>
         Rechnungen sind strukturiert genug für einfache Regeln, aber uneinheitlich genug für Ausnahmen. Deshalb bauen wir
         zweistufig: erst die billige Regel, die du im Code nachlesen kannst; danach das flexiblere, teurere Modell.
       </div>
@@ -185,7 +185,7 @@ IBAN: DE89 3704 0044 0532 0130 00</pre>
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:690px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">✉️</span><b>Rechnungsmail</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-mail"></i></span><b>Rechnungsmail</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -249,7 +249,7 @@ IBAN: DE89 3704 0044 0532 0130 00</pre>
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:700px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">📄</span><b>PDF-Text lesen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-file"></i></span><b>PDF-Text lesen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -320,7 +320,7 @@ return {
       </div>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Textlänge ist ein Qualitätsindikator</b>
+        <b class="t">Textlänge ist ein Qualitätsindikator</b>
         Wenn <code>text_length</code> sehr klein ist, stimmt die Extraktion wahrscheinlich nicht. Prüfe solche Fälle manuell,
         statt sie automatisch in eine Tabelle zu schreiben.
       </div>
@@ -433,17 +433,17 @@ return {
                 <path class="is-active" d="M 410 150 C 470 150, 500 230, 558 230"></path>
               </svg>
               <div class="n8n-node n8n-node--code" style="left:60px; top:104px;">
-                <span class="n8n-node__icon">🔎</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-search"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Regeln</span></div>
               <div class="n8n-node" style="left:318px; top:104px;">
-                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-shuffle"></i></span><span class="ep in"></span>
                 <span class="ep out" style="top:30px;"></span><span class="ep out" style="top:64px;"></span>
                 <span class="n8n-node__label">Regeln sicher?</span></div>
               <div class="n8n-node" style="left:558px; top:44px;">
-                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chart"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">speichern</span></div>
               <div class="n8n-node n8n-node--ai" style="left:558px; top:184px;">
-                <span class="n8n-node__icon">🤖</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-bot"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">KI prüfen</span></div>
             </div>
           </div>
@@ -480,7 +480,7 @@ return {
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Flache Tabellenfelder</b>
+        <b class="t">Flache Tabellenfelder</b>
         Speichere nicht das komplette PDF-JSON in einer Zelle. Lege die Kernfelder flach ab. Erst dann kannst du in der
         Tabelle nach Lieferant sortieren oder alle Beträge über 1000 EUR herausfiltern.
       </div>
@@ -537,7 +537,7 @@ return {
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:720px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">🤖</span><b>KI-Fallback</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-bot"></i></span><b>KI-Fallback</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Information Extractor</div>
@@ -670,17 +670,17 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
                 <path class="is-active" d="M 410 155 C 480 155, 500 235, 560 235"></path>
               </svg>
               <div class="n8n-node n8n-node--ai" style="left:60px; top:109px;">
-                <span class="n8n-node__icon">🤖</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-bot"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">KI geprüft</span></div>
               <div class="n8n-node" style="left:318px; top:109px;">
-                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-shuffle"></i></span><span class="ep in"></span>
                 <span class="ep out" style="top:30px;"></span><span class="ep out" style="top:64px;"></span>
                 <span class="n8n-node__label">Review nötig?</span></div>
               <div class="n8n-node" style="left:560px; top:46px;">
-                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chat"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Review melden</span></div>
               <div class="n8n-node" style="left:560px; top:189px;">
-                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chart"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">speichern</span></div>
             </div>
           </div>
@@ -708,7 +708,7 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Teste den Fehlerweg absichtlich</b>
+        <b class="t">Teste den Fehlerweg absichtlich</b>
         Bei Rechnungen ist ein sauberer Stopp wertvoller als ein spektakulärer Treffer. Der wichtigste Test ist:
         Erkennt der Workflow, wann er nicht genug weiß?
       </div>
@@ -726,7 +726,7 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Warum extrahieren wir zuerst mit Regeln und erst danach mit KI?</li>
           <li>Warum ist <code>text_length</code> ein nützlicher Prüfwert?</li>

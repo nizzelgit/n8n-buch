@@ -20,13 +20,13 @@
         anhand einfacher Regeln über die Zuständigkeit und legt den Kontakt im CRM an. Danach bekommt das passende Team
         eine Nachricht. Das ist der erste Workflow in diesem Buch, der wie ein kleiner Geschäftsprozess funktioniert.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 45 Minuten</span>
-        <span>🎯 Niveau: Mittel</span>
-        <span>🧩 Voraussetzung: Kapitel 7–12, 14</span>
+        <span><i class="vic vic-clock"></i> ca. 45 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Mittel</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 7–12, 14</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>n8n ist von außen erreichbar, damit ein Webhook aufgerufen werden kann.</li>
           <li>Ein CRM-Testbereich, z. B. HubSpot, Pipedrive oder ein eigenes Test-CRM. Alternativ nutzt du Google Sheets als Fallback.</li>
@@ -61,23 +61,23 @@
                 <path class="is-active" d="M 852 245 C 900 245, 910 205, 930 185"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:40px; top:124px;">
-                <span class="n8n-node__icon">🔗</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-link"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Webhook Lead</span><span class="items">1 Item</span></div>
               <div class="n8n-node n8n-node--code" style="left:298px; top:124px;">
-                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-pencil"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Lead vorbereiten</span></div>
               <div class="n8n-node" style="left:528px; top:124px;">
-                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-shuffle"></i></span><span class="ep in"></span>
                 <span class="ep out" style="top:28px;"></span><span class="ep out" style="top:64px;"></span>
                 <span class="n8n-node__label">Routing</span></div>
               <div class="n8n-node" style="left:760px; top:49px;">
-                <span class="n8n-node__icon">🏢</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-building"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">CRM Sales</span></div>
               <div class="n8n-node" style="left:760px; top:199px;">
-                <span class="n8n-node__icon">🛟</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-lifebuoy"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">CRM Support</span></div>
               <div class="n8n-node" style="left:930px; top:139px;">
-                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chat"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Team melden</span><span class="badge badge--ok">✓</span></div>
             </div>
           </div>
@@ -88,7 +88,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Das Muster</b>
+        <b class="t">Das Muster</b>
         Lead-Routing besteht aus vier Dingen: <strong>validieren</strong>, <strong>normalisieren</strong>,
         <strong>entscheiden</strong>, <strong>anlegen &amp; melden</strong>. Wenn du diese Trennung sauber hältst, bleibt der
         Workflow auch bei neuen Regeln verständlich.
@@ -149,7 +149,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:620px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">🔗</span><b>Webhook Lead</b><span class="ndv__exec-step">⦿ Listen for test event</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-link"></i></span><b>Webhook Lead</b><span class="ndv__exec-step">⦿ Listen for test event</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -227,7 +227,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">✏️</span><b>Lead vorbereiten</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-pencil"></i></span><b>Lead vorbereiten</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body"><div class="n8n-json">{
@@ -273,7 +273,7 @@
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Früh abbrechen</b>
+        <b class="t">Früh abbrechen</b>
         Prüfe Pflichtfelder vor teuren oder sensiblen Aktionen. Ein fehlendes Feld ist kein CRM-Problem, sondern ein
         Eingangsproblem.
       </div>
@@ -309,7 +309,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:620px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">🔀</span><b>Routing</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-shuffle"></i></span><b>Routing</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -509,7 +509,7 @@ Budget: {{ $('Lead vorbereiten').item.json.budget }} €
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Der Test, den alle auslassen</b>
+        <b class="t">Der Test, den alle auslassen</b>
         Der Idealfall läuft fast immer. Kaputt geht es bei dem Lead, dem ein Feld fehlt oder dessen Thema in keiner deiner
         Regeln steht. Schick deshalb den ungültigen Lead durch, bevor du die Production-URL irgendwem gibst, und schau danach
         in die Executions: Der Lauf muss im Fehlerzweig enden und darf keinen CRM-Kontakt hinterlassen. Genau für den zweiten
@@ -529,7 +529,7 @@ Budget: {{ $('Lead vorbereiten').item.json.budget }} €
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Warum verwenden wir POST statt GET?</li>
           <li>Warum normalisieren wir vor dem Routing?</li>

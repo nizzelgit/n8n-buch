@@ -20,13 +20,13 @@
         Produktiv heißt: Zugriffe sind begrenzt, Secrets bleiben geschützt, Jobs überstehen Lastspitzen, und du weißt,
         was passiert, wenn ein Teil der Instanz ausfällt.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 30 Minuten</span>
-        <span>🎯 Niveau: Betrieb verstehen</span>
-        <span>🧩 Voraussetzung: Kapitel 12, 23, 24</span>
+        <span><i class="vic vic-clock"></i> ca. 30 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Betrieb verstehen</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 12, 23, 24</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>Eine n8n-Testinstanz. Für Queue-Mode brauchst du eine Self-hosted-Umgebung.</li>
           <li>Grundverständnis für Credentials, Env-Variablen und Deployment aus Kapitel 12 und 24.</li>
@@ -65,16 +65,16 @@
               </svg>
 
               <div class="n8n-node n8n-node--trigger" style="left:34px; top:82px;">
-                <span class="n8n-node__icon">🌐</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Webhook</span></div>
               <div class="n8n-node n8n-node--code" style="left:302px; top:82px;">
-                <span class="n8n-node__icon">🧠</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-brain"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Eine n8n-Instanz</span><span class="badge badge--ok">einfach</span></div>
               <div class="n8n-node" style="left:584px; top:82px;">
-                <span class="n8n-node__icon">🗄</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-database"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Datenbank</span></div>
               <div class="n8n-node" style="left:880px; top:82px;">
-                <span class="n8n-node__icon">📊</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chart"></i></span><span class="ep in"></span>
                 <span class="n8n-node__label">Ausführungen</span></div>
 
               <div class="n8n-sticky" style="left:34px; top:178px; max-width:470px;">
@@ -84,22 +84,22 @@
               </div>
 
               <div class="n8n-node n8n-node--trigger" style="left:34px; top:292px;">
-                <span class="n8n-node__icon">🌐</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Trigger / Webhook</span></div>
               <div class="n8n-node" style="left:366px; top:292px;">
-                <span class="n8n-node__icon">📬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-mail"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Redis Queue</span><span class="badge badge--ok">Puffer</span></div>
               <div class="n8n-node n8n-node--code" style="left:670px; top:192px;">
-                <span class="n8n-node__icon">⚙️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-gear"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Worker 1</span></div>
               <div class="n8n-node n8n-node--code" style="left:670px; top:292px;">
-                <span class="n8n-node__icon">⚙️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-gear"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Worker 2</span></div>
               <div class="n8n-node n8n-node--code" style="left:670px; top:392px;">
-                <span class="n8n-node__icon">⚙️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-gear"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Worker 3</span></div>
               <div class="n8n-node" style="left:964px; top:292px;">
-                <span class="n8n-node__icon">🗄</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-database"></i></span><span class="ep in"></span>
                 <span class="n8n-node__label">Postgres</span></div>
 
               <div class="n8n-sticky" style="left:34px; top:420px; max-width:470px;">
@@ -445,7 +445,7 @@
         zentraler Datenbank, Worker-Deployments, Logs und Netzwerkregeln ist echter Aufwand.</p>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Warum muss <code>N8N_ENCRYPTION_KEY</code> auf allen Workern gleich sein?</li>
           <li>Welche Rolle spielt Redis im Queue-Mode?</li>

@@ -20,13 +20,13 @@
         ein Limit ist erreicht. Ein guter Workflow <em>plant das ein</em>. Er versucht es noch einmal, weicht auf einen zweiten
         Weg aus oder meldet sich bei dir. Still abbrechen tut er nicht.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 16 Minuten</span>
-        <span>🎯 Niveau: Mittel</span>
-        <span>🧩 Voraussetzung: Kapitel 7, 8 &amp; 10</span>
+        <span><i class="vic vic-clock"></i> ca. 16 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Mittel</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 7, 8 &amp; 10</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du mitbringen solltest</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du mitbringen solltest</h4>
         <ul>
           <li>Einen Workflow mit mindestens einem Node, der nach außen spricht (z. B. HTTP aus Kapitel 8).</li>
           <li>Verzweigungen aus Kapitel 10. Die Fehlerausgänge funktionieren ganz ähnlich.</li>
@@ -63,7 +63,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:540px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">⚙️</span><b>HTTP Request — Settings</b></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-gear"></i></span><b>HTTP Request — Settings</b></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Settings</div>
@@ -82,7 +82,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Retry kostet nichts und rettet viel</b>
+        <b class="t">Retry kostet nichts und rettet viel</b>
         Schalte <strong>Retry On Fail</strong> bei jedem Node an, der mit dem Internet spricht. Zwei bis drei Versuche reichen.
         Das kostet dich einen Klick und fängt die meisten kurzen Aussetzer ab, bevor du überhaupt davon erfährst. Wenn du aus
         diesem Kapitel nur eine Sache übernimmst, dann diese.
@@ -108,17 +108,17 @@
                 <path d="M 424 212 C 510 212, 520 300, 592 300"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:60px; top:144px;">
-                <span class="n8n-node__icon">🌐</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Wetter holen</span></div>
               <div class="n8n-node" style="left:330px; top:144px;">
-                <span class="n8n-node__icon">🌐</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-globe"></i></span><span class="ep in"></span>
                 <span class="ep out" style="top:26px;"></span><span class="ep out" style="top:66px;"></span>
                 <span class="n8n-node__label">API-Call</span></div>
               <div class="n8n-node n8n-node--code" style="left:600px; top:64px;">
-                <span class="n8n-node__icon">✅</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-check-circle"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Erfolg: weiter</span></div>
               <div class="n8n-node" style="left:600px; top:254px;">
-                <span class="n8n-node__icon">🔔</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-bell"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Fehler: melden</span><span class="badge badge--err">!</span></div>
             </div>
           </div>
@@ -128,7 +128,7 @@
       </figure>
 
       <div class="callout callout--tip">
-        <b class="t">💡 Der Fehler bringt Infos mit</b>
+        <b class="t">Der Fehler bringt Infos mit</b>
         Das Item im Fehlerzweig behält die Felder, die in den Node hineingingen, und bekommt zusätzlich
         <code>$json.error</code> mit der Fehlermeldung. Schreib die in deine Benachrichtigung. Dann weißt du sofort,
         <em>was</em> schiefging, ohne die Execution erst aufzumachen.
@@ -177,10 +177,10 @@
                 <path class="is-active" d="M 178 120 C 260 120, 300 120, 380 120"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:60px; top:74px;">
-                <span class="n8n-node__icon">🚨</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-alert"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Error Trigger</span></div>
               <div class="n8n-node" style="left:380px; top:74px;">
-                <span class="n8n-node__icon">🔔</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-bell"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Mir Bescheid geben</span></div>
             </div>
           </div>
@@ -239,7 +239,7 @@
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Welche Einzelmaßnahme bringt am meisten Stabilität für API-Nodes?</li>
           <li>Wie bekommt ein Node einen zweiten, roten Ausgang?</li>

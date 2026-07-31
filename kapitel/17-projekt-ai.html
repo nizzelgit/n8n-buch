@@ -20,13 +20,13 @@
         erzeugt einen Antwortentwurf und meldet dringende Fälle an dein Team. Wichtig: Der Workflow sendet keine Antwort
         automatisch. KI schlägt vor, der Mensch entscheidet.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 50 Minuten</span>
-        <span>🎯 Niveau: Mittel bis fortgeschritten</span>
-        <span>🧩 Voraussetzung: Kapitel 6–12, 14</span>
+        <span><i class="vic vic-clock"></i> ca. 50 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Mittel bis fortgeschritten</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 6–12, 14</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>Ein Test-Postfach, idealerweise Gmail. Mit IMAP geht es auch, dann heißt der Trigger
             <strong>Email Trigger (IMAP)</strong> und die Feldnamen im Output sehen anders aus.</li>
@@ -62,23 +62,23 @@
                 <path class="is-active" d="M 830 170 C 890 170, 900 235, 958 235"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:32px; top:124px;">
-                <span class="n8n-node__icon">✉️</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-mail"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Neue E-Mail</span><span class="items">1 Item</span></div>
               <div class="n8n-node" style="left:288px; top:124px;">
-                <span class="n8n-node__icon">📩</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-mail"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">E-Mail holen</span></div>
               <div class="n8n-node n8n-node--code" style="left:508px; top:124px;">
-                <span class="n8n-node__icon">🧹</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-code"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">E-Mail vorbereiten</span></div>
               <div class="n8n-node n8n-node--ai" style="left:738px; top:124px;">
-                <span class="n8n-node__icon">🤖</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-bot"></i></span><span class="ep in"></span>
                 <span class="ep out" style="top:46px;"></span>
                 <span class="n8n-node__label">Basic LLM Chain</span></div>
               <div class="n8n-node" style="left:958px; top:59px;">
-                <span class="n8n-node__icon">📝</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-pencil"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Entwurf</span><span class="badge badge--ok">✓</span></div>
               <div class="n8n-node" style="left:958px; top:189px;">
-                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chat"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Dringend melden</span></div>
             </div>
           </div>
@@ -89,7 +89,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ KI bewertet, n8n entscheidet</b>
+        <b class="t">KI bewertet, n8n entscheidet</b>
         Nutze KI für <strong>Bewertung und Textentwurf</strong>, aber lasse n8n die Regeln ausführen:
         JSON prüfen, IF-Node verzweigen, Entwurf statt Sendung, Label statt endgültiger Entscheidung.
       </div>
@@ -142,7 +142,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:660px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">✉️</span><b>Neue E-Mail</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-mail"></i></span><b>Neue E-Mail</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -194,7 +194,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">📩</span><b>E-Mail holen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-mail"></i></span><b>E-Mail holen</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body"><div class="n8n-json">{
@@ -267,7 +267,7 @@
       </div>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Kontext begrenzen</b>
+        <b class="t">Kontext begrenzen</b>
         Mehr Text ist nicht automatisch besser. Für Klassifikation und Antwortentwurf reicht oft die aktuelle Nachricht.
         Alte Zitate und Signaturen erhöhen Kosten und Fehlerwahrscheinlichkeit.
       </div>
@@ -333,7 +333,7 @@ Text: {{ $json.email_text }}</pre>
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:720px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">🤖</span><b>Basic LLM Chain</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-bot"></i></span><b>Basic LLM Chain</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -422,7 +422,7 @@ Text: {{ $json.email_text }}</pre>
       </div>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ KI-Ausgaben sind Eingaben</b>
+        <b class="t">KI-Ausgaben sind Eingaben</b>
         Behandle KI-Antworten wie Daten von außen: parsen, validieren, Defaults setzen. Erst danach darf der Workflow
         Entscheidungen treffen. Und merk dir die Regel aus diesem Schritt: Was du nach dem KI-Node noch brauchst, holst du
         dir über <code>$('Node-Name')</code> zurück.
@@ -502,17 +502,17 @@ Zusammenfassung:
                 <path class="is-active" d="M 404 140 C 470 140, 490 205, 548 205"></path>
               </svg>
               <div class="n8n-node n8n-node--ai" style="left:60px; top:94px;">
-                <span class="n8n-node__icon">🤖</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-bot"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">geprüfte KI-Daten</span></div>
               <div class="n8n-node" style="left:312px; top:94px;">
-                <span class="n8n-node__icon">🔀</span><span class="ep in"></span>
+                <span class="n8n-node__icon"><i class="vic vic-shuffle"></i></span><span class="ep in"></span>
                 <span class="ep out" style="top:30px;"></span><span class="ep out" style="top:64px;"></span>
                 <span class="n8n-node__label">urgency = high?</span></div>
               <div class="n8n-node" style="left:548px; top:39px;">
-                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chat"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Slack</span></div>
               <div class="n8n-node" style="left:548px; top:159px;">
-                <span class="n8n-node__icon">📝</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-pencil"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">nur Entwurf</span></div>
             </div>
           </div>
@@ -567,7 +567,7 @@ Zusammenfassung:
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Teste Grenzfälle, nicht nur Wunschfälle</b>
+        <b class="t">Teste Grenzfälle, nicht nur Wunschfälle</b>
         Eine KI-Demo funktioniert fast immer mit perfekten Beispielen. Relevant sind die schlechten Fälle: zu wenig Kontext,
         widersprüchlicher Text, Dringlichkeit ohne klare Zuständigkeit.
       </div>
@@ -601,7 +601,7 @@ Zusammenfassung:
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Warum triggert der Workflow zuerst nur auf ein Testlabel?</li>
           <li>Warum erstellt der Workflow einen Entwurf statt direkt zu senden?</li>

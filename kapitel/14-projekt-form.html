@@ -20,13 +20,13 @@
         n8n speichert die Anfrage in Google Sheets und informiert dein Team in Slack. Das ist ein Grundmuster für
         Kontaktformulare, interne Tickets, Workshop-Anmeldungen und einfache Lead-Erfassung.</p>
       <div class="chap-meta">
-        <span>⏱ ca. 42 Minuten</span>
-        <span>🎯 Niveau: Mittel</span>
-        <span>🧩 Voraussetzung: Kapitel 7–12</span>
+        <span><i class="vic vic-clock"></i> ca. 42 Minuten</span>
+        <span><i class="vic vic-target"></i> Niveau: Mittel</span>
+        <span><i class="vic vic-layers"></i> Voraussetzung: Kapitel 7–12</span>
       </div>
 
       <div class="prereq">
-        <h4>📋 Was du brauchst</h4>
+        <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>n8n läuft und kann Webhooks/Formulare von außen erreichbar machen. In n8n Cloud ist das sofort der Fall.</li>
           <li>Ein Google-Konto mit Zugriff auf Google Sheets.</li>
@@ -56,16 +56,16 @@
                 <path class="is-active" d="M 624 150 C 700 150, 710 150, 760 150"></path>
               </svg>
               <div class="n8n-node n8n-node--trigger" style="left:50px; top:104px;">
-                <span class="n8n-node__icon">📝</span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-pencil"></i></span><span class="ep out"></span>
                 <span class="n8n-node__label">Formular</span><span class="items">1 Item</span></div>
               <div class="n8n-node n8n-node--code" style="left:300px; top:104px;">
-                <span class="n8n-node__icon">✏️</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-pencil"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Daten vorbereiten</span><span class="items">1 Item</span></div>
               <div class="n8n-node" style="left:532px; top:104px;">
-                <span class="n8n-node__icon">📊</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chart"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Sheets: Zeile</span><span class="badge badge--ok">✓</span></div>
               <div class="n8n-node" style="left:760px; top:104px;">
-                <span class="n8n-node__icon">💬</span><span class="ep in"></span><span class="ep out"></span>
+                <span class="n8n-node__icon"><i class="vic vic-chat"></i></span><span class="ep in"></span><span class="ep out"></span>
                 <span class="n8n-node__label">Slack melden</span><span class="badge badge--ok">✓</span></div>
             </div>
           </div>
@@ -75,7 +75,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Das eigentliche Lernziel</b>
+        <b class="t">Das eigentliche Lernziel</b>
         „Google Sheets“ und „Slack“ sind hier nur die Beispiele. Der Ertrag ist das Muster dahinter:
         <strong>Eingang → Normalisierung → dauerhafte Ablage → Benachrichtigung</strong>. Es taucht in sehr vielen
         Business-Automationen wieder auf.
@@ -196,7 +196,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:620px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">📝</span><b>n8n Form Trigger</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-pencil"></i></span><b>n8n Form Trigger</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -298,7 +298,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv">
-            <div class="ndv__bar"><span class="ndvic">✏️</span><b>Daten vorbereiten</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-pencil"></i></span><b>Daten vorbereiten</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols">
               <div class="ndv-panel"><div class="ndv-panel__head">⬅ Eingang <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body">
@@ -330,7 +330,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Normalisieren spart Ärger</b>
+        <b class="t">Normalisieren spart Ärger</b>
         Formulare ändern sich gern. Wenn du direkt aus dem Trigger in Sheets und Slack schreibst, verteilst du Feldlogik über
         mehrere Nodes. Ein sauberer Zwischen-Node macht spätere Änderungen kontrollierbar.
       </div>
@@ -389,7 +389,7 @@
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:640px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">📊</span><b>Google Sheets — Append Row</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-chart"></i></span><b>Google Sheets — Append Row</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -476,7 +476,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
       <figure class="figure">
         <div class="frame">
           <div class="ndv" style="max-width:560px; margin:0 auto;">
-            <div class="ndv__bar"><span class="ndvic">💬</span><b>Slack — Send a message</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
+            <div class="ndv__bar"><span class="ndvic"><i class="vic vic-chat"></i></span><b>Slack — Send a message</b><span class="ndv__exec-step">▶ Schritt ausführen</span></div>
             <div class="ndv__cols" style="grid-template-columns:1fr;">
               <div class="ndv-panel ndv-params" style="border-right:none;">
                 <div class="ndv-panel__head">Parameter</div>
@@ -538,7 +538,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
       </ol>
 
       <div class="callout callout--pareto">
-        <b class="t">⚡ Test-URL ist nicht Produktion</b>
+        <b class="t">Test-URL ist nicht Produktion</b>
         Wie beim Webhook gilt: Test-Links sind temporär. Für echte Nutzer:innen brauchst du die Production-URL und einen
         published Workflow.
       </div>
@@ -585,7 +585,7 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
       </table>
 
       <div class="prereq">
-        <h4>✅ Selbsttest</h4>
+        <h4><i class="vic vic-check-circle"></i> Selbsttest</h4>
         <ul>
           <li>Warum legen wir die Sheet-Spalten vor dem n8n-Node an?</li>
           <li>Warum gibt es einen eigenen Node „Daten vorbereiten“?</li>
