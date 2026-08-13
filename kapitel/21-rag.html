@@ -43,10 +43,15 @@
         n8n-Instanz. Zum Lernen ist das ideal. Für echte Dokumente nicht, aus drei Gründen: Nach einem Neustart ist der
         Inhalt weg. Bei knappem Speicher räumt n8n ältere Stores selbst ab. Und die Memory Keys gelten instanzweit:
         Wer auf derselben Instanz einen Simple Vector Store einfügt, sieht deinen Key in der Auswahlliste und kann
-        mitlesen. Auf n8n Cloud gelten rund 100 MB (etwa 8000 Dokumente) und sieben Tage ohne Zugriff als Grenze;
-        selbst gehostet stellst du das über <code>N8N_VECTOR_STORE_MAX_MEMORY</code> und
-        <code>N8N_VECTOR_STORE_TTL_HOURS</code> ein. Für echte Dokumente nimm später Qdrant, PGVector, Pinecone, Supabase
+        mitlesen. Für echte Dokumente nimm später Qdrant, PGVector, Pinecone, Supabase
         oder einen anderen persistenten Vector Store, also einen, der Daten dauerhaft speichert.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Grenzen des Lernspeichers</b>
+        Auf n8n Cloud gelten rund 100 MB (etwa 8000 Dokumente) und sieben Tage ohne Zugriff als Grenze. Selbst gehostet
+        stellst du beides über <code>N8N_VECTOR_STORE_MAX_MEMORY</code> und <code>N8N_VECTOR_STORE_TTL_HOURS</code> ein.
+        Fürs Durcharbeiten dieses Kapitels musst du dich darum nicht kümmern.
       </div>
 
       <h2>Das Ziel</h2>
@@ -105,7 +110,7 @@
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 21.1</span>RAG besteht aus zwei getrennten Bewegungen: Wissen laden und
+        <figcaption><span class="fig-tag">Abb. 21.1</span>RAG besteht aus zwei getrennten Vorgängen: Wissen laden und
           Wissen abfragen. Mische diese beiden Schritte am Anfang nicht.</figcaption>
       </figure>
 
@@ -312,8 +317,8 @@ return docs.map((doc) =&gt; ({ json: doc }));</pre>
       </div>
 
       <h2>Schritt 5: Data Loader konfigurieren</h2>
-      <p>Der Data Loader entscheidet, welcher Teil deiner Items überhaupt als Dokumenttext in den Store geht. Das ist
-        wichtiger als es aussieht.</p>
+      <p>Der Data Loader entscheidet, welcher Teil deiner Items überhaupt als Dokumenttext in den Store geht. Was hier
+        nicht im Text landet, kann später keine Antwort werden.</p>
 
       <ol class="steps">
         <li><h4>Data-Loader-Anschluss öffnen</h4>
@@ -326,8 +331,11 @@ return docs.map((doc) =&gt; ({ json: doc }));</pre>
           <p>Setze <strong>Mode</strong> von <strong>Load All Input Data</strong> auf
             <strong>Load Specific Data</strong>. Wir laden nicht blind das ganze JSON.</p></li>
         <li><h4>Textvorlage eintragen</h4>
-          <p>Jetzt erscheint das Feld <strong>Data</strong>. Trage dort die folgende Vorlage ein. Die doppelten
-            geschweiften Klammern sind Expressions: n8n setzt an diesen Stellen den Wert aus dem jeweiligen Item ein.</p></li>
+          <p>Jetzt erscheint das Feld <strong>Data</strong>. Schalte es zuerst auf <strong>Expression</strong> um
+            (die kleinen Reiter <strong>Fest</strong>/<strong>Expression</strong> erscheinen, sobald du mit der Maus über
+            dem Feld bist), sonst landen die geschweiften Klammern wörtlich als Text im Store. Trage dann die folgende
+            Vorlage ein. Die doppelten geschweiften Klammern sind Expressions: n8n setzt an diesen Stellen den Wert aus
+            dem jeweiligen Item ein.</p></li>
       </ol>
 
       <div class="code">
@@ -343,7 +351,9 @@ Quelle: {{ $json.source }}
         <li><h4>Metadaten ergänzen</h4>
           <p>Scrolle im Default Data Loader nach unten zu <strong>Options</strong>, klicke <strong>Add Option</strong> und
             wähle <strong>Metadata</strong>. Über <strong>Add property</strong> legst du je einen Eintrag mit
-            <strong>Name</strong> und <strong>Value</strong> an. Nutze mindestens die folgenden vier.</p></li>
+            <strong>Name</strong> und <strong>Value</strong> an. Auch die Value-Felder sind Expressions: Stelle jedes
+            einzelne auf <strong>Expression</strong> um, bevor du den Wert einträgst. Nutze mindestens die folgenden
+            vier.</p></li>
       </ol>
 
       <table class="btable">

@@ -1277,7 +1277,7 @@ ol.steps > li p { font-size: 15.5px; }
       <div class="callout callout--tip"><b class="t">Tipp</b>Eine Abkürzung oder ein Handgriff, der dir Zeit spart.</div>
       <div class="callout callout--warn"><b class="t">Achtung</b>Eine häufige Stolperfalle. Hier lohnt genaues Hinsehen.</div>
       <div class="callout callout--info"><b class="t">Hintergrund</b>Vertiefung für alle, die verstehen wollen, <em>warum</em> etwas so ist.</div>
-      <div class="callout callout--pareto"><b class="t">80/20</b>Markiert das Wissen aus den wichtigen 35 %. Wenn du wenig Zeit hast, lies zuerst diese Stellen.</div>
+      <div class="callout callout--pareto"><b class="t">80/20</b>Markiert das Wissen aus den wichtigen 35 %: dem kleinen Teil von n8n, der dir die meisten Ergebnisse bringt. Warum genau 35, erklärt Kapitel 0.1. Wenn du wenig Zeit hast, lies zuerst diese Stellen.</div>
 
       <h2>Was du an deinem Rechner brauchst</h2>
       <p>Viel ist es nicht. Die konkrete Einrichtung machen wir gemeinsam in Kapitel 2:</p>
@@ -2348,7 +2348,7 @@ docker run -it --rm <span class="ky">\</span>
             (der Cursor blinkt).</p></li>
         <li><h4>Neuen Namen tippen</h4>
           <p>Lösche den alten Text (z. B. mit <span class="kbd">Strg/⌘</span> + <span class="kbd">A</span>, dann
-            <span class="kbd">Entf</span>) und tippe: <code>Wetter-Report</code></p></li>
+            <span class="kbd">Entf</span>, auf dem Mac <span class="kbd">⌫</span>) und tippe: <code>Wetter-Report</code></p></li>
         <li><h4>Bestätigen</h4>
           <p>Drücke <span class="kbd">Enter</span> oder klicke irgendwo auf die leere Fläche. Der Name oben steht jetzt fest.</p></li>
       </ol>
@@ -2624,12 +2624,14 @@ docker run -it --rm <span class="ky">\</span>
             einen leicht bläulichen Hintergrund. Jetzt versteht es Platzhalter in doppelten geschweiften Klammern
             <code>{{ }}</code>.</p></li>
         <li><h4>Die Expression eintippen</h4>
-          <p>Trage in das (jetzt bläuliche) Value-Feld genau Folgendes ein:</p></li>
+          <p>Trage in das (jetzt bläuliche) Value-Feld genau Folgendes ein. Ein Hinweis fürs Abtippen: Sobald du
+            <code>{{</code> schreibst, ergänzt der Editor die schließenden Klammern <code>}}</code> von selbst. Tippe sie
+            nicht noch einmal.</p></li>
       </ol>
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Wert des Feldes „nachricht“ (Modus: Expression)</div>
-<pre>Wetter-Update: In Berlin sind es gerade {{ $json.current.temperature_2m }} °C bei {{ $json.current.wind_speed_10m }} km/h Wind.</pre>
+<pre>Wetter-Update: In Berlin sind es {{ $json.current.temperature_2m }} °C bei {{ $json.current.wind_speed_10m }} km/h Wind.</pre>
       </div>
 
       <div class="callout callout--tip">
@@ -2749,7 +2751,8 @@ docker run -it --rm <span class="ky">\</span>
           <p>Öffne den Chat mit deinem neuen Bot und sende ihm irgendeine Nachricht (z. B. „Hallo“). Erst danach darf er dir
             antworten. So will es Telegram.</p></li>
         <li><h4>Deine Chat-ID herausfinden</h4>
-          <p>Schreibe dem Bot <strong>@userinfobot</strong>; er antwortet sofort mit deiner numerischen <strong>Id</strong>. Notiere sie.</p></li>
+          <p>Such in Telegram den Kontakt <strong>@userinfobot</strong>. Das ist ein öffentlicher Hilfs-Bot, nicht dein
+            eigener. Schick ihm irgendeine Nachricht; er antwortet sofort mit deiner numerischen <strong>Id</strong>. Notiere sie.</p></li>
         <li><h4>Den Telegram-Node anhängen</h4>
           <p>Zieh im n8n-Canvas vom Edit-Fields-Node eine Linie ins Leere, such <code>telegram</code> und wähle
             <strong>„Telegram“</strong>. Wähle als Aktion <strong>„Send a text message“</strong>.</p></li>
@@ -2795,7 +2798,7 @@ docker run -it --rm <span class="ky">\</span>
         <li>Einen einzelnen Schritt und den ganzen Workflow ausführen und das Ergebnis prüfen.</li>
       </ul>
 
-      <p>Die Expression hat sich fast wie Zauberei angefühlt? Sie ist nur eine Vorlage mit Platzhaltern, die n8n vor jedem
+      <p>Falls sich die Expression wie Zauberei angefühlt hat: Sie ist nur eine Vorlage mit Platzhaltern, die n8n vor jedem
         Lauf frisch mit den aktuellen Daten füllt. Mehr nicht. Das nächste Kapitel macht aus dem Bauchgefühl echtes
         Verständnis: Items, JSON und der Datenfluss.</p>
 
@@ -7123,8 +7126,9 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         <li><h4>Webhook-Trigger hinzufügen</h4>
           <p>Klicke auf das große <span class="kbd">+</span>, suche <code>webhook</code> und wähle <strong>Webhook</strong>.</p></li>
         <li><h4>Node benennen</h4>
-          <p>Nenne den Node <code>Webhook Lead</code>. Wir sprechen ihn später über diesen Namen an, deshalb lohnt sich das
-            gleich zu Beginn.</p></li>
+          <p>Falls die Detailansicht des Nodes nicht schon offen ist, doppelklicke ihn. Klicke oben auf den Namen
+            <strong>Webhook</strong>, tippe <code>Webhook Lead</code> und drücke <span class="kbd">Enter</span>. Wir
+            sprechen den Node später über diesen Namen an, deshalb lohnt sich das gleich zu Beginn.</p></li>
         <li><h4>Methode setzen</h4>
           <p>Setze <strong>HTTP Method</strong> auf <strong>POST</strong>. Leads werden mit Inhalt gesendet, deshalb POST.</p></li>
         <li><h4>Pfad setzen</h4>
@@ -7171,7 +7175,16 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
             Das ist die Test-Adresse.</p></li>
         <li><h4>POST senden</h4>
           <p>Sende das JSON aus Schritt 1 an diese URL. Setze dabei den Header <code>Content-Type: application/json</code>.
-            Dieser Zusatz sagt n8n, dass JSON kommt.</p></li>
+            Dieser Zusatz sagt n8n, dass JSON kommt. Mit curl sieht der komplette Aufruf so aus; ersetze nur die URL durch
+            deine kopierte Test-URL:</p>
+          <div class="code">
+            <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Test-Aufruf mit curl</div>
+<pre>curl -X POST "https://dein-n8n/webhook-test/lead-routing" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Mira Beispiel","email":"mira@example.com","company":"Beispiel GmbH","topic":"sales","budget":12000,"message":"Wir suchen eine Automatisierung für Angebotsprozesse."}'</pre>
+          </div>
+          <p>Der Befehl funktioniert so im Terminal von macOS und Linux. Unter Windows nimm die Git-Bash oder gleich
+            Postman; die klassische Eingabeaufforderung stolpert über die Anführungszeichen.</p></li>
         <li><h4>Ausgang prüfen</h4>
           <p>Wechsle zurück zu n8n. Im Ausgang des Webhook-Nodes siehst du jetzt ein Item; deine Lead-Daten stecken darin
             unter <code>$json.body</code>. Wenn das Item da ist, hat dein Webhook funktioniert.</p></li>
@@ -7368,7 +7381,9 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         Routing passt dort also nicht hinein. Und ein Feld namens „Lead Source“ bietet der Node gar nicht an. Am nächsten kommt
         <strong>Original Source Name or ID</strong>, aber das ist wieder eine Liste mit HubSpot-eigenen Werten. Beides löst du
         über <strong>Custom Properties</strong>, also selbst definierte Felder: Du legst in HubSpot eine eigene Property an,
-        etwa <code>n8n_owner_team</code>, und trägst sie hier mit Name und Wert ein.</p>
+        etwa <code>n8n_owner_team</code>, und trägst sie hier mit Name und Wert ein. Das Anlegen passiert in HubSpot
+        selbst, nicht in n8n: Klicke dort auf das Zahnrad oben rechts und wähle
+        <strong>Data Management → Properties → Create property</strong>.</p>
 
       <div class="callout callout--warn">
         <b class="t">Dubletten skeptisch behandeln</b>
@@ -7412,7 +7427,8 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         <li><h4>Slack-Node an Sales-Zweig hängen</h4>
           <p>Hänge einen Slack-Node hinter den Sales-CRM-Node und wähle die Aktion <strong>Send a message</strong>.
             Lass <strong>Send Message To</strong> auf <strong>Channel</strong> stehen und wähle als
-            <strong>Channel</strong> den Testkanal <code>#sales-leads-test</code>.</p></li>
+            <strong>Channel</strong> den Testkanal <code>#sales-leads-test</code>. Lade deine Slack-App vorher in diesen
+            Kanal ein (tippe im Kanal <code>/invite @DeinBotName</code>), sonst darf sie dort nicht schreiben.</p></li>
         <li><h4>Slack-Text setzen</h4>
           <p><strong>Message Type</strong> bleibt auf <strong>Simple Text Message</strong>. Schalte <strong>Message Text</strong>
             auf <strong>Expression</strong> und trage den folgenden Text ein.</p></li>
@@ -7479,6 +7495,7 @@ Budget: {{ $('Lead vorbereiten').item.json.budget }} €
           <tr><td>Alles landet bei Sales</td><td><code>topic</code> fehlt oder ist anders geschrieben, <code>owner_team</code> fällt auf Sales zurück</td><td>Ausgang von <strong>Lead vorbereiten</strong> prüfen und <code>topic</code> in der Quelle korrigieren</td></tr>
           <tr><td>Ein Lead verschwindet spurlos im Switch</td><td>keine Regel trifft und <strong>Fallback Output</strong> steht auf <em>None</em></td><td>unter <strong>Options</strong> einen Fallback-Ausgang setzen</td></tr>
           <tr><td>HubSpot verweigert das Ticket</td><td><strong>Pipeline Name or ID</strong>, <strong>Stage Name or ID</strong> oder <strong>Ticket Name</strong> ist leer</td><td>alle drei Pflichtangaben füllen, Pipeline und Stage aus den Listen wählen</td></tr>
+          <tr><td>Slack meldet <code>not_in_channel</code></td><td>deine Slack-App ist kein Mitglied des Zielkanals</td><td>im Kanal <code>/invite @DeinBotName</code> ausführen, dann erneut testen</td></tr>
           <tr><td>In Slack steht <code>undefined</code></td><td><code>$json</code> zeigt hinter dem CRM-Node auf die CRM-Antwort</td><td>Lead-Felder mit <code>$('Lead vorbereiten').item.json.…</code> holen</td></tr>
           <tr><td>Production-URL antwortet mit 404</td><td>Workflow ist gespeichert, aber nicht published</td><td>Publish klicken und die Production-URL danach neu kopieren</td></tr>
         </tbody>
@@ -8360,7 +8377,7 @@ IBAN: DE89 3704 0044 0532 0130 00</pre>
             automatisch.</p></li>
         <li><h4>Credential auswählen</h4>
           <p>Wähle oben im Node deine IMAP-Credential aus, also den gespeicherten Zugang zu deinem Postfach. Hast du
-            noch keine, lege dort eine Test-Credential an. Wie das geht, kennst du aus Kapitel 7.</p></li>
+            noch keine, lege dort eine Test-Credential an. Wie das geht, kennst du aus Kapitel 12.</p></li>
         <li><h4>Postfach prüfen</h4>
           <p>Im Feld <strong>Mailbox Name</strong> steht bereits <code>INBOX</code> (der Posteingang). Lass es so.
             Darunter steht <strong>Action</strong> auf <strong>Mark as Read</strong> („als gelesen markieren“). Auch das
@@ -8635,7 +8652,7 @@ return {
       <ol class="steps">
         <li><h4>IF-Node anhängen</h4>
           <p>Ziehe von <strong>Regel-Extraktion</strong> eine Linie ins Leere, suche <code>if</code> und wähle
-            <strong>If</strong>, den Verzweigungs-Node aus Kapitel 9. Im Node-Panel steht er so geschrieben, im Buch
+            <strong>If</strong>, den Verzweigungs-Node aus Kapitel 10. Im Node-Panel steht er so geschrieben, im Buch
             nennen wir ihn weiter IF-Node.</p></li>
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>Regeln sicher?</code>.</p></li>
@@ -8943,7 +8960,7 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
           <p>Erstelle ein PDF aus einem Screenshot oder lösche wichtige Felder. Erwartung: Nachricht im Slack-Kanal,
             keine blinde Speicherung.</p></li>
         <li><h4>Executions öffnen</h4>
-          <p>Öffne nach jedem Test die Liste <strong>Executions</strong> (die Ausführungsliste aus Kapitel 12). Klicke
+          <p>Öffne nach jedem Test die Liste <strong>Executions</strong> (die Ausführungsliste aus Kapitel 3). Klicke
             den Lauf an und verfolge, welchen Weg das Item genommen hat: Regeln, KI-Fallback oder Review.</p></li>
         <li><h4>Workflow erst danach publishen</h4>
           <p>Klicke erst dann oben rechts auf <strong>Publish</strong>, wenn alle drei Fälle erwartungsgemäß laufen.
@@ -10640,10 +10657,15 @@ Regeln:
         n8n-Instanz. Zum Lernen ist das ideal. Für echte Dokumente nicht, aus drei Gründen: Nach einem Neustart ist der
         Inhalt weg. Bei knappem Speicher räumt n8n ältere Stores selbst ab. Und die Memory Keys gelten instanzweit:
         Wer auf derselben Instanz einen Simple Vector Store einfügt, sieht deinen Key in der Auswahlliste und kann
-        mitlesen. Auf n8n Cloud gelten rund 100 MB (etwa 8000 Dokumente) und sieben Tage ohne Zugriff als Grenze;
-        selbst gehostet stellst du das über <code>N8N_VECTOR_STORE_MAX_MEMORY</code> und
-        <code>N8N_VECTOR_STORE_TTL_HOURS</code> ein. Für echte Dokumente nimm später Qdrant, PGVector, Pinecone, Supabase
+        mitlesen. Für echte Dokumente nimm später Qdrant, PGVector, Pinecone, Supabase
         oder einen anderen persistenten Vector Store, also einen, der Daten dauerhaft speichert.
+      </div>
+
+      <div class="callout callout--info">
+        <b class="t">Grenzen des Lernspeichers</b>
+        Auf n8n Cloud gelten rund 100 MB (etwa 8000 Dokumente) und sieben Tage ohne Zugriff als Grenze. Selbst gehostet
+        stellst du beides über <code>N8N_VECTOR_STORE_MAX_MEMORY</code> und <code>N8N_VECTOR_STORE_TTL_HOURS</code> ein.
+        Fürs Durcharbeiten dieses Kapitels musst du dich darum nicht kümmern.
       </div>
 
       <h2>Das Ziel</h2>
@@ -10702,7 +10724,7 @@ Regeln:
             </div>
           </div>
         </div>
-        <figcaption><span class="fig-tag">Abb. 21.1</span>RAG besteht aus zwei getrennten Bewegungen: Wissen laden und
+        <figcaption><span class="fig-tag">Abb. 21.1</span>RAG besteht aus zwei getrennten Vorgängen: Wissen laden und
           Wissen abfragen. Mische diese beiden Schritte am Anfang nicht.</figcaption>
       </figure>
 
@@ -10909,8 +10931,8 @@ return docs.map((doc) =&gt; ({ json: doc }));</pre>
       </div>
 
       <h2>Schritt 5: Data Loader konfigurieren</h2>
-      <p>Der Data Loader entscheidet, welcher Teil deiner Items überhaupt als Dokumenttext in den Store geht. Das ist
-        wichtiger als es aussieht.</p>
+      <p>Der Data Loader entscheidet, welcher Teil deiner Items überhaupt als Dokumenttext in den Store geht. Was hier
+        nicht im Text landet, kann später keine Antwort werden.</p>
 
       <ol class="steps">
         <li><h4>Data-Loader-Anschluss öffnen</h4>
@@ -10923,8 +10945,11 @@ return docs.map((doc) =&gt; ({ json: doc }));</pre>
           <p>Setze <strong>Mode</strong> von <strong>Load All Input Data</strong> auf
             <strong>Load Specific Data</strong>. Wir laden nicht blind das ganze JSON.</p></li>
         <li><h4>Textvorlage eintragen</h4>
-          <p>Jetzt erscheint das Feld <strong>Data</strong>. Trage dort die folgende Vorlage ein. Die doppelten
-            geschweiften Klammern sind Expressions: n8n setzt an diesen Stellen den Wert aus dem jeweiligen Item ein.</p></li>
+          <p>Jetzt erscheint das Feld <strong>Data</strong>. Schalte es zuerst auf <strong>Expression</strong> um
+            (die kleinen Reiter <strong>Fest</strong>/<strong>Expression</strong> erscheinen, sobald du mit der Maus über
+            dem Feld bist), sonst landen die geschweiften Klammern wörtlich als Text im Store. Trage dann die folgende
+            Vorlage ein. Die doppelten geschweiften Klammern sind Expressions: n8n setzt an diesen Stellen den Wert aus
+            dem jeweiligen Item ein.</p></li>
       </ol>
 
       <div class="code">
@@ -10940,7 +10965,9 @@ Quelle: {{ $json.source }}
         <li><h4>Metadaten ergänzen</h4>
           <p>Scrolle im Default Data Loader nach unten zu <strong>Options</strong>, klicke <strong>Add Option</strong> und
             wähle <strong>Metadata</strong>. Über <strong>Add property</strong> legst du je einen Eintrag mit
-            <strong>Name</strong> und <strong>Value</strong> an. Nutze mindestens die folgenden vier.</p></li>
+            <strong>Name</strong> und <strong>Value</strong> an. Auch die Value-Felder sind Expressions: Stelle jedes
+            einzelne auf <strong>Expression</strong> um, bevor du den Wert einträgst. Nutze mindestens die folgenden
+            vier.</p></li>
       </ol>
 
       <table class="btable">
@@ -11987,7 +12014,7 @@ return inputItems.map((item) =&gt; {
         <ul>
           <li>Eine n8n-Instanz, lokal oder in der Cloud.</li>
           <li>Keine API-Credentials: Wir bauen uns die externe API mit Code-Nodes selbst nach.</li>
-          <li>Grundverständnis für Items, IF und Schleifen (Kapitel 5, 8 und 10).</li>
+          <li>Grundverständnis für Items, IF und Schleifen (Kapitel 5 und 10).</li>
           <li>Bewusst kleine Testdaten. Mit echten Massendaten wird das Thema schnell unübersichtlich.</li>
         </ul>
       </div>
@@ -12088,7 +12115,7 @@ return inputItems.map((item) =&gt; {
 
       <ol class="steps">
         <li><h4>Neuen Workflow erstellen</h4>
-          <p>Lege wie in Kapitel 5 einen neuen, leeren Workflow an. Nenne ihn
+          <p>Lege wie in Kapitel 4 einen neuen, leeren Workflow an. Nenne ihn
             <code>Batching und Rate-Limits lernen</code>.</p></li>
         <li><h4>Manual Trigger hinzufügen</h4>
           <p>Füge als ersten Node einen <strong>Manual Trigger</strong> hinzu. Im Node-Panel heißt der Eintrag
@@ -13149,7 +13176,7 @@ volumes:
 
               <div class="n8n-sticky" style="left:34px; top:178px; max-width:470px;">
                 <b>Single-Instance</b><br>
-                Editor, Trigger und Ausführung liegen in einem Prozess. Das ist gut zum Lernen und für kleine Setups.
+                Editor, Trigger und Ausführung (Execution) liegen in einem Prozess. Das ist gut zum Lernen und für kleine Setups.
                 Bei langen Jobs blockiert dieselbe Instanz aber schnell mehrere Rollen zugleich.
               </div>
 

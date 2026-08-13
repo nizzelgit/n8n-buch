@@ -136,8 +136,9 @@
         <li><h4>Webhook-Trigger hinzufügen</h4>
           <p>Klicke auf das große <span class="kbd">+</span>, suche <code>webhook</code> und wähle <strong>Webhook</strong>.</p></li>
         <li><h4>Node benennen</h4>
-          <p>Nenne den Node <code>Webhook Lead</code>. Wir sprechen ihn später über diesen Namen an, deshalb lohnt sich das
-            gleich zu Beginn.</p></li>
+          <p>Falls die Detailansicht des Nodes nicht schon offen ist, doppelklicke ihn. Klicke oben auf den Namen
+            <strong>Webhook</strong>, tippe <code>Webhook Lead</code> und drücke <span class="kbd">Enter</span>. Wir
+            sprechen den Node später über diesen Namen an, deshalb lohnt sich das gleich zu Beginn.</p></li>
         <li><h4>Methode setzen</h4>
           <p>Setze <strong>HTTP Method</strong> auf <strong>POST</strong>. Leads werden mit Inhalt gesendet, deshalb POST.</p></li>
         <li><h4>Pfad setzen</h4>
@@ -184,7 +185,16 @@
             Das ist die Test-Adresse.</p></li>
         <li><h4>POST senden</h4>
           <p>Sende das JSON aus Schritt 1 an diese URL. Setze dabei den Header <code>Content-Type: application/json</code>.
-            Dieser Zusatz sagt n8n, dass JSON kommt.</p></li>
+            Dieser Zusatz sagt n8n, dass JSON kommt. Mit curl sieht der komplette Aufruf so aus; ersetze nur die URL durch
+            deine kopierte Test-URL:</p>
+          <div class="code">
+            <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Test-Aufruf mit curl</div>
+<pre>curl -X POST "https://dein-n8n/webhook-test/lead-routing" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Mira Beispiel","email":"mira@example.com","company":"Beispiel GmbH","topic":"sales","budget":12000,"message":"Wir suchen eine Automatisierung für Angebotsprozesse."}'</pre>
+          </div>
+          <p>Der Befehl funktioniert so im Terminal von macOS und Linux. Unter Windows nimm die Git-Bash oder gleich
+            Postman; die klassische Eingabeaufforderung stolpert über die Anführungszeichen.</p></li>
         <li><h4>Ausgang prüfen</h4>
           <p>Wechsle zurück zu n8n. Im Ausgang des Webhook-Nodes siehst du jetzt ein Item; deine Lead-Daten stecken darin
             unter <code>$json.body</code>. Wenn das Item da ist, hat dein Webhook funktioniert.</p></li>
@@ -381,7 +391,9 @@
         Routing passt dort also nicht hinein. Und ein Feld namens „Lead Source“ bietet der Node gar nicht an. Am nächsten kommt
         <strong>Original Source Name or ID</strong>, aber das ist wieder eine Liste mit HubSpot-eigenen Werten. Beides löst du
         über <strong>Custom Properties</strong>, also selbst definierte Felder: Du legst in HubSpot eine eigene Property an,
-        etwa <code>n8n_owner_team</code>, und trägst sie hier mit Name und Wert ein.</p>
+        etwa <code>n8n_owner_team</code>, und trägst sie hier mit Name und Wert ein. Das Anlegen passiert in HubSpot
+        selbst, nicht in n8n: Klicke dort auf das Zahnrad oben rechts und wähle
+        <strong>Data Management → Properties → Create property</strong>.</p>
 
       <div class="callout callout--warn">
         <b class="t">Dubletten skeptisch behandeln</b>
@@ -425,7 +437,8 @@
         <li><h4>Slack-Node an Sales-Zweig hängen</h4>
           <p>Hänge einen Slack-Node hinter den Sales-CRM-Node und wähle die Aktion <strong>Send a message</strong>.
             Lass <strong>Send Message To</strong> auf <strong>Channel</strong> stehen und wähle als
-            <strong>Channel</strong> den Testkanal <code>#sales-leads-test</code>.</p></li>
+            <strong>Channel</strong> den Testkanal <code>#sales-leads-test</code>. Lade deine Slack-App vorher in diesen
+            Kanal ein (tippe im Kanal <code>/invite @DeinBotName</code>), sonst darf sie dort nicht schreiben.</p></li>
         <li><h4>Slack-Text setzen</h4>
           <p><strong>Message Type</strong> bleibt auf <strong>Simple Text Message</strong>. Schalte <strong>Message Text</strong>
             auf <strong>Expression</strong> und trage den folgenden Text ein.</p></li>
@@ -492,6 +505,7 @@ Budget: {{ $('Lead vorbereiten').item.json.budget }} €
           <tr><td>Alles landet bei Sales</td><td><code>topic</code> fehlt oder ist anders geschrieben, <code>owner_team</code> fällt auf Sales zurück</td><td>Ausgang von <strong>Lead vorbereiten</strong> prüfen und <code>topic</code> in der Quelle korrigieren</td></tr>
           <tr><td>Ein Lead verschwindet spurlos im Switch</td><td>keine Regel trifft und <strong>Fallback Output</strong> steht auf <em>None</em></td><td>unter <strong>Options</strong> einen Fallback-Ausgang setzen</td></tr>
           <tr><td>HubSpot verweigert das Ticket</td><td><strong>Pipeline Name or ID</strong>, <strong>Stage Name or ID</strong> oder <strong>Ticket Name</strong> ist leer</td><td>alle drei Pflichtangaben füllen, Pipeline und Stage aus den Listen wählen</td></tr>
+          <tr><td>Slack meldet <code>not_in_channel</code></td><td>deine Slack-App ist kein Mitglied des Zielkanals</td><td>im Kanal <code>/invite @DeinBotName</code> ausführen, dann erneut testen</td></tr>
           <tr><td>In Slack steht <code>undefined</code></td><td><code>$json</code> zeigt hinter dem CRM-Node auf die CRM-Antwort</td><td>Lead-Felder mit <code>$('Lead vorbereiten').item.json.…</code> holen</td></tr>
           <tr><td>Production-URL antwortet mit 404</td><td>Workflow ist gespeichert, aber nicht published</td><td>Publish klicken und die Production-URL danach neu kopieren</td></tr>
         </tbody>

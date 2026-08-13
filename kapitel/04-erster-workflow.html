@@ -104,7 +104,7 @@
             (der Cursor blinkt).</p></li>
         <li><h4>Neuen Namen tippen</h4>
           <p>Lösche den alten Text (z. B. mit <span class="kbd">Strg/⌘</span> + <span class="kbd">A</span>, dann
-            <span class="kbd">Entf</span>) und tippe: <code>Wetter-Report</code></p></li>
+            <span class="kbd">Entf</span>, auf dem Mac <span class="kbd">⌫</span>) und tippe: <code>Wetter-Report</code></p></li>
         <li><h4>Bestätigen</h4>
           <p>Drücke <span class="kbd">Enter</span> oder klicke irgendwo auf die leere Fläche. Der Name oben steht jetzt fest.</p></li>
       </ol>
@@ -380,12 +380,14 @@
             einen leicht bläulichen Hintergrund. Jetzt versteht es Platzhalter in doppelten geschweiften Klammern
             <code>{{ }}</code>.</p></li>
         <li><h4>Die Expression eintippen</h4>
-          <p>Trage in das (jetzt bläuliche) Value-Feld genau Folgendes ein:</p></li>
+          <p>Trage in das (jetzt bläuliche) Value-Feld genau Folgendes ein. Ein Hinweis fürs Abtippen: Sobald du
+            <code>{{</code> schreibst, ergänzt der Editor die schließenden Klammern <code>}}</code> von selbst. Tippe sie
+            nicht noch einmal.</p></li>
       </ol>
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Wert des Feldes „nachricht“ (Modus: Expression)</div>
-<pre>Wetter-Update: In Berlin sind es gerade {{ $json.current.temperature_2m }} °C bei {{ $json.current.wind_speed_10m }} km/h Wind.</pre>
+<pre>Wetter-Update: In Berlin sind es {{ $json.current.temperature_2m }} °C bei {{ $json.current.wind_speed_10m }} km/h Wind.</pre>
       </div>
 
       <div class="callout callout--tip">
@@ -505,7 +507,8 @@
           <p>Öffne den Chat mit deinem neuen Bot und sende ihm irgendeine Nachricht (z. B. „Hallo“). Erst danach darf er dir
             antworten. So will es Telegram.</p></li>
         <li><h4>Deine Chat-ID herausfinden</h4>
-          <p>Schreibe dem Bot <strong>@userinfobot</strong>; er antwortet sofort mit deiner numerischen <strong>Id</strong>. Notiere sie.</p></li>
+          <p>Such in Telegram den Kontakt <strong>@userinfobot</strong>. Das ist ein öffentlicher Hilfs-Bot, nicht dein
+            eigener. Schick ihm irgendeine Nachricht; er antwortet sofort mit deiner numerischen <strong>Id</strong>. Notiere sie.</p></li>
         <li><h4>Den Telegram-Node anhängen</h4>
           <p>Zieh im n8n-Canvas vom Edit-Fields-Node eine Linie ins Leere, such <code>telegram</code> und wähle
             <strong>„Telegram“</strong>. Wähle als Aktion <strong>„Send a text message“</strong>.</p></li>
@@ -551,7 +554,7 @@
         <li>Einen einzelnen Schritt und den ganzen Workflow ausführen und das Ergebnis prüfen.</li>
       </ul>
 
-      <p>Die Expression hat sich fast wie Zauberei angefühlt? Sie ist nur eine Vorlage mit Platzhaltern, die n8n vor jedem
+      <p>Falls sich die Expression wie Zauberei angefühlt hat: Sie ist nur eine Vorlage mit Platzhaltern, die n8n vor jedem
         Lauf frisch mit den aktuellen Daten füllt. Mehr nicht. Das nächste Kapitel macht aus dem Bauchgefühl echtes
         Verständnis: Items, JSON und der Datenfluss.</p>
 
