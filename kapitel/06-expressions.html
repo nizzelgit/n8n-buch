@@ -44,8 +44,8 @@
       </div>
 
       <h2>Fest oder Expression? Der Schalter, den du ständig brauchst</h2>
-      <p>Fast jedes Eingabefeld in n8n hat zwei Modi. Fahr mit der Maus über das Feld, dann erscheinen zwei winzige Reiter
-        direkt darüber (bei schmalen Feldern auch daneben):</p>
+      <p>Fast jedes Eingabefeld in n8n hat zwei Modi. Fahr mit der Maus über das Feld, dann erscheinen zwei winzige Reiter,
+        also kleine Umschalt-Knöpfe, direkt darüber (bei schmalen Feldern auch daneben):</p>
       <ul>
         <li><strong>Fest</strong> (engl. <em>Fixed</em>): Was du tippst, bleibt wörtlich stehen. <code>{{ }}</code> wäre hier nur Text.</li>
         <li><strong>Expression</strong>: Das Feld wertet <code>{{ }}</code> aus. Es bekommt einen leicht bläulichen Hintergrund und Monospace-Schrift.</li>
@@ -54,7 +54,7 @@
       <ol class="steps">
         <li><h4>Ein Feld in den Expression-Modus schalten</h4>
           <p>Klicke auf den Reiter <strong>Expression</strong> über dem Feld. Der Hintergrund wird leicht blau, die Schrift
-            wechselt zu Monospace. Das ist dein Zeichen: „Hier verstehe ich jetzt <code>{{ }}</code>.“</p>
+            wechselt zu Monospace. Beides heißt: „Hier verstehe ich jetzt <code>{{ }}</code>.“</p>
           <p>Abkürzung für Tastatur-Menschen: Ist das Feld noch leer, tippst du einfach ein
             <span class="kbd">=</span>. n8n schaltet dann von selbst in den Expression-Modus.</p></li>
         <li><h4>Was du jetzt zusätzlich siehst</h4>
@@ -87,7 +87,7 @@
       </figure>
 
       <div class="callout callout--pareto">
-        <b class="t">Die Ergebnis-Vorschau ist dein bester Freund</b>
+        <b class="t">Verlass dich auf die Ergebnis-Vorschau</b>
         Du musst nicht raten und nicht ständig ausführen. Tippe, schau auf „Ergebnis“, korrigiere. Steht dort der erwartete
         Wert, stimmt deine Expression. Steht dort <code>[undefined]</code> oder ein roter Fehler, weißt du es sofort.
       </div>
@@ -101,8 +101,8 @@
         <div class="frame">
           <div class="n8n-expr" style="max-width:620px; margin:0 auto;">
             <div class="n8n-expr__head"><span class="ic">𝑓𝑥</span> Ausdruckseditor</div>
-            <div class="n8n-expr__code">🌤️ In Berlin sind es <span class="expr-tok">{{ <span class="expr-var">$json</span>.current.temperature_2m }}</span> °C bei <span class="expr-tok">{{ <span class="expr-var">$json</span>.current.wind_speed_10m }}</span> km/h Wind.</div>
-            <div class="n8n-expr__result"><span class="lbl">Ergebnis</span><span>🌤️ In Berlin sind es 17.4 °C bei 12.3 km/h Wind.</span></div>
+            <div class="n8n-expr__code">Wetter-Update: In Berlin sind es <span class="expr-tok">{{ <span class="expr-var">$json</span>.current.temperature_2m }}</span> °C bei <span class="expr-tok">{{ <span class="expr-var">$json</span>.current.wind_speed_10m }}</span> km/h Wind.</div>
+            <div class="n8n-expr__result"><span class="lbl">Ergebnis</span><span>Wetter-Update: In Berlin sind es 17.4 °C bei 12.3 km/h Wind.</span></div>
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 6.2</span>Lila hinterlegt sind die <b>Platzhalter</b> (<code>{{ }}</code>), der Rest
@@ -117,7 +117,7 @@
       </div>
 
       <h2>Dein Werkzeugkasten: die wichtigsten Variablen</h2>
-      <p>In jeder Expression stehen dir besondere Variablen zur Verfügung (sie beginnen mit <code>$</code>). Zwei kennst du schon
+      <p>Expressions kennen eine Reihe eingebauter Variablen, alle beginnen mit <code>$</code>. Zwei kennst du schon
         aus Kapitel 5. Hier stehen die, die du im Alltag wirklich brauchst. Die vollständige Aufstellung führt die n8n-Doku
         unter „Expression reference“:</p>
 
@@ -147,12 +147,13 @@
       <div class="callout callout--pareto">
         <b class="t">Die vier, mit denen du fast alles baust</b>
         <code>$json.feld</code> · <code>$('Node').item.json.feld</code> · <code>$now</code> · und ein <code>?</code> für
-        Entscheidungen. Wenn du <em>diese</em> sicher beherrschst, baust du fast jeden Workflow. Den Rest holst du dir bei Bedarf.
+        Entscheidungen. Damit kommst du durch jedes Projekt in diesem Buch. Den Rest holst du dir bei Bedarf.
       </div>
 
       <h2>Mit Text arbeiten (das brauchst du am häufigsten)</h2>
-      <p>Texte zusammensetzen, Groß-/Kleinschreibung anpassen, Teile herausschneiden. Das ist Alltag. An einen Wert hängst du
-        dafür mit einem Punkt eine <strong>Funktion</strong> an. Nimm als Beispiel ein Item mit
+      <p>Texte zusammensetzen, Groß-/Kleinschreibung anpassen, Teile herausschneiden. Das ist Alltag. Dafür hängst du an einen
+        Wert mit einem Punkt eine <strong>Funktion</strong> an. Eine Funktion ist ein eingebauter Mini-Befehl, etwa „mach alles
+        groß“. Nimm als Beispiel ein Item mit
         <code>name = "anna schmidt"</code> und <code>email = "Anna@Example.com "</code> (mit Leerzeichen am Ende):</p>
 
       <table class="btable">
@@ -210,9 +211,9 @@
 
       <h2>Mit Datum &amp; Uhrzeit arbeiten</h2>
       <p>Datum ist das Thema, an dem die meisten Einsteiger:innen hängenbleiben. Zu Unrecht.
-        <code>$now</code> und <code>$today</code> sind keine simplen Texte, sondern <strong>Datum-Objekte</strong> aus der
-        Bibliothek Luxon, die n8n mitbringt. Damit kannst du <em>rechnen</em> (Tage addieren) und sie in <em>jedes Format</em>
-        bringen:</p>
+        <code>$now</code> und <code>$today</code> sind keine simplen Texte. Sie sind <strong>Datum-Objekte</strong> aus der
+        Bibliothek Luxon, einer Sammlung fertiger Datums-Werkzeuge, die n8n mitbringt. Mit einem Datum-Objekt kannst du
+        <em>rechnen</em>, zum Beispiel Tage addieren. Und du bringst es in <em>jedes Format</em>:</p>
 
       <table class="btable">
         <thead><tr><th>Expression</th><th>Ergebnis (Beispiel)</th></tr></thead>
@@ -252,13 +253,14 @@
 
       <h2>Entscheidungen treffen (ohne IF-Node)</h2>
       <p>Oft willst du <em>innerhalb</em> einer Expression eine kleine Weiche stellen: „ist es wärmer als 20 Grad, dann …, sonst …“.
-        Dafür gibt es den <strong>Frage-Doppelpunkt-Operator</strong>: <code>Bedingung ? Wert-wenn-wahr : Wert-wenn-falsch</code>.</p>
+        Dafür gibt es den <strong>Frage-Doppelpunkt-Operator</strong>: <code>Bedingung ? Wert-wenn-wahr : Wert-wenn-falsch</code>.
+        Lies das <code>?</code> als „dann“ und das <code>:</code> als „sonst“.</p>
 
       <table class="btable">
         <thead><tr><th>Expression</th><th>Ergebnis</th></tr></thead>
         <tbody>
           <tr><td><code>{{ $json.temp &gt; 20 ? 'warm' : 'kühl' }}</code></td><td>bei temp = 17.5 → „kühl“</td></tr>
-          <tr><td><code>{{ $json.temp &gt; 25 ? '🔥 heiß' : $json.temp &gt; 15 ? '😎 mild' : '🧥 kalt' }}</code></td><td>verkettet für drei Stufen → „😎 mild“</td></tr>
+          <tr><td><code>{{ $json.temp &gt; 25 ? 'heiß' : $json.temp &gt; 15 ? 'mild' : 'kalt' }}</code></td><td>verkettet für drei Stufen → „mild“</td></tr>
           <tr><td><code>{{ $json.name || 'Unbekannt' }}</code></td><td>nimm <code>name</code>, und falls leer/fehlt → „Unbekannt“</td></tr>
           <tr><td><code>{{ $ifEmpty($json.name, 'Unbekannt') }}</code></td><td>dieselbe Idee als <span class="hint">n8n-Helfer</span>: leerer Text, <code>null</code> oder fehlender Wert werden ersetzt</td></tr>
           <tr><td><code>{{ $json.user?.email }}</code></td><td>kein Absturz, wenn <code>user</code> fehlt; die Expression liefert dann einfach nichts</td></tr>
@@ -277,7 +279,7 @@
 
       <h3>1) Autovervollständigung</h3>
       <p>Tippe in einem Expression-Feld <code>{{ $json.</code>, und n8n klappt eine Liste mit genau den Feldern auf, die gerade
-        hereinkommen, samt Datentyp. Mit den Pfeiltasten auswählen, <span class="kbd">Enter</span> übernimmt:</p>
+        hereinkommen, samt Datentyp (Zahl, Text …). Wähle mit den Pfeiltasten aus, <span class="kbd">Enter</span> übernimmt:</p>
 
       <figure class="figure">
         <div class="frame" style="display:flex; justify-content:center; padding:24px; background:#eef0f4; border-radius:12px;">
@@ -296,9 +298,9 @@
       </figure>
 
       <h3>2) Drag-and-drop aus dem Schema</h3>
-      <p>Noch bequemer: Wechsle im <strong>Eingangspanel</strong> (linke Spalte der NDV) auf den Reiter <strong>Schema</strong>,
-        pack dir ein Feld und zieh es direkt ins Expression-Feld. n8n baut die Expression dann selbst, inklusive
-        <code>{{ }}</code> und richtigem Pfad.</p>
+      <p>Noch bequemer: Wechsle im <strong>Eingangspanel</strong> (die linke Spalte im geöffneten Node-Fenster, der NDV) auf den
+        Reiter <strong>Schema</strong>. Klicke dort ein Feld an, halte die Maustaste gedrückt und zieh es direkt ins
+        Expression-Feld. n8n baut die Expression dann selbst, inklusive <code>{{ }}</code> und richtigem Pfad.</p>
 
       <div class="clickpath">
         <span class="step"><span class="n">1</span> Feld auf „Expression“ schalten</span>
@@ -313,7 +315,7 @@
       <hr>
 
       <h2>Mini-Übung: aus rohen Daten eine richtig schöne Nachricht</h2>
-      <p>Jetzt führen wir alles zusammen. Wir nehmen den Wetter-Workflow aus Kapitel 4 und bauen den Satz im
+      <p>Wir nehmen den Wetter-Workflow aus Kapitel 4 und bauen den Satz im
         <strong>Edit-Fields-Node</strong> deutlich aus: mit gerundeter Temperatur, einer Wenn-dann-Entscheidung und dem heutigen Datum.</p>
 
       <ol class="steps">
@@ -329,8 +331,8 @@
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Wert des Feldes „nachricht“, Modus: Expression</div>
-<pre>🌤️ Wetter für Berlin am {{ $now.toFormat('dd.MM.yyyy') }}:
-Es sind {{ Math.round($json.current.temperature_2m) }} °C, {{ $json.current.temperature_2m &gt; 18 ? 'angenehm 😎' : 'eher frisch 🧥' }}.
+<pre>Wetter für Berlin am {{ $now.toFormat('dd.MM.yyyy') }}:
+Es sind {{ Math.round($json.current.temperature_2m) }} °C, {{ $json.current.temperature_2m &gt; 18 ? 'angenehm' : 'eher frisch' }}.
 Wind: {{ Math.round($json.current.wind_speed_10m) }} km/h.</pre>
       </div>
 
@@ -340,11 +342,11 @@ Wind: {{ Math.round($json.current.wind_speed_10m) }} km/h.</pre>
         <div class="frame">
           <div class="n8n-expr" style="max-width:620px; margin:0 auto;">
             <div class="n8n-expr__head"><span class="ic">𝑓𝑥</span> Ausdruckseditor — Feld „nachricht“</div>
-            <div class="n8n-expr__code">🌤️ Wetter für Berlin am <span class="expr-tok">{{ <span class="expr-var">$now</span>.toFormat('dd.MM.yyyy') }}</span>:
-Es sind <span class="expr-tok">{{ Math.round(<span class="expr-var">$json</span>.current.temperature_2m) }}</span> °C, <span class="expr-tok">{{ <span class="expr-var">$json</span>.current.temperature_2m &gt; 18 ? 'angenehm 😎' : 'eher frisch 🧥' }}</span>.
+            <div class="n8n-expr__code">Wetter für Berlin am <span class="expr-tok">{{ <span class="expr-var">$now</span>.toFormat('dd.MM.yyyy') }}</span>:
+Es sind <span class="expr-tok">{{ Math.round(<span class="expr-var">$json</span>.current.temperature_2m) }}</span> °C, <span class="expr-tok">{{ <span class="expr-var">$json</span>.current.temperature_2m &gt; 18 ? 'angenehm' : 'eher frisch' }}</span>.
 Wind: <span class="expr-tok">{{ Math.round(<span class="expr-var">$json</span>.current.wind_speed_10m) }}</span> km/h.</div>
-            <div class="n8n-expr__result"><span class="lbl">Ergebnis</span><span>🌤️ Wetter für Berlin am 29.05.2026:
-Es sind 17 °C, eher frisch 🧥.
+            <div class="n8n-expr__result"><span class="lbl">Ergebnis</span><span>Wetter für Berlin am 29.05.2026:
+Es sind 17 °C, eher frisch.
 Wind: 12 km/h.</span></div>
           </div>
         </div>
@@ -354,8 +356,8 @@ Wind: 12 km/h.</span></div>
 
       <ol class="steps" style="counter-reset: st 3;">
         <li><h4>Ausführen und prüfen</h4>
-          <p>Klick auf <strong>„▶ Schritt ausführen“</strong>. Im Ausgang steht jetzt deine mehrzeilige Nachricht. Von dort
-            kannst du sie später weiterreichen, etwa per Telegram oder E-Mail.</p></li>
+          <p>Klick oben im Node-Fenster auf <strong>„▶ Schritt ausführen“</strong>. Im Ausgang (rechte Spalte) steht jetzt
+            deine mehrzeilige Nachricht. Von dort kannst du sie später weiterreichen, etwa per Telegram oder E-Mail.</p></li>
         <li><h4>Speichern</h4>
           <p><span class="kbd">Strg/⌘</span> + <span class="kbd">S</span>. Geschafft.</p></li>
       </ol>
@@ -386,6 +388,7 @@ Wind: 12 km/h.</span></div>
       </div>
 
       <h2>Konkrete Testfälle</h2>
+      <p>Probier diese vier Mini-Tests direkt in einem Expression-Feld aus. Die Ergebnis-Vorschau zeigt dir sofort, ob alles stimmt:</p>
       <table class="btable">
         <thead><tr><th>Test</th><th>Expression</th><th>Erwartung</th></tr></thead>
         <tbody>
@@ -416,7 +419,7 @@ Wind: 12 km/h.</span></div>
         5) Die Autovervollständigung zeigt die Felder, die gerade wirklich hereinkommen: kein Raten, keine Tippfehler.
       </div>
 
-      <p>Du hast jetzt das Werkzeug, mit dem du Daten in jede gewünschte Form bringst. Ab hier nehmen wir die einzelnen
+      <p>Du hast jetzt das Werkzeug, um Daten in die Form zu bringen, die du brauchst. Ab hier nehmen wir die einzelnen
         Bausteine gründlich auseinander. Den Anfang macht die Frage, <em>wann</em> ein Workflow überhaupt loslegt:
         die <strong>Trigger-Nodes</strong>, manuell, nach Zeitplan oder per Webhook.</p>
 

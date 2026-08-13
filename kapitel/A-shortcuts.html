@@ -16,8 +16,8 @@
 
       <div class="chap-eyebrow"><span class="knum">A</span> Anhang</div>
       <h1 class="chap-title">Tastenkürzel-Referenz</h1>
-      <p class="chap-lede">Tastenkürzel sparen in n8n vor allem Such- und Mauswege. Für Einsteiger:innen sind sie
-        kein Pflichtwissen, aber ein guter Hebel, sobald du öfter Workflows baust oder bestehende Workflows prüfst.</p>
+      <p class="chap-lede">Tastenkürzel ersparen dir Mauswege. Auswendig lernen musst du sie nicht: Dieses Kapitel
+        ist zum Nachschlagen da. Komm zurück, sobald du öfter Workflows baust und schneller arbeiten willst.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 9 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Nachschlagen</span>
@@ -26,39 +26,42 @@
 
       <div class="callout callout--pareto">
         <b class="t">80/20 für Tastenkürzel</b>
-        Wenn du nur fünf Kürzel nutzt, dann diese: <span class="kbd">N</span> für die Node-Suche,
-        <span class="kbd">Esc</span> zum Schließen, <span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span>
-        für den Testlauf, <span class="kbd">Entf</span> zum Löschen ausgewählter Nodes und
-        <span class="kbd">Shift</span> + <span class="kbd">P</span> zum Publishen. Speichern steht bewusst nicht in
-        der Liste: Das erledigt n8n seit dem Autosave von selbst.
+        Wenn du nur fünf Kürzel nutzt, dann diese: <span class="kbd">N</span> öffnet die Node-Suche.
+        <span class="kbd">Esc</span> schließt das gerade offene Fenster. <span class="kbd">Strg/⌘</span> +
+        <span class="kbd">Enter</span> startet den Testlauf. <span class="kbd">Entf</span> löscht die markierten
+        Nodes. <span class="kbd">Shift</span> + <span class="kbd">P</span> publisht den Workflow, schaltet ihn also
+        produktiv. Ein Kürzel zum Speichern fehlt bewusst: n8n speichert deinen Entwurf automatisch (Autosave).
       </div>
 
       <h2>Windows, Linux und macOS</h2>
-      <p>Dieses Werkbuch schreibt häufig <span class="kbd">Strg/⌘</span>. Gemeint ist: unter Windows und Linux
-        <span class="kbd">Strg</span>, unter macOS <span class="kbd">⌘</span>. Dieselbe Trennung gilt für
-        <span class="kbd">Alt</span>: Auf der Mac-Tastatur ist das die Taste <span class="kbd">⌥</span>, je nach
-        Layout mit „alt“ oder „option“ beschriftet. <span class="kbd">Shift</span>, <span class="kbd">Enter</span> und
-        die Pfeiltasten sind auf allen drei Systemen gleich.</p>
-      <p>Eine Stolperstelle betrifft nur macOS: Die große Löschtaste rechts oben sendet
-        <span class="kbd">Backspace</span>, nicht <span class="kbd">Entf</span>. n8n hört auf beide, deshalb löschst du
-        markierte Nodes auf dem Mac mit genau dieser Taste.</p>
-      <p>Wenn ein Browser oder dein Betriebssystem ein Kürzel bereits belegt, gewinnt manchmal diese Ebene. Dann nutze
-        die sichtbare Schaltfläche in n8n als Ausweichweg.</p>
+      <p>In diesem Werkbuch steht oft <span class="kbd">Strg/⌘</span>. Das heißt: Unter Windows und Linux drückst du
+        <span class="kbd">Strg</span>, unter macOS die Kommandotaste <span class="kbd">⌘</span>. Genauso bei
+        <span class="kbd">Alt</span>: Auf der Mac-Tastatur heißt diese Taste <span class="kbd">⌥</span>, auf ihr steht
+        je nach Tastatur „alt“ oder „option“. <span class="kbd">Shift</span> (die Umschalttaste),
+        <span class="kbd">Enter</span> und die Pfeiltasten sind auf allen drei Systemen gleich.</p>
+      <p>Eine Stolperstelle gibt es nur auf dem Mac: Die große Löschtaste rechts oben sendet
+        <span class="kbd">Backspace</span>, nicht <span class="kbd">Entf</span>. Das macht nichts. n8n reagiert auf
+        beide Tasten, du löschst markierte Nodes auf dem Mac also mit genau dieser Taste.</p>
+      <p>Manchmal hat dein Browser oder dein Betriebssystem ein Kürzel schon für sich reserviert. Dann passiert etwas
+        anderes als erwartet oder gar nichts. Kein Problem: Klicke stattdessen einfach auf die sichtbare Schaltfläche
+        in n8n.</p>
 
       <div class="callout callout--info">
         <b class="t">Versionen prüfen</b>
-        Tastenkürzel ändern sich zwischen n8n-Versionen. Diese Referenz hat den Stand Juli 2026 und n8n 2.32.x. Ein
-        Beispiel für so eine Änderung: Das Node-Panel öffnest du mit <span class="kbd">N</span>. Früher lag es auf
-        <span class="kbd">Tab</span>, diese Belegung hat n8n abgelöst. Reagiert deine Instanz anders, läuft dort eine
-        andere Version. Den jeweils aktuellen Stand führt die Seite „Keyboard shortcuts“ in der n8n-Dokumentation.
+        Tastenkürzel ändern sich zwischen n8n-Versionen. Diese Referenz gilt für n8n 2.32.x, Stand Juli 2026. Ein
+        Beispiel: Das Node-Panel, also die Suchliste für neue Nodes, öffnest du heute mit <span class="kbd">N</span>.
+        Früher lag es auf <span class="kbd">Tab</span>. Wenn deine Installation anders reagiert, läuft dort einfach
+        eine andere Version. Das ist kein Fehler bei dir. Den aktuellen Stand findest du auf der Seite „Keyboard
+        shortcuts“ in der n8n-Dokumentation.
       </div>
 
       <div class="callout callout--tip">
         <b class="t">Nicht alles hat ein Kürzel</b>
-        Manche Funktionen erreichst du nur mit der Maus. Eine Canvas Group umbenennen zum Beispiel: Doppelklick auf
-        den Gruppennamen, Text ändern, dann außerhalb der Gruppe klicken. Fürs Gruppieren selbst gibt es seit n8n
-        2.28.0 ein Kürzel, es steht weiter unten im Abschnitt zu ausgewählten Nodes. Ein Rechtsklick auf den Canvas
-        lohnt sich generell, wenn du eine Funktion suchst und kein Kürzel dafür findest.
+        Manche Funktionen erreichst du nur mit der Maus. Beispiel: eine Canvas Group (einen farbigen Rahmen um mehrere
+        Nodes) umbenennen. Dafür machst du einen Doppelklick auf den Gruppennamen, tippst den neuen Text und klickst
+        dann außerhalb der Gruppe. Fürs Gruppieren selbst gibt es seit n8n 2.28.0 ein Kürzel, es steht weiter unten im
+        Abschnitt zu ausgewählten Nodes. Faustregel: Findest du für eine Funktion kein Kürzel,
+        hilft oft ein Rechtsklick auf den Canvas, also die freie Arbeitsfläche.
       </div>
 
       <table class="btable">
@@ -71,10 +74,11 @@
       </table>
 
       <h2>Canvas und Workflow</h2>
-      <p>Diese Kürzel wirken auf den Workflow als Ganzes. Eines vorweg, weil es regelmäßig für Verwirrung sorgt: Deinen
-        Draft speichert n8n von selbst, meist innerhalb von ein bis fünf Sekunden. Die Doku-Seite „Keyboard shortcuts“
-        führt <span class="kbd">Strg/⌘</span> + <span class="kbd">S</span> zwar noch als Speichern-Kürzel. In n8n 2.32
-        klappt es das Menü neben dem <em>Publish</em>-Knopf auf, in dem unter anderem <em>Name version</em> liegt.</p>
+      <p>Diese Kürzel wirken auf den ganzen Workflow. Eines vorweg, weil es oft für Verwirrung sorgt: Du musst nicht
+        selbst speichern. n8n sichert deinen Draft (den Entwurf deines Workflows) automatisch, meist innerhalb von ein
+        bis fünf Sekunden. Die Doku-Seite „Keyboard shortcuts“ nennt <span class="kbd">Strg/⌘</span> +
+        <span class="kbd">S</span> zwar noch als Speichern-Kürzel. In n8n 2.32 macht es aber etwas anderes: Es klappt
+        das kleine Menü neben dem <em>Publish</em>-Knopf auf, in dem unter anderem <em>Name version</em> liegt.</p>
       <table class="btable">
         <thead><tr><th>Aktion</th><th>Tastenkürzel</th><th>Wofür?</th></tr></thead>
         <tbody>
@@ -98,14 +102,17 @@
 
       <div class="callout callout--warn">
         <b class="t">Erst auswählen, dann löschen</b>
-        <span class="kbd">Entf</span> löscht nicht „irgendetwas“, sondern die aktuelle Auswahl. Prüfe auf dem Canvas
-        kurz, welcher Node markiert ist. Bei Unsicherheit: abbrechen, neu auswählen, dann löschen.
+        <span class="kbd">Entf</span> löscht genau die Nodes, die gerade markiert sind.
+        Schau deshalb vor dem Drücken kurz auf den Canvas: Welcher Node hat den farbigen Rand? Bist du unsicher,
+        klicke erst auf eine freie Stelle, wähle neu aus und lösche dann. Und falls doch der falsche Node
+        verschwindet: <span class="kbd">Strg/⌘</span> + <span class="kbd">Z</span> holt ihn zurück.
       </div>
 
       <h2>Ausgewählte Nodes</h2>
-      <p>Sobald mindestens ein Node markiert ist, kommen weitere Kürzel dazu. Markieren geht mit einem Klick, mit
-        einem aufgezogenen Rahmen um mehrere Nodes oder mit <span class="kbd">Strg/⌘</span> und Klick für jeden
-        weiteren Node.</p>
+      <p>Sobald mindestens ein Node markiert ist, kommen weitere Kürzel dazu. Markieren geht auf drei Wegen: Klicke
+        einen Node an. Oder ziehe mit gedrückter Maustaste einen Rahmen um mehrere Nodes. Oder halte
+        <span class="kbd">Strg/⌘</span> gedrückt und klicke jeden weiteren Node einzeln an. Markierte Nodes erkennst
+        du am farbigen Rand.</p>
       <table class="btable">
         <thead><tr><th>Aktion</th><th>Tastenkürzel</th><th>Wofür?</th></tr></thead>
         <tbody>
@@ -124,16 +131,20 @@
 
       <div class="callout callout--tip">
         <b class="t">Wann Group ausgegraut bleibt</b>
-        Gruppieren geht auch ohne Tastatur: über das Symbol <strong>Group nodes</strong> in der Leiste über der Auswahl
-        oder über <strong>Group</strong> im Kontextmenü. Diese Wege und das Kürzel greifen aber nur, wenn die Auswahl
-        die Regeln erfüllt. Trigger-Nodes bleiben draußen, die Nodes müssen eine zusammenhängende Kette bilden, keiner darf schon
-        in einer anderen Gruppe stecken, Verbindungen nach außen dürfen nur am ersten und am letzten Node hängen, und
-        ein KI-Node nimmt seine Sub-Nodes mit. Passt etwas davon nicht, bleibt <strong>Group nodes</strong> ausgegraut
-        und <span class="kbd">Strg/⌘</span> + <span class="kbd">G</span> tut nichts. Zum Auflösen wählst du die Gruppe
-        aus und klickst auf das Symbol <strong>Ungroup</strong>.
+        Gruppieren geht auch ohne Tastatur: Klicke auf das Symbol <strong>Group nodes</strong> in der Leiste über der
+        Auswahl, oder wähle <strong>Group</strong> im Kontextmenü (das Menü nach einem Rechtsklick). Beide Wege und
+        das Kürzel funktionieren aber nur, wenn deine Auswahl ein paar Regeln erfüllt: Trigger-Nodes bleiben draußen.
+        Die Nodes müssen eine zusammenhängende Kette bilden. Keiner darf schon in einer anderen Gruppe stecken.
+        Verbindungen nach außen dürfen nur am ersten und am letzten Node hängen. Und ein KI-Node nimmt seine
+        Sub-Nodes mit. Passt etwas davon nicht, bleibt <strong>Group nodes</strong> ausgegraut und
+        <span class="kbd">Strg/⌘</span> + <span class="kbd">G</span> tut nichts. Das ist kein Fehler: Deine Auswahl
+        verletzt nur eine dieser Regeln. Zum Auflösen wählst du die Gruppe aus und klickst auf das Symbol
+        <strong>Ungroup</strong>.
       </div>
 
       <h2>Zoom und Orientierung</h2>
+      <p>Bei größeren Workflows verlierst du schnell den Überblick. Diese Kürzel bringen dich zurück. Der Griff,
+        den ich selbst am häufigsten brauche: <span class="kbd">1</span> holt den kompletten Workflow ins Bild.</p>
       <table class="btable">
         <thead><tr><th>Aktion</th><th>Tastenkürzel</th><th>Wofür?</th></tr></thead>
         <tbody>
@@ -150,6 +161,8 @@
       </table>
 
       <h2>Node-Detailansicht</h2>
+      <p>Die Detailansicht ist das große Fenster mit den Einstellungen eines Nodes. Du öffnest sie mit einem
+        Doppelklick auf den Node oder mit <span class="kbd">Enter</span>. Darin helfen diese Kürzel:</p>
       <table class="btable">
         <thead><tr><th>Aktion</th><th>Tastenkürzel</th><th>Wofür?</th></tr></thead>
         <tbody>
@@ -163,6 +176,7 @@
       </table>
 
       <h2>Suchen und Navigieren</h2>
+      <p>Mit diesen Kürzeln findest du Nodes und Funktionen, ohne lange in Menüs zu klicken.</p>
       <table class="btable">
         <thead><tr><th>Aktion</th><th>Tastenkürzel</th><th>Wofür?</th></tr></thead>
         <tbody>
@@ -179,24 +193,30 @@
 
       <div class="callout callout--info">
         <b class="t">Nicht jedes Kürzel ist n8n-spezifisch</b>
-        Ein Teil der Kürzel in diesen Tabellen kommt vom Browser oder vom Betriebssystem, nicht aus n8n. Für die
-        tägliche Arbeit macht die Herkunft keinen Unterschied. Es zählt der Handgriff, den du dir sparst.
+        Ein Teil der Kürzel in diesen Tabellen kommt vom Browser oder vom Betriebssystem, nicht aus n8n. Für deine
+        tägliche Arbeit ist das egal. Es zählt nur der Handgriff, den du dir sparst.
       </div>
 
       <h2>Typische Arbeitsfolge ohne Maus</h2>
       <ol class="steps">
-        <li><h4>Node suchen</h4><p><span class="kbd">N</span> drücken, Suchbegriff tippen, mit <span class="kbd">↑</span> /
-          <span class="kbd">↓</span> auswählen und mit <span class="kbd">Enter</span> einfügen.</p></li>
-        <li><h4>Parameter setzen</h4><p>In der Detailansicht Werte eintragen. Bestehenden Text mit
-          <span class="kbd">Strg/⌘</span> + <span class="kbd">A</span> markieren und ersetzen.</p></li>
-        <li><h4>Ansicht schließen</h4><p><span class="kbd">Esc</span> drücken, bis du wieder den Canvas siehst.</p></li>
-        <li><h4>Auto-Save prüfen</h4><p>Warten, bis der Draft gespeichert ist.</p></li>
-        <li><h4>Testlauf starten</h4><p><span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span> nutzen oder unten am
-          Canvas auf <strong>Execute workflow</strong> klicken, wenn dein Browser das Kürzel abfängt. In älteren
-          n8n-Versionen heißt derselbe Knopf <strong>Test workflow</strong>.</p></li>
+        <li><h4>Node suchen</h4><p>Drücke <span class="kbd">N</span>. Das Node-Panel öffnet sich. Tippe einen
+          Suchbegriff, wähle mit <span class="kbd">↑</span> / <span class="kbd">↓</span> einen Treffer und füge ihn
+          mit <span class="kbd">Enter</span> ein. Der neue Node erscheint auf dem Canvas.</p></li>
+        <li><h4>Parameter setzen</h4><p>Trage in der Detailansicht deine Werte ein. Bestehenden Text ersetzt du am
+          schnellsten so: mit <span class="kbd">Strg/⌘</span> + <span class="kbd">A</span> alles markieren, dann neu
+          tippen.</p></li>
+        <li><h4>Ansicht schließen</h4><p>Drücke <span class="kbd">Esc</span>, notfalls mehrmals, bis du wieder den
+          Canvas siehst.</p></li>
+        <li><h4>Auto-Save prüfen</h4><p>Warte ein paar Sekunden. Oben zeigt n8n an, dass der Draft gespeichert
+          ist.</p></li>
+        <li><h4>Testlauf starten</h4><p>Drücke <span class="kbd">Strg/⌘</span> + <span class="kbd">Enter</span>.
+          Fängt dein Browser das Kürzel ab, klicke stattdessen unten am Canvas auf <strong>Execute
+          workflow</strong>. In älteren n8n-Versionen heißt derselbe Knopf <strong>Test workflow</strong>.</p></li>
       </ol>
 
       <h2>Wenn etwas schiefgeht</h2>
+      <p>Ein Kürzel, das nicht reagiert, ist fast nie ein Defekt. Meist ist nur der Fokus falsch: Deine Tastendrücke
+        landen in einem anderen Bereich, als du denkst. Die Tabelle zeigt die häufigsten Fälle:</p>
       <table class="btable">
         <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
         <tbody>
@@ -211,6 +231,8 @@
       </table>
 
       <h2>Konkrete Testfälle</h2>
+      <p>Probiere die wichtigsten Kürzel einmal selbst aus, am besten in einem Übungs-Workflow. Wenn die Erwartung
+        aus der rechten Spalte eintritt, hat es geklappt.</p>
       <table class="btable">
         <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
         <tbody>

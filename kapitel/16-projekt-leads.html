@@ -16,9 +16,11 @@
 
       <div class="chap-eyebrow"><span class="knum">16</span> Projekt 4</div>
       <h1 class="chap-title">Lead-Routing vom Webhook ins CRM</h1>
-      <p class="chap-lede">In diesem Projekt nimmt n8n neue Leads per Webhook entgegen, bereinigt die Daten, entscheidet
-        anhand einfacher Regeln über die Zuständigkeit und legt den Kontakt im CRM an. Danach bekommt das passende Team
-        eine Nachricht. Das ist der erste Workflow in diesem Buch, der wie ein kleiner Geschäftsprozess funktioniert.</p>
+      <p class="chap-lede">In diesem Projekt nimmt n8n neue Leads entgegen, also Kontaktanfragen von möglichen Kunden.
+        Sie kommen per Webhook herein, also über eine Web-Adresse, an die andere Systeme Daten schicken können. n8n
+        bereinigt die Daten, entscheidet nach einfachen Regeln, welches Team zuständig ist, und legt den Kontakt im CRM
+        an, also in der Kundendatenbank. Danach bekommt das passende Team eine Nachricht. Das ist der erste Workflow in diesem Buch, der
+        wie ein kleiner Geschäftsprozess funktioniert.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 45 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Mittel</span>
@@ -44,9 +46,10 @@
       </div>
 
       <h2>Das Ziel</h2>
-      <p>Ein Formular, eine Website oder ein anderes System ruft deinen Webhook auf. n8n macht daraus ein sauberes Lead-Objekt,
-        routet nach dem Thema der Anfrage, legt den Lead im CRM an und benachrichtigt das zuständige Team. Das Budget entscheidet
-        dabei nicht über den Zweig, sondern nur darüber, ob der Lead als „hoch“ markiert wird.</p>
+      <p>Ein Formular, eine Website oder ein anderes System ruft deinen Webhook auf. n8n macht aus den Rohdaten ein sauberes
+        Lead-Objekt. Dann entscheidet der Workflow anhand des Themas der Anfrage, welches Team zuständig ist. Dieses Weiterleiten
+        nach Regeln nennt man Routing. Zum Schluss legt n8n den Lead im CRM an und benachrichtigt das Team. Das Budget entscheidet
+        dabei nicht über den Zweig. Es bestimmt nur, ob der Lead als „hoch“ markiert wird.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -89,9 +92,9 @@
 
       <div class="callout callout--pareto">
         <b class="t">Das Muster</b>
-        Lead-Routing besteht aus vier Dingen: <strong>validieren</strong>, <strong>normalisieren</strong>,
-        <strong>entscheiden</strong>, <strong>anlegen &amp; melden</strong>. Wenn du diese Trennung sauber hältst, bleibt der
-        Workflow auch bei neuen Regeln verständlich.
+        Lead-Routing besteht aus vier Dingen: <strong>validieren</strong> (Eingaben prüfen), <strong>normalisieren</strong>
+        (Daten vereinheitlichen), <strong>entscheiden</strong>, <strong>anlegen &amp; melden</strong>. Wenn du diese Trennung
+        sauber hältst, bleibt der Workflow auch bei neuen Regeln verständlich.
       </div>
 
       <hr>
@@ -170,17 +173,21 @@
 
       <h2>Schritt 3: Webhook testen</h2>
       <p>Die URL im Browser aufzurufen bringt dich hier nicht weiter. Der Browser schickt ein GET, dein Webhook wartet auf POST.
-        Du brauchst also curl, Postman, Insomnia oder einen HTTP-Request-Node in einem zweiten Test-Workflow.</p>
+        Du brauchst also ein Werkzeug, das POST-Anfragen senden kann: curl (ein Kommandozeilen-Programm), Postman oder
+        Insomnia (Programme mit grafischer Oberfläche) oder einen HTTP-Request-Node in einem zweiten Test-Workflow.</p>
 
       <ol class="steps">
         <li><h4>Auf Test-Ereignis warten</h4>
           <p>Klicke im Webhook-Node auf <strong>Listen for test event</strong>.</p></li>
         <li><h4>Test-URL kopieren</h4>
-          <p>Kopiere die <strong>Test URL</strong>. Achte auf <code>/webhook-test/</code>.</p></li>
+          <p>Kopiere die <strong>Test URL</strong>. Achte darauf, dass <code>/webhook-test/</code> in der Adresse steht.
+            Das ist die Test-Adresse.</p></li>
         <li><h4>POST senden</h4>
-          <p>Sende das JSON aus Schritt 1 an diese URL. Header: <code>Content-Type: application/json</code>.</p></li>
+          <p>Sende das JSON aus Schritt 1 an diese URL. Setze dabei den Header <code>Content-Type: application/json</code>.
+            Dieser Zusatz sagt n8n, dass JSON kommt.</p></li>
         <li><h4>Ausgang prüfen</h4>
-          <p>Im Ausgang des Webhook-Nodes sollte ein Item erscheinen. Die Daten liegen in der Regel unter <code>$json.body</code>.</p></li>
+          <p>Wechsle zurück zu n8n. Im Ausgang des Webhook-Nodes siehst du jetzt ein Item; deine Lead-Daten stecken darin
+            unter <code>$json.body</code>. Wenn das Item da ist, hat dein Webhook funktioniert.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -193,9 +200,9 @@
       </div>
 
       <h2>Schritt 4: Lead normalisieren</h2>
-      <p>Jetzt bauen wir ein sauberes Lead-Objekt. Schreibweisen werden vereinheitlicht, fehlende Felder bekommen einen
-        Ersatzwert, und aus dem Budget rechnen wir eine Priorität aus. Alles Weitere im Workflow arbeitet danach nur noch mit
-        diesen Feldern.</p>
+      <p>Normalisieren heißt: alle Daten in eine einheitliche Form bringen. Schreibweisen werden vereinheitlicht, fehlende
+        Felder bekommen einen Ersatzwert, und aus dem Budget rechnen wir eine Priorität aus. Alles Weitere im Workflow
+        arbeitet danach nur noch mit diesen sauberen Feldern.</p>
 
       <ol class="steps">
         <li><h4>Edit-Fields-Node anhängen</h4>
@@ -223,6 +230,8 @@
           <tr><td><code>received_at</code></td><td><code>{{ $now.toFormat('yyyy-LL-dd HH:mm') }}</code></td></tr>
         </tbody>
       </table>
+
+      <p>Führe den Node danach einmal aus. Rechts im Ausgang siehst du jetzt die bereinigten Felder, so wie in Abb. 16.3.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -267,9 +276,11 @@
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>E-Mail vorhanden?</code>.</p></li>
         <li><h4>Bedingung setzen</h4>
-          <p>Prüfe, ob <code>{{ $json.email }}</code> <strong>is not empty</strong> ist.</p></li>
+          <p>Trage links im Bedingungsfeld <code>{{ $json.email }}</code> ein. Wähle als Operator
+            <strong>is not empty</strong>, also „ist nicht leer“.</p></li>
         <li><h4>Testen</h4>
-          <p>Führe den Node aus. Der Test-Lead sollte über den <strong>true</strong>-Ausgang laufen.</p></li>
+          <p>Führe den Node aus. Der Test-Lead sollte über den <strong>true</strong>-Ausgang laufen. true heißt: Die
+            Bedingung ist erfüllt, eine E-Mail-Adresse ist da.</p></li>
       </ol>
 
       <div class="callout callout--pareto">
@@ -279,9 +290,9 @@
       </div>
 
       <h2>Schritt 6: Routing nach Team</h2>
-      <p>Jetzt verzweigen wir: Sales-Leads gehen an Sales, Support-Anfragen an Support. Dafür ist ein Switch-Node lesbarer
-        als verschachtelte IF-Nodes. Anders als früher hat der Switch keinen einzelnen Vergleichswert mehr. Jede Regel bringt
-        ihre eigene Bedingung mit.</p>
+      <p>Jetzt verzweigen wir: Sales-Leads gehen an Sales, Support-Anfragen an Support. Dafür nehmen wir einen Switch-Node.
+        Er ist wie mehrere IF-Nodes in einem und bleibt trotzdem lesbar. Jede Regel bringt ihre eigene Bedingung und ihren
+        eigenen Ausgang mit.</p>
 
       <ol class="steps">
         <li><h4>Switch-Node anhängen</h4>
@@ -299,7 +310,7 @@
         <li><h4>Zweite Regel anlegen</h4>
           <p>Klicke <strong>Add Routing Rule</strong> und wiederhole beides mit <code>Support</code>: Bedingung
             <code>{{ $json.owner_team }}</code> <strong>is equal to</strong> <code>Support</code>, Output Name
-            <code>Support</code>.</p></li>
+            <code>Support</code>. Auf dem Canvas hat der Switch jetzt zwei beschriftete Ausgänge: Sales und Support.</p></li>
         <li><h4>Fallback festlegen</h4>
           <p>Öffne <strong>Options</strong>, klicke <strong>Add option</strong>, wähle <strong>Fallback Output</strong> und
             dort den Eintrag <strong>Output Sales</strong>. Leads, deren Thema zu keiner Regel passt, laufen dann bei Sales
@@ -339,9 +350,10 @@
             <strong>HubSpot</strong>.</p></li>
         <li><h4>Aktion wählen</h4>
           <p>Setze <strong>Resource</strong> auf <strong>Contact</strong> und <strong>Operation</strong> auf
-            <strong>Create or Update</strong>. Ein reines „Create“ gibt es für Kontakte im HubSpot-Node nicht. Die Operation ist
-            ein Upsert über die E-Mail-Adresse und legt denselben Kontakt kein zweites Mal an. Andere CRM-Nodes trennen Create
-            und Update; dort nimmst du den Upsert-Modus, wenn es einen gibt.</p></li>
+            <strong>Create or Update</strong>. Ein reines „Create“ gibt es für Kontakte im HubSpot-Node nicht.
+            „Create or Update“ ist ein sogenannter Upsert: Gibt es die E-Mail-Adresse im CRM noch nicht, wird der Kontakt
+            angelegt. Gibt es sie schon, wird er aktualisiert. So entsteht kein Kontakt doppelt. Andere CRM-Nodes trennen
+            Create und Update; dort nimmst du den Upsert-Modus, wenn es einen gibt.</p></li>
         <li><h4>Credential auswählen</h4>
           <p>Wähle deine CRM-Credential. Echte Tokens stehen nur dort, nicht im Workflow.</p></li>
         <li><h4>Felder zuordnen</h4>
@@ -365,11 +377,11 @@
       </table>
 
       <p>Zwei Dinge fallen dabei auf. <strong>Lead Status Name or ID</strong> und <strong>Contact Owner Name or ID</strong> sind
-        Auswahllisten, die ihre Werte aus deinem HubSpot-Account laden. Freien Text nehmen sie nicht an, der Teamname aus dem
+        Auswahllisten. Sie laden ihre Werte aus deinem HubSpot-Account und nehmen keinen freien Text an. Der Teamname aus dem
         Routing passt dort also nicht hinein. Und ein Feld namens „Lead Source“ bietet der Node gar nicht an. Am nächsten kommt
         <strong>Original Source Name or ID</strong>, aber das ist wieder eine Liste mit HubSpot-eigenen Werten. Beides löst du
-        über <strong>Custom Properties</strong>: Du legst in HubSpot eine eigene Property an, etwa <code>n8n_owner_team</code>,
-        und trägst sie hier mit Name und Wert ein.</p>
+        über <strong>Custom Properties</strong>, also selbst definierte Felder: Du legst in HubSpot eine eigene Property an,
+        etwa <code>n8n_owner_team</code>, und trägst sie hier mit Name und Wert ein.</p>
 
       <div class="callout callout--warn">
         <b class="t">Dubletten skeptisch behandeln</b>
@@ -400,12 +412,14 @@
             dafür keine eigenen Felder. Das Feld <strong>Contact Names or IDs</strong> gibt es zwar, es will aber eine
             HubSpot-Kontakt-ID sehen, keine E-Mail-Adresse.</p></li>
         <li><h4>Testen</h4>
-          <p>Sende einen zweiten Webhook-Test mit <code>"topic": "support"</code>. Er sollte in den Support-Zweig laufen.</p></li>
+          <p>Sende einen zweiten Webhook-Test mit <code>"topic": "support"</code>. Auf dem Canvas siehst du: Diesmal läuft
+            der Lead über den Support-Ausgang des Switch.</p></li>
       </ol>
 
       <h2>Schritt 9: Team benachrichtigen</h2>
       <p>Nach der CRM-Aktion soll das zuständige Team wissen, dass ein Lead eingegangen ist. Dafür hängen wir Slack an beide
-        CRM-Zweige. Alternativ kannst du erst beide Zweige mit Merge zusammenführen und danach einmal Slack senden.</p>
+        CRM-Zweige. Alternativ kannst du beide Zweige erst mit einem Merge-Node wieder zu einem Strang zusammenführen und
+        danach nur einmal Slack senden.</p>
 
       <ol class="steps">
         <li><h4>Slack-Node an Sales-Zweig hängen</h4>
@@ -450,8 +464,9 @@ Budget: {{ $('Lead vorbereiten').item.json.budget }} €
       </div>
 
       <h2>Schritt 10: Fehlerzweig für ungültige Leads</h2>
-      <p>Der false-Ausgang von <strong>E-Mail vorhanden?</strong> darf nicht ins Leere führen. Schicke ungültige Leads in einen
-        Testkanal oder eine Tabelle, damit du die Ursache sehen kannst.</p>
+      <p>Über den <strong>false</strong>-Ausgang von <strong>E-Mail vorhanden?</strong> laufen alle Leads ohne E-Mail-Adresse.
+        Dieser Ausgang darf nicht ins Leere führen. Schicke ungültige Leads in einen Testkanal oder eine Tabelle, damit du
+        die Ursache sehen kannst.</p>
 
       <ol class="steps">
         <li><h4>Slack-Node an false-Ausgang hängen</h4>
@@ -498,9 +513,11 @@ Budget: {{ $('Lead vorbereiten').item.json.budget }} €
         <li><h4>Testergebnisse prüfen</h4>
           <p>Prüfe für alle drei Testfälle CRM, Slack und Executions. Erst danach arbeitest du mit der Production-URL.</p></li>
         <li><h4>Auto-Save prüfen</h4>
-          <p>Warte, bis im Kopf wieder <strong>„Saved“</strong> steht. Damit ist der Draft gesichert, live ist er noch nicht.</p></li>
+          <p>Warte, bis im Kopf wieder <strong>„Saved“</strong> steht. Damit ist dein Entwurf (der Draft) gesichert.
+            Live ist er noch nicht.</p></li>
         <li><h4>Publish klicken</h4>
-          <p>Klicke oben rechts auf <strong>Publish</strong>. Erst jetzt registriert n8n die Production-URL.</p></li>
+          <p>Klicke oben rechts auf <strong>Publish</strong>, also veröffentlichen. Erst jetzt registriert n8n die
+            Production-URL, und der Workflow reagiert auf echte Aufrufe.</p></li>
         <li><h4>Production-URL kopieren</h4>
           <p>Öffne den Webhook-Node und schalte oben von <strong>Test URL</strong> auf <strong>Production URL</strong>. Kopiere
             die URL mit <code>/webhook/lead-routing</code>, nicht die mit <code>/webhook-test/</code>.</p></li>

@@ -16,9 +16,9 @@
 
       <div class="chap-eyebrow"><span class="knum">24</span> Profi &amp; Betrieb</div>
       <h1 class="chap-title">Deployment, Env-Variablen &amp; Git</h1>
-      <p class="chap-lede">In diesem Kapitel bringst du einen Workflow aus der Testinstanz kontrolliert in eine
-        produktive Umgebung. Der Kern: Workflow-Logik, geheime Zugangsdaten und Umgebungseinstellungen gehören an
-        verschiedene Orte.</p>
+      <p class="chap-lede">In diesem Kapitel bringst du einen Workflow von deiner Test-Instanz in den echten Betrieb.
+        Dieses Umziehen nennt man Deployment. Die wichtigste Regel dabei: Workflow-Logik, geheime Zugangsdaten und
+        Umgebungseinstellungen gehören an drei verschiedene Orte.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 25 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Fortgeschrittene Grundlagen</span>
@@ -37,14 +37,17 @@
 
       <div class="callout callout--warn">
         <b class="t">Deployment ist kein Kopieren mit Hoffnung</b>
-        Wenn ein Workflow nur funktioniert, weil ein Token hart im HTTP-Node steht oder weil die Webhook-URL zufällig
-        passt, ist er nicht deploybar. Er funktioniert nur zufällig in genau dieser Umgebung.
+        Stell dir vor, ein Workflow läuft nur, weil ein Token (ein geheimer Zugangsschlüssel) direkt im HTTP-Node
+        steht. Oder weil die Webhook-URL zufällig passt. Dann läuft er nur auf genau dieser Instanz. Auf jeder anderen
+        geht er kaputt. Genau das räumen wir in diesem Kapitel auf.
       </div>
 
       <h2>Das Ziel</h2>
-      <p>Du baust kein vollständiges Server-Setup. Du lernst das Betriebsmodell: Die Entwicklungsinstanz hält die
-        Workflow-Logik, Git hält die nachvollziehbare Version, und Produktion bekommt eigene Credentials und eigene
-        Umgebungswerte. Sind diese drei Ebenen getrennt, kannst du eine Änderung prüfen, bevor sie echte Daten anfasst.</p>
+      <p>Du baust in diesem Kapitel kein komplettes Server-Setup. Du lernst das Grundmodell dahinter. Es hat drei
+        Ebenen: Die Entwicklungsinstanz hält die Workflow-Logik. Git (ein Programm, das alte Versionen von Dateien
+        aufbewahrt) hält die nachvollziehbare Version. Und die Produktion bekommt ihre eigenen Credentials und eigenen
+        Umgebungswerte. Sind diese drei Ebenen getrennt, kannst du jede Änderung erst prüfen, bevor sie echte Daten
+        anfasst.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -98,6 +101,8 @@
       </div>
 
       <h2>Was heißt Deployment in n8n?</h2>
+      <p>Vier Begriffe tauchen in diesem Kapitel immer wieder auf. Die Tabelle zeigt, was jeder Begriff in n8n
+        bedeutet und welche Frage du dir dazu stellen solltest.</p>
       <table class="btable">
         <thead><tr><th>Begriff</th><th>In n8n bedeutet das</th><th>Skeptische Frage</th></tr></thead>
         <tbody>
@@ -110,15 +115,16 @@
 
       <div class="callout callout--info">
         <b class="t">Skeptische Einordnung</b>
-        Git löst nicht alle Betriebsfragen. Git beantwortet nur: Welche Workflow-Version ist gemeint? Ob die Instanz
-        richtig konfiguriert, erreichbar und berechtigt ist, bleibt eine separate Prüfung.
+        Git löst nicht alle Betriebsfragen. Git beantwortet nur eine Frage: Welche Workflow-Version ist gemeint? Ob
+        die Instanz richtig eingestellt, von außen erreichbar und berechtigt ist, musst du zusätzlich prüfen.
       </div>
 
       <hr>
 
       <h2>Schritt 1: Umgebungen benennen</h2>
       <p>Ein Deployment wird unklar, wenn du nur „meine n8n-Instanz“ sagst. Du brauchst mindestens zwei Rollen:
-        Entwicklung und Produktion. Das kann am Anfang auch dieselbe Maschine mit zwei getrennten Workflows sein.</p>
+        Entwicklung (dort baust und testest du) und Produktion (dort läuft der Workflow mit echten Daten). Am Anfang
+        darf das auch dieselbe Maschine sein, dann eben mit zwei getrennten Workflows.</p>
 
       <ol class="steps">
         <li><h4>Entwicklungsumgebung festlegen</h4>
@@ -129,8 +135,9 @@
           <p>Nutze Namen wie <code>dev · Lead-Routing</code> und <code>prod · Lead-Routing</code>, solange du keine
             echte Umgebungstrennung hast.</p></li>
         <li><h4>Nebenwirkungen markieren</h4>
-          <p>Schreibende Nodes wie CRM-Update, E-Mail, Slack oder Zahlung bekommen im Namen einen klaren Hinweis:
-            <code>CRM schreiben</code>, <code>E-Mail senden</code>, <code>Ticket anlegen</code>.</p></li>
+          <p>Nodes, die etwas nach außen schreiben (CRM-Update, E-Mail, Slack-Nachricht, Zahlung), bekommen im Namen
+            einen klaren Hinweis: <code>CRM schreiben</code>, <code>E-Mail senden</code>, <code>Ticket anlegen</code>.
+            So siehst du auf einen Blick, wo ein Test echte Folgen hätte.</p></li>
       </ol>
 
       <table class="btable">
@@ -148,21 +155,25 @@
       </div>
 
       <h2>Schritt 2: Secrets aus der Logik entfernen</h2>
-      <p>Secrets gehören in n8n-Credentials oder in die Umgebungsverwaltung deiner Instanz. Nicht in Code-Nodes, nicht
-        in HTTP-Header-Felder als Klartext und nicht in Git.</p>
+      <p>Secrets sind alle geheimen Werte: API-Schlüssel, Tokens, Passwörter. Sie gehören in n8n-Credentials oder in
+        die Umgebungsverwaltung deiner Instanz. Nicht in Code-Nodes, nicht als Klartext in HTTP-Header-Felder und
+        niemals in Git.</p>
 
       <ol class="steps">
         <li><h4>HTTP-Node prüfen</h4>
-          <p>Öffne einen Workflow mit einem HTTP Request-Node.</p></li>
+          <p>Öffne einen Workflow mit einem HTTP Request-Node. Klicke doppelt auf den Node, damit sich sein
+            Einstellungsfenster öffnet.</p></li>
         <li><h4>Authentication verwenden</h4>
-          <p>Kennt n8n den Dienst, stellst du <strong>Authentication</strong> auf <strong>Predefined Credential Type</strong>
-            und wählst darunter den passenden Typ. Sonst nimmst du <strong>Generic Credential Type</strong> und darunter
-            bei <strong>Generic Auth Type</strong> die Machart: Bearer Auth, Header Auth, Query Auth oder OAuth2 API.</p></li>
+          <p>Schau auf das Feld <strong>Authentication</strong> (englisch für Anmeldung). Kennt n8n den Dienst, stellst
+            du es auf <strong>Predefined Credential Type</strong> und wählst darunter den passenden Typ. Kennt n8n den
+            Dienst nicht, nimmst du <strong>Generic Credential Type</strong> und wählst darunter bei
+            <strong>Generic Auth Type</strong> die Machart: Bearer Auth, Header Auth, Query Auth oder OAuth2 API.</p></li>
         <li><h4>Credential anlegen</h4>
-          <p>Lege ein Credential mit einem neutralen Namen an, zum Beispiel <code>CRM API · dev</code>.</p></li>
+          <p>Lege ein Credential mit einem neutralen Namen an, zum Beispiel <code>CRM API · dev</code>. Der geheime
+            Schlüssel steht jetzt nur noch im Credential. Im Workflow selbst taucht er nicht mehr auf.</p></li>
         <li><h4>Produktions-Credential separat anlegen</h4>
-          <p>In Produktion legst du später <code>CRM API · prod</code> an. Es darf denselben Workflow nutzen, aber
-            nicht denselben geheimen Schlüssel.</p></li>
+          <p>In Produktion legst du später ein zweites Credential an: <code>CRM API · prod</code>. Es darf denselben
+            Workflow nutzen, aber nicht denselben geheimen Schlüssel.</p></li>
       </ol>
 
       <figure class="figure">
@@ -189,27 +200,30 @@
 
       <div class="callout callout--info">
         <b class="t">Variablen sind keine Credentials</b>
-        n8n-Variablen sind gut für nicht-geheime Werte wie <code>CRM_BASE_URL</code>, <code>REPORT_CHANNEL</code> oder
-        <code>ENV_NAME</code>. Du legst sie im Tab <strong>Variables</strong> an, entweder auf der Übersichtsseite oder
-        in einem Projekt, über den Button <strong>Add Variable</strong>. Das darfst du allerdings nur als Instanz-Owner
-        oder Admin. Im Workflow liest du den Wert dann als <code>{{ $vars.CRM_BASE_URL }}</code>. API-Schlüssel und Tokens bleiben
-        Credentials. Die Funktion gibt es im selbst gehosteten Enterprise-Plan und in der Cloud ab Pro. Fehlt sie dir,
-        nutze pro Umgebung einen kleinen <code>Konfiguration</code>-Node, aber auch dort keine Secrets.
+        n8n-Variablen sind gut für Werte, die nicht geheim sind, sich aber pro Umgebung unterscheiden, zum Beispiel
+        <code>CRM_BASE_URL</code>, <code>REPORT_CHANNEL</code> oder <code>ENV_NAME</code>. Du legst sie im Tab
+        <strong>Variables</strong> an, entweder auf der Übersichtsseite oder in einem Projekt, über den Button
+        <strong>Add Variable</strong>. Das darfst du allerdings nur als Instanz-Owner oder Admin. Im Workflow liest du
+        den Wert dann als <code>{{ $vars.CRM_BASE_URL }}</code>. API-Schlüssel und Tokens bleiben Credentials. Die
+        Funktion gibt es im selbst gehosteten Enterprise-Plan und in der Cloud ab Pro. Fehlt sie dir, nutze pro
+        Umgebung einen kleinen <code>Konfiguration</code>-Node, aber auch dort keine Secrets.
       </div>
 
       <div class="callout callout--warn">
         <b class="t">Umgebungsvariablen erreichst du aus dem Workflow nicht mehr</b>
-        Der naheliegende Ausweg wäre, Betriebswerte als Umgebungsvariable zu setzen und im Workflow auszulesen. Das
-        geht seit n8n 2.0 nicht mehr: <code>$env</code> in Expressions und <code>process.env</code> im Code-Node sind
-        blockiert, <code>N8N_BLOCK_ENV_ACCESS_IN_NODE</code> steht ab 2.0 auf <code>true</code>. Auf einer selbst
-        gehosteten Instanz öffnest du den Zugriff mit <code>N8N_BLOCK_ENV_ACCESS_IN_NODE=false</code> und einem
-        Neustart wieder, in n8n Cloud gar nicht. Nimm stattdessen Variablen oder den <code>Konfiguration</code>-Node. Was der
-        Code-Node sonst noch nicht darf, steht in Kapitel 9.
+        Ein naheliegender Trick wäre: Betriebswerte als Umgebungsvariable setzen und im Workflow auslesen. Das geht
+        seit n8n 2.0 nicht mehr. <code>$env</code> in Expressions und <code>process.env</code> im Code-Node sind
+        blockiert, denn <code>N8N_BLOCK_ENV_ACCESS_IN_NODE</code> steht ab 2.0 auf <code>true</code>. Auf einer selbst
+        gehosteten Instanz kannst du den Zugriff mit <code>N8N_BLOCK_ENV_ACCESS_IN_NODE=false</code> und einem
+        Neustart wieder öffnen, in n8n Cloud gar nicht. Nimm stattdessen Variablen oder den
+        <code>Konfiguration</code>-Node. Was der Code-Node sonst noch nicht darf, steht in Kapitel 9.
       </div>
 
       <h2>Schritt 3: Self-hosting minimal konfigurieren</h2>
-      <p>Wenn du n8n selbst hostest, kommen mehrere Betriebswerte aus Umgebungsvariablen. Das folgende Beispiel ist
-        bewusst ein Lern-Skelett. Es ersetzt kein gehärtetes Server-Setup, zeigt aber die entscheidenden Stellen.</p>
+      <p>Dieser Schritt betrifft dich nur, wenn du n8n selbst hostest. Nutzt du n8n Cloud, kannst du ihn überfliegen.
+        Beim Self-hosting kommen mehrere Betriebswerte aus Umgebungsvariablen: Einstellungen, die der Server
+        beim Start liest, meist aus einer Datei namens <code>.env</code>. Das folgende Beispiel ist bewusst ein
+        Lern-Skelett. Es ersetzt kein gehärtetes Server-Setup, zeigt aber die Stellen, auf die es ankommt.</p>
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; .env · Beispiel ohne echte Secrets</div>
@@ -229,6 +243,10 @@ DB_POSTGRESDB_DATABASE=n8n
 DB_POSTGRESDB_USER=n8n
 DB_POSTGRESDB_PASSWORD=auch-dieser-wert-gehoert-nicht-in-git</pre>
       </div>
+
+      <p>Die zweite Datei ist die <code>docker-compose.yml</code>. Sie beschreibt, welche Container Docker starten
+        soll: hier die Datenbank Postgres und n8n selbst. Die Schreibweise <code>${...}</code> bedeutet: Der Wert
+        wird aus der <code>.env</code>-Datei übernommen.</p>
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; docker-compose.yml · stark gekürzt</div>
@@ -274,8 +292,9 @@ volumes:
 
       <div class="callout callout--warn">
         <b class="t">N8N_ENCRYPTION_KEY ist kritisch</b>
-        Dieser Schlüssel schützt gespeicherte Credentials. Wenn du ihn verlierst oder zwischen Instanzen unbedacht
-        änderst, können Credentials unbrauchbar werden. Sichere ihn getrennt von Git, wie ein echtes Secret.
+        Mit diesem Schlüssel verschlüsselt n8n deine gespeicherten Credentials. Verlierst du ihn oder änderst ihn
+        zwischen Instanzen unbedacht, kann n8n die Credentials nicht mehr entschlüsseln. Sie sind dann unbrauchbar.
+        Sichere ihn getrennt von Git, wie ein echtes Secret.
       </div>
 
       <div class="callout callout--info">
@@ -290,31 +309,36 @@ volumes:
       <div class="callout callout--info">
         <b class="t">Aus <code>WEBHOOK_URL</code> wurde <code>N8N_WEBHOOK_URL</code></b>
         Die Variable für die öffentliche Webhook-Basis-URL heißt jetzt <code>N8N_WEBHOOK_URL</code>. Der alte Name
-        <code>WEBHOOK_URL</code> funktioniert weiter, n8n schreibt beim Start aber eine Deprecation-Warnung ins Log. In
-        älteren Anleitungen und Blogposts liest du fast immer noch die kurze Form. Direkt darunter steht
-        <code>N8N_PROXY_HOPS</code>: die Zahl der Reverse Proxies vor n8n, voreingestellt <code>0</code>. Steht ein nginx
-        oder Traefik davor, setzt du <code>1</code>, damit n8n die weitergereichten Proxy-Header richtig auswertet.
+        <code>WEBHOOK_URL</code> funktioniert weiter, n8n schreibt beim Start aber eine Deprecation-Warnung ins Log
+        (einen Hinweis, dass der Name veraltet ist). In älteren Anleitungen und Blogposts liest du fast immer noch die
+        kurze Form. Direkt darunter steht <code>N8N_PROXY_HOPS</code>: die Zahl der Reverse Proxies vor n8n,
+        voreingestellt <code>0</code>. Ein Reverse Proxy ist ein vorgeschalteter Server wie nginx oder Traefik, der
+        Anfragen an n8n weiterreicht. Steht so einer davor, setzt du <code>1</code>, damit n8n die weitergereichten
+        Proxy-Header richtig auswertet.
       </div>
 
       <h2>Schritt 4: Webhook-URL prüfen</h2>
-      <p>Viele Deployment-Fehler zeigen sich zuerst bei Webhooks. Intern läuft n8n vielleicht auf Port 5678, extern
-        muss aber eine stabile HTTPS-Adresse erreichbar sein.</p>
+      <p>Viele Deployment-Fehler zeigen sich zuerst bei Webhooks. Intern läuft n8n vielleicht auf Port 5678. Von außen
+        muss aber eine stabile HTTPS-Adresse erreichbar sein. Das prüfst du so:</p>
 
       <ol class="steps">
         <li><h4>Test-Webhook anlegen</h4>
           <p>Erstelle einen neuen Workflow mit einem <strong>Webhook</strong>-Node und nenne ihn
             <code>dev · Webhook-URL prüfen</code>.</p></li>
         <li><h4>Pfad setzen</h4>
-          <p>Setze <strong>Path</strong> auf <code>deployment-test</code>.</p></li>
+          <p>Öffne den Node und setze das Feld <strong>Path</strong> auf <code>deployment-test</code>.</p></li>
         <li><h4>Test URL öffnen</h4>
-          <p>Klicke im Node auf <strong>Listen for test event</strong>, kopiere die <strong>Test URL</strong> und öffne
-            sie in einem neuen Browser-Tab.</p></li>
+          <p>Klicke im Node auf <strong>Listen for test event</strong>. Der Node wartet jetzt auf einen Aufruf.
+            Kopiere die <strong>Test URL</strong> und öffne sie in einem neuen Browser-Tab. Wenn alles stimmt, zeigt
+            n8n dir im Workflow ein empfangenes Test-Event an. Kommt nichts an, liegt das fast immer an der
+            Instanz-Konfiguration, nicht am Workflow.</p></li>
         <li><h4>Production URL prüfen</h4>
           <p>Publishe den Workflow kurz in einer Testumgebung und prüfe, ob die <strong>Production URL</strong> die
-            richtige Domain zeigt.</p></li>
+            richtige Domain zeigt, also deine echte Adresse und nicht eine interne.</p></li>
         <li><h4>Falsche Domain korrigieren</h4>
-          <p>Wenn n8n eine interne Adresse oder <code>localhost</code> anzeigt, korrigiere <code>N8N_WEBHOOK_URL</code>
-            und <code>N8N_EDITOR_BASE_URL</code> der Instanz.</p></li>
+          <p>Zeigt n8n eine interne Adresse oder <code>localhost</code> an, ist das kein Fehler im Workflow. Es fehlt
+            nur die richtige Einstellung: Korrigiere <code>N8N_WEBHOOK_URL</code> und
+            <code>N8N_EDITOR_BASE_URL</code> der Instanz.</p></li>
       </ol>
 
       <figure class="figure">
@@ -342,9 +366,9 @@ volumes:
       </figure>
 
       <h2>Schritt 5: Git-Strategie wählen</h2>
-      <p>n8n kann Workflow-Versionen direkt mit Git verbinden. Die Funktion heißt Source Control und steckt in den
-        Business- und Enterprise-Plänen. Fehlt sie dir, bleibt ein einfacher Weg: Workflow-JSON exportieren und sauber
-        in Git ablegen.</p>
+      <p>n8n kann Workflow-Versionen direkt mit Git verbinden. Die Funktion heißt Source Control (englisch für
+        Versionsverwaltung) und steckt in den Business- und Enterprise-Plänen. Fehlt sie dir, bleibt ein einfacher Weg:
+        Du exportierst den Workflow als JSON-Datei und legst sie sauber in Git ab.</p>
 
       <table class="btable">
         <thead><tr><th>Variante</th><th>Geeignet für</th><th>Risiko</th></tr></thead>
@@ -362,36 +386,41 @@ volumes:
       </div>
 
       <h2>Schritt 6: Source Control in n8n nutzen</h2>
-      <p>Der Ablauf ist immer derselbe: Git-Zugang verbinden, Änderungen aus der Entwicklungsinstanz pushen, in
-        Produktion pullen und danach erst publishen. Einrichten und pullen darf nur, wer Instanz-Owner oder
-        Instanz-Admin ist. Pushen dürfen zusätzlich Projekt-Admins.</p>
+      <p>Zwei Git-Wörter brauchst du hier: <strong>Push</strong> heißt, Änderungen ins Repository hochladen.
+        <strong>Pull</strong> heißt, den aktuellen Stand aus dem Repository herunterladen. Der Ablauf ist immer
+        derselbe: Git-Zugang verbinden, Änderungen aus der Entwicklungsinstanz pushen, in Produktion pullen und
+        danach erst publishen. Einrichten und pullen darf nur, wer Instanz-Owner oder Instanz-Admin ist. Pushen
+        dürfen zusätzlich Projekt-Admins.</p>
 
       <ol class="steps">
         <li><h4>Einstellungen öffnen</h4>
-          <p>Öffne <strong>Settings</strong> und dort <strong>Environments</strong>. In älteren Versionen und in vielen
-            Anleitungen heißt derselbe Bereich noch <strong>Source Control</strong>.</p></li>
+          <p>Öffne <strong>Settings</strong> und klicke dort auf <strong>Environments</strong>. In älteren Versionen
+            und in vielen Anleitungen heißt derselbe Bereich noch <strong>Source Control</strong>. Es ist dieselbe
+            Seite.</p></li>
         <li><h4>Repository verbinden</h4>
-          <p>Trag unter <strong>Git repository URL</strong> die Adresse deines Repos ein. Nutze ein eigenes Repo für
-            n8n-Workflows. Bei SSH kopierst du den Schlüssel aus dem Feld <strong>SSH Key</strong> und legst ihn im
-            Git-Hosting als Deploy Key mit Schreibrecht an; bei HTTPS füllst du <strong>Username</strong> und
-            <strong>Token</strong>. Dann
-            <strong>Connect</strong>.</p></li>
+          <p>Trag unter <strong>Git repository URL</strong> die Adresse deines Repos ein. Nutze ein eigenes Repo nur
+            für n8n-Workflows. Bei SSH kopierst du den Schlüssel aus dem Feld <strong>SSH Key</strong> und legst ihn
+            bei deinem Git-Hosting (etwa GitHub) als Deploy Key mit Schreibrecht an. Bei HTTPS füllst du stattdessen
+            <strong>Username</strong> und <strong>Token</strong> aus. Klicke dann auf <strong>Connect</strong>. Wenn
+            die Verbindung steht, zeigt n8n das Repo als verbunden an.</p></li>
         <li><h4>Instanz einstellen</h4>
-          <p>Wähle unter <strong>Instance settings</strong> den Branch dieser Instanz. Für <code>prod</code> setzt du
-            zusätzlich <strong>Protected instance</strong>, damit dort niemand direkt am Workflow schraubt. Sichern mit
+          <p>Wähle unter <strong>Instance settings</strong> den Branch dieser Instanz (ein Branch ist ein benannter
+            Arbeitsstand im Repository). Für <code>prod</code> setzt du zusätzlich den Haken
+            <strong>Protected instance</strong>, damit dort niemand direkt am Workflow schraubt. Sichern mit
             <strong>Save settings</strong>.</p></li>
         <li><h4>Entwicklungsänderung pushen</h4>
-          <p>Klicke im Hauptmenü auf <strong>Push</strong>. Im Fenster <strong>Commit and push changes</strong> filterst
-            du bei Bedarf nach Status, Owner oder Ordner, hakst die gewünschten Workflows an und schreibst eine
-            Commit-Nachricht in einem Satz. Dann <strong>Commit and Push</strong>. Push aus <code>dev</code> nur dann,
-            wenn der Draft gespeichert, getestet und verständlich benannt ist.</p></li>
+          <p>Klicke im Hauptmenü auf <strong>Push</strong>. Ein Fenster mit dem Titel <strong>Commit and push
+            changes</strong> öffnet sich. Dort filterst du bei Bedarf nach Status, Owner oder Ordner, hakst die
+            gewünschten Workflows an und schreibst eine Commit-Nachricht: einen kurzen Satz, der die Änderung
+            beschreibt. Dann klickst du auf <strong>Commit and Push</strong>. Pushe aus <code>dev</code> nur, wenn
+            der Draft gespeichert, getestet und verständlich benannt ist.</p></li>
         <li><h4>Produktionsinstanz pullen</h4>
-          <p>Klicke in <code>prod</code> im Hauptmenü auf <strong>Pull</strong>. Warnt n8n vor lokalen Änderungen,
-            entscheidest du dich bewusst für <strong>Pull and override</strong>. Prüfe danach Credentials und Variablen,
-            bevor du publishst.</p></li>
+          <p>Wechsle zur <code>prod</code>-Instanz und klicke im Hauptmenü auf <strong>Pull</strong>. Warnt n8n vor
+            lokalen Änderungen, entscheidest du dich bewusst für <strong>Pull and override</strong>. Danach liegt die
+            neue Version in <code>prod</code>. Prüfe jetzt Credentials und Variablen, bevor du publishst.</p></li>
         <li><h4>Publish bewusst durchführen</h4>
-          <p>Im Pull-Fenster steht <strong>Auto publish</strong> auf <strong>Off</strong>. Lass das so. Dann liegt die
-            neue Version zwar in <code>prod</code>, geht aber erst live, wenn du sie nach einem Testlauf mit
+          <p>Im Pull-Fenster steht <strong>Auto publish</strong> auf <strong>Off</strong>. Lass das so. Die neue
+            Version liegt dann zwar in <code>prod</code>, geht aber erst live, wenn du sie nach einem Testlauf mit
             ungefährlichen Daten selbst publishst. Die beiden anderen Optionen heißen <strong>If workflow already
             published</strong> und <strong>On</strong>.</p></li>
       </ol>
@@ -399,25 +428,26 @@ volumes:
       <div class="callout callout--warn">
         <b class="t">Source Control ersetzt keine Freigabe</b>
         Ein Pull in Produktion ist noch kein erfolgreiches Deployment. Erst wenn Credentials, Webhook-URL, Variablen
-        und Testlauf stimmen, ist die Änderung betriebsbereit. Wer den letzten Schritt überhaupt gehen darf, lässt sich
-        in den Enterprise-Rollen einzeln vergeben: seit n8n 2.8 sind <code>workflow:publish</code> und
-        <code>workflow:unpublish</code> zwei getrennte Scopes.
+        und Testlauf stimmen, ist die Änderung betriebsbereit. Wer den letzten Schritt überhaupt gehen darf, lässt
+        sich in den Enterprise-Rollen einzeln vergeben: Seit n8n 2.8 sind <code>workflow:publish</code> und
+        <code>workflow:unpublish</code> zwei getrennte Scopes (einzeln vergebbare Rechte).
       </div>
 
       <div class="callout callout--info">
         <b class="t">Zwei Helfer aus n8n 2.13</b>
-        Die Versionshistorie zeigt seitdem ein <strong>visuelles Diff</strong>. Du öffnest die Historie, klickst
-        <strong>Compare changes</strong> und wählst zwei Stände: n8n legt beide Canvas nebeneinander und hebt die
-        geänderten Nodes hervor. Das beantwortet die Frage „was hat sich seit gestern geändert?“ schneller als ein
-        JSON-Vergleich. Dasselbe Diff findest du als kleines Symbol neben jedem Workflow im Push- und im Pull-Fenster.
+        Die Versionshistorie zeigt seitdem ein <strong>visuelles Diff</strong>, also einen bildlichen Vergleich zweier
+        Stände. Du öffnest die Historie, klickst <strong>Compare changes</strong> und wählst zwei Stände aus. n8n legt
+        beide Canvas nebeneinander und hebt die geänderten Nodes hervor. Das beantwortet die Frage „was hat sich seit
+        gestern geändert?“ schneller als ein JSON-Vergleich. Dasselbe Diff findest du als kleines Symbol neben jedem
+        Workflow im Push- und im Pull-Fenster.
         Zweite Neuerung: In diesen Fenstern steht neben Status und Owner jetzt auch ein <strong>Folder</strong>-Filter,
         sodass du nicht jedes Mal die ganze Instanz durchgehst. Den Vergleich gibt es allerdings nur im
         Enterprise-Plan, und nur, wenn Environments auf der Instanz eingeschaltet sind.
       </div>
 
       <h2>Workaround: JSON-Export in Git</h2>
-      <p>Wenn du keine eingebaute Source-Control-Funktion hast, nutze eine einfache Ordnerstruktur. Perfekt muss sie
-        nicht sein. Wiederholbar schon.</p>
+      <p>Hast du keine eingebaute Source-Control-Funktion, geht es auch von Hand. Nutze eine einfache Ordnerstruktur
+        wie diese. Perfekt muss sie nicht sein. Wiederholbar schon.</p>
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Repository-Struktur</div>
@@ -434,17 +464,18 @@ volumes:
 
       <ol class="steps">
         <li><h4>Workflow exportieren</h4>
-          <p>Öffne den Workflow, klicke oben rechts auf das Drei-Punkte-Menü und wähle <strong>Download</strong>. Speichere
-            die JSON-Datei unter einem sprechenden Namen.</p></li>
+          <p>Öffne den Workflow. Klicke oben rechts auf das Drei-Punkte-Menü und wähle <strong>Download</strong>.
+            Dein Browser speichert eine JSON-Datei. Gib ihr einen sprechenden Namen, zum Beispiel
+            <code>lead-routing.json</code>.</p></li>
         <li><h4>JSON prüfen</h4>
-          <p>Öffne die Datei und suche nach echten Tokens, Passwörtern oder Kundendaten. Wenn du welche findest: nicht
-            committen, sondern zuerst den Workflow bereinigen.</p></li>
+          <p>Öffne die Datei in einem Texteditor. Suche nach echten Tokens, Passwörtern oder Kundendaten. Findest du
+            welche: nicht committen, sondern zuerst den Workflow bereinigen und neu exportieren.</p></li>
         <li><h4>Commit schreiben</h4>
-          <p>Committe die Änderung mit einer knappen fachlichen Beschreibung, zum Beispiel
-            <code>Lead-Routing um Fehlerzweig ergänzt</code>.</p></li>
+          <p>Committe die Änderung in Git (also: speichere sie als Version) mit einer knappen fachlichen
+            Beschreibung, zum Beispiel <code>Lead-Routing um Fehlerzweig ergänzt</code>.</p></li>
         <li><h4>In Produktion importieren</h4>
           <p>Wähle in der Produktionsinstanz im Drei-Punkte-Menü <strong>Import from File</strong> und lade die
-            JSON-Datei. Danach Credentials auswählen, Variablen prüfen und Testlauf durchführen.</p></li>
+            JSON-Datei hoch. Danach: Credentials auswählen, Variablen prüfen und einen Testlauf machen.</p></li>
       </ol>
 
       <h2>Was gehört wohin?</h2>
@@ -478,9 +509,10 @@ volumes:
 
       <div class="callout callout--info">
         <b class="t">Rollback heißt nicht Magie</b>
-        Ein alter Workflow-Stand kann die Logik zurücksetzen. Er kann aber keine bereits gesendeten E-Mails, erstellten
-        Tickets oder geschriebenen CRM-Datensätze rückgängig machen. Schreibende Aktionen brauchen daher Idempotenz oder
-        klare Dublettenprüfung.
+        Rollback bedeutet: zurück zu einer älteren Version. Ein alter Workflow-Stand setzt aber nur die Logik zurück.
+        Bereits gesendete E-Mails, erstellte Tickets oder geschriebene CRM-Datensätze macht er nicht rückgängig.
+        Schreibende Aktionen brauchen daher Idempotenz (mehrfaches Ausführen richtet keinen doppelten Schaden an) oder
+        eine klare Dublettenprüfung.
       </div>
 
       <div class="callout callout--info">
@@ -504,6 +536,8 @@ volumes:
       </table>
 
       <h2>Wenn etwas schiefgeht</h2>
+      <p>Keine Sorge: Fast jeder Deployment-Fehler in dieser Tabelle ist eine Einstellung, kein kaputter Workflow.
+        Such dein Symptom und arbeite die Lösung ab.</p>
       <table class="btable">
         <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
         <tbody>

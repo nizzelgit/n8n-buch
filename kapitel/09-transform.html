@@ -58,19 +58,23 @@
 
       <ol class="steps">
         <li><h4>Node anlegen &amp; öffnen</h4>
-          <p>Häng „Edit Fields (Set)“ an und öffne ihn. <strong>Mode</strong> steht auf <em>Manual Mapping</em>. Die zweite
-            Möglichkeit im selben Dropdown heißt <em>JSON</em>; dort tippst du das Ausgabe-Objekt als JSON. Wir bleiben bei
-            Manual Mapping.</p></li>
+          <p>Zieh vom letzten Node eine Linie ins Leere und wähl „Edit Fields (Set)“ aus der Liste. Öffne den Node mit
+            einem Doppelklick. Ganz oben steht das Auswahlfeld <strong>Mode</strong> (Modus). Es steht auf
+            <em>Manual Mapping</em>, also „Felder von Hand anlegen“. Die zweite Möglichkeit im selben Dropdown heißt
+            <em>JSON</em>; dort tippst du das Ausgabe-Objekt selbst als JSON. Wir bleiben bei Manual Mapping.</p></li>
         <li><h4>Felder hinzufügen</h4>
-          <p>Der Bereich heißt <strong>„Fields to Set“</strong>. Klick dort auf <strong>„Add Field“</strong>. Jeder Eintrag hat
-            drei Angaben: <strong>Name</strong> (z. B. <code>stadt</code>), <strong>Type</strong> (String, Number, Boolean …)
-            und <strong>Value</strong>. Beim Wert schaltest du wie gewohnt zwischen <strong>Fest</strong> (engl. <em>Fixed</em>)
-            und <strong>Expression</strong> um.</p></li>
+          <p>Darunter siehst du den Bereich <strong>„Fields to Set“</strong> (die Felder, die der Node setzen soll).
+            Klick dort auf <strong>„Add Field“</strong>. Ein neuer Eintrag erscheint, mit drei Angaben: Unter
+            <strong>Name</strong> legst du fest, wie das Feld heißen soll (z. B. <code>stadt</code>), unter
+            <strong>Type</strong> die Art des Werts (String = Text, Number = Zahl, Boolean = wahr/falsch …) und unter
+            <strong>Value</strong> den Wert selbst. Beim Wert schaltest du wie gewohnt zwischen <strong>Fest</strong>
+            (engl. <em>Fixed</em>) und <strong>Expression</strong> um.</p></li>
         <li><h4>Nur gesetzte Felder behalten</h4>
-          <p>Ganz unten gibt es den Schalter <strong>„Include Other Input Fields“</strong>. Er ist von Haus aus <strong>aus</strong>,
-            und dann enthält die Ausgabe <em>nur</em> deine neuen Felder. So wirst du den Ballast los. Schaltest du ihn ein,
-            erscheint darunter <strong>„Input Fields to Include“</strong> mit den Möglichkeiten <em>All</em>, <em>Selected</em>
-            und <em>All Except</em>.</p></li>
+          <p>Scroll ganz nach unten. Dort sitzt der Schalter <strong>„Include Other Input Fields“</strong>
+            („übrige Eingangsfelder mitnehmen“). Ab Werk ist er <strong>aus</strong>. Dann enthält die Ausgabe
+            <em>nur</em> deine neuen Felder. Genau so wirst du den Ballast los. Schaltest du ihn ein, erscheint darunter
+            <strong>„Input Fields to Include“</strong> mit den Möglichkeiten <em>All</em> (alle), <em>Selected</em>
+            (nur ausgewählte) und <em>All Except</em> (alle außer).</p></li>
       </ol>
 
       <figure class="figure">
@@ -97,8 +101,8 @@
 
       <div class="callout callout--tip">
         <b class="t">Sauberes Objekt = ruhiger Workflow</b>
-        Reduziere früh auf die Felder, die du wirklich weitergibst. Das macht spätere Nodes übersichtlicher und Fehler seltener.
-        Du siehst auf einen Blick, womit du arbeitest.
+        Ich hänge in fast jedem Workflow direkt hinter den ersten HTTP-Request so einen Set-Node. Reduzier früh auf die
+        Felder, die du wirklich weitergibst, dann musst du dich später nie wieder durch das große Roh-JSON wühlen.
       </div>
 
       <h2>Filter: Items aussortieren</h2>
@@ -107,14 +111,18 @@
 
       <ol class="steps">
         <li><h4>Node anlegen &amp; öffnen</h4>
-          <p>„Filter“ anhängen und öffnen. Du siehst einen Bereich <strong>„Conditions“</strong>.</p></li>
+          <p>Häng den Node „Filter“ an und öffne ihn. Du siehst einen Bereich <strong>„Conditions“</strong>
+            (Bedingungen). Hier legst du die Regel fest, die ein Item erfüllen muss, um durchzukommen.</p></li>
         <li><h4>Eine Bedingung bauen</h4>
-          <p>Links der <strong>Wert</strong> (per Expression, z. B. <code>{{ $json.tempC }}</code>), in der Mitte der
-            <strong>Operator</strong> (z. B. <em>is greater than</em>), rechts der <strong>Vergleichswert</strong> (z. B. <code>20</code>).
-            Welche Operatoren dir angeboten werden, hängt am gewählten Datentyp: bei Zahlen <em>is greater than</em>, bei Text
-            <em>contains</em>, bei Datum <em>is after</em>.</p></li>
+          <p>Eine Bedingung hat drei Teile. Links steht der <strong>Wert</strong>, den du prüfen willst, per Expression,
+            z. B. <code>{{ $json.tempC }}</code>. In der Mitte wählst du den <strong>Operator</strong>, also die Art des
+            Vergleichs, z. B. <em>is greater than</em> („ist größer als“). Rechts steht der
+            <strong>Vergleichswert</strong>, z. B. <code>20</code>. Welche Operatoren dir angeboten werden, hängt am
+            gewählten Datentyp: bei Zahlen <em>is greater than</em>, bei Text <em>contains</em> („enthält“), bei Datum
+            <em>is after</em> („liegt nach“).</p></li>
         <li><h4>Mehrere Bedingungen kombinieren</h4>
-          <p>Mit <strong>AND</strong>/<strong>OR</strong> verknüpfst du Bedingungen, z. B. „tempC &gt; 20 <em>UND</em> windKmh &lt; 15“.</p></li>
+          <p>Mit <strong>AND</strong> (und) bzw. <strong>OR</strong> (oder) verknüpfst du mehrere Bedingungen,
+            z. B. „tempC &gt; 20 <em>UND</em> windKmh &lt; 15“.</p></li>
       </ol>
 
       <figure class="figure">
@@ -155,11 +163,12 @@
         <em>und</em> Nicht-Treffer in getrennten Zweigen, dann nimm den <strong>IF</strong>-Node (nächstes Kapitel).
       </div>
 
-      <h2>Code: der letzte Ausweg (mit Bedacht)</h2>
-      <p>Wenn wirklich kein no-code-Node reicht, schreibst du im <strong>Code</strong>-Node ein paar Zeilen. Oben wählst du unter
-        <strong>Language</strong> zwischen <em>JavaScript</em> und <em>Python</em>. Wir bleiben bei JavaScript. Seit n8n 2.0 läuft
-        Python nativ über die Task Runner; auf n8n Cloud kannst du dort keine Python-Bibliotheken importieren. Direkt darunter
-        steht der <strong>Mode</strong>, und der ist die eigentlich wichtige Entscheidung:</p>
+      <h2>Code: der letzte Ausweg</h2>
+      <p>Wenn wirklich kein No-code-Node reicht, schreibst du im <strong>Code</strong>-Node ein paar Zeilen Programmcode.
+        Keine Sorge: Die Beispiele hier kannst du einfach abtippen. Oben im Node wählst du unter <strong>Language</strong>
+        (Programmiersprache) zwischen <em>JavaScript</em> und <em>Python</em>. Wir bleiben bei JavaScript. (Seit n8n 2.0
+        läuft Python nativ über die Task Runner; auf n8n Cloud kannst du dort keine Python-Bibliotheken importieren.)
+        Direkt darunter steht der <strong>Mode</strong>, und der ist die eigentlich wichtige Entscheidung:</p>
       <ul>
         <li><strong>Run Once for All Items:</strong> Dein Code läuft <em>einmal</em> und bekommt <em>alle</em> Items über
           <code>$input.all()</code>. Du gibst eine <strong>Liste</strong> von Items zurück.</li>
@@ -199,7 +208,8 @@
       <div class="callout callout--info">
         <b class="t">Der Code-Node sitzt seit n8n 2.0 im Sandkasten</b>
         <p style="margin:0 0 6px">Ab Version 2.0 laufen Code-Nodes standardmäßig in sogenannten <strong>Task Runnern</strong>, also
-          in einem abgeschotteten Prozess neben n8n. Du merkst davon im Alltag nichts, bis du etwas versuchst, was dort verboten ist.</p>
+          in einem abgeschotteten Extra-Prozess neben n8n. Im Alltag merkst du davon nichts. Erst wenn du etwas versuchst,
+          was dort verboten ist, meldet sich n8n mit einem Fehler:</p>
         <p style="margin:0 0 6px">• <strong>Keine Umgebungsvariablen.</strong> <code>process.env</code> im Code-Node und
           <code>$env</code> in Expressions sind ab 2.0 blockiert. Auf einer selbst gehosteten Instanz kannst du das mit
           <code>N8N_BLOCK_ENV_ACCESS_IN_NODE=false</code> wieder öffnen. n8n rät davon ab: Zugangsdaten gehören in Credentials.</p>
@@ -240,16 +250,21 @@
       <h2>Mini-Übung: Wetterdaten auf das Wesentliche eindampfen</h2>
       <p>Wir nehmen wieder den Wetter-Workflow und hängen hinter „Wetter holen“ einen Set-Node, der ein sauberes Objekt baut.</p>
       <ol class="steps">
-        <li><h4>Set-Node anhängen</h4><p>Vom HTTP-Node eine Linie ziehen, „Edit Fields (Set)“ wählen, öffnen.</p></li>
+        <li><h4>Set-Node anhängen</h4>
+          <p>Zieh vom kleinen Punkt rechts am HTTP-Node eine Linie ins Leere. Wähl „Edit Fields (Set)“ aus der Liste
+            und öffne den Node.</p></li>
         <li><h4>Drei Felder anlegen</h4>
-          <p><em>String</em> <code>stadt</code> = <code>Berlin</code> · <em>Number</em> <code>tempC</code> =
+          <p>Klick dreimal auf „Add Field“ und trag ein:
+            <em>String</em> <code>stadt</code> = <code>Berlin</code> · <em>Number</em> <code>tempC</code> =
             <code>{{ Math.round($json.current.temperature_2m) }}</code> · <em>Number</em> <code>windKmh</code> =
-            <code>{{ Math.round($json.current.wind_speed_10m) }}</code>.</p></li>
+            <code>{{ Math.round($json.current.wind_speed_10m) }}</code>. Die beiden Zahlenfelder brauchen den
+            Expression-Modus.</p></li>
         <li><h4>„Include Other Input Fields“ ausgeschaltet lassen</h4>
           <p>Der Schalter steht ohnehin auf aus. Schau trotzdem kurz nach, damit wirklich nur deine drei Felder übrig bleiben.</p></li>
         <li><h4>Ausführen &amp; prüfen</h4>
-          <p>„▶ Schritt ausführen“: Im Ausgang steht jetzt ein knappes Objekt <code>{ stadt, tempC, windKmh }</code>. Viel
-            angenehmer als das große Roh-JSON.</p></li>
+          <p>Klick auf „▶ Schritt ausführen“. Im Output-Panel steht jetzt ein knappes Objekt
+            <code>{ stadt, tempC, windKmh }</code>. Wenn du das siehst, hat alles geklappt. Viel angenehmer als das
+            große Roh-JSON.</p></li>
       </ol>
 
       <h2>Konkrete Testfälle</h2>
@@ -286,9 +301,9 @@
         6) Der Code-Node läuft im Task Runner, und der Zugriff auf Umgebungsvariablen ist dort standardmäßig blockiert.
       </div>
 
-      <p>Du kannst Daten jetzt holen, senden und umformen. Als Nächstes bringen wir <strong>Logik</strong> in den Ablauf:
+      <p>Du kannst Daten jetzt holen, senden und umformen. Als Nächstes bringen wir Logik in den Workflow:
         verzweigen mit <strong>IF</strong> und <strong>Switch</strong>, Zweige wieder zusammenführen mit <strong>Merge</strong>.
-        Und wir klären, wann du wirklich eine <strong>Schleife</strong> brauchst. Spoiler: seltener, als du denkst.</p>
+        Und wir klären, wann du wirklich eine Schleife brauchst. Spoiler: seltener, als du denkst.</p>
 
     </article>
     <nav id="prevnext"></nav>

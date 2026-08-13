@@ -16,9 +16,9 @@
 
       <div class="chap-eyebrow"><span class="knum">17</span> Projekt 5</div>
       <h1 class="chap-title">KI-E-Mail-Assistent</h1>
-      <p class="chap-lede">In diesem Projekt liest n8n neue E-Mails, lässt eine Basic LLM Chain die Nachricht klassifizieren,
-        erzeugt einen Antwortentwurf und meldet dringende Fälle an dein Team. Wichtig: Der Workflow sendet keine Antwort
-        automatisch. KI schlägt vor, der Mensch entscheidet.</p>
+      <p class="chap-lede">In diesem Projekt liest n8n neue E-Mails. Eine KI ordnet jede Nachricht ein, schreibt einen
+        Antwortentwurf und meldet dringende Fälle an dein Team. Wichtig: Der Workflow sendet keine Antwort automatisch.
+        Die KI schlägt vor, du entscheidest.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 50 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Mittel bis fortgeschritten</span>
@@ -28,11 +28,12 @@
       <div class="prereq">
         <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
-          <li>Ein Test-Postfach, idealerweise Gmail. Mit IMAP geht es auch, dann heißt der Trigger
-            <strong>Email Trigger (IMAP)</strong> und die Feldnamen im Output sehen anders aus.</li>
-          <li>Eine Gmail-Credential mit Zugriff auf Lesen, Labels und Entwürfe.</li>
-          <li>Eine Credential für ein Chat Model, etwa für den <strong>OpenAI Chat Model</strong>- oder den
-            <strong>Anthropic Chat Model</strong>-Node.</li>
+          <li>Ein Test-Postfach, idealerweise Gmail. Mit IMAP (dem allgemeinen Standard zum Abrufen von E-Mails) geht es
+            auch. Dann heißt der Trigger <strong>Email Trigger (IMAP)</strong> und die Feldnamen im Output sehen anders aus.</li>
+          <li>Eine Gmail-Credential, also gespeicherte Zugangsdaten wie in Kapitel 12, mit Zugriff auf Lesen, Labels und
+            Entwürfe.</li>
+          <li>Eine Credential für ein Chat Model, also für den Node, der die KI anspricht. Beispiele sind der
+            <strong>OpenAI Chat Model</strong>- und der <strong>Anthropic Chat Model</strong>-Node.</li>
           <li>Eine Slack-Credential oder einen anderen Benachrichtigungskanal für dringende Fälle.</li>
           <li>Test-E-Mails. Keine produktiven Kundenmails, bevor du die Klassifikation geprüft hast.</li>
         </ul>
@@ -46,9 +47,10 @@
       </div>
 
       <h2>Das Ziel</h2>
-      <p>Der Workflow reagiert auf neue ungelesene E-Mails. Er holt den vollständigen Inhalt, kürzt ihn auf das Nötige,
-        fragt eine Basic LLM Chain nach Kategorie, Dringlichkeit und Antwortentwurf, verarbeitet die strukturierte Ausgabe und
-        legt einen Gmail-Entwurf an. Sehr dringende E-Mails werden zusätzlich in Slack gemeldet.</p>
+      <p>Der Workflow reagiert auf neue ungelesene E-Mails. Er holt den vollständigen Inhalt und kürzt ihn auf das Nötige.
+        Dann fragt er eine <strong>Basic LLM Chain</strong> nach Kategorie, Dringlichkeit und einem Antwortentwurf. Das ist
+        der n8n-Node, der eine Anfrage an ein KI-Modell schickt und die Antwort zurückgibt. Diese Antwort prüfen wir, dann
+        legt n8n einen Gmail-Entwurf an. Sehr dringende E-Mails werden zusätzlich in Slack gemeldet.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -98,11 +100,12 @@
 
       <h2>Schritt 1: Testpostfach vorbereiten</h2>
       <p>Der wichtigste Schutz ist ein klar begrenzter Eingang. Wir lassen den Trigger nicht auf dein ganzes Postfach los.
-        Er sieht nur, was ein eigenes Testlabel trägt.</p>
+        Er sieht nur, was ein eigenes Testlabel trägt. Ein Label ist in Gmail eine Art Etikett, das du an E-Mails heften
+        kannst.</p>
 
       <ol class="steps">
         <li><h4>Gmail-Label anlegen</h4>
-          <p>Lege in Gmail ein Label <code>n8n-test-ai</code> an.</p></li>
+          <p>Lege in Gmail ein Label mit dem Namen <code>n8n-test-ai</code> an.</p></li>
         <li><h4>Test-E-Mail senden</h4>
           <p>Sende dir selbst eine E-Mail mit Betreff <code>Bitte Angebot für Workshop</code> und einem kurzen Text.</p></li>
         <li><h4>Label setzen</h4>
@@ -129,8 +132,10 @@
         <li><h4>Ereignis setzen</h4>
           <p>Setze <strong>Event</strong> auf <strong>Message Received</strong>.</p></li>
         <li><h4>Poll-Zeit setzen</h4>
-          <p>Unter <strong>Poll Times</strong> setzt du <strong>Mode</strong> auf <strong>Every X</strong>, <strong>Value</strong>
-            auf <code>5</code> und <strong>Unit</strong> auf <strong>Minutes</strong>. Im Betrieb darfst du langsamer pollen.</p></li>
+          <p>„Poll“ heißt: n8n schaut in festen Abständen selbst im Postfach nach. Unter <strong>Poll Times</strong> setzt du
+            <strong>Mode</strong> auf <strong>Every X</strong>, <strong>Value</strong> auf <code>5</code> und
+            <strong>Unit</strong> auf <strong>Minutes</strong>. n8n prüft dann alle 5 Minuten. Im Betrieb darfst du langsamer
+            pollen.</p></li>
         <li><h4>Menge begrenzen</h4>
           <p>Setze <strong>Max Emails per Poll</strong> auf <code>3</code>. Voreingestellt sind 10, erlaubt sind bis zu 50.</p></li>
         <li><h4>Filter setzen</h4>
@@ -167,28 +172,32 @@
       </div>
 
       <h2>Schritt 3: Vollständige E-Mail holen</h2>
-      <p>Der Trigger hat <strong>Simplify</strong> standardmäßig an und liefert dann nur Kopfzeilen und den Vorschautext aus
-        <code>snippet</code>. Für die KI brauchen wir aber den ganzen Textkörper. Deshalb hängen wir einen Gmail-Node an, der
-        die Nachricht per ID noch einmal holt.</p>
+      <p>Im Trigger ist die Option <strong>Simplify</strong> (auf Deutsch: vereinfachen) standardmäßig eingeschaltet. Er
+        liefert dann nur die Kopfzeilen und den kurzen Vorschautext aus dem Feld <code>snippet</code>. Für die KI brauchen
+        wir aber den ganzen Nachrichtentext. Deshalb hängen wir einen Gmail-Node an, der die Nachricht über ihre ID noch
+        einmal komplett holt.</p>
 
       <ol class="steps">
         <li><h4>Gmail-Node anhängen</h4>
-          <p>Ziehe vom Gmail Trigger eine Linie ins Leere, suche <code>gmail</code> und wähle <strong>Gmail</strong>.</p></li>
+          <p>Ziehe vom kleinen Punkt rechts am Gmail Trigger eine Linie ins Leere und lass los. Die Node-Suche öffnet sich.
+            Suche <code>gmail</code> und wähle <strong>Gmail</strong>.</p></li>
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>E-Mail holen</code>. Unter diesem Namen sprechen wir ihn in den nächsten Schritten an.</p></li>
         <li><h4>Operation wählen</h4>
           <p>Setze <strong>Resource</strong> auf <strong>Message</strong> und <strong>Operation</strong> auf
             <strong>Get</strong>.</p></li>
         <li><h4>Message ID einsetzen</h4>
-          <p>Stelle das Feld <strong>Message ID</strong> auf Expression und trage <code>{{ $json.id }}</code> ein.</p></li>
+          <p>Stelle das Feld <strong>Message ID</strong> auf Expression um, also auf eine Formel statt festem Text.
+            Trage <code>{{ $json.id }}</code> ein. So nimmt der Node die ID der Mail, die der Trigger gefunden hat.</p></li>
         <li><h4>Simplify ausschalten</h4>
           <p>Schalte <strong>Simplify</strong> <strong>aus</strong>. Das ist der entscheidende Klick in diesem Schritt: Mit
             eingeschaltetem Simplify holt der Node nur die Kopfzeilen und schreibt sie großgeschrieben als <code>Subject</code>
             und <code>From</code> ins Item, ohne Nachrichtentext. Ausgeschaltet bekommst du <code>subject</code>,
             <code>from</code>, <code>text</code>, <code>html</code> und <code>headers</code>.</p></li>
         <li><h4>Schritt ausführen</h4>
-          <p>Führe den Node aus und prüfe rechts, ob Betreff, Absender und Inhalt sichtbar sind. <code>from</code> ist dabei
-            kein einfacher String, sondern ein Objekt. Die lesbare Adresse steht in <code>from.text</code>.</p></li>
+          <p>Führe den Node aus. Rechts im Ausgabe-Bereich siehst du jetzt Betreff, Absender und den Nachrichtentext.
+            Beachte: <code>from</code> ist kein einfacher Text, sondern ein Objekt mit mehreren Unterfeldern. Die lesbare
+            Adresse steht in <code>from.text</code>.</p></li>
       </ol>
 
       <figure class="figure">
@@ -226,8 +235,8 @@
       </figure>
 
       <h2>Schritt 4: E-Mail-Text vorbereiten</h2>
-      <p>Signaturen und alte Antwortketten braucht das Modell nicht. Wir bauen ein kompaktes Objekt, das die Basic LLM Chain
-        lesen soll: Betreff, Absender, gekürzter Text, dazu die IDs für die späteren Schritte.</p>
+      <p>Signaturen und alte Antwortketten braucht das KI-Modell nicht. Wir bauen deshalb ein kleines, aufgeräumtes
+        Datenpaket für die Basic LLM Chain: Betreff, Absender und gekürzter Text, dazu die IDs für die späteren Schritte.</p>
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
@@ -235,11 +244,15 @@
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>E-Mail vorbereiten</code>.</p></li>
         <li><h4>Modus wählen</h4>
-          <p>Setze den Modus auf <strong>Run Once for Each Item</strong>.</p></li>
+          <p>Setze den Modus auf <strong>Run Once for Each Item</strong>. Der Code läuft dann für jede E-Mail einzeln.</p></li>
         <li><h4>Code einfügen</h4>
           <p>Füge diesen Code ein. Die ersten drei Zeilen fangen beide Gmail-Varianten ab: <code>subject</code> und
             <code>from.text</code> kommen aus dem Node ohne Simplify, <code>Subject</code> und <code>From</code> aus dem Node
             mit Simplify.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Node aus. Rechts siehst du jetzt ein Item mit den Feldern <code>message_id</code>,
+            <code>thread_id</code>, <code>subject</code>, <code>from</code> und <code>email_text</code>. Genau dieses Paket
+            bekommt gleich die KI.</p></li>
       </ol>
 
       <div class="code">
@@ -273,31 +286,36 @@
       </div>
 
       <h2>Schritt 5: Basic LLM Chain hinzufügen</h2>
-      <p>Jetzt kommt der KI-Schritt. Wichtig für den Stand Juli 2026: Seit n8n 1.82 gibt es beim AI Agent keine Agent-Typen
-        mehr, jeder AI Agent arbeitet als Tools Agent, und die Doku verlangt mindestens ein verbundenes Tool. Unsere Aufgabe
-        ist reine Klassifikation plus Textentwurf. Dafür passt die <strong>Basic LLM Chain</strong> besser als ein Agent ohne
-        Werkzeuge.</p>
+      <p>Vielleicht hast du schon vom <strong>AI Agent</strong>-Node gehört und fragst dich, warum wir ihn hier nicht
+        nehmen. Der Grund, Stand Juli 2026: Seit n8n 1.82 gibt es beim AI Agent keine Agent-Typen mehr. Jeder AI Agent arbeitet als Tools Agent,
+        und die Doku verlangt mindestens ein verbundenes Tool, also ein Werkzeug, das die KI selbst benutzen darf. Unsere
+        Aufgabe ist einfacher: nur einordnen und einen Text entwerfen. Dafür passt die <strong>Basic LLM Chain</strong>
+        besser als ein Agent ohne Werkzeuge.</p>
 
       <ol class="steps">
         <li><h4>Basic LLM Chain anhängen</h4>
           <p>Ziehe von <strong>E-Mail vorbereiten</strong> eine Linie ins Leere, suche <code>basic llm chain</code> und wähle
             <strong>Basic LLM Chain</strong>.</p></li>
         <li><h4>Keine Tools erzwingen</h4>
-          <p>Diese Chain bekommt nur den vorbereiteten E-Mail-Text und gibt strukturiertes JSON zurück.</p></li>
+          <p>Diese Chain braucht keine Werkzeuge. Sie bekommt nur den vorbereiteten E-Mail-Text und gibt strukturiertes
+            JSON zurück.</p></li>
         <li><h4>Modell verbinden</h4>
-          <p>Unter dem Chain-Node hängt ein Anschluss mit dem Namen <strong>Model</strong>. Beim AI Agent heißt derselbe
-            Anschluss <strong>Chat Model</strong>; bei der Chain steht dort nur <strong>Model</strong>. Klicke auf das
-            <span class="kbd">+</span> darunter und wähle <strong>OpenAI Chat Model</strong>.</p></li>
+          <p>Unter dem Chain-Node hängt ein Anschluss mit dem Namen <strong>Model</strong>. Dort wird das KI-Modell
+            angeschlossen. Beim AI Agent heißt derselbe Anschluss <strong>Chat Model</strong>; bei der Chain steht dort nur
+            <strong>Model</strong>. Klicke auf das <span class="kbd">+</span> darunter und wähle
+            <strong>OpenAI Chat Model</strong>.</p></li>
         <li><h4>Modell auswählen</h4>
           <p>Wähle deine Credential. Im Feld <strong>Model</strong> steht die Liste der verfügbaren Modelle; n8n 2.32 schlägt
             beim OpenAI Chat Model <code>gpt-5-mini</code> vor. Nimmst du stattdessen den <strong>Anthropic Chat Model</strong>-Node,
             ist <code>claude-sonnet-4-6</code> die Voreinstellung. Für Einordnen und einen kurzen Entwurf brauchst du kein
             großes Modell.</p></li>
         <li><h4>Prompt-Quelle setzen</h4>
-          <p>Setze <strong>Source for Prompt (User Message)</strong> auf <strong>Define below</strong>. Die zweite Option heißt
-            <strong>Connected Chat Trigger Node</strong> und sucht ein Feld <code>chatInput</code>. Das haben wir hier nicht.</p></li>
+          <p>Öffne den Chain-Node. Setze <strong>Source for Prompt (User Message)</strong> auf <strong>Define below</strong>,
+            also: den Prompt direkt hier eintippen. Die zweite Option heißt <strong>Connected Chat Trigger Node</strong> und
+            sucht ein Feld <code>chatInput</code>. Das haben wir hier nicht.</p></li>
         <li><h4>Prompt einfügen</h4>
-          <p>Trage den folgenden Text in das Feld <strong>Prompt (User Message)</strong> ein.</p></li>
+          <p>Ein Prompt ist die Arbeitsanweisung an die KI. Trage den folgenden Text in das Feld
+            <strong>Prompt (User Message)</strong> ein.</p></li>
       </ol>
 
       <div class="code">
@@ -352,25 +370,27 @@ Text: {{ $json.email_text }}</pre>
 
       <div class="callout callout--warn">
         <b class="t">Wenn die Chain kein JSON liefert</b>
-        Prüfe zuerst, ob dein Prompt wirklich „ausschließlich gültiges JSON“ verlangt. Die Chain hat außerdem einen Schalter
-        <strong>Require Specific Output Format</strong>. Schaltest du ihn ein, erscheint unter dem Node ein zusätzlicher
-        Anschluss <strong>Output Parser</strong>. Dort hängst du den <strong>Structured Output Parser</strong> ein, setzt
-        <strong>Schema Type</strong> auf <strong>Generate From JSON Example</strong> und fügst unter <strong>JSON Example</strong>
-        genau das Objekt aus dem Prompt oben ein. Achtung, das ändert den nächsten Schritt: Mit Parser landen
-        <code>category</code>, <code>urgency</code> und die übrigen Schlüssel direkt oben im Item, das Feld <code>text</code>
-        gibt es dann nicht mehr. Im Code-Node aus Schritt 6 ersetzt du deshalb die Zeile mit <code>raw</code> samt
-        <code>try</code>-Block durch <code>const parsed = item.json;</code>. Alles darunter bleibt stehen. Diese Prüfung lohnt
-        sich weiterhin, denn auch mit Parser kann ein Modell eine Kategorie erfinden, die du nicht erlaubt hast.
+        Prüfe zuerst, ob dein Prompt wirklich „ausschließlich gültiges JSON“ verlangt. Reicht das nicht, hilft ein Schalter
+        an der Chain: <strong>Require Specific Output Format</strong>. Schaltest du ihn ein, erscheint unter dem Node ein
+        zusätzlicher Anschluss <strong>Output Parser</strong>. Dort hängst du den <strong>Structured Output Parser</strong>
+        ein. Setze in ihm <strong>Schema Type</strong> auf <strong>Generate From JSON Example</strong> und füge unter
+        <strong>JSON Example</strong> genau das Objekt aus dem Prompt oben ein. Achtung, das ändert den nächsten Schritt:
+        Mit Parser landen <code>category</code>, <code>urgency</code> und die übrigen Schlüssel direkt oben im Item. Das Feld
+        <code>text</code> gibt es dann nicht mehr. Im Code-Node aus Schritt 6 ersetzt du deshalb die Zeile mit
+        <code>raw</code> samt <code>try</code>-Block durch <code>const parsed = item.json;</code>. Alles darunter bleibt
+        stehen. Diese Prüfung lohnt sich weiterhin, denn auch mit Parser kann ein Modell eine Kategorie erfinden, die du
+        nicht erlaubt hast.
       </div>
 
       <h2>Schritt 6: KI-Ausgabe prüfen und zerlegen</h2>
-      <p>Wir vertrauen der KI-Ausgabe nicht blind. Ein Code-Node versucht, JSON zu parsen, setzt Fallbacks und markiert
-        fehlerhafte Antworten.</p>
+      <p>Wir vertrauen der KI-Ausgabe nicht blind. Ein Code-Node versucht, die Antwort als JSON zu parsen, also als Daten
+        einzulesen. Klappt das nicht, setzt er Ersatzwerte und markiert die Antwort als fehlerhaft.</p>
 
       <p>Vorher ein Stolperstein, der beim Bauen viel Zeit kostet: Die Basic LLM Chain reicht ihre Eingabe <strong>nicht</strong>
-        durch. Aus dem Node kommt genau ein Feld heraus, nämlich <code>text</code>. Betreff, Absender und Message-ID sind ab hier
-        weg. Wir holen sie deshalb ausdrücklich über <code>$('E-Mail vorbereiten')</code> zurück und legen sie wieder mit ins Item.
-        Ohne diesen Griff bleiben später der Entwurfsempfänger und das Label leer.</p>
+        durch. Aus dem Node kommt genau ein Feld heraus, nämlich <code>text</code>. Betreff, Absender und Message-ID sind ab
+        hier weg. Das ist kein Fehler von dir, der Node arbeitet einfach so. Wir holen die Felder deshalb ausdrücklich über
+        <code>$('E-Mail vorbereiten')</code> zurück und legen sie wieder mit ins Item. Ohne diesen Griff bleiben später der
+        Entwurfsempfänger und das Label leer.</p>
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
@@ -382,6 +402,10 @@ Text: {{ $json.email_text }}</pre>
           <p>Füge diesen Parser ein. Die Basic LLM Chain schreibt ihre Antwort in das Feld <code>text</code>. Die Zeile mit
             <code>raw</code> prüft trotzdem noch <code>output</code> und <code>response</code> mit, weil ältere Chain-Versionen
             und der AI Agent andere Namen benutzen.</p></li>
+        <li><h4>Schritt ausführen</h4>
+          <p>Führe den Node aus. Rechts steht jetzt ein Item, das beides enthält: die Felder aus <strong>E-Mail
+            vorbereiten</strong> und dazu die neuen KI-Felder wie <code>category</code>, <code>urgency</code> und
+            <code>draft_body</code>. Damit hast du den schwierigsten Teil des Kapitels geschafft.</p></li>
       </ol>
 
       <div class="code">
@@ -429,7 +453,8 @@ Text: {{ $json.email_text }}</pre>
       </div>
 
       <h2>Schritt 7: Entwurf in Gmail erstellen</h2>
-      <p>Jetzt macht der Workflow etwas Nützliches, aber Reversibles: Er legt einen Entwurf an.</p>
+      <p>Jetzt macht der Workflow etwas Nützliches, das sich jederzeit rückgängig machen lässt: Er legt einen Entwurf an.
+        Einen Entwurf kannst du in Ruhe lesen, ändern oder löschen. Gesendet wird nichts.</p>
 
       <ol class="steps">
         <li><h4>Gmail-Node anhängen</h4>
@@ -444,16 +469,16 @@ Text: {{ $json.email_text }}</pre>
         <li><h4>Text setzen</h4>
           <p>Setze <strong>Message</strong> auf <code>{{ $json.draft_body }}</code>.</p></li>
         <li><h4>Empfänger setzen</h4>
-          <p>Ein Feld <strong>To</strong> gibt es hier nicht, und das ist die Stelle, an der die meisten hängen bleiben. Klicke
-            unten auf <strong>Add option</strong> und wähle <strong>To Email</strong>. Trage dort
-            <code>{{ $json.from }}</code> ein. Prüfe bei echten Mails später, ob das Feld nur die Adresse enthält oder auch den
-            Anzeigenamen.</p></li>
+          <p>Ein Feld <strong>To</strong> gibt es hier nicht. An dieser Stelle bleiben die meisten hängen. Klicke unten auf
+            <strong>Add option</strong> und wähle <strong>To Email</strong>. Trage dort <code>{{ $json.from }}</code> ein.
+            Prüfe bei echten Mails später, ob das Feld nur die Adresse enthält oder auch den Anzeigenamen.</p></li>
         <li><h4>Entwurf in den Thread hängen</h4>
           <p>Füge über <strong>Add option</strong> noch <strong>Thread ID</strong> hinzu und setze sie auf
-            <code>{{ $json.thread_id }}</code>. Damit sitzt der Entwurf in der richtigen Unterhaltung statt einzeln im
-            Entwurfsordner.</p></li>
+            <code>{{ $json.thread_id }}</code>. Damit sitzt der Entwurf in der richtigen Unterhaltung (dem „Thread“) statt
+            einzeln im Entwurfsordner.</p></li>
         <li><h4>Schritt ausführen</h4>
-          <p>Führe den Node aus und öffne danach Gmail. Im Entwurfsordner sollte ein neuer Antwortentwurf liegen.</p></li>
+          <p>Führe den Node aus und öffne danach Gmail. Im Entwurfsordner liegt jetzt ein neuer Antwortentwurf. Wenn du ihn
+            siehst, hat alles geklappt.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -464,18 +489,20 @@ Text: {{ $json.email_text }}</pre>
       </div>
 
       <h2>Schritt 8: Dringende Fälle melden</h2>
-      <p>Jetzt verzweigen wir. Nur E-Mails mit <code>urgency = high</code> gehen zusätzlich in Slack. Alle anderen bekommen
-        allein den Gmail-Entwurf.</p>
+      <p>Nur E-Mails mit <code>urgency = high</code> gehen zusätzlich in Slack. Alle anderen bekommen
+        nur den Gmail-Entwurf.</p>
 
       <ol class="steps">
         <li><h4>IF-Node anhängen</h4>
-          <p>Hänge hinter <strong>KI-Ausgabe prüfen</strong> zusätzlich einen IF-Node oder setze ihn vor den Gmail-Entwurf,
-            wenn du die Verzweigung sichtbarer haben willst.</p></li>
+          <p>Hänge hinter <strong>KI-Ausgabe prüfen</strong> zusätzlich einen IF-Node an. Er läuft dann parallel zum
+            Entwurf-Node. Du kannst den IF-Node auch vor den Gmail-Entwurf setzen, wie in Abb. 17.5. Dann ist die
+            Verzweigung besser sichtbar.</p></li>
         <li><h4>Bedingung setzen</h4>
-          <p>Links <code>{{ $json.urgency }}</code> eintragen. In der Mitte im Dropdown erst den Datentyp <strong>String</strong>
-            wählen, dann die Operation <em>is equal to</em>. Rechts <code>high</code> eintragen.</p></li>
+          <p>Trage links <code>{{ $json.urgency }}</code> ein. Wähle in der Mitte im Dropdown erst den Datentyp
+            <strong>String</strong>, dann die Operation <em>is equal to</em>. Trage rechts <code>high</code> ein.</p></li>
         <li><h4>Slack an true-Ausgang hängen</h4>
-          <p>Hänge an den true-Ausgang einen Slack-Node mit Kanal <code>#inbox-urgent-test</code>.</p></li>
+          <p>Der IF-Node hat zwei Ausgänge: <strong>true</strong> für „Bedingung erfüllt“ und <strong>false</strong> für
+            den Rest. Hänge an den true-Ausgang einen Slack-Node mit dem Kanal <code>#inbox-urgent-test</code>.</p></li>
         <li><h4>Slack-Text setzen</h4>
           <p>Setze den Text auf die folgende Expression.</p></li>
       </ol>
@@ -534,9 +561,11 @@ Zusammenfassung:
           <p>Setze <strong>Resource</strong> auf <strong>Message</strong> und <strong>Operation</strong> auf
             <strong>Add Label</strong>.</p></li>
         <li><h4>Message ID zurückholen</h4>
-          <p>Der Gmail-Node davor hat einen Entwurf zurückgegeben, nicht unsere ursprüngliche Mail. In <code>$json</code> steht
-            deshalb keine <code>message_id</code> mehr. Trage im Feld <strong>Message ID</strong> als Expression
-            <code>{{ $('KI-Ausgabe prüfen').item.json.message_id }}</code> ein.</p></li>
+          <p>Achtung, hier lauert ein Stolperstein: Der Gmail-Node davor hat einen Entwurf zurückgegeben, nicht unsere
+            ursprüngliche Mail. In <code>$json</code> steht deshalb keine <code>message_id</code> mehr. Trage im Feld
+            <strong>Message ID</strong> als Expression
+            <code>{{ $('KI-Ausgabe prüfen').item.json.message_id }}</code> ein. So greifst du auf das Item des früheren
+            Nodes zurück.</p></li>
         <li><h4>Label wählen</h4>
           <p>Unter <strong>Label Names or IDs</strong> wählst du <code>n8n-ai-draft</code> aus der Liste.</p></li>
         <li><h4>Optional als gelesen markieren</h4>
@@ -563,7 +592,8 @@ Zusammenfassung:
           <p>Öffne jede Ausführung. Prüfe besonders die Felder <code>category</code>, <code>urgency</code>,
             <code>summary</code> und <code>draft_body</code>.</p></li>
         <li><h4>Workflow publishen</h4>
-          <p>Erst wenn alle drei Fälle passen, warte auf Auto-Save und klicke <strong>Publish</strong>. Lasse das Testlabel zunächst bestehen.</p></li>
+          <p>Erst wenn alle drei Fälle passen: Warte auf das Auto-Save und klicke <strong>Publish</strong>. Ab jetzt läuft
+            der Workflow von selbst. Lass das Testlabel zunächst bestehen.</p></li>
       </ol>
 
       <div class="callout callout--pareto">
@@ -622,8 +652,8 @@ Zusammenfassung:
         6) Damit Fehler nicht unsichtbar werden.
       </div>
 
-      <p>Du hast jetzt einen KI-Workflow gebaut, der einen realen Arbeitsprozess unterstützt, ohne die Kontrolle abzugeben.
-        Lass ihn ein paar Tage auf dem Testlabel laufen, bevor du das Label wegnimmst. Im nächsten Projekt wird die Eingabe
+      <p>Der Assistent ist damit fertig: Die KI sortiert vor und formuliert, entschieden wird bei dir im Entwurfsordner.
+        Lass den Workflow ein paar Tage auf dem Testlabel laufen, bevor du das Label wegnimmst. Im nächsten Projekt wird die Eingabe
         schwieriger: PDFs und Rechnungen musst du erst lesen und strukturieren, bevor n8n damit zuverlässig weiterarbeitet.</p>
 
     </article>

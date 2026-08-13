@@ -16,9 +16,9 @@
 
       <div class="chap-eyebrow"><span class="knum">D</span> Anhang</div>
       <h1 class="chap-title">Glossar</h1>
-      <p class="chap-lede">Dieses Glossar erklärt die Begriffe aus dem Werkbuch und aus der n8n-Oberfläche in kurzen,
-        arbeitsnahen Sätzen. Gedacht ist es zum Nachschlagen beim Lesen und beim Debuggen. Eine technische Spezifikation
-        ersetzt es nicht.</p>
+      <p class="chap-lede">Alle Begriffe aus dem Werkbuch und aus der n8n-Oberfläche, jeweils in ein bis zwei Sätzen
+        erklärt. Auswendig lernen musst du nichts. Schlag nach, wenn dir beim Lesen oder bei der Fehlersuche ein
+        Wort unklar ist.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 8 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Nachschlagen</span>
@@ -27,15 +27,16 @@
 
       <div class="callout callout--pareto">
         <b class="t">80/20 für Begriffe</b>
-        Wenn du nur sieben Wörter sicher können willst, dann diese: Workflow, Node, Item, JSON, Credential, Execution
-        und Publish. Diese Begriffe tauchen in fast jeder Fehlersuche auf.
+        Wenn du nur sieben Wörter sicher kennen willst, dann diese: Workflow, Node, Item, JSON, Credential, Execution
+        und Publish. Sie tauchen in fast jeder Fehlersuche auf.
       </div>
 
       <div class="callout callout--info">
         <b class="t">Welcher Stand hier gilt</b>
         Die Erklärungen folgen dem Stand Juli 2026 und n8n 2.32.x. Ein paar Begriffe haben mit n8n 2.0 den Namen
-        gewechselt. Am häufigsten stolpert man über den alten Aktiv-Schalter: Was früher „aktivieren“ hieß, heißt
-        heute <strong>Publish</strong>. Wo ein Begriff so einen Vorgänger hat, stehen beide Namen im Eintrag.
+        gewechselt. Am häufigsten stolpert man über den alten Aktiv-Schalter: Was in älteren Anleitungen „aktivieren“
+        heißt, heißt heute <strong>Publish</strong>. Wo ein Begriff so einen Vorgänger hat, stehen beide Namen im
+        Eintrag. Wundere dich also nicht, wenn ein YouTube-Video noch das alte Wort benutzt.
       </div>
 
       <h2>A bis C</h2>
@@ -44,13 +45,13 @@
         <tbody>
           <tr><td>Active / Activation</td><td>in n8n 1.x der Schalter, mit dem ein Workflow automatisch lief. Seit n8n 2.0 gibt es dafür <em>Publish</em> und als Gegenstück <em>Unpublish</em>. Ältere Anleitungen sagen noch „aktivieren“</td><td>Steht der Workflow auf Published?</td></tr>
           <tr><td>Agent Builder</td><td>Oberfläche im Projekt-Reiter <em>Agents</em>, in der ein KI-Agent ein eigenes Objekt neben den Workflows ist. n8n führt das noch als Preview</td><td>Baue ich den Agenten inline oder als eigenes Objekt?</td></tr>
-          <tr><td>API</td><td>Schnittstelle, über die Systeme Daten austauschen</td><td>Welche URL, Methode und Authentifizierung?</td></tr>
-          <tr><td>API-Key</td><td>geheimer Schlüssel für einen Dienst</td><td>Liegt er in Credentials statt im Workflow?</td></tr>
-          <tr><td>Batching</td><td>Items in kleineren Gruppen verarbeiten</td><td>Wie groß darf eine Gruppe sein?</td></tr>
+          <tr><td>API</td><td>Schnittstelle, über die zwei Programme Daten austauschen, ohne dass ein Mensch klickt</td><td>Welche URL, Methode und Authentifizierung?</td></tr>
+          <tr><td>API-Key</td><td>geheimer Schlüssel, mit dem du dich bei einem Dienst ausweist</td><td>Liegt er in Credentials statt im Workflow?</td></tr>
+          <tr><td>Batching</td><td>Items nicht alle auf einmal, sondern in kleineren Gruppen verarbeiten</td><td>Wie groß darf eine Gruppe sein?</td></tr>
           <tr><td>Binary Data</td><td>Dateiinhalte wie PDFs, Bilder oder Anhänge. Seit n8n 2.0 liegen die Bytes im Dateisystem, im Queue-Modus in der Datenbank</td><td>Wo wird die Datei gespeichert?</td></tr>
-          <tr><td>Canvas</td><td>Arbeitsfläche, auf der Nodes verbunden werden</td><td>Welche Daten laufen entlang der Verbindung?</td></tr>
-          <tr><td>Code Node</td><td>Node für eigene JavaScript- oder Python-Logik</td><td>Ist Code hier nötig oder reicht ein sichtbarer Node?</td></tr>
-          <tr><td>Credential</td><td>gespeicherte Authentifizierung für externe Dienste</td><td>Wer darf dieses Credential benutzen?</td></tr>
+          <tr><td>Canvas</td><td>die große Arbeitsfläche in der Mitte des Editors, auf der du Nodes ablegst und verbindest</td><td>Welche Daten laufen entlang der Verbindung?</td></tr>
+          <tr><td>Code Node</td><td>Node, in den du eigenen JavaScript- oder Python-Code schreibst</td><td>Ist Code hier nötig oder reicht ein sichtbarer Node?</td></tr>
+          <tr><td>Credential</td><td>in n8n gespeicherte Zugangsdaten für einen externen Dienst, zum Beispiel ein API-Key oder ein Login</td><td>Wer darf dieses Credential benutzen?</td></tr>
         </tbody>
       </table>
 
@@ -59,17 +60,17 @@
         <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
         <tbody>
           <tr><td>Data Table</td><td>Tabelle, die n8n selbst speichert, im Projekt unter <em>Data Tables</em>. Der Node <em>Data Table</em> liest und schreibt sie im Workflow</td><td>Reicht eine n8n-Tabelle oder brauche ich eine echte Datenbank?</td></tr>
-          <tr><td>Datenfluss</td><td>Reihenfolge, in der Items durch Nodes laufen</td><td>Welcher Node erzeugt welches Feld?</td></tr>
-          <tr><td>Deployment</td><td>kontrolliertes Überführen in eine Zielumgebung</td><td>Welche Version läuft in Produktion?</td></tr>
+          <tr><td>Datenfluss</td><td>der Weg der Daten: die Reihenfolge, in der Items durch die Nodes laufen</td><td>Welcher Node erzeugt welches Feld?</td></tr>
+          <tr><td>Deployment</td><td>das kontrollierte Überführen eines Workflows in eine Zielumgebung, zum Beispiel von Test nach Produktion</td><td>Welche Version läuft in Produktion?</td></tr>
           <tr><td>Draft</td><td>dein Bearbeitungsstand im Editor. n8n sichert ihn automatisch, in den Betrieb kommt er erst mit <em>Publish</em></td><td>Teste ich den Draft oder die veröffentlichte Version?</td></tr>
-          <tr><td>Encryption Key</td><td>Schlüssel zum Verschlüsseln gespeicherter Credentials</td><td>Ist er gesichert und in allen Prozessen gleich?</td></tr>
-          <tr><td>Environment Variable</td><td>Konfigurationswert außerhalb des Workflow-JSON</td><td>Unterscheidet sich dev von prod?</td></tr>
-          <tr><td>Error Workflow</td><td>Workflow, der auf Fehler anderer Workflows reagiert</td><td>Welche Information brauche ich bei einem Fehler?</td></tr>
-          <tr><td>Execution</td><td>eine konkrete Ausführung eines Workflows</td><td>Welche Items kamen rein, welche gingen raus?</td></tr>
-          <tr><td>Expression</td><td>dynamischer Ausdruck in einem Node-Feld</td><td>Aus welchem Item kommt der Wert?</td></tr>
-          <tr><td>Idempotenz</td><td>mehrfaches Ausführen erzeugt kein mehrfaches Ergebnis</td><td>Wie verhindere ich Dubletten?</td></tr>
+          <tr><td>Encryption Key</td><td>Schlüssel, mit dem n8n die gespeicherten Credentials verschlüsselt</td><td>Ist er gesichert und in allen Prozessen gleich?</td></tr>
+          <tr><td>Environment Variable</td><td>Umgebungsvariable: ein Konfigurationswert, der außerhalb des Workflows gesetzt wird</td><td>Unterscheidet sich dev von prod?</td></tr>
+          <tr><td>Error Workflow</td><td>Workflow, der automatisch startet, wenn ein anderer Workflow mit Fehler abbricht</td><td>Welche Information brauche ich bei einem Fehler?</td></tr>
+          <tr><td>Execution</td><td>ein einzelner, konkreter Lauf eines Workflows</td><td>Welche Items kamen rein, welche gingen raus?</td></tr>
+          <tr><td>Expression</td><td>kleine Formel in einem Node-Feld, die ihren Wert dynamisch aus den Daten holt</td><td>Aus welchem Item kommt der Wert?</td></tr>
+          <tr><td>Idempotenz</td><td>Eigenschaft einer Aktion: Sie darf mehrfach laufen und erzeugt trotzdem kein doppeltes Ergebnis</td><td>Wie verhindere ich Dubletten?</td></tr>
           <tr><td>Insights</td><td>Auswertung über Anzahl, Fehlerquote und Laufzeit deiner Ausführungen. Gezählt werden nur Produktionsläufe, Testläufe bleiben draußen</td><td>Welcher Workflow schlägt am häufigsten fehl?</td></tr>
-          <tr><td>Item</td><td>ein Datensatz, der durch den Workflow läuft</td><td>Wie sieht das aktuelle JSON aus?</td></tr>
+          <tr><td>Item</td><td>ein einzelner Datensatz, der durch den Workflow läuft, zum Beispiel eine E-Mail oder eine Tabellenzeile</td><td>Wie sieht das aktuelle JSON aus?</td></tr>
         </tbody>
       </table>
 
@@ -77,16 +78,16 @@
       <table class="btable">
         <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
         <tbody>
-          <tr><td>JSON</td><td>strukturierte Daten aus Objekten, Feldern und Listen</td><td>Ist das Feld wirklich dort, wo ich es suche?</td></tr>
-          <tr><td>Loop</td><td>wiederholte Verarbeitung von Items oder Gruppen</td><td>Wann endet die Schleife?</td></tr>
+          <tr><td>JSON</td><td>das Datenformat, in dem n8n arbeitet: strukturierte Daten aus Objekten, Feldern und Listen</td><td>Ist das Feld wirklich dort, wo ich es suche?</td></tr>
+          <tr><td>Loop</td><td>Schleife: dieselben Schritte laufen für jedes Item oder jede Gruppe erneut</td><td>Wann endet die Schleife?</td></tr>
           <tr><td>MCP</td><td>Protokoll, über das ein Agent externe Werkzeuge anspricht. n8n kann beide Seiten: Client über das MCP Client Tool, Server über den MCP Server Trigger</td><td>Welche Werkzeuge gibt der Server frei?</td></tr>
-          <tr><td>Merge</td><td>Zusammenführen mehrerer Datenströme</td><td>Nach Position oder nach Schlüssel?</td></tr>
-          <tr><td>NDV</td><td>Node-Detailansicht mit Parametern, Input und Output</td><td>Welche Einstellung verändert das Verhalten?</td></tr>
-          <tr><td>Node</td><td>ein einzelner Baustein im Workflow</td><td>Was ist seine Eingabe, was seine Ausgabe?</td></tr>
-          <tr><td>Output</td><td>Daten, die ein Node nach der Ausführung weitergibt</td><td>Welche Felder sind ab jetzt verfügbar?</td></tr>
-          <tr><td>Pagination</td><td>API-Daten seitenweise abrufen</td><td>Wo steht die nächste Seite?</td></tr>
+          <tr><td>Merge</td><td>das Zusammenführen mehrerer Datenströme zu einem</td><td>Nach Position oder nach Schlüssel?</td></tr>
+          <tr><td>NDV</td><td>die Node-Detailansicht: das große Fenster mit Parametern, Input und Output, das aufgeht, wenn du einen Node öffnest</td><td>Welche Einstellung verändert das Verhalten?</td></tr>
+          <tr><td>Node</td><td>ein einzelner Baustein im Workflow, der eine Aufgabe erledigt</td><td>Was ist seine Eingabe, was seine Ausgabe?</td></tr>
+          <tr><td>Output</td><td>die Daten, die ein Node nach der Ausführung an den nächsten weitergibt</td><td>Welche Felder sind ab jetzt verfügbar?</td></tr>
+          <tr><td>Pagination</td><td>API-Daten seitenweise abrufen, weil nicht alles auf einmal kommt</td><td>Wo steht die nächste Seite?</td></tr>
           <tr><td>Publish</td><td>den gespeicherten Draft live schalten. Vorher ändert sich am Produktivbetrieb nichts, der Autosave sichert nur deine Arbeit. Zurück geht es mit <em>Unpublish</em></td><td>Habe ich nur gespeichert oder auch publiziert?</td></tr>
-          <tr><td>Queue-Mode</td><td>Ausführungen werden über Redis an Worker verteilt</td><td>Brauche ich wirklich mehrere Worker?</td></tr>
+          <tr><td>Queue-Mode</td><td>Betriebsart für große Installationen: Ausführungen werden über Redis an mehrere Worker verteilt</td><td>Brauche ich wirklich mehrere Worker?</td></tr>
         </tbody>
       </table>
 
@@ -94,38 +95,39 @@
       <table class="btable">
         <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Typische Frage</th></tr></thead>
         <tbody>
-          <tr><td>RAG</td><td>KI-Muster: eigene Dokumente suchen und als Kontext nutzen</td><td>Welche Quelle darf die Antwort stützen?</td></tr>
-          <tr><td>Rate-Limit</td><td>Grenze für API-Aufrufe in einem Zeitfenster</td><td>Wie viele Requests darf ich senden?</td></tr>
-          <tr><td>Redis</td><td>Speicher- und Queue-Dienst für verteilte Ausführung</td><td>Erreichen Main und Worker dieselbe Queue?</td></tr>
-          <tr><td>Retry</td><td>erneuter Versuch nach einem Fehler</td><td>Ist die Aktion beim zweiten Versuch noch sicher?</td></tr>
-          <tr><td>Secret</td><td>sensibler Wert wie Token, Passwort oder Schlüssel</td><td>Ist er aus Exporten und Logs herausgehalten?</td></tr>
-          <tr><td>Sub-Workflow</td><td>wiederverwendbarer Workflow als Baustein</td><td>Welche Eingaben erwartet er?</td></tr>
+          <tr><td>RAG</td><td>KI-Muster: Die KI sucht erst in deinen eigenen Dokumenten und nutzt die Fundstellen als Kontext für die Antwort</td><td>Welche Quelle darf die Antwort stützen?</td></tr>
+          <tr><td>Rate-Limit</td><td>Obergrenze eines Dienstes: nur so viele API-Aufrufe pro Zeitfenster</td><td>Wie viele Requests darf ich senden?</td></tr>
+          <tr><td>Redis</td><td>Speicher- und Warteschlangen-Dienst, den n8n im Queue-Mode zum Verteilen der Arbeit nutzt</td><td>Erreichen Main und Worker dieselbe Queue?</td></tr>
+          <tr><td>Retry</td><td>erneuter Versuch nach einem Fehler, automatisch oder von Hand</td><td>Ist die Aktion beim zweiten Versuch noch sicher?</td></tr>
+          <tr><td>Secret</td><td>jeder sensible Wert wie Token, Passwort oder Schlüssel</td><td>Ist er aus Exporten und Logs herausgehalten?</td></tr>
+          <tr><td>Sub-Workflow</td><td>Workflow, den andere Workflows als Baustein aufrufen können</td><td>Welche Eingaben erwartet er?</td></tr>
           <tr><td>Task Runner</td><td>abgeschotteter Prozess, in dem n8n den JavaScript- oder Python-Code aus dem Code-Node ausführt. Seit n8n 2.0 der Normalfall</td><td>Warum sieht mein Code die Umgebungsvariable nicht?</td></tr>
-          <tr><td>Trigger</td><td>Node, der eine Ausführung startet</td><td>Wann und wodurch startet der Workflow?</td></tr>
-          <tr><td>Webhook</td><td>URL, die externe Systeme aufrufen können</td><td>Ist es Test-URL oder Produktions-URL?</td></tr>
-          <tr><td>Worker</td><td>n8n-Prozess, der Jobs im Queue-Mode ausführt</td><td>Hat er Datenbank, Redis und Encryption Key korrekt?</td></tr>
-          <tr><td>Workflow</td><td>verbundene Nodes, die eine Automatisierung beschreiben</td><td>Welches fachliche Ziel erfüllt er?</td></tr>
+          <tr><td>Trigger</td><td>der erste Node im Workflow: Er legt fest, wodurch eine Ausführung startet</td><td>Wann und wodurch startet der Workflow?</td></tr>
+          <tr><td>Webhook</td><td>eine URL deines Workflows, die externe Systeme aufrufen können, um ihn zu starten</td><td>Ist es Test-URL oder Produktions-URL?</td></tr>
+          <tr><td>Worker</td><td>n8n-Prozess, der im Queue-Mode die eigentlichen Jobs ausführt</td><td>Hat er Datenbank, Redis und Encryption Key korrekt?</td></tr>
+          <tr><td>Workflow</td><td>die verbundenen Nodes zusammen: dein kompletter Ablauf, deine Automatisierung</td><td>Welches fachliche Ziel erfüllt er?</td></tr>
         </tbody>
       </table>
 
       <h2>Arbeitsregel</h2>
       <ol class="steps">
-        <li><h4>Begriff im Fehlertext markieren</h4><p>Suche zuerst das Wort, das wirklich im Fehler steht: Credential,
-          item, execution, webhook oder connection.</p></li>
-        <li><h4>Zum passenden Objekt wechseln</h4><p>Credential-Fehler im Credential prüfen, Item-Fehler im Input/Output,
-          Webhook-Fehler im Trigger.</p></li>
-        <li><h4>Nicht Begriffe vermischen</h4><p>Ein Workflow ist keine Execution. Ein Node ist kein Item. Ein Draft
-          ist noch nicht veröffentlicht. Diese Trennung spart viele Fehlannahmen.</p></li>
-        <li><h4>Begriff mit Testdaten verbinden</h4><p>Frage immer: Wie sieht ein konkretes Beispiel dazu aus?</p></li>
+        <li><h4>Begriff im Fehlertext markieren</h4><p>Lies die Fehlermeldung genau. Suche das Wort, das wirklich darin
+          steht: Credential, item, execution, webhook oder connection.</p></li>
+        <li><h4>Zum passenden Objekt wechseln</h4><p>Das Wort sagt dir, wo du suchen musst: Credential-Fehler prüfst du
+          im Credential, Item-Fehler im Input und Output des Nodes, Webhook-Fehler im Trigger.</p></li>
+        <li><h4>Begriffe nicht vermischen</h4><p>Ein Workflow ist keine Execution. Ein Node ist kein Item. Ein Draft
+          ist noch nicht veröffentlicht. Wer das trennt, sucht am richtigen Ort.</p></li>
+        <li><h4>Begriff mit Testdaten verbinden</h4><p>Frage dich immer: Wie sieht ein konkretes Beispiel dazu aus?
+          Ein echtes Item vor Augen hilft mehr als jede Definition.</p></li>
       </ol>
 
       <h2>Wenn etwas schiefgeht</h2>
       <table class="btable">
         <thead><tr><th>Verwechslung</th><th>Warum problematisch?</th><th>Korrektur</th></tr></thead>
         <tbody>
-          <tr><td>Workflow vs. Execution</td><td>du änderst Logik, obwohl nur ein Lauf fehlerhaft war</td><td>erst die konkrete Ausführung ansehen</td></tr>
-          <tr><td>Credential vs. Secret</td><td>Secret wird eventuell im Workflow gespeichert</td><td>Secret gehört in Credential oder Secret-Verwaltung</td></tr>
-          <tr><td>Item vs. Feld</td><td>du suchst Daten auf der falschen Ebene</td><td>JSON-Struktur vollständig öffnen</td></tr>
+          <tr><td>Workflow vs. Execution</td><td>du änderst die Logik, obwohl nur ein einzelner Lauf fehlerhaft war</td><td>erst die konkrete Ausführung ansehen</td></tr>
+          <tr><td>Credential vs. Secret</td><td>das Secret landet leicht ungeschützt im Workflow</td><td>Secret gehört in ein Credential oder eine Secret-Verwaltung</td></tr>
+          <tr><td>Item vs. Feld</td><td>du suchst Daten auf der falschen Ebene</td><td>die JSON-Struktur vollständig aufklappen</td></tr>
           <tr><td>Webhook Test vs. Produktion</td><td>Tests funktionieren, echte Aufrufe nicht</td><td>richtige URL prüfen und sicherstellen, dass der Workflow publiziert ist</td></tr>
           <tr><td>Retry vs. Idempotenz</td><td>erneuter Versuch erzeugt Dubletten</td><td>vor schreibenden Aktionen Dublettenprüfung ergänzen</td></tr>
         </tbody>

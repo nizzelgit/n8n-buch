@@ -34,14 +34,16 @@
 
       <div class="callout callout--info">
         <b class="t">Welche Namen hier stehen</b>
-        Die Namen in diesem Spickzettel sind die Anzeigenamen aus dem Node-Panel, Stand Juli 2026 und n8n 2.32.x.
-        Manche sind dort länger als auf dem Canvas. Du suchst nach <strong>„Edit Fields (Set)“</strong>, auf dem
-        Canvas steht danach kurz „Edit Fields“. Genauso bei <strong>„Loop Over Items (Split in Batches)“</strong>.
+        Die Namen in diesem Spickzettel sind die Anzeigenamen aus dem Node-Panel, also der Suchliste, die sich öffnet,
+        wenn du einen Node hinzufügst. Stand: Juli 2026, n8n 2.32.x. Manche Namen sind im Panel länger als auf dem
+        Canvas (der Arbeitsfläche). Du suchst nach <strong>„Edit Fields (Set)“</strong>, auf dem Canvas steht danach
+        kurz „Edit Fields“. Genauso bei <strong>„Loop Over Items (Split in Batches)“</strong>.
         Die Suche im Node-Panel reagiert auf beide Teile: <code>edit fields</code> findet den Node, <code>set</code>
         genauso.
       </div>
 
       <h2>Node-Typen verstehen</h2>
+      <p>Ein Node ist ein Baustein in deinem Workflow. Jeder Node gehört zu einem dieser Typen:</p>
       <table class="btable">
         <thead><tr><th>Typ</th><th>Was er macht</th><th>Merksatz</th></tr></thead>
         <tbody>
@@ -49,8 +51,8 @@
           <tr><td>Action</td><td>arbeitet mit Daten oder externen Diensten</td><td>holt, verändert, sendet oder speichert</td></tr>
           <tr><td>Core Node</td><td>liefert allgemeine Logik</td><td>nicht an einen bestimmten Dienst gebunden</td></tr>
           <tr><td>App Node</td><td>spricht einen konkreten Dienst an</td><td>z. B. Google Sheets, Slack, Gmail</td></tr>
-          <tr><td>Credential-only</td><td>bringt nur die Authentifizierung mit</td><td>oft zusammen mit HTTP Request nützlich</td></tr>
-          <tr><td>Cluster Node</td><td>Root-Node mit angedockten Sub-Nodes</td><td>die KI-Nodes funktionieren so</td></tr>
+          <tr><td>Credential-only</td><td>bringt nur die Authentifizierung mit, also die Anmeldung bei einem Dienst</td><td>oft zusammen mit HTTP Request nützlich</td></tr>
+          <tr><td>Cluster Node</td><td>ein Root-Node (Haupt-Node) mit angedockten Sub-Nodes</td><td>die KI-Nodes funktionieren so</td></tr>
         </tbody>
       </table>
 
@@ -59,8 +61,9 @@
         n8n 2.0 hat aufgeräumt. Den <strong>Start</strong>-Node gibt es nicht mehr. Für Testläufe nimmst du jetzt den
         <strong>Manual Trigger</strong>, in aufgerufenen Workflows den <strong>Execute Sub-workflow Trigger</strong>.
         Ebenfalls entfernt sind die Nodes für Dienste, die es selbst nicht mehr gibt: Spontit, crowd.dev, Kitemaker und
-        Automizy. In diesem Spickzettel steht keiner davon. Wenn du aber einen älteren Workflow oder eine ältere
-        Anleitung aus dem Netz öffnest, ist das oft die Ursache für einen Node, den n8n nicht mehr kennt.
+        Automizy. In diesem Spickzettel steht keiner davon. Meldet n8n bei einem älteren Workflow oder einer älteren
+        Anleitung aus dem Netz einen unbekannten Node, ist das meist der Grund. Du hast dann nichts falsch gemacht,
+        der Node wurde entfernt.
       </div>
 
       <h2>Starten</h2>
@@ -79,10 +82,10 @@
       <table class="btable">
         <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Prüffrage</th></tr></thead>
         <tbody>
-          <tr><td>HTTP Request</td><td>du eine REST-API ansprechen willst</td><td>Welche Methode, URL, Authentifizierung und Antwortstruktur?</td></tr>
+          <tr><td>HTTP Request</td><td>du eine REST-API ansprechen willst, also die Web-Schnittstelle eines Dienstes</td><td>Welche Methode, URL, Authentifizierung und Antwortstruktur?</td></tr>
           <tr><td>Google Sheets</td><td>Zeilen gelesen oder geschrieben werden sollen</td><td>Ist die Kopfzeile stabil?</td></tr>
           <tr><td>Slack</td><td>Nachrichten in Kanäle oder Personen gehen</td><td>Ist der Zielkanal korrekt?</td></tr>
-          <tr><td>Gmail / Send Email</td><td>E-Mails verschickt werden sollen; lesen kann von den beiden nur Gmail</td><td>Ist Senden wirklich gewollt oder erst Testmodus?</td></tr>
+          <tr><td>Gmail / Send Email</td><td>E-Mails verschickt werden sollen. Lesen kann von den beiden nur Gmail</td><td>Ist Senden wirklich gewollt oder erst Testmodus?</td></tr>
           <tr><td>Notion</td><td>Seiten oder Datenbankeinträge in Notion gebraucht werden</td><td>Ressource Page, Database Page oder Data Source?</td></tr>
           <tr><td>Read/Write Files from Disk</td><td>lokale Dateien in Self-hosted-Setups gebraucht werden</td><td>Existiert der Pfad im Container und im erlaubten Verzeichnis?</td></tr>
         </tbody>
@@ -98,12 +101,12 @@
       <div class="callout callout--info">
         <b class="t">Zwei Stolperstellen an diesen Nodes</b>
         Seit n8n 2.0 darf „Read/Write Files from Disk“ selbst gehostet nur noch unter <code>~/.n8n-files</code> lesen und
-        schreiben. Das steckt in der Variable <code>N8N_RESTRICT_FILE_ACCESS_TO</code>. Brauchst du einen anderen Ordner,
-        trägst du ihn dort ein, mehrere Ordner trennst du mit Semikolon. Der Notion-Node wiederum läuft inzwischen in
-        Version 3. Neben <strong>Database</strong> gibt es dort die Ressource <strong>Data Source</strong> mit
-        <strong>Get</strong> und <strong>Search</strong>, weil Notion seine Datenbanken in Data Sources aufgeteilt hat.
-        Der Notion Trigger fragt ab seiner Node-Version 1.1 ebenfalls nach einer <strong>Data Source</strong> statt nach
-        einer Database.
+        schreiben. Diese Grenze steckt in der Umgebungsvariable <code>N8N_RESTRICT_FILE_ACCESS_TO</code>. Brauchst du
+        einen anderen Ordner, trägst du ihn dort ein. Mehrere Ordner trennst du mit Semikolon. Der Notion-Node wiederum
+        läuft inzwischen in Version 3. Neben <strong>Database</strong> gibt es dort die Ressource
+        <strong>Data Source</strong> mit <strong>Get</strong> und <strong>Search</strong>, weil Notion seine Datenbanken
+        in Data Sources aufgeteilt hat. Der Notion Trigger fragt ab seiner Node-Version 1.1 ebenfalls nach einer
+        <strong>Data Source</strong> statt nach einer Database.
       </div>
 
       <h2>Daten verändern</h2>
@@ -111,10 +114,10 @@
         <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Grenze</th></tr></thead>
         <tbody>
           <tr><td>Edit Fields (Set)</td><td>du Felder setzen, umbenennen oder gezielt weitergeben willst</td><td>keine komplexe Programmlogik</td></tr>
-          <tr><td>Filter</td><td>Items anhand von Bedingungen behalten oder entfernen willst</td><td>kein Verzweigungsdiagramm</td></tr>
+          <tr><td>Filter</td><td>du Items anhand von Bedingungen behalten oder entfernen willst</td><td>verzweigt nicht, aussortierte Items laufen nirgends weiter</td></tr>
           <tr><td>Sort</td><td>Items sortiert werden sollen</td><td>sortiert nur vorhandene Items</td></tr>
-          <tr><td>Limit</td><td>du nur eine begrenzte Anzahl Items weiterreichen willst</td><td>löst keine API-Pagination</td></tr>
-          <tr><td>Remove Duplicates</td><td>Dubletten anhand von Feldern verschwinden sollen</td><td>ersetzt keine fachliche Idempotenz</td></tr>
+          <tr><td>Limit</td><td>du nur eine begrenzte Anzahl Items weiterreichen willst</td><td>blättert nicht durch API-Seiten (Pagination)</td></tr>
+          <tr><td>Remove Duplicates</td><td>Dubletten anhand von Feldern verschwinden sollen</td><td>ersetzt keine fachliche Idempotenz, also die Absicherung, dass eine Aktion nicht doppelt ausgeführt wird</td></tr>
           <tr><td>Code</td><td>die GUI-Optionen nicht reichen</td><td>macht Workflows schwerer lesbar</td></tr>
         </tbody>
       </table>
@@ -126,8 +129,8 @@
           <tr><td>If</td><td>es genau zwei Wege gibt</td><td>wahr oder falsch. In älteren Versionen hieß er „IF“</td></tr>
           <tr><td>Switch</td><td>mehrere Wege möglich sind</td><td>mehrere Fälle statt verschachtelter If-Nodes</td></tr>
           <tr><td>Merge</td><td>zwei oder mehr Datenströme wieder zusammenkommen</td><td>erst Mode wählen, bei Combine dann Combine By</td></tr>
-          <tr><td>Loop Over Items (Split in Batches)</td><td>Items portioniert verarbeitet werden sollen</td><td>hilft bei Batching und Limits</td></tr>
-          <tr><td>Wait</td><td>ein Workflow pausieren soll</td><td>bewusst warten, nicht blockierend schlafen</td></tr>
+          <tr><td>Loop Over Items (Split in Batches)</td><td>Items in kleinen Portionen verarbeitet werden sollen</td><td>hilft bei Batching (portionsweiser Verarbeitung) und API-Limits</td></tr>
+          <tr><td>Wait</td><td>ein Workflow pausieren soll</td><td>eine geplante Pause, danach läuft der Workflow von selbst weiter</td></tr>
         </tbody>
       </table>
 
@@ -145,32 +148,35 @@
       <h2>Zeitersparnis messen</h2>
       <p>Wie viel Arbeit spart ein Workflow eigentlich? Seit n8n 2.1.0 gibt es dafür einen eigenen Node. Im Node-Panel
         heißt er <strong>Track Time Saved</strong>, auf dem Canvas trägt er danach den kurzen Namen <code>Time Saved</code>.
-        Er reicht alle Items unverändert weiter und meldet nebenbei, wie viele Minuten dieser Lauf gespart hat.</p>
+        Er fasst deine Daten nicht an, alle Items laufen unverändert durch. Nebenbei meldet er, wie viele Minuten
+        dieser Lauf gespart hat. So richtest du ihn ein:</p>
 
       <ol class="steps">
         <li><h4>Workflow-Einstellungen öffnen</h4>
           <p>Klicke im Workflow oben rechts auf das Drei-Punkte-Menü und wähle <strong>Settings</strong>.</p></li>
         <li><h4>Berechnung umstellen</h4>
-          <p>Setze <strong>Estimated time saved</strong> auf <strong>Dynamic</strong> und speichere. Die Alternative
-            <strong>Fixed</strong> ist eine feste Minutenzahl pro Ausführung, dafür brauchst du keinen Node.</p></li>
+          <p>Ein Fenster mit den Workflow-Einstellungen öffnet sich. Setze <strong>Estimated time saved</strong> auf
+            <strong>Dynamic</strong> und speichere. Die Alternative <strong>Fixed</strong> ist eine feste Minutenzahl
+            pro Ausführung, dafür brauchst du keinen Node.</p></li>
         <li><h4>Node einsetzen</h4>
           <p>Hänge in jeden Zweig, der wirklich Arbeit spart, einen <strong>Track Time Saved</strong>-Node.</p></li>
         <li><h4>Minuten eintragen</h4>
-          <p>Der Node hat zwei Felder. <strong>Calculation Mode</strong> steht auf <strong>Once For All Items</strong>
-            oder <strong>Per Item</strong>, wobei Per Item die Minuten mit der Anzahl der Eingabe-Items multipliziert.
+          <p>Der Node hat zwei Felder. Bei <strong>Calculation Mode</strong> wählst du <strong>Once For All Items</strong>
+            oder <strong>Per Item</strong>. Per Item multipliziert die Minuten mit der Anzahl der Eingabe-Items.
             In <strong>Minutes Saved</strong> trägst du die Zahl ein.</p></li>
       </ol>
 
       <p>n8n addiert die Werte aller Time-Saved-Nodes, die in einem Lauf tatsächlich durchlaufen werden. Die Summe
-        landet im Insights-Banner oben im Bereich <strong>Overview</strong>; das ausführliche Insights-Dashboard gibt
-        es erst ab dem Pro-Plan. Zwei Grenzen solltest du kennen. Insights zählt nur Produktions-Ausführungen, deine
-        Testläufe im Editor also nicht. Und gezählt wird nur der Eltern-Workflow: Zeit aus Sub-Workflows rechnet n8n
-        bisher nicht mit.</p>
+        siehst du im Insights-Banner oben im Bereich <strong>Overview</strong>. Das ausführliche Insights-Dashboard
+        gibt es erst ab dem Pro-Plan. Zwei Grenzen solltest du kennen. Insights zählt nur Produktions-Ausführungen,
+        deine Testläufe im Editor also nicht. Wundere dich nicht, wenn nach dem Testen noch nichts im Banner
+        steht. Und gezählt wird nur der Eltern-Workflow: Zeit aus Sub-Workflows (aufgerufenen Unter-Workflows) rechnet
+        n8n bisher nicht mit.</p>
 
       <h2>KI-Bausteine</h2>
       <p>Diese Nodes gehören zu den Kapiteln 17, 20 und 21. Sie funktionieren anders als der Rest: Ein Chat Model,
-        ein Memory oder ein Tool wird nicht in die Kette gehängt, sondern von unten an einen Root-Node angedockt.
-        n8n nennt das Cluster Nodes, der angedockte Teil heißt Sub-Node.</p>
+        ein Memory (Gedächtnis) oder ein Tool (Werkzeug) hängst du nicht in die normale Kette. Du dockst es von unten
+        an einen Root-Node an. n8n nennt das Cluster Nodes, der angedockte Teil heißt Sub-Node.</p>
       <table class="btable">
         <thead><tr><th>Node</th><th>Nutze ihn, wenn ...</th><th>Prüffrage</th></tr></thead>
         <tbody>
@@ -184,12 +190,12 @@
       </table>
 
       <p>Bei Memory und Vector Store lohnt ein Blick über die Tabelle hinaus. Der Memory-Sub-Node
-        <strong>Motorhead</strong> ist seit n8n 2.8.0 deprecated, weil das Projekt dahinter nicht mehr gepflegt wird.
-        Im Node-Panel taucht er nicht mehr auf, bestehende Workflows laufen weiter. Für alles jenseits des
-        Lernbeispiels nimmst du ohnehin Redis Chat Memory oder Postgres Chat Memory. Der Simple Vector Store hat ein
-        anderes Problem: Er hält die Vektoren im Arbeitsspeicher der Instanz, ein Neustart löscht sie. Abgekündigt ist
-        er nicht. Produktiv nimmst du trotzdem Pinecone Vector Store, Qdrant Vector Store oder PGVector Vector
-        Store.</p>
+        <strong>Motorhead</strong> ist seit n8n 2.8.0 deprecated, also abgekündigt: Das Projekt dahinter wird nicht
+        mehr gepflegt. Im Node-Panel taucht er nicht mehr auf, bestehende Workflows laufen aber weiter. Für alles
+        jenseits des Lernbeispiels nimmst du ohnehin Redis Chat Memory oder Postgres Chat Memory. Der Simple Vector
+        Store hat ein anderes Problem: Er hält die Vektoren nur im Arbeitsspeicher der Instanz. Ein Neustart löscht
+        sie. Abgekündigt ist er nicht. Produktiv nimmst du trotzdem Pinecone Vector Store, Qdrant Vector Store oder
+        PGVector Vector Store.</p>
 
       <div class="callout callout--warn">
         <b class="t">Ein Agent ist die teurere Antwort</b>
@@ -213,7 +219,7 @@
         <tbody>
           <tr><td>Node findet keine Daten</td><td>falscher Eingang oder falscher Feldname</td><td>Input-Panel prüfen und Feld per Drag-and-drop wählen</td></tr>
           <tr><td>HTTP Request liefert 401</td><td>Authentifizierung fehlt oder ist falsch</td><td>Credential, Header und Token-Typ prüfen</td></tr>
-          <tr><td>Webhook reagiert nur im Test</td><td>Workflow ist nicht published oder falsche URL wird genutzt</td><td>Publish klicken und Production-URL nutzen</td></tr>
+          <tr><td>Webhook reagiert nur im Test</td><td>Workflow ist nicht published (veröffentlicht) oder falsche URL wird genutzt</td><td><strong>Publish</strong> klicken und Production-URL nutzen</td></tr>
           <tr><td>Merge liefert unerwartete Paare</td><td>falscher Kombinationsmodus</td><td>erst <strong>Mode</strong> auf Append oder Combine stellen, bei Combine dann <strong>Combine By</strong> setzen</td></tr>
           <tr><td>Code-Node macht alles und keiner versteht ihn</td><td>zu viel Logik im Code versteckt</td><td>einfache Teile zurück in sichtbare Nodes verlagern</td></tr>
         </tbody>
@@ -223,7 +229,7 @@
       <table class="btable">
         <thead><tr><th>Test</th><th>Durchführung</th><th>Erwartung</th></tr></thead>
         <tbody>
-          <tr><td>Webhook-Test</td><td>Test-URL mit kleiner JSON-Payload aufrufen</td><td>Webhook zeigt ein neues Item</td></tr>
+          <tr><td>Webhook-Test</td><td>Test-URL mit einer kleinen JSON-Payload (Testdaten) aufrufen</td><td>Webhook zeigt ein neues Item</td></tr>
           <tr><td>Filter-Test</td><td>Beispieldaten mit passenden und unpassenden Items verwenden</td><td>nur erwartete Items laufen weiter</td></tr>
           <tr><td>Merge-Test</td><td>zwei Listen mit sichtbaren IDs zusammenführen</td><td>Paare stimmen mit den IDs überein</td></tr>
           <tr><td>HTTP-Test</td><td>ungefährlichen GET-Request ausführen</td><td>Status und Antwortstruktur sind sichtbar</td></tr>

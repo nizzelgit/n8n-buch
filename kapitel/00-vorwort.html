@@ -17,7 +17,8 @@
       <div class="chap-eyebrow"><span class="knum">00</span> Orientierung</div>
       <h1 class="chap-title">Vorwort & wie du dieses Buch nutzt</h1>
       <p class="chap-lede">Dieses Buch hat ein einziges, sehr konkretes Ziel: Nach dem Lesen kannst du
-        jeden gezeigten Workflow selbst nachbauen. Nicht „so ungefähr“, sondern Klick für Klick,
+        jeden gezeigten Workflow selbst nachbauen. Ein Workflow ist ein automatischer Ablauf, den n8n
+        für dich ausführt. Und „nachbauen“ heißt hier: nicht „so ungefähr“, sondern Klick für Klick,
         Feld für Feld.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 8 Minuten</span>
@@ -26,11 +27,12 @@
       </div>
 
       <h2>Für wen ist dieses Buch?</h2>
-      <p>Für alle, die wiederkehrende Aufgaben automatisieren wollen, ohne ein Software-Team zu sein:
-        Solo-Selbstständige, Marketing- und Ops-Leute, Entwickler:innen, die schneller zu einem Prototyp kommen,
-        und Neugierige, die KI sinnvoll in echte Abläufe einbauen möchten. Du brauchst
+      <p>Für alle, die wiederkehrende Aufgaben automatisieren wollen, ohne ein Software-Team zu sein.
+        Zum Beispiel: Solo-Selbstständige, Marketing- und Ops-Leute, Entwickler:innen, die schnell einen
+        Prototyp brauchen, und Neugierige, die KI in echte Abläufe einbauen möchten. Du brauchst
         <strong>keine Programmierkenntnisse</strong>. An den wenigen Stellen, an denen ein bisschen Code oder
-        JSON hilft, fangen wir bei null an.</p>
+        JSON hilft (JSON ist ein einfaches Textformat, in dem Programme Daten austauschen), fangen wir
+        bei null an.</p>
 
       <h2>Die drei Prinzipien dieses Buchs</h2>
       <div class="cards">
@@ -43,22 +45,25 @@
       </div>
 
       <h2>So sind die Kapitel aufgebaut</h2>
-      <p>Damit du dich schnell zurechtfindest, wiederholen sich dieselben Bausteine. Hier stelle ich sie dir einmal
-        alle vor, damit du sie ab Kapitel 1 sofort einordnen kannst. Dazu gehört die kleine graue Zeile ganz am
-        Kapitelanfang, die dir Dauer, Niveau und vorausgesetzte Kapitel nennt. Beim Bauen tauchen dann
-        „Wenn etwas schiefgeht“-Kästen auf, und am Kapitelende wartet ein Selbsttest.</p>
+      <p>Jedes Kapitel benutzt dieselben Bausteine. Ich stelle sie dir hier einmal vor, damit du sie
+        ab Kapitel 1 sofort wiedererkennst. Ganz oben in jedem Kapitel steht eine kleine graue Zeile.
+        Sie nennt dir Dauer, Niveau und die vorausgesetzten Kapitel (du hast sie oben auf dieser Seite
+        schon gesehen). Beim Bauen tauchen später „Wenn etwas schiefgeht“-Kästen auf. Sie helfen dir,
+        wenn bei dir etwas anders aussieht als im Buch. Am Kapitelende wartet ein kurzer Selbsttest.</p>
 
       <div class="prereq">
         <h4><i class="vic vic-clipboard"></i> Voraussetzungs-Box</h4>
         <p style="margin:0 0 8px;font-size:14.5px">Steht am Anfang jedes Praxis-Kapitels, meist mit der Überschrift „Was du brauchst“, und sagt dir <em>genau</em>, was du können und vorbereitet haben musst:</p>
         <ul>
-          <li>Welche Konten/Zugänge du brauchst (z. B. ein Telegram-Bot-Token)</li>
-          <li>Welche Credentials in n8n schon angelegt sein sollten</li>
+          <li>Welche Konten/Zugänge du brauchst (z. B. ein Telegram-Bot-Token, also einen Zugangsschlüssel für einen Telegram-Bot)</li>
+          <li>Welche Credentials in n8n schon angelegt sein sollten („Credentials“ nennt n8n gespeicherte Zugangsdaten, etwa für dein E-Mail-Konto)</li>
           <li>Welche Konzepte aus früheren Kapiteln vorausgesetzt werden</li>
         </ul>
       </div>
 
-      <p>Ein <strong>Klick-Pfad</strong> fasst eine kurze Bedienabfolge in einer Zeile zusammen. Lies ihn von links nach rechts:</p>
+      <p>Ein <strong>Klick-Pfad</strong> fasst mehrere Klicks in einer Zeile zusammen. Lies ihn von links
+        nach rechts, ein Schritt nach dem anderen. So sieht er aus („Canvas“ heißt übrigens die große
+        Arbeitsfläche in n8n, auf der du deine Workflows baust):</p>
       <div class="clickpath">
         <span class="step"><span class="n">1</span> Canvas öffnen</span>
         <span class="arrow">→</span>
@@ -79,31 +84,33 @@
       <p>Viel ist es nicht. Die konkrete Einrichtung machen wir gemeinsam in Kapitel 2:</p>
       <ul>
         <li>Einen <strong>aktuellen Browser</strong> (Chrome, Firefox, Edge oder Safari).</li>
-        <li>Entweder einen <strong>n8n-Cloud-Zugang</strong> (die Testphase läuft 14 Tage und kostet nichts)
-          <em>oder</em> die Bereitschaft, n8n lokal zu starten. Das ist ein einziger Befehl. Beide Wege zeige ich.</li>
+        <li>Entweder einen <strong>n8n-Cloud-Zugang</strong> (n8n läuft dann im Internet, die Testphase
+          dauert 14 Tage und kostet nichts) <em>oder</em> die Bereitschaft, n8n lokal zu starten, also
+          direkt auf deinem eigenen Rechner. Das ist ein einziger Befehl. Beide Wege zeige ich dir.</li>
         <li>Etwas Zeit und Lust zum Ausprobieren. Kaputtmachen kannst du nichts.</li>
       </ul>
 
       <div class="callout callout--info">
         <b class="t">Zur Oberfläche in diesem Buch</b>
         Die abgebildeten „Screenshots“ sind detailgetreue Nachbildungen der n8n-Oberfläche, Stand Juli 2026
-        (n8n 2.32.x). n8n veröffentlicht fast jede Woche eine neue Version. Farben oder Beschriftungen können
-        deshalb minimal abweichen, die <em>Struktur</em> und der <em>Bedienablauf</em> bleiben aber stabil.
-        Wo n8n etwas umbenannt hat, nenne ich beide Begriffe. Ein Beispiel: Den Schalter „Active“ aus n8n 1.x
-        haben seit Version 2.0 die Knöpfe „Publish“ und „Unpublish“ abgelöst.
+        (n8n 2.32.x). n8n veröffentlicht fast jede Woche eine neue Version. Bei dir können Farben oder
+        Beschriftungen deshalb minimal anders aussehen. Das ist kein Fehler. Die <em>Struktur</em> und der
+        <em>Bedienablauf</em> bleiben stabil. Wo n8n etwas umbenannt hat, nenne ich beide Begriffe.
+        Ein Beispiel: Den Schalter „Active“ aus n8n 1.x haben seit Version 2.0 die Knöpfe „Publish“
+        und „Unpublish“ abgelöst.
       </div>
 
       <h2>Wie du am meisten mitnimmst</h2>
       <ol class="steps">
-        <li><h4>Bau mit, nicht nur lesen</h4><p>Öffne n8n in einem zweiten Fenster und tippe jeden Schritt selbst.
+        <li><h4>Bau mit, nicht nur lesen</h4><p>Öffne n8n in einem zweiten Fenster und mache jeden Schritt selbst.
           Verstehen entsteht in den Fingern. Überfliegen reicht dafür nicht.</p></li>
-        <li><h4>Brich Beispiele absichtlich</h4><p>Ändere einen Wert, lass es fehlschlagen, schau dir die Fehlermeldung an.
-          Du lernst n8n am schnellsten, indem du beobachtest, wie es reagiert.</p></li>
+        <li><h4>Mach Beispiele absichtlich kaputt</h4><p>Ändere einen Wert, lass den Workflow fehlschlagen und
+          lies die Fehlermeldung. Du lernst n8n am schnellsten, wenn du beobachtest, wie es reagiert.</p></li>
         <li><h4>Folge erst dem <i class="vic vic-zap"></i>-Pfad</h4><p>Wenn die Zeit knapp ist: Kapitel 0.1 (das 80/20) und die Kapitel 3 bis 5
           geben dir das Fundament für fast alles Weitere.</p></li>
       </ol>
 
-      <p>Genug Vorrede. Schauen wir uns zuerst an, welche <strong>35 % von n8n</strong> dir die meisten Ergebnisse
+      <p>Genug Vorrede. Als Erstes zeige ich dir, welche 35 % von n8n dir die meisten Ergebnisse
         bringen. Dann bauen wir.</p>
 
     </article>

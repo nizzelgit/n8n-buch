@@ -16,9 +16,10 @@
 
       <div class="chap-eyebrow"><span class="knum">15</span> Projekt 3</div>
       <h1 class="chap-title">News-Aggregator mit Filter</h1>
-      <p class="chap-lede">Dieses Projekt sammelt regelmäßig neue RSS-Einträge, filtert sie nach deinen Interessen und
-        schickt nur die relevanten Treffer weiter. Am Ende steht ein kleiner Aufmerksamkeitsfilter, der aus rund zwanzig
-        Schlagzeilen die fünf herausholt, die dich wirklich betreffen.</p>
+      <p class="chap-lede">Dieses Projekt sammelt regelmäßig neue Einträge aus einem RSS-Feed, filtert sie nach deinen
+        Interessen und schickt nur die relevanten Treffer weiter. Ein RSS-Feed ist eine maschinenlesbare Liste der
+        neuesten Beiträge einer Website. Am Ende hast du einen kleinen Aufmerksamkeitsfilter: Aus rund zwanzig
+        Schlagzeilen holt er die fünf heraus, die dich wirklich interessieren.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 40 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Mittel</span>
@@ -29,9 +30,9 @@
         <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>n8n läuft und kann externe RSS-Feeds abrufen.</li>
-          <li>Eine Slack-Credential oder alternativ einen Telegram-Node aus Kapitel 13. Wir zeigen Slack; Telegram funktioniert analog.</li>
+          <li>Eine Slack-Credential, also einen in n8n gespeicherten Slack-Zugang. Alternativ geht der Telegram-Node aus Kapitel 13; wir zeigen Slack, Telegram funktioniert genauso.</li>
           <li>Keinen API-Schlüssel: Wir verwenden den öffentlichen RSS-Feed <code>https://hnrss.org/frontpage</code>.</li>
-          <li>Ein Testkanal, damit du beim Entwickeln keine produktiven Kanäle flutest.</li>
+          <li>Einen Testkanal in Slack, damit deine Probenachrichten nicht in einem echten Team-Kanal landen.</li>
         </ul>
       </div>
 
@@ -43,9 +44,10 @@
       </div>
 
       <h2>Das Ziel</h2>
-      <p>Der Workflow läuft morgens automatisch und liest den Hacker-News-Frontpage-RSS-Feed. Von den rund zwanzig
-        Einträgen behält er nur die zu Automatisierung, KI oder n8n-ähnlichen Themen, begrenzt die Menge auf fünf und
-        sendet eine kompakte Slack-Zusammenfassung.</p>
+      <p>Der Workflow startet jeden Morgen von selbst und liest den RSS-Feed der Hacker-News-Frontpage, also der
+        Startseite von Hacker News. Von den rund zwanzig Einträgen behält er nur die zu Automatisierung, KI oder
+        n8n-ähnlichen Themen. Dann begrenzt er die Menge auf fünf und sendet alles zusammen als eine einzige
+        Slack-Nachricht. So eine Sammel-Nachricht heißt Digest (englisch für „Zusammenfassung“).</p>
 
       <figure class="figure">
         <div class="frame">
@@ -94,25 +96,26 @@
         <li><h4>Name setzen</h4>
           <p>Klicke oben links auf den Workflow-Namen und schreibe: <code>News-Aggregator</code>.</p></li>
         <li><h4>Auto-Save prüfen</h4>
-          <p>Warte kurz. n8n sichert deine Änderungen von allein als Draft, laut Doku innerhalb von einer bis fünf Sekunden.
-            Oben wechselt die Anzeige von <strong>Saving</strong> auf <strong>Saved</strong>. Einen Save-Knopf brauchst du
-            dafür nicht mehr; den hat n8n mit dem Autosave-Update Anfang 2026 abgeschafft.</p></li>
+          <p>Warte kurz. n8n speichert deine Änderungen von allein als Draft, also als Entwurf — laut Doku innerhalb von
+            einer bis fünf Sekunden. Oben wechselt die Anzeige von <strong>Saving</strong> auf <strong>Saved</strong>.
+            Einen Save-Knopf brauchst du nicht; den hat n8n mit dem Autosave-Update Anfang 2026 abgeschafft.</p></li>
       </ol>
 
       <h2>Schritt 2: Schedule-Trigger setzen</h2>
       <ol class="steps">
         <li><h4>Schedule Trigger hinzufügen</h4>
-          <p>Klicke auf den großen <span class="kbd">+</span> mit der Beschriftung <strong>„Add first step…“</strong>, tippe
-            <code>schedule</code> ins Suchfeld und wähle <strong>Schedule Trigger</strong>.</p></li>
+          <p>Klicke auf den großen <span class="kbd">+</span> mit der Beschriftung <strong>„Add first step…“</strong> in der
+            Mitte des leeren Canvas. Tippe <code>schedule</code> ins Suchfeld und wähle <strong>Schedule Trigger</strong>.</p></li>
         <li><h4>Node öffnen</h4>
-          <p>Doppelklicke den Trigger.</p></li>
+          <p>Doppelklicke auf den Trigger. Seine Detailansicht mit den Einstellungen öffnet sich.</p></li>
         <li><h4>Täglichen Lauf einstellen</h4>
           <p>Die Felder sitzen im Block <strong>Trigger Rules</strong>. Setze <strong>Trigger Interval</strong> auf
             <strong>Days</strong>, <strong>Days Between Triggers</strong> auf
             <code>1</code>, <strong>Trigger at Hour</strong> auf <code>9am</code> und <strong>Trigger at Minute</strong> auf
-            <code>0</code>.</p></li>
+            <code>0</code>. Übersetzt heißt das: jeden Tag um 9:00 Uhr.</p></li>
         <li><h4>Einmal testen</h4>
-          <p>Klicke <strong>▶ Schritt ausführen</strong>. Der Trigger erzeugt ein Test-Item.</p></li>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Rechts erscheint ein einzelnes Test-Item. Wenn du das siehst,
+            ist der Trigger fertig eingerichtet.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -122,26 +125,29 @@
       </div>
 
       <h2>Schritt 3: RSS-Feed lesen</h2>
-      <p>n8n hat einen RSS-Node. Er heißt <strong>RSS Read</strong>; intern trägt er den Typ <code>rssFeedRead</code>, und in
-        älteren Anleitungen findest du ihn unter <strong>RSS Feed Read</strong>. Er nimmt eine Feed-URL und gibt pro
-        Feed-Eintrag ein Item aus.</p>
+      <p>n8n hat einen fertigen RSS-Node. Er heißt <strong>RSS Read</strong>; intern trägt er den Typ
+        <code>rssFeedRead</code>, und in älteren Anleitungen findest du ihn unter <strong>RSS Feed Read</strong>.
+        Er bekommt eine Feed-URL und gibt pro Feed-Eintrag ein Item aus.</p>
 
       <ol class="steps">
         <li><h4>RSS-Node anhängen</h4>
-          <p>Schließe die Detailansicht. Ziehe vom Schedule-Trigger eine Linie ins Leere, suche <code>rss</code> und wähle
+          <p>Schließe die Detailansicht mit <span class="kbd">Esc</span>. Ziehe dann vom Schedule-Trigger eine Linie ins
+            Leere und lass los. Die Node-Suche öffnet sich. Tippe <code>rss</code> und wähle
             <strong>RSS Read</strong>. Nimm nicht den <strong>RSS Feed Trigger</strong>: Der würde den Workflow selbst starten,
             und das macht bei uns schon der Schedule-Trigger.</p></li>
         <li><h4>Node benennen</h4>
-          <p>Nenne ihn <code>RSS lesen</code>.</p></li>
+          <p>Nenne ihn <code>RSS lesen</code>: Doppelklick auf den Node-Namen, neuen Namen tippen, mit Enter bestätigen.</p></li>
         <li><h4>Feed-URL eintragen</h4>
-          <p>Trage als <strong>URL</strong> ein: <code>https://hnrss.org/frontpage</code>. Der Feed liefert standardmäßig
-            zwanzig Einträge. Mit <code>https://hnrss.org/frontpage?count=50</code> bekommst du mehr, bei 100 ist Schluss.</p></li>
+          <p>Trage im Feld <strong>URL</strong> ein: <code>https://hnrss.org/frontpage</code>. Der Feed
+            liefert standardmäßig zwanzig Einträge. Mit <code>https://hnrss.org/frontpage?count=50</code> bekommst du mehr,
+            bei 100 ist Schluss.</p></li>
         <li><h4>Schritt ausführen</h4>
           <p>Klicke <strong>▶ Schritt ausführen</strong>. Rechts erscheint die aktuelle Frontpage, ein Item pro Eintrag. Jedes
             Item hat <code>title</code>, <code>link</code>, <code>pubDate</code>, <code>isoDate</code>, <code>content</code>,
             <code>contentSnippet</code>, <code>creator</code>, <code>comments</code> und <code>guid</code>.</p></li>
         <li><h4>Schema ansehen</h4>
-          <p>Wechsle rechts auf <strong>Schema</strong>. Merke dir besonders <code>title</code> und <code>link</code>.
+          <p>Wechsle im Ausgabebereich rechts auf die Ansicht <strong>Schema</strong>. Sie zeigt dir die Felder eines
+            Items als übersichtliche Liste. Merke dir besonders <code>title</code> und <code>link</code>:
             <code>link</code> zeigt auf den verlinkten Artikel, <code>comments</code> auf die Diskussion bei Hacker News.</p></li>
       </ol>
 
@@ -176,15 +182,17 @@
 
       <div class="callout callout--warn">
         <b class="t">Wenn keine Items erscheinen</b>
-        Prüfe zuerst die URL und deine Internetverbindung. RSS-Feeds können außerdem kurzzeitig langsam sein. Teste im Zweifel
-        die URL direkt im Browser: Wenn dort XML erscheint, ist der Feed erreichbar. Meldet n8n stattdessen ein
-        Zertifikatsproblem, gibt es unter <strong>Options</strong> → <strong>Add option</strong> den Schalter
-        <strong>Ignore SSL Issues (Insecure)</strong>. Setz ihn nur bei Feeds, denen du wirklich traust.
+        Keine Panik, meist ist es eine Kleinigkeit. Prüfe zuerst die URL auf Tippfehler und deine Internetverbindung.
+        RSS-Feeds können außerdem kurzzeitig langsam sein; warte eine Minute und versuche es noch einmal. Teste im Zweifel
+        die URL direkt im Browser: Wenn dort XML (strukturierter Text mit spitzen Klammern) erscheint, ist der Feed
+        erreichbar. Meldet n8n stattdessen ein Zertifikatsproblem, gibt es unter <strong>Options</strong> →
+        <strong>Add option</strong> den Schalter <strong>Ignore SSL Issues (Insecure)</strong>. Setze ihn nur bei Feeds,
+        denen du wirklich traust.
       </div>
 
       <h2>Schritt 4: Relevante Einträge filtern</h2>
-      <p>Jetzt bauen wir den ersten groben Interessenfilter. Er lässt Einträge durch, deren Titel eines unserer Keywords
-        enthält.</p>
+      <p>Der Interessenfilter bleibt bewusst grob: Er lässt nur Einträge durch, deren Titel eines unserer
+        Keywords (Stichwörter) enthält.</p>
 
       <ol class="steps">
         <li><h4>Filter-Node anhängen</h4>
@@ -192,8 +200,10 @@
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>Interessante Titel</code>.</p></li>
         <li><h4>Bedingung auf Expression stellen</h4>
-          <p>Im Block <strong>Conditions</strong> setzt du das linke Feld auf <strong>Expression</strong>. Wir wandeln den Titel
-            in Kleinbuchstaben um, damit <code>AI</code>, <code>ai</code> und <code>Ai</code> gleich behandelt werden.</p></li>
+          <p>Im Block <strong>Conditions</strong> hat jede Bedingung drei Teile: links ein Wert, in der Mitte ein
+            Vergleich, rechts ein Wert. Stelle das linke Feld auf <strong>Expression</strong> um, also auf eine kleine
+            Formel statt eines festen Texts. Mit der Formel wandeln wir den Titel in Kleinbuchstaben um. So werden
+            <code>AI</code>, <code>ai</code> und <code>Ai</code> gleich behandelt.</p></li>
         <li><h4>Expression eintragen</h4>
           <p>Trage links ein:</p></li>
       </ol>
@@ -215,10 +225,13 @@
         <li><h4>Dritte Bedingung anlegen</h4>
           <p>Noch einmal <strong>Add condition</strong>, rechts diesmal <code>workflow</code>.</p></li>
         <li><h4>Verknüpfung auf OR stellen</h4>
-          <p>Zwischen den Bedingungen sitzt ein kleiner Schalter. Der steht auf <strong>AND</strong>, also müssten alle drei
-            Keywords gleichzeitig im Titel stehen. Stell ihn auf <strong>OR</strong>.</p></li>
+          <p>Zwischen den Bedingungen sitzt ein kleiner Schalter. Er steht auf <strong>AND</strong> (und): Dann müssten
+            alle drei Keywords gleichzeitig im Titel stehen. Stelle ihn auf <strong>OR</strong> (oder): Ein Keyword im
+            Titel reicht.</p></li>
         <li><h4>Schritt ausführen</h4>
-          <p>Klicke <strong>▶ Schritt ausführen</strong>. Im Ausgang sollten weniger Items stehen als im Eingang.</p></li>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Im Ausgang stehen jetzt weniger Items als im Eingang. Auch
+            <strong>0 Items</strong> sind kein Fehler: Dann passt heute einfach kein Titel zu deinen Keywords. Der Filter
+            arbeitet trotzdem richtig.</p></li>
       </ol>
 
       <figure class="figure">
@@ -247,7 +260,7 @@
         Kleinschreibung. Ein Titel mit „AI“ fiele bei der Bedingung <code>ai</code> also durchs Raster.
         <code>toLowerCase()</code> in der Expression löst das. Es geht auch anders: unter <strong>Options</strong> auf
         <strong>Add option</strong> klicken und <strong>Ignore Case</strong> hinzufügen; die Option ist dann gleich
-        eingeschaltet. Ich bleibe bei <code>toLowerCase()</code>, weil man in der Expression-Vorschau sieht, worauf
+        eingeschaltet. Wir bleiben bei <code>toLowerCase()</code>, weil du in der Expression-Vorschau siehst, worauf
         wirklich verglichen wird.
       </div>
 
@@ -266,10 +279,11 @@
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>Maximal 5 Treffer</code>.</p></li>
         <li><h4>Limit setzen</h4>
-          <p>Setze <strong>Max Items</strong> auf <code>5</code>. <strong>Keep</strong> lässt du auf
-            <strong>First Items</strong>, dann behält n8n die ersten fünf Treffer.</p></li>
+          <p>Setze <strong>Max Items</strong> auf <code>5</code>. Das Feld <strong>Keep</strong> lässt du auf
+            <strong>First Items</strong>; dann behält n8n die ersten fünf Treffer und wirft den Rest weg.</p></li>
         <li><h4>Ausführen</h4>
-          <p>Klicke <strong>▶ Schritt ausführen</strong>. Im Ausgang stehen höchstens fünf Items.</p></li>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Im Ausgang stehen jetzt höchstens fünf Items. Waren es vorher
+            schon fünf oder weniger, ändert sich nichts — auch das ist richtig.</p></li>
       </ol>
 
       <div class="callout callout--info">
@@ -279,8 +293,9 @@
       </div>
 
       <h2>Schritt 6: Digest bauen</h2>
-      <p>Der Slack-Node arbeitet pro Item: Bei fünf Treffern schickt er fünf einzelne Nachrichten. Wir wollen aber eine
-        Nachricht mit bis zu fünf Links, und dafür machen wir aus mehreren Items ein einziges.</p>
+      <p>Der Slack-Node arbeitet pro Item: Bei fünf Treffern würde er fünf einzelne Nachrichten schicken. Wir wollen aber
+        eine einzige Nachricht mit bis zu fünf Links. Dafür machen wir mit einem Code-Node aus mehreren Items ein
+        einziges.</p>
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
@@ -288,11 +303,11 @@
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>Digest bauen</code>.</p></li>
         <li><h4>Modus wählen</h4>
-          <p>Setze <strong>Mode</strong> auf <strong>Run Once for All Items</strong>. Das ist auch die Voreinstellung, aber
-            schau hin: Wir brauchen alle Treffer gleichzeitig. <strong>Language</strong> bleibt auf
-            <strong>JavaScript</strong>.</p></li>
+          <p>Setze <strong>Mode</strong> auf <strong>Run Once for All Items</strong> (der Code läuft einmal und sieht dabei
+            alle Items). Das ist auch die Voreinstellung, aber schau hin: Wir brauchen alle Treffer gleichzeitig.
+            <strong>Language</strong> bleibt auf <strong>JavaScript</strong>.</p></li>
         <li><h4>Code einfügen</h4>
-          <p>Füge diesen Code ein:</p></li>
+          <p>Lösche den Beispielcode im großen Codefeld und füge stattdessen diesen Code ein:</p></li>
       </ol>
 
       <div class="code">
@@ -317,9 +332,11 @@
 
       <ol class="steps" style="counter-reset: st 4;">
         <li><h4>Schritt ausführen</h4>
-          <p>Klicke <strong>▶ Schritt ausführen</strong>. Im Ausgang sollte genau <strong>1 Item</strong> stehen.</p></li>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Im Ausgang muss genau <strong>1 Item</strong> stehen. Das ist der
+            wichtigste Zwischenerfolg dieses Projekts: Aus vielen Treffern ist ein einziges Digest-Item geworden.</p></li>
         <li><h4>Text prüfen</h4>
-          <p>Öffne das Feld <code>text</code>. Es sollte mehrere nummerierte Links oder die Meldung „Heute keine Treffer“ enthalten.</p></li>
+          <p>Schau in das Feld <code>text</code> des Ausgabe-Items. Dort stehen mehrere nummerierte Links oder die Meldung
+            „Heute keine Treffer“.</p></li>
       </ol>
 
       <figure class="figure">
@@ -348,7 +365,8 @@
 
       <div class="callout callout--warn">
         <b class="t">Wenn der Code-Node Fehler meldet</b>
-        Prüfe zuerst den Modus. Dieser Code erwartet <strong>Run Once for All Items</strong>. Im Modus
+        Prüfe zuerst den Modus, das ist der häufigste Fehler in diesem Projekt. Dieser Code erwartet
+        <strong>Run Once for All Items</strong>. Im Modus
         <strong>Run Once for Each Item</strong> gibt es <code>$input.all()</code> nicht; dort arbeitest du mit
         <code>$input.item</code>.
       </div>
@@ -360,18 +378,20 @@
         <li><h4>Aktion wählen</h4>
           <p>Wähle in der Aktionsliste <strong>Send a message</strong>.</p></li>
         <li><h4>Credential wählen</h4>
-          <p>Wähle deine Slack-Credential aus. Falls noch keine da ist: <strong>Create new credential</strong>,
-            Slack-Workspace verbinden, Zugriff erlauben, speichern.</p></li>
+          <p>Wähle deine gespeicherte Slack-Credential aus. Falls noch keine da ist: <strong>Create new credential</strong>
+            klicken, den Slack-Workspace verbinden, den Zugriff erlauben, speichern.</p></li>
         <li><h4>Kanal wählen</h4>
           <p>Lass <strong>Send Message To</strong> auf <strong>Channel</strong> stehen und wähle darunter bei
-            <strong>Channel</strong> einen Testkanal, z. B. <code>#news-test</code>.</p></li>
+            <strong>Channel</strong> deinen Testkanal, z. B. <code>#news-test</code>.</p></li>
         <li><h4>Text auf Expression stellen</h4>
           <p><strong>Message Type</strong> bleibt auf <strong>Simple Text Message</strong>. Schalte das Feld
-            <strong>Message Text</strong> auf <strong>Expression</strong>.</p></li>
+            <strong>Message Text</strong> auf <strong>Expression</strong>, damit du dort eine Formel statt festen Text
+            eintragen kannst.</p></li>
         <li><h4>Digest-Text einsetzen</h4>
-          <p>Trage ein: <code>{{ $json.text }}</code></p></li>
+          <p>Trage ein: <code>{{ $json.text }}</code>. Das holt den fertigen Text aus dem Digest-Item.</p></li>
         <li><h4>Schritt ausführen</h4>
-          <p>Klicke <strong>▶ Schritt ausführen</strong>. Im Slack-Testkanal sollte genau eine Digest-Nachricht erscheinen.</p></li>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Wechsle zu Slack: Im Testkanal steht jetzt genau eine
+            Digest-Nachricht.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -388,17 +408,18 @@
           <p>Warte, bis oben wieder <strong>Saved</strong> steht.</p></li>
         <li><h4>Ganzen Workflow ausführen</h4>
           <p>Klicke unten am Canvas auf <strong>Execute workflow</strong>. Bis n8n 1.x hieß derselbe Knopf
-            <strong>Test workflow</strong>; in älteren Anleitungen und Videos steht noch dieser Name. Prüfe, dass die Kette
-            von links nach rechts grün durchläuft.</p></li>
+            <strong>Test workflow</strong>; in älteren Anleitungen und Videos steht noch dieser Name. Schau zu, wie die
+            Kette von links nach rechts durchläuft: Jeder fertige Node bekommt ein grünes Häkchen.</p></li>
         <li><h4>Slack prüfen</h4>
           <p>Kontrolliere den Testkanal. Es sollte eine einzige Nachricht mit höchstens fünf Links stehen.</p></li>
         <li><h4>Publish klicken</h4>
-          <p>Wenn der Test passt, klicke oben rechts auf <strong>Publish</strong>. n8n öffnet das Fenster
+          <p>Wenn der Test passt, klicke oben rechts auf <strong>Publish</strong> (veröffentlichen). n8n öffnet das Fenster
             <strong>Publish workflow</strong> und fragt nach einem <strong>Version name</strong>. Schreib etwas Sprechendes
             hinein, etwa <code>Erste Fassung</code>, und bestätige mit <strong>Publish</strong>. Erst ab jetzt läuft der
-            Schedule-Trigger wirklich.</p></li>
+            Schedule-Trigger wirklich von allein.</p></li>
         <li><h4>Ersten echten Lauf prüfen</h4>
-          <p>Nach dem ersten geplanten Lauf öffnest du <strong>Executions</strong> und prüfst, ob der automatische Lauf sauber war.</p></li>
+          <p>Schau am nächsten Tag nach 9 Uhr in <strong>Executions</strong>, die Liste aller bisherigen Läufe. Dort sollte
+            ein automatischer Lauf stehen, grün und mit sinnvollem Ergebnis.</p></li>
       </ol>
 
       <div class="callout callout--pareto">

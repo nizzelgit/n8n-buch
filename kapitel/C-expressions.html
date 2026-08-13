@@ -16,9 +16,10 @@
 
       <div class="chap-eyebrow"><span class="knum">C</span> Anhang</div>
       <h1 class="chap-title">Expression-Cheatsheet</h1>
-      <p class="chap-lede">Expressions sind kleine JavaScript-Ausdrücke in Node-Feldern. Sie holen Werte aus Items,
-        formen Text, prüfen Bedingungen und bauen dynamische URLs. Dieses Cheatsheet zeigt die Muster, die du wirklich
-        häufig brauchst.</p>
+      <p class="chap-lede">Eine Expression ist eine kleine Formel in einem Node-Feld, geschrieben in JavaScript.
+        Statt eines festen Werts steht dort eine Anweisung: Hole einen Wert aus einem Item, baue einen Text, prüfe
+        eine Bedingung, setze eine URL zusammen. Dieses Cheatsheet zeigt die Muster, die du wirklich häufig
+        brauchst.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 12 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Nachschlagen</span>
@@ -27,20 +28,26 @@
 
       <div class="callout callout--pareto">
         <b class="t">80/20 für Expressions</b>
-        Lerne zuerst <code>$json</code> mit Punktzugriff und eckigen Klammern, <code>$("Node")</code> für Werte aus
-        früheren Nodes, Verkettung mit Text, <code>??</code> als Fallback, die ternäre Bedingung und
-        <code>$now.toFormat()</code> fürs Datum. Damit füllst du fast jedes Feld.
+        Sechs Muster reichen für fast jedes Feld: <code>$json</code> zum Lesen von Feldern (mit Punkt oder eckigen
+        Klammern), <code>$("Node")</code> für Werte aus früheren Nodes, Text mit <code>+</code> zusammensetzen,
+        <code>??</code> als Ersatzwert, die Wenn-dann-sonst-Bedingung mit <code>?</code> und <code>:</code> sowie
+        <code>$now.toFormat()</code> fürs Datum. Alle sechs stehen in den Tabellen unten.
       </div>
 
       <div class="callout callout--info">
         <b class="t">Stand dieser Referenz</b>
         Juli 2026, n8n 2.32.x. Die vollständige Liste steht in der n8n-Doku unter
         <code>docs.n8n.io/build/work-with-data/transform-data/expression-reference</code>, sortiert nach Datentyp.
-        Was dort als „Custom n8n functionality“ geführt wird, heißt in diesem Buch „n8n-Helfer“. Solche Helfer gelten
-        in Expressions. Im Code-Node laufen sie nicht unbedingt, reines JavaScript und Luxon dagegen an beiden Stellen.
+        Was dort „Custom n8n functionality“ heißt, nennen wir in diesem Buch „n8n-Helfer“: Zusatzfunktionen, die n8n
+        auf das normale JavaScript draufpackt. Verlass dich auf diese Helfer nur in Expressions, im Code-Node
+        laufen sie nicht unbedingt. Reines JavaScript und die Datumsbibliothek Luxon funktionieren an beiden Stellen.
       </div>
 
       <h2>Grundform</h2>
+      <p>Eine Expression steht immer in doppelten geschweiften Klammern: <code>{{ ... }}</code>. Damit n8n sie
+        auswertet, muss das Feld im Modus <strong>Expression</strong> stehen. Den Umschalter siehst du, wenn du mit
+        der Maus über das Feld fährst. Steht das Feld auf <strong>Fixed</strong> (fest), bleibt deine Expression
+        einfach Text.</p>
       <table class="btable">
         <thead><tr><th>Ziel</th><th>Expression</th><th>Beispielausgabe</th></tr></thead>
         <tbody>
@@ -73,20 +80,22 @@
 
       <div class="callout callout--warn">
         <b class="t">Item-Verknüpfung nicht erraten</b>
-        <code>$("Node").item</code> ist dann sinnvoll, wenn n8n weiß, welches frühere Item zum aktuellen Item gehört.
-        Wenn du bewusst den ersten Datensatz brauchst, nutze klar <code>.first()</code>. Die beiden Fehlermeldungen, die
-        dir bei gerissener Verknüpfung begegnen, stehen weiter unten in „Wenn etwas schiefgeht“, ausführlich erklärt
-        sind sie in Kapitel 5.
+        <code>$("Node").item</code> heißt: „Gib mir das frühere Item, das zu meinem aktuellen Item gehört.“ Das klappt
+        nur, wenn n8n diese Zuordnung kennt. Willst du dagegen bewusst den ersten Datensatz, schreib klar
+        <code>.first()</code>. Reißt die Zuordnung ab, siehst du eine von zwei Fehlermeldungen. Beide stehen unten in
+        „Wenn etwas schiefgeht“, ausführlich erklärt sind sie in Kapitel 5.
       </div>
 
       <div class="callout callout--info">
         <b class="t">Alte Schreibweisen aus Tutorials</b>
-        In älteren Anleitungen liest du <code>$node["Webhook"].json.email</code> oder <code>$items()</code>. Beides
-        stammt aus früheren n8n-Versionen und steht in der aktuellen Expression-Referenz nicht mehr. Schreib
-        <code>$("Webhook").item.json.email</code> und <code>$input.all()</code>.
+        In älteren Anleitungen liest du manchmal <code>$node["Webhook"].json.email</code> oder <code>$items()</code>.
+        Nicht wundern: Beides stammt aus früheren n8n-Versionen und steht in der aktuellen Expression-Referenz nicht
+        mehr. Schreib stattdessen <code>$("Webhook").item.json.email</code> und <code>$input.all()</code>.
       </div>
 
       <h2>Fallbacks und Bedingungen</h2>
+      <p>Ein Fallback ist ein Ersatzwert. Er springt ein, wenn ein Feld fehlt oder leer ist, damit deine Expression
+        nicht mit <code>undefined</code> weiterrechnet.</p>
       <table class="btable">
         <thead><tr><th>Ziel</th><th>Expression</th><th>Warum?</th></tr></thead>
         <tbody>
@@ -134,13 +143,16 @@
 
       <div class="callout callout--tip">
         <b class="t">Zwei Schreibweisen für dieselbe Rechnung</b>
-        <code>$now.plus({ days: 1 })</code> kommt aus Luxon und läuft überall, auch im Code-Node. Daneben kennt n8n die
-        Kurzform <code>$now.plus(1, "days")</code>, die es nur in Expressions gibt. Im Code-Node wirft sie keinen
-        Fehler, sie addiert aber auch nichts, und genau das kostet dich dann eine halbe Stunde Suche. Deshalb bleiben
-        wir im ganzen Buch bei der Objekt-Schreibweise.
+        <code>$now.plus({ days: 1 })</code> kommt aus Luxon und läuft überall, auch im Code-Node. Daneben kennt n8n
+        die Kurzform <code>$now.plus(1, "days")</code>, die es nur in Expressions gibt. Die Kurzform ist eine Falle:
+        Im Code-Node wirft sie keinen Fehler, sie addiert aber auch nichts. Genau das kostet dich dann eine halbe
+        Stunde Suche. Deshalb bleiben wir im ganzen Buch bei der Schreibweise mit <code>{ days: 1 }</code>.
       </div>
 
       <h2>URLs und API-Parameter</h2>
+      <p>Query-Parameter sind die Wertepaare hinter dem <code>?</code> in einer URL, etwa
+        <code>?stadt=Bad+Ems</code>. Werte mit Leerzeichen oder Sonderzeichen musst du dafür kodieren, sonst geht die
+        URL kaputt.</p>
       <table class="btable">
         <thead><tr><th>Ziel</th><th>Expression</th><th>Warum?</th></tr></thead>
         <tbody>
@@ -154,7 +166,8 @@
       </table>
 
       <h2>Kontext: Workflow und Ausführung</h2>
-      <p>Diese Werte beschreiben den Lauf selbst. Nützlich in Logmeldungen, in Fehlerpfaden und in Dateinamen, die du
+      <p>Diese Werte beschreiben nicht deine Daten, sondern den Lauf selbst: welcher Workflow gerade läuft, welche
+        Ausführung es ist, woher das Item kam. Nützlich in Logmeldungen, in Fehlerpfaden und in Dateinamen, die du
         später wiederfinden willst.</p>
       <table class="btable">
         <thead><tr><th>Ziel</th><th>Expression</th><th>Wofür?</th></tr></thead>
@@ -175,26 +188,28 @@
 
       <div class="callout callout--info">
         <b class="t">Variablen gibt es nicht auf jeder Instanz</b>
-        <code>$vars</code> setzt angelegte Variablen voraus. Die Funktion gehört zum selbst gehosteten Enterprise-Plan
-        und zur Cloud ab dem Pro-Plan. Anlegen dürfen sie nur Instanz-Owner und Admins, und zwar im Tab
-        <strong>Variables</strong> über <strong>Add Variable</strong>. Seit n8n 1.118.0 lässt sich eine Variable auch
-        auf ein Projekt begrenzen. Jeder Wert kommt als Text an, und im Schlüssel sind nur Buchstaben, Ziffern und
-        Unterstriche erlaubt. Fehlt dir die Funktion, greif nicht zu Umgebungsvariablen: Seit n8n 2.0 sperrt
-        <code>N8N_BLOCK_ENV_ACCESS_IN_NODE</code> den Zugriff darauf aus Expressions. Leg stattdessen pro Umgebung
-        einen kleinen Edit-Fields-Node namens <code>Konfiguration</code> an, aber auch dort ohne Secrets. Wie du
-        Umgebungen sauber trennst, steht in Kapitel 24.
+        <code>$vars</code> funktioniert nur, wenn vorher jemand Variablen angelegt hat. Die Funktion gehört zum
+        selbst gehosteten Enterprise-Plan und zur Cloud ab dem Pro-Plan. Anlegen dürfen sie nur Instanz-Owner und
+        Admins, und zwar im Tab <strong>Variables</strong> über <strong>Add Variable</strong>. Seit n8n 1.118.0
+        lässt sich eine Variable auch auf ein Projekt begrenzen. Zwei Regeln: Jeder Wert kommt als Text an, und im
+        Schlüssel sind nur Buchstaben, Ziffern und Unterstriche erlaubt. Fehlt dir die Funktion, greif nicht zu
+        Umgebungsvariablen. Seit n8n 2.0 sperrt <code>N8N_BLOCK_ENV_ACCESS_IN_NODE</code> den Zugriff darauf aus
+        Expressions. Leg stattdessen pro Umgebung einen kleinen Edit-Fields-Node namens <code>Konfiguration</code>
+        an, aber auch dort ohne Secrets, also ohne Passwörter und Schlüssel. Wie du Umgebungen sauber trennst, steht
+        in Kapitel 24.
       </div>
 
       <h2>Arbeitsregel</h2>
       <ol class="steps">
-        <li><h4>Input ansehen</h4><p>Öffne das Input-Panel und prüfe den echten Feldnamen. Nicht aus dem Gedächtnis raten.</p></li>
-        <li><h4>Klein anfangen</h4><p>Erst <code>{{ $json }}</code>, dann <code>{{ $json.feld }}</code>, dann erst Logik ergänzen.</p></li>
+        <li><h4>Input ansehen</h4><p>Öffne den Node und schau links ins Input-Panel, die Ansicht der ankommenden Daten. Übernimm den Feldnamen von dort, Zeichen für Zeichen. Nicht aus dem Gedächtnis raten.</p></li>
+        <li><h4>Klein anfangen</h4><p>Schreib erst <code>{{ $json }}</code> und prüfe die Vorschau. Dann <code>{{ $json.feld }}</code>. Erst wenn das stimmt, ergänze Logik.</p></li>
         <li><h4>Fallback setzen</h4><p>Bei optionalen Feldern <code>??</code> oder <code>?.</code> verwenden. Kann das Feld auch leer ankommen, nimm <code>$ifEmpty()</code>.</p></li>
         <li><h4>Komplexität begrenzen</h4><p>Wenn eine Expression mehr als eine Zeile Denkarbeit braucht, verteile die Schritte lieber auf einen Edit-Fields-Node oder einen Code-Node.</p></li>
-        <li><h4>Mit echten Testdaten prüfen</h4><p>Mindestens ein vollständiges und ein unvollständiges Item testen.</p></li>
+        <li><h4>Mit echten Testdaten prüfen</h4><p>Teste mindestens ein vollständiges und ein unvollständiges Item. Fehler zeigen sich fast immer beim unvollständigen.</p></li>
       </ol>
 
       <h2>Wenn etwas schiefgeht</h2>
+      <p>Die folgenden Stolperer passieren jedem, auch nach Jahren noch. Such dein Symptom in der linken Spalte.</p>
       <table class="btable">
         <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
         <tbody>
@@ -209,6 +224,8 @@
       </table>
 
       <h2>Konkrete Testfälle</h2>
+      <p>Mit diesen fünf Mini-Beispielen prüfst du dein Verständnis. Kommt bei dir dieselbe Erwartung heraus, sitzt
+        das Muster.</p>
       <table class="btable">
         <thead><tr><th>Test</th><th>Input</th><th>Expression</th><th>Erwartung</th></tr></thead>
         <tbody>

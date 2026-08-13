@@ -17,7 +17,8 @@
       <div class="chap-eyebrow"><span class="knum">1</span> Grundlagen</div>
       <h1 class="chap-title">Was ist n8n? Konzept & Einsatzgebiete</h1>
       <p class="chap-lede">n8n (gesprochen „n-eight-n“, kurz für <em>nodemation</em>) ist ein Werkzeug, mit dem du
-        Software-Bausteine per Drag-and-drop zu automatischen Abläufen verbindest, ohne (oder mit nur wenig) Code.
+        wiederkehrende Aufgaben automatisierst. Du ziehst fertige Bausteine mit der Maus auf eine Fläche und
+        verbindest sie zu einem Ablauf – ganz ohne Programmieren, oder mit nur wenig Code.
         Stand dieses Buchs: Juli 2026, n8n 2.32.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 14 Minuten</span>
@@ -28,19 +29,25 @@
       <h2>Die Idee in einem Bild</h2>
       <p>Stell dir einen Assistenten vor, dem du einmal eine Abfolge von Anweisungen gibst: „Hol jeden Morgen den
         Wechselkurs, rechne ihn um, und wenn er unter X fällt, schick mir eine Nachricht.“ In n8n malst du genau
-        diese Anweisungskette als Diagramm auf. Starten musst du sie danach nicht mehr selbst: Das übernimmt n8n,
+        diese Anweisungskette als Diagramm auf. Danach musst du nichts mehr selbst starten. Das übernimmt n8n,
         jeden Tag um dieselbe Uhrzeit.</p>
 
-      <p>Jeder Kasten in diesem Diagramm heißt <strong>Node</strong> und macht genau eine Sache. Die Linien dazwischen
-        sind der Weg, den die Daten nehmen. Diese Kombination aus Nodes und Verbindungen ist ein <strong>Workflow</strong>.</p>
+      <p>Jeder Kasten in so einem Diagramm heißt <strong>Node</strong> (englisch für „Knoten“). Ein Node macht genau
+        eine Sache, zum Beispiel „Wechselkurs holen“. Die Linien dazwischen zeigen, welchen Weg die Daten nehmen.
+        Nodes plus Verbindungen ergeben einen <strong>Workflow</strong> – deinen fertigen Ablauf.</p>
 
-      <p>Für die gängigen Dienste musst du dabei nichts selbst bauen. Die Integrationsliste auf n8n.io zählt derzeit
-        knapp 2000 Einträge, von Gmail über Slack bis PostgreSQL.</p>
+      <p>Für die gängigen Dienste musst du dabei nichts selbst bauen. n8n bringt fertige Anschluss-Bausteine mit,
+        sogenannte Integrationen. Die Liste auf n8n.io zählt derzeit knapp 2000 Einträge, von Gmail über Slack bis
+        PostgreSQL.</p>
 
-      <p>Ein Workflow ist beim Bauen zunächst ein <strong>Draft</strong>. Deine Änderungen speichert n8n automatisch,
-        in der Regel innerhalb von ein bis fünf Sekunden. Produktiv wird eine Version aber erst, wenn du
-        <strong>Publish</strong> klickst: Ab dann laufen Schedules, Webhook- und Form-Trigger antworten unter ihren
-        Production-URLs und App-Trigger nehmen echte Ereignisse an. <strong>Unpublish</strong> nimmt diese produktive
+      <p>Solange du an einem Workflow baust, ist er ein <strong>Draft</strong> (englisch für „Entwurf“). Einen
+        Speichern-Knopf brauchst du nicht: n8n sichert deine Änderungen automatisch, in der Regel innerhalb von ein
+        bis fünf Sekunden. Von allein läuft ein Draft aber noch nicht. Das ist die klassische Stolperfalle am
+        Anfang: Der Workflow sieht fertig aus und tut trotzdem nichts. Damit er läuft, klickst du auf
+        <strong>Publish</strong> („veröffentlichen“). Erst ab diesem Klick
+        arbeitet der Workflow im echten Betrieb. Zeitpläne (Schedules) starten pünktlich. Webhook- und Form-Trigger,
+        also Startpunkte, die auf Anfragen von außen warten, antworten unter ihren Production-URLs (den festen
+        Adressen für den Betrieb). Und App-Trigger wie „neue E-Mail eingetroffen“ nehmen echte Ereignisse an. Mit <strong>Unpublish</strong> nimmst du die veröffentlichte
         Version wieder aus dem Betrieb. Falls dir n8n 1.x noch vertraut ist: Publish und Unpublish haben den früheren
         Schalter „Active“ abgelöst.</p>
 
@@ -72,27 +79,29 @@
       </figure>
 
       <h2>Was bedeutet „Workflow-Automatisierung“ konkret?</h2>
-      <p>Automatisieren heißt: eine Aufgabe, die du sonst <em>manuell und wiederholt</em> machst, einmal als Ablauf
-        beschreiben und dann die Maschine machen lassen. Typische Kandidaten erkennst du an drei Merkmalen:</p>
+      <p>Automatisieren heißt: Eine Aufgabe, die du sonst <em>von Hand und immer wieder</em> erledigst, beschreibst du
+        einmal als Ablauf. Danach erledigt sie die Maschine für dich. Ob sich eine Aufgabe dafür eignet, erkennst du
+        an drei Merkmalen:</p>
       <ul>
-        <li>Es passiert <strong>regelmäßig</strong> oder <strong>als Reaktion</strong> auf ein Ereignis.</li>
-        <li>Es folgt <strong>festen Regeln</strong> („wenn X, dann Y“).</li>
-        <li>Es verbindet <strong>mehrere Werkzeuge</strong> (E-Mail, Tabelle, Chat, Datenbank …).</li>
+        <li>Sie fällt regelmäßig an oder als Reaktion auf ein Ereignis.</li>
+        <li>Sie folgt festen Regeln („wenn X, dann Y“).</li>
+        <li>Sie verbindet mehrere Werkzeuge (E-Mail, Tabelle, Chat, Datenbank …).</li>
       </ul>
 
       <h2>Wann lohnt sich n8n, wann nicht?</h2>
       <div class="cards">
         <div class="card"><div class="ic"><i class="vic vic-check-circle"></i></div><b>Ideal für</b>
-          <p>Daten zwischen Apps schaufeln, Benachrichtigungen, Reports, Lead-Verarbeitung, KI-Aufgaben, API-Integrationen, Prototypen.</p></div>
+          <p>Daten zwischen Apps schaufeln, Benachrichtigungen, Reports, Lead-Verarbeitung (also Anfragen von Interessenten weiterreichen), KI-Aufgaben, API-Integrationen, Prototypen.</p></div>
         <div class="card"><div class="ic"><i class="vic vic-help"></i></div><b>Geht auch, aber überleg</b>
-          <p>Sehr rechenintensive Datenverarbeitung großer Mengen, harte Echtzeit-Anforderungen im Millisekunden-Bereich.</p></div>
+          <p>Sehr rechenintensive Verarbeitung riesiger Datenmengen, harte Echtzeit-Anforderungen im Millisekunden-Bereich.</p></div>
         <div class="card"><div class="ic"><i class="vic vic-ban"></i></div><b>Eher nicht</b>
-          <p>Komplette Endnutzer-Apps mit Oberfläche, sicherheitskritische Systeme ohne Aufsicht, Dinge mit nur einem einzigen Schritt.</p></div>
+          <p>Komplette Endnutzer-Apps mit eigener Oberfläche, sicherheitskritische Systeme ohne Aufsicht, Aufgaben mit nur einem einzigen Schritt.</p></div>
       </div>
 
       <h2>n8n im Vergleich zu Zapier & Make</h2>
       <p>Wahrscheinlich hast du von <strong>Zapier</strong> oder <strong>Make</strong> (früher Integromat) gehört. Alle drei lösen
-        dasselbe Grundproblem. Die Unterschiede, die in der Praxis wirklich zählen:</p>
+        dasselbe Grundproblem. In der Tabelle taucht der Begriff <strong>API</strong> auf: Das ist die Schnittstelle,
+        über die Programme automatisch miteinander sprechen. Die Unterschiede, die in der Praxis wirklich zählen:</p>
 
       <table class="btable">
         <thead><tr><th>Aspekt</th><th>n8n</th><th>Zapier</th><th>Make</th></tr></thead>
@@ -109,26 +118,28 @@
 
       <div class="callout callout--pareto">
         <b class="t">Die Entscheidung in einem Satz</b>
-        Wenn dir die Kontrolle über deine Daten wichtiger ist als der bequemste Einstieg und du bei viel Volumen nicht
-        pro Schritt zahlen willst, nimm n8n. Die Lernkurve ist dann steiler als bei Zapier. Genau dafür ist dieses Buch da.
+        Nimm n8n, wenn dir zwei Dinge wichtig sind: die Kontrolle über deine Daten, und dass du bei viel Volumen nicht
+        pro Schritt zahlst. Der Einstieg ist dafür etwas steiler als bei Zapier. Genau deshalb gibt es dieses Buch.
       </div>
 
       <h2>„Fair-Code“, Open Source & Cloud: Was heißt das für dich?</h2>
-      <p>Der Quellcode von n8n liegt offen auf GitHub. Die Lizenz dazu heißt Sustainable Use License, und n8n nennt
-        dieses Modell <em>fair-code</em>. Open Source im Sinne der Open Source Initiative ist das nicht, denn die Lizenz
-        zieht eine Grenze bei der kommerziellen Weitergabe. Praktisch heißt das:</p>
+      <p>Der Quellcode von n8n liegt offen auf GitHub, jeder kann ihn anschauen. Die Lizenz dazu heißt Sustainable
+        Use License, und n8n nennt dieses Modell <em>fair-code</em>. Open Source im Sinne der Open Source Initiative
+        ist das nicht, denn die Lizenz zieht eine Grenze bei der kommerziellen Weitergabe. Praktisch heißt das:</p>
       <ul>
-        <li>Du darfst n8n <strong>kostenlos selbst betreiben</strong> (lokal oder auf deinem Server), privat und intern
-          in deiner Firma.</li>
+        <li>Du darfst n8n kostenlos selbst betreiben – auf deinem eigenen Rechner oder deinem
+          eigenen Server. Das gilt privat und intern in deiner Firma.</li>
         <li>Du kannst den Quellcode einsehen und anpassen.</li>
         <li>Was die Lizenz ausschließt: n8n als eigenen Dienst weiterverkaufen oder in ein kommerzielles Produkt
           einbauen. Dafür verlangt n8n eine Enterprise-Lizenz.</li>
-        <li>Es gibt zusätzlich eine bezahlte <strong>Cloud-Variante</strong>, bei der n8n Hosting, Updates und
-          Skalierung übernimmt. Du startest mit einer kostenlosen Testphase und wählst danach einen Tarif.</li>
+        <li>Es gibt zusätzlich eine bezahlte <strong>Cloud-Variante</strong>. Dabei übernimmt n8n das Hosting (der
+          Server läuft bei n8n), die Updates und die Skalierung. Du startest mit einer kostenlosen Testphase und
+          wählst danach einen Tarif.</li>
       </ul>
       <p>Für dieses Buch ist beides gleichwertig: Editor, Nodes und Workflows sind dieselben. Zusatzfunktionen wie
-        Projekte, SSO oder die Git-Versionierung brauchen einen bezahlten Plan, in der Cloud genauso wie beim
-        Self-Hosting. Im nächsten Kapitel wählst du einfach den Weg, der dir lieber ist.</p>
+        Projekte, SSO (ein zentrales Firmen-Login) oder die Git-Versionierung brauchen einen bezahlten Plan – in der
+        Cloud genauso wie beim Selbst-Betreiben (Self-Hosting). Im nächsten Kapitel wählst du einfach den Weg, der
+        dir lieber ist; wechseln kannst du später immer noch.</p>
 
       <h2>Ein paar Begriffe, die ab jetzt ständig vorkommen</h2>
       <table class="btable">
@@ -149,13 +160,13 @@
 
       <div class="callout callout--info">
         <b class="t">Keine Sorge, wenn noch nicht alles sitzt</b>
-        Diese Begriffe werden in den nächsten Kapiteln lebendig, sobald du sie anklickst. Auswendig lernen musst du hier
-        nichts. Das Glossar im Anhang bleibt als Nachschlagewerk.
+        Du musst hier nichts auswendig lernen. Diese Begriffe werden in den nächsten Kapiteln von selbst lebendig,
+        sobald du sie in n8n vor dir siehst und anklickst. Und das Glossar im Anhang bleibt als Nachschlagewerk.
       </div>
 
       <p>Du weißt jetzt, <em>was</em> n8n ist und <em>wofür</em> es taugt. Im nächsten Kapitel bringen wir es bei dir zum Laufen:
-        wahlweise in der Cloud (keine Installation) oder lokal (ein Befehl). Für den lokalen Weg brauchst du ein
-        Terminal. Halte es bereit.</p>
+        wahlweise in der Cloud (keine Installation) oder lokal auf deinem Rechner (ein einziger Befehl). Für den
+        lokalen Weg brauchst du ein Terminal – das Fenster, in das du Textbefehle eintippst. Halte es bereit.</p>
 
     </article>
     <nav id="prevnext"></nav>

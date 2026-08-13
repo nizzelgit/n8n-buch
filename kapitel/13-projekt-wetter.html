@@ -30,9 +30,11 @@
         <ul>
           <li>n8n läuft, und du kannst einen neuen Workflow erstellen.</li>
           <li>Einen Telegram-Account und einen Telegram-Bot. Falls du noch keinen hast: Schritt 1 führt dich durch.</li>
-          <li>Keinen Wetter-API-Schlüssel: Wir nutzen Open-Meteo. Für nicht-kommerzielle Nutzung braucht diese API weder
-            Anmeldung noch Key. Einen Schlüssel verlangt Open-Meteo erst für den kommerziellen Tarif.</li>
-          <li>Keine echten Tokens in Notizen, Screenshots oder geteilte Dateien schreiben. Tokens gehören nur in Credentials.</li>
+          <li>Keinen Wetter-API-Schlüssel: Wir nutzen den Wetterdienst Open-Meteo. Seine API, also die Schnittstelle,
+            über die Programme Daten abfragen, ist für nicht-kommerzielle Nutzung frei. Keine Anmeldung, kein Key.
+            Einen Schlüssel verlangt Open-Meteo erst für den kommerziellen Tarif.</li>
+          <li>Wichtig: Schreibe geheime Zugangsschlüssel (Tokens) nie in Notizen, Screenshots oder geteilte Dateien.
+            Tokens gehören nur in Credentials, den sicheren Speicher von n8n für Zugangsdaten.</li>
         </ul>
       </div>
 
@@ -78,28 +80,32 @@
       <hr>
 
       <h2>Schritt 1: Telegram-Bot vorbereiten</h2>
-      <p>Telegram verschickt Nachrichten über Bots. Der Bot ist technisch der Absender; du gibst n8n sein Token als
-        Credential und deine Chat-ID als Empfänger.</p>
+      <p>Telegram verschickt automatische Nachrichten über Bots. Ein Bot ist ein maschineller Telegram-Benutzer.
+        Er wird der Absender deiner Wetter-Nachricht. Damit n8n den Bot steuern darf, brauchst du zwei Dinge:
+        das Bot-Token (einen geheimen Zugangsschlüssel) und deine Chat-ID (die Nummer deines Chats).
+        Beides besorgst du dir jetzt.</p>
 
       <ol class="steps">
         <li><h4>BotFather öffnen</h4>
-          <p>Öffne Telegram und suche nach <strong>@BotFather</strong>. Achte auf den verifizierten Bot von Telegram.</p></li>
+          <p>Öffne Telegram. Tippe oben ins Suchfeld: <strong>@BotFather</strong>. Das ist der offizielle
+            Telegram-Bot, der neue Bots erstellt. Achte auf das Verifizierungshäkchen, es gibt viele Nachahmer.</p></li>
         <li><h4>Neuen Bot erstellen</h4>
-          <p>Starte den Chat und sende <code>/newbot</code>. BotFather fragt nach einem Anzeigenamen und danach nach
-            einem Benutzernamen, der auf <code>bot</code> enden muss, z. B. <code>mein_wetter_report_bot</code>.</p></li>
+          <p>Öffne den Chat mit BotFather und sende die Nachricht <code>/newbot</code>. BotFather fragt zuerst nach
+            einem Anzeigenamen. Danach fragt er nach einem Benutzernamen. Der muss auf <code>bot</code> enden,
+            z. B. <code>mein_wetter_report_bot</code>.</p></li>
         <li><h4>Token kopieren</h4>
-          <p>Am Ende bekommst du ein Bot-Token. Kopiere es, aber speichere es nicht in einer normalen Textdatei.
-            Wir tragen es gleich in eine n8n-Credential ein.</p></li>
+          <p>Am Ende schickt BotFather dir eine lange Zeichenkette: das Bot-Token. Kopiere es, aber speichere es
+            nicht in einer normalen Textdatei. Wir tragen es gleich in eine n8n-Credential ein.</p></li>
         <li><h4>Dem Bot einmal schreiben</h4>
           <p>Öffne den Chat mit deinem neuen Bot und sende irgendeine Nachricht, z. B. <code>Hallo</code>.
             Ohne diesen ersten Kontakt darf der Bot dir später nicht schreiben.</p></li>
         <li><h4>Chat-ID herausfinden</h4>
-          <p>Suche in Telegram <strong>@get_id_bot</strong> und starte ihn. Auf genau diesen Bot verweist n8n selbst,
-            in der Beschreibung des Feldes <strong>Chat ID</strong>. Er antwortet mit deiner numerischen Id. Notiere
-            diese Zahl als <code>CHAT_ID</code>. Die n8n-Doku nennt zwei weitere Wege: einen <strong>Telegram
-            Trigger</strong> in einen Testworkflow hängen und die Chat-ID aus dessen Ausgabe lesen, oder für
-            Gruppenchats den Bot <strong>@RawDataBot</strong> in die Gruppe einladen und im ausgegebenen JSON unter
-            <code>chat</code> nachsehen.</p></li>
+          <p>Suche in Telegram nach <strong>@get_id_bot</strong> und starte ihn. Auf genau diesen Bot verweist n8n
+            selbst, in der Beschreibung des Feldes <strong>Chat ID</strong>. Er antwortet mit einer Zahl: deiner
+            Chat-ID. Notiere sie, du brauchst sie in Schritt 7. Die n8n-Doku nennt zwei weitere Wege: einen
+            <strong>Telegram Trigger</strong> in einen Testworkflow hängen und die Chat-ID aus dessen Ausgabe lesen,
+            oder für Gruppenchats den Bot <strong>@RawDataBot</strong> in die Gruppe einladen und im ausgegebenen
+            JSON unter <code>chat</code> nachsehen.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -117,27 +123,32 @@
         <li><h4>Name setzen</h4>
           <p>Klicke oben links auf den Workflow-Namen und schreibe: <code>Täglicher Wetter-Report</code>.</p></li>
         <li><h4>Auto-Save abwarten</h4>
-          <p>Warte ein bis fünf Sekunden, bis oben der gespeicherte Draft angezeigt wird. So lange braucht der Autosave
-            von n8n 2.x. Veröffentlicht wird der Workflow erst am Ende.</p></li>
+          <p>Warte ein bis fünf Sekunden. Oben zeigt n8n dann an, dass dein Draft gespeichert ist. Draft heißt
+            Entwurf: n8n 2.x speichert deine Arbeit automatisch, aber der Workflow läuft dadurch noch nicht.
+            Veröffentlicht wird erst ganz am Ende.</p></li>
       </ol>
 
       <h2>Schritt 3: Schedule-Trigger setzen</h2>
-      <p>Der Workflow soll von allein starten, also nehmen wir keinen manuellen Trigger, sondern einen Zeitplan.</p>
+      <p>Ein Trigger ist der Startknopf eines Workflows. Unser Workflow soll von allein starten. Deshalb nehmen wir
+        keinen manuellen Trigger, sondern einen mit Zeitplan: den Schedule Trigger.</p>
 
       <ol class="steps">
         <li><h4>Start-Node hinzufügen</h4>
-          <p>Klicke auf das große <span class="kbd">+</span> in der Mitte des Canvas, beschriftet mit
-            <strong>„Add first step…“</strong>. Tippe <code>schedule</code> ins Suchfeld und wähle
-            <strong>Schedule Trigger</strong>.</p></li>
+          <p>Klicke auf das große <span class="kbd">+</span> in der Mitte des Canvas (der leeren Arbeitsfläche),
+            beschriftet mit <strong>„Add first step…“</strong>. Eine Suchliste öffnet sich. Tippe
+            <code>schedule</code> ins Suchfeld und wähle <strong>Schedule Trigger</strong>.</p></li>
         <li><h4>Trigger öffnen</h4>
-          <p>Doppelklicke den Schedule-Node. Die Parameter-Spalte öffnet sich.</p></li>
+          <p>Doppelklicke auf den neuen Schedule-Node. Die Detailansicht öffnet sich. Dort stehen die
+            <strong>Parameter</strong>, also die Einstellungen des Nodes.</p></li>
         <li><h4>Täglich einstellen</h4>
-          <p>Setze <strong>Trigger Interval</strong> auf <strong>Days</strong>, <strong>Days Between Triggers</strong> auf
-            <code>1</code>, <strong>Trigger at Hour</strong> auf <code>8am</code> und <strong>Trigger at Minute</strong> auf
-            <code>0</code>.</p></li>
+          <p>Stelle vier Felder ein: <strong>Trigger Interval</strong> auf <strong>Days</strong>,
+            <strong>Days Between Triggers</strong> auf <code>1</code>, <strong>Trigger at Hour</strong> auf
+            <code>8am</code> und <strong>Trigger at Minute</strong> auf <code>0</code>. Das heißt zusammen:
+            jeden Tag um 8:00 Uhr.</p></li>
         <li><h4>Testlauf ermöglichen</h4>
-          <p>Klicke oben im Node auf <strong>▶ Schritt ausführen</strong>. Der Node erzeugt sofort ein Test-Item, auch wenn es
-            gerade nicht 8 Uhr ist.</p></li>
+          <p>Klicke oben im Node auf <strong>▶ Schritt ausführen</strong>. Der Node erzeugt sofort ein Test-Item,
+            also einen Beispiel-Datensatz, auch wenn es gerade nicht 8 Uhr ist. Damit können die nächsten Nodes
+            gleich arbeiten.</p></li>
       </ol>
 
       <figure class="figure">
@@ -173,24 +184,27 @@
       </div>
 
       <h2>Schritt 4: Wetterdaten mit Open-Meteo holen</h2>
-      <p>Jetzt hängen wir einen HTTP-Request-Node an. Wir nutzen Query-Parameter als Name/Wert-Liste, weil das lesbarer ist
-        als eine lange URL.</p>
+      <p>Jetzt kommt der zweite Node: <strong>HTTP Request</strong>. Er ruft eine Internet-Adresse auf und nimmt die
+        Antwort entgegen, ähnlich wie dein Browser, nur ohne Bildschirm. Was wir genau wissen wollen, sagen wir der
+        API über Query-Parameter. Das ist eine Liste aus Name/Wert-Paaren und lesbarer als eine lange URL.</p>
 
       <ol class="steps">
         <li><h4>HTTP-Node anhängen</h4>
-          <p>Schließe die Detailansicht mit <span class="kbd">Esc</span>. Ziehe vom Ausgangspunkt rechts am Schedule-Node
-            eine Verbindung ins Leere, suche <code>http</code> und wähle <strong>HTTP Request</strong>.</p></li>
+          <p>Schließe die Detailansicht mit <span class="kbd">Esc</span>. Klicke auf den kleinen Punkt rechts am
+            Schedule-Node, halte die Maustaste und ziehe eine Linie ins Leere. Lass los: Die Suchliste öffnet sich.
+            Tippe <code>http</code> und wähle <strong>HTTP Request</strong>.</p></li>
         <li><h4>Node benennen</h4>
           <p>Klicke den Node-Namen an und benenne ihn in <code>Wetter holen</code> um. Das macht spätere Expressions lesbarer.</p></li>
         <li><h4>Node öffnen</h4>
           <p>Doppelklick auf <strong>Wetter holen</strong>.</p></li>
         <li><h4>Methode und URL setzen</h4>
-          <p><strong>Method</strong> bleibt <code>GET</code>. In <strong>URL</strong> trägst du ein:
+          <p><strong>Method</strong> bleibt <code>GET</code>, das heißt: Daten abholen, nichts verändern. In
+            <strong>URL</strong> trägst du ein:
             <code>https://api.open-meteo.com/v1/forecast</code></p></li>
         <li><h4>Query-Parameter einschalten</h4>
           <p>Schalte <strong>Send Query Parameters</strong> ein. Das Feld <strong>Specify Query Parameters</strong>
-            darunter bleibt auf <strong>Using Fields Below</strong>. Jede weitere Zeile holst du dir über
-            <strong>Add Query Parameter</strong>. Trage nun die folgenden Name/Wert-Paare ein.</p></li>
+            darunter bleibt auf <strong>Using Fields Below</strong>. Jede weitere Zeile holst du dir mit einem Klick
+            auf <strong>Add Query Parameter</strong>. Trage nun die folgenden Name/Wert-Paare ein.</p></li>
       </ol>
 
       <table class="btable">
@@ -206,11 +220,12 @@
 
       <ol class="steps" style="counter-reset: st 5;">
         <li><h4>Schritt ausführen</h4>
-          <p>Klicke oben auf <strong>▶ Schritt ausführen</strong>. Rechts sollte ein JSON-Ergebnis mit <code>current</code>
-            und <code>daily</code> erscheinen.</p></li>
+          <p>Klicke oben auf <strong>▶ Schritt ausführen</strong>. Rechts erscheint die Antwort der API im
+            JSON-Format, dem üblichen Datenformat zwischen Programmen. Du siehst darin die Abschnitte
+            <code>current</code> und <code>daily</code>. Wenn ja: Die Wetterdaten sind da.</p></li>
         <li><h4>Schema prüfen</h4>
-          <p>Wechsle rechts auf <strong>Schema</strong>. Du solltest unter anderem
-            <code>current.temperature_2m</code>, <code>current.wind_speed_10m</code> und
+          <p>Wechsle rechts auf <strong>Schema</strong>. Diese Ansicht zeigt die Feldnamen als Liste. Du solltest
+            unter anderem <code>current.temperature_2m</code>, <code>current.wind_speed_10m</code> und
             <code>daily.temperature_2m_max</code> sehen.</p></li>
       </ol>
 
@@ -261,25 +276,27 @@
       </div>
 
       <h2>Schritt 5: Report-Text bauen</h2>
-      <p>Rohes JSON ist kein Report. Der nächste Node erzeugt ein einziges Feld <code>nachricht</code>, das Telegram später
-        verschickt.</p>
+      <p>Rohes JSON ist kein Report. Der nächste Node macht aus den Wetterdaten ein einziges Textfeld namens
+        <code>nachricht</code>. Genau dieses Feld verschickt Telegram später.</p>
 
       <ol class="steps">
         <li><h4>Edit-Fields-Node anhängen</h4>
-          <p>Schließe die Detailansicht. Ziehe vom HTTP-Node eine Linie ins Leere, suche <code>edit fields</code> und wähle
-            <strong>Edit Fields (Set)</strong>.</p></li>
+          <p>Schließe die Detailansicht. Ziehe wie eben eine Linie vom HTTP-Node ins Leere, suche
+            <code>edit fields</code> und wähle <strong>Edit Fields (Set)</strong>.</p></li>
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>Report bauen</code>.</p></li>
         <li><h4>Node öffnen und Feld anlegen</h4>
           <p>Doppelklick. Unter <strong>Fields to Set</strong> klickst du auf <strong>Add Field</strong>; in älteren
             n8n-Versionen hieß derselbe Knopf <strong>Add Value</strong>. Trage bei <strong>Name</strong> ein:
-            <code>nachricht</code>. Der <strong>Type</strong> daneben bleibt auf <strong>String</strong>.</p></li>
+            <code>nachricht</code>. Der <strong>Type</strong> daneben bleibt auf <strong>String</strong>, also Text.</p></li>
         <li><h4>Wert auf Expression stellen</h4>
           <p>Fahre mit der Maus über das Feld <strong>Value</strong>. Erst dann erscheinen die beiden Reiter
             <strong>Fest</strong> (englisch <strong>Fixed</strong>) und <strong>Expression</strong>. Klicke auf
             <strong>Expression</strong>.</p></li>
         <li><h4>Nachricht einfügen</h4>
-          <p>Füge den folgenden Ausdruck vollständig ein.</p></li>
+          <p>Füge den folgenden Text vollständig ein. Alles zwischen <code>{{</code> und <code>}}</code> ist eine
+            Expression: eine kleine Formel, die n8n ausrechnet und durch ihr Ergebnis ersetzt.
+            <code>Math.round(...)</code> rundet dabei die Zahlen.</p></li>
       </ol>
 
       <div class="code">
@@ -295,10 +312,11 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
 
       <ol class="steps" style="counter-reset: st 5;">
         <li><h4>Schritt ausführen</h4>
-          <p>Klicke <strong>▶ Schritt ausführen</strong>. Rechts sollte ein einziges Feld <code>nachricht</code> mit einem
-            lesbaren Text stehen.</p></li>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Rechts steht jetzt ein einziges Feld <code>nachricht</code>
+            mit dem fertigen Morgenbericht als lesbarem Text.</p></li>
         <li><h4>Text prüfen</h4>
-          <p>Kontrolliere kritisch: Sind Zahlen gerundet? Wirkt der Satz natürlich? Passt die Windwarnung zum Wert im Eingang?</p></li>
+          <p>Lies die Nachricht so, als käme sie gerade morgens aufs Handy. Sind die Zahlen gerundet? Passt die
+            Windwarnung zum Windwert im Eingang?</p></li>
       </ol>
 
       <div class="callout callout--pareto">
@@ -310,7 +328,8 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
       </div>
 
       <h2>Schritt 6: Telegram-Credential anlegen</h2>
-      <p>Jetzt kommt das Bot-Token aus Schritt 1 ins Spiel. Es gehört in eine Credential, nicht in den Workflow-Text.</p>
+      <p>Jetzt kommt das Bot-Token aus Schritt 1 ins Spiel. Es gehört in eine Credential. So nennt n8n den sicheren
+        Speicher für Zugangsdaten, getrennt vom Workflow-Text.</p>
 
       <ol class="steps">
         <li><h4>Telegram-Node anhängen</h4>
@@ -319,14 +338,16 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
         <li><h4>Aktion wählen</h4>
           <p>Wähle in der Aktionsliste <strong>Send a text message</strong>. Im geöffneten Node siehst du dieselbe
             Einstellung noch einmal, aufgeteilt in zwei Felder: <strong>Resource</strong> steht auf
-            <strong>Message</strong>, <strong>Operation</strong> auf <strong>Send Message</strong>.</p></li>
+            <strong>Message</strong>, <strong>Operation</strong> auf <strong>Send Message</strong>. Das passt so.</p></li>
         <li><h4>Credential erstellen</h4>
-          <p>Beim Feld <strong>Credential to connect with</strong> auf <strong>+ Create new credential</strong> klicken.</p></li>
+          <p>Klicke beim Feld <strong>Credential to connect with</strong> auf <strong>+ Create new credential</strong>.
+            Ein Fenster öffnet sich.</p></li>
         <li><h4>Token eintragen</h4>
           <p>Füge das Bot-Token von BotFather in das Token-Feld ein. Benenne die Credential z. B.
             <code>Telegram – Wetter-Report</code> und speichere.</p></li>
         <li><h4>Zurück zum Node</h4>
-          <p>Die neue Credential sollte jetzt im Telegram-Node ausgewählt sein.</p></li>
+          <p>Das Fenster schließt sich. Die neue Credential ist jetzt im Telegram-Node ausgewählt. Damit ist die
+            Verbindung zu deinem Bot fertig.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -339,14 +360,18 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
 
       <ol class="steps">
         <li><h4>Chat-ID eintragen</h4>
-          <p>Im Telegram-Node das Feld <strong>Chat ID</strong> mit deiner Zahl aus Schritt 1 füllen. Für einen Kanal
-            akzeptiert das Feld statt der Zahl auch den Benutzernamen in der Form <code>@kanalname</code>.</p></li>
+          <p>Trage im Telegram-Node in das Feld <strong>Chat ID</strong> deine notierte Zahl aus Schritt 1 ein.
+            Für einen Kanal akzeptiert das Feld statt der Zahl auch den Benutzernamen in der Form
+            <code>@kanalname</code>.</p></li>
         <li><h4>Text-Feld auf Expression stellen</h4>
-          <p>Beim Feld <strong>Text</strong> auf <strong>Expression</strong> umschalten.</p></li>
+          <p>Fahre mit der Maus über das Feld <strong>Text</strong> und klicke auf den Reiter
+            <strong>Expression</strong>.</p></li>
         <li><h4>Nachricht aus vorherigem Node übernehmen</h4>
-          <p>Trage ein: <code>{{ $json.nachricht }}</code>. Das ist das Feld aus <strong>Report bauen</strong>.</p></li>
+          <p>Trage ein: <code>{{ $json.nachricht }}</code>. Das holt das Feld <code>nachricht</code> aus
+            <strong>Report bauen</strong>.</p></li>
         <li><h4>Telegram-Node einzeln testen</h4>
-          <p>Klicke <strong>▶ Schritt ausführen</strong>. Innerhalb weniger Sekunden sollte die Nachricht in Telegram erscheinen.</p></li>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Wirf einen Blick auf dein Handy oder Telegram am Rechner:
+            Innerhalb weniger Sekunden sollte dein Wetterbericht ankommen.</p></li>
       </ol>
 
       <figure class="figure">
@@ -384,12 +409,13 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
           <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Ganzen Workflow ausführen</h4>
           <p>Klicke unten am Canvas auf <strong>Execute workflow</strong>. Bis n8n 1.x hieß derselbe Knopf
-            <strong>Test workflow</strong>; in älteren Anleitungen und Videos steht noch dieser Name. n8n läuft von
-            links nach rechts durch: Schedule → Wetter holen → Report bauen → Telegram senden.</p></li>
+            <strong>Test workflow</strong>; in älteren Anleitungen und Videos steht noch dieser Name. n8n arbeitet
+            die Nodes von links nach rechts ab: Schedule → Wetter holen → Report bauen → Telegram senden.</p></li>
         <li><h4>Grüne Häkchen prüfen</h4>
-          <p>Jeder Node sollte ein grünes Häkchen bekommen. Öffne bei einem Fehler genau den roten Node, nicht blind alle.</p></li>
+          <p>Jeder Node sollte ein grünes Häkchen bekommen. Wird ein Node rot, ist dort der Fehler. Öffne genau
+            diesen Node und lies die Fehlermeldung, statt blind alle zu öffnen.</p></li>
         <li><h4>Telegram kontrollieren</h4>
-          <p>Prüfe, ob genau eine neue Nachricht angekommen ist und ob sie fachlich plausibel klingt.</p></li>
+          <p>Prüfe, ob genau eine neue Nachricht angekommen ist und ob die Werte plausibel sind.</p></li>
       </ol>
 
       <div class="callout callout--info">
@@ -399,19 +425,21 @@ Regenwahrscheinlichkeit: {{ $json.daily.precipitation_probability_max[0] ?? "unb
       </div>
 
       <h2>Schritt 9: Publish klicken</h2>
+      <p>Publish heißt veröffentlichen: Erst damit läuft der Workflow von allein, ohne dass du auf einen Knopf drückst.</p>
       <ol class="steps">
         <li><h4>Draft prüfen</h4>
           <p>Warte, bis der Auto-Save-Status keine offenen Änderungen mehr zeigt.</p></li>
         <li><h4>Publish klicken</h4>
-          <p>Oben rechts <strong>Publish</strong> klicken. n8n fragt in einem kleinen Fenster nach einem Versionsnamen
-            und schlägt eine UUID vor. Überschreib sie mit etwas Sprechendem, etwa <code>Erste Fassung</code>, und
-            ergänze bei Bedarf eine kurze Beschreibung. Nach dem Bestätigen ist genau diese getestete Version
-            produktiv.</p></li>
+          <p>Klicke oben rechts auf <strong>Publish</strong>. Ein kleines Fenster öffnet sich und fragt nach einem
+            Versionsnamen. n8n schlägt eine UUID vor, eine zufällige Zeichenkette. Überschreib sie mit etwas
+            Sprechendem, etwa <code>Erste Fassung</code>, und ergänze bei Bedarf eine kurze Beschreibung. Nach dem
+            Bestätigen ist genau diese getestete Version produktiv.</p></li>
         <li><h4>Was jetzt passiert</h4>
-          <p>n8n lauscht nun auf den Schedule. Der nächste automatische Lauf passiert zur eingestellten Uhrzeit.</p></li>
+          <p>n8n lauscht nun auf den Schedule. Der nächste automatische Lauf passiert zur eingestellten Uhrzeit,
+            also morgen früh um 8.</p></li>
         <li><h4>Ersten automatischen Lauf prüfen</h4>
           <p>Nach der ersten geplanten Ausführung öffnest du den Tab <strong>Executions</strong> und prüfst, ob der Lauf
-            erfolgreich war. Das ist deine Kontrolle, dass nicht nur der manuelle Test funktioniert.</p></li>
+            erfolgreich war. Der manuelle Test beweist nur, dass die Nodes funktionieren. Ob auch der Zeitplan greift, siehst du erst hier.</p></li>
       </ol>
 
       <div class="callout callout--pareto">

@@ -16,9 +16,10 @@
 
       <div class="chap-eyebrow"><span class="knum">22</span> Profi &amp; Betrieb</div>
       <h1 class="chap-title">Sub-Workflows &amp; Modularisierung</h1>
-      <p class="chap-lede">In diesem Kapitel zerlegst du einen Workflow in einen Haupt-Workflow und einen
-        wiederverwendbaren Sub-Workflow. Es geht dabei um weniger Kopieren: Dieselbe Logik liegt an einer Stelle,
-        und der Aufrufer weiß, welche Felder er hineingibt und welche er zurückbekommt.</p>
+      <p class="chap-lede">In diesem Kapitel zerlegst du einen Workflow in zwei Teile: einen Haupt-Workflow und einen
+        Sub-Workflow. Ein Sub-Workflow ist ein kleiner Hilfs-Workflow, den andere Workflows aufrufen können.
+        Der Vorteil: Du musst nichts mehr kopieren. Dieselbe Logik liegt an einer Stelle, und der Aufrufer weiß genau,
+        welche Felder er hineingibt und welche er zurückbekommt.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 18 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Fortgeschrittene Grundlagen</span>
@@ -42,10 +43,12 @@
       </div>
 
       <h2>Das Ziel</h2>
-      <p>Wir bauen einen kleinen Baustein für Lead-Daten. Der Haupt-Workflow erzeugt drei Demo-Leads und ruft einen
-        Sub-Workflow auf. Der Sub-Workflow normalisiert Name, E-Mail, Firma und Quelle, berechnet eine einfache
-        Qualitätsbewertung und gibt das Ergebnis an den Haupt-Workflow zurück. Die Node-Namen, Beschriftungen und
-        Voreinstellungen in diesem Kapitel haben den Stand Juli 2026 und n8n 2.32.x.</p>
+      <p>Wir bauen einen kleinen Baustein für Lead-Daten. Ein Lead ist ein Kontakt, der sich für dein Angebot
+        interessiert. Der Haupt-Workflow erzeugt drei Demo-Leads und ruft einen Sub-Workflow auf. Der Sub-Workflow
+        normalisiert Name, E-Mail, Firma und Quelle. Normalisieren heißt: Er bringt die Werte in eine einheitliche
+        Form, zum Beispiel ohne überflüssige Leerzeichen. Dazu berechnet er eine einfache Qualitätsbewertung und gibt
+        das Ergebnis an den Haupt-Workflow zurück. Die Node-Namen, Beschriftungen und Voreinstellungen in diesem
+        Kapitel haben den Stand Juli 2026 und n8n 2.32.x.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -122,32 +125,37 @@
       <hr>
 
       <h2>Schritt 1: Sub-Workflow anlegen</h2>
-      <p>Wir beginnen mit dem wiederverwendbaren Teil. Der Sub-Workflow soll später von anderen Workflows aufgerufen
-        werden, aber zunächst testest du ihn isoliert.</p>
+      <p>Zuerst der wiederverwendbare Teil. Du baust und testest ihn für sich allein; aufgerufen wird er erst
+        später.</p>
 
       <ol class="steps">
         <li><h4>Neuen Workflow erstellen</h4>
-          <p>Erstelle einen neuen Workflow und nenne ihn <code>Baustein · Lead normalisieren</code>.</p></li>
+          <p>Lege einen neuen, leeren Workflow an, so wie du es aus den früheren Kapiteln kennst. Nenne ihn
+            <code>Baustein · Lead normalisieren</code>.</p></li>
         <li><h4>Execute Sub-workflow Trigger hinzufügen</h4>
-          <p>Klicke auf <strong>Add first step…</strong>. n8n öffnet die Liste <strong>What triggers this
-            workflow?</strong>, und dort wählst du <strong>When executed by another workflow</strong>. Auf dem Canvas
-            heißt der Node danach <strong>When Executed by Another Workflow</strong>, die n8n-Doku führt ihn als
-            <strong>Execute Sub-workflow Trigger</strong>. Alle drei Bezeichnungen meinen denselben Node.</p></li>
+          <p>Klicke auf dem leeren Canvas auf <strong>Add first step…</strong>. Es öffnet sich die Liste
+            <strong>What triggers this workflow?</strong> („Was startet diesen Workflow?“). Wähle dort
+            <strong>When executed by another workflow</strong>, also: „wenn ein anderer Workflow ihn ausführt“.
+            Auf dem Canvas heißt der Node danach <strong>When Executed by Another Workflow</strong>, die n8n-Doku
+            nennt ihn <strong>Execute Sub-workflow Trigger</strong>. Alle drei Bezeichnungen meinen denselben Node.
+            Der Node öffnet sich direkt, und du siehst seine Einstellungen.</p></li>
         <li><h4>Input data mode prüfen</h4>
-          <p><strong>Input data mode</strong> steht bereits auf <strong>Define using fields below</strong>. Lass es
-            dabei. Die beiden anderen Modi heißen <strong>Define using JSON example</strong> für ein Beispiel-JSON und
-            <strong>Accept all data</strong> für „nimm einfach alles“. Für einen Baustein mit festem Vertrag willst du
-            den ersten Modus.</p></li>
+          <p>Die Einstellung <strong>Input data mode</strong> legt fest, wie der Baustein seine Eingabedaten annimmt.
+            Sie steht bereits auf <strong>Define using fields below</strong>: Du zählst die erwarteten Felder einzeln
+            auf. Lass es dabei. Die beiden anderen Modi heißen <strong>Define using JSON example</strong> für ein
+            Beispiel-JSON und <strong>Accept all data</strong> für „nimm einfach alles“. Für einen Baustein mit festem
+            Vertrag willst du den ersten Modus.</p></li>
         <li><h4>Vier Eingabefelder anlegen</h4>
           <p>Klicke unter <strong>Workflow Input Schema</strong> viermal auf <strong>Add field</strong>. Trage als
             <strong>Name</strong> nacheinander <code>name</code>, <code>email</code>, <code>company</code> und
-            <code>source</code> ein. <strong>Type</strong> bleibt bei allen vier auf <code>String</code>.</p></li>
+            <code>source</code> ein. <strong>Type</strong> bleibt bei allen vier auf <code>String</code>, also Text.
+            Du siehst jetzt vier Feldzeilen wie in Abbildung 22.2.</p></li>
         <li><h4>Speichern lassen, Publish merken</h4>
-          <p>Einen Save-Button suchst du vergeblich. Der ist mit dem Autosave-Update im Januar 2026 (n8n 2.4)
-            verschwunden; n8n speichert seitdem automatisch, laut Doku innerhalb von einer bis fünf Sekunden. Alle
-            Änderungen bleiben allerdings ein Draft, bis du auf <strong>Publish</strong> klickst. Zum
-            Üben genügt der Draft, denn ein manuell gestarteter Haupt-Workflow ruft die Draft-Version des Sub-Workflows
-            auf. Produktive Läufe brauchen dagegen eine publizierte Version.</p></li>
+          <p>Einen Save-Button suchst du vergeblich. Er ist mit dem Autosave-Update im Januar 2026 (n8n 2.4)
+            verschwunden. n8n speichert seitdem automatisch, laut Doku innerhalb von einer bis fünf Sekunden.
+            Alle Änderungen bleiben aber ein Draft, also ein unveröffentlichter Entwurf, bis du auf
+            <strong>Publish</strong> klickst. Zum Üben genügt der Draft: Ein manuell gestarteter Haupt-Workflow ruft
+            die Draft-Version des Sub-Workflows auf. Nur produktive Läufe brauchen eine publizierte Version.</p></li>
       </ol>
 
       <figure class="figure">
@@ -173,18 +181,20 @@
       </figure>
 
       <h2>Schritt 2: Normalisierung einbauen</h2>
-      <p>Der Sub-Workflow soll alle eingehenden Items bearbeiten. Deshalb bleibt die Logik klein und deterministisch:
-        Leerzeichen entfernen, E-Mail kleinschreiben, Pflichtfelder prüfen, Score berechnen.</p>
+      <p>Der Sub-Workflow soll alle eingehenden Items bearbeiten. Die Logik bleibt klein und vorhersehbar:
+        Leerzeichen entfernen, E-Mail kleinschreiben, Pflichtfelder prüfen, Score berechnen. Gleiche Eingabe,
+        gleiches Ergebnis.</p>
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
-          <p>Hänge hinter den Trigger einen <strong>Code</strong>-Node.</p></li>
+          <p>Ziehe vom Trigger eine Verbindung ins Leere und wähle den <strong>Code</strong>-Node aus.</p></li>
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>Felder normalisieren</code>.</p></li>
         <li><h4>Modus wählen</h4>
-          <p>Setze den Modus auf <strong>Run Once for All Items</strong>. Der Code verarbeitet dann die komplette Item-Liste.</p></li>
+          <p>Setze den Modus auf <strong>Run Once for All Items</strong>. Der Code läuft dann ein einziges Mal und
+            verarbeitet dabei die komplette Item-Liste.</p></li>
         <li><h4>Code einfügen</h4>
-          <p>Füge diesen Code ein:</p></li>
+          <p>Lösche den Beispielcode im Node und füge diesen Code ein:</p></li>
       </ol>
 
       <div class="code">
@@ -244,18 +254,19 @@ return inputItems.map((item) =&gt; {
       </div>
 
       <h2>Schritt 3: Rückgabe sichtbar machen</h2>
-      <p>Der aufrufende Workflow bekommt zurück, was der letzte Node des Sub-Workflows ausgibt. Du könntest den
-        Code-Node einfach als letzten Node stehen lassen. Ein eigener Rückgabe-Node liest sich später aber
-        eindeutiger.</p>
+      <p>Der aufrufende Workflow bekommt genau das zurück, was der letzte Node des Sub-Workflows ausgibt. Du
+        könntest den Code-Node also einfach als letzten Node stehen lassen. Ich hänge trotzdem einen eigenen
+        Rückgabe-Node ans Ende: Wer den Workflow in einem halben Jahr öffnet, sieht sofort, wo der Vertrag
+        endet.</p>
 
       <div class="callout callout--warn">
         <b class="t">Geändert in n8n 2.0: Rückgabe nach einer Wartepause</b>
-        Enthält dein Sub-Workflow einen Node, der ihn in den Wartezustand schickt, bekommt der Haupt-Workflow seit
-        n8n 2.0 die Daten vom Ende des Sub-Workflows. In n8n 1.x kam an dieser Stelle noch der Input des wartenden
-        Nodes zurück. Auslöser sind zum Beispiel ein Wait-Node mit mehr als 65 Sekunden Wartezeit, ein Webhook-Aufruf,
-        eine Formulareingabe oder ein Human-in-the-Loop-Node. Erst dadurch kannst du eine Freigabe im Sub-Workflow
-        einholen und das Ergebnis im Haupt-Workflow auswerten. Wenn du einen alten Workflow migrierst, der sich auf das
-        1.x-Verhalten verlassen hat, musst du ihn umbauen.
+        Manche Nodes schicken einen Workflow in den Wartezustand: ein Wait-Node mit mehr als 65 Sekunden Wartezeit,
+        ein Webhook-Aufruf, eine Formulareingabe oder ein Human-in-the-Loop-Node. Enthält dein Sub-Workflow so einen
+        Node, bekommt der Haupt-Workflow seit n8n 2.0 die Daten vom Ende des Sub-Workflows. In n8n 1.x kam an dieser
+        Stelle noch der Input des wartenden Nodes zurück. Erst durch das neue Verhalten kannst du eine Freigabe im
+        Sub-Workflow einholen und das Ergebnis im Haupt-Workflow auswerten. Migrierst du einen alten Workflow, der
+        sich auf das 1.x-Verhalten verlassen hat, musst du ihn umbauen.
       </div>
 
       <ol class="steps">
@@ -264,10 +275,13 @@ return inputItems.map((item) =&gt; {
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>Rückgabe</code>.</p></li>
         <li><h4>Alle Felder behalten</h4>
-          <p>Stelle sicher, dass vorhandene Felder nicht gelöscht werden. Der Node dient hier als lesbarer Endpunkt.</p></li>
+          <p>Stelle sicher, dass vorhandene Felder nicht gelöscht werden. Der Node ändert hier nichts an den Daten.
+            Er ist nur ein gut lesbarer Endpunkt.</p></li>
         <li><h4>Testdaten manuell ausführen</h4>
           <p>Führe den Sub-Workflow mit einem Test-Item aus, zum Beispiel:
-            <code>{ "name": "  Ada Lovelace  ", "email": "ADA@EXAMPLE.COM ", "company": "Analytical Machines", "source": "Webform" }</code>.</p></li>
+            <code>{ "name": "  Ada Lovelace  ", "email": "ADA@EXAMPLE.COM ", "company": "Analytical Machines", "source": "Webform" }</code>.
+            Die Tabelle unten zeigt dir, was zurückkommen sollte. Stimmt sie mit deiner Ausgabe überein, funktioniert
+            dein Baustein.</p></li>
       </ol>
 
       <table class="btable">
@@ -282,17 +296,19 @@ return inputItems.map((item) =&gt; {
       </table>
 
       <h2>Schritt 4: Sub-Workflow berechtigen</h2>
-      <p>Ein Sub-Workflow ist nur dann sinnvoll wiederverwendbar, wenn klar ist, wer ihn aufrufen darf. Das ist eine
-        Betriebsfrage.</p>
+      <p>Eine Frage fehlt noch: Wer darf den Baustein überhaupt aufrufen? Das stellst du direkt im Sub-Workflow
+        ein.</p>
 
       <ol class="steps">
         <li><h4>Workflow-Einstellungen öffnen</h4>
-          <p>Öffne im Sub-Workflow oben rechts das <strong>Options</strong>-Menü, also die drei Punkte, und wähle
-            <strong>Settings</strong>. n8n zeigt jetzt das Fenster <strong>Workflow settings</strong>.</p></li>
+          <p>Klicke im Sub-Workflow oben rechts auf das <strong>Options</strong>-Menü, also die drei Punkte, und
+            wähle <strong>Settings</strong>. Ein Fenster mit dem Titel <strong>Workflow settings</strong> öffnet
+            sich.</p></li>
         <li><h4>Aufrufrechte prüfen</h4>
-          <p>Suche die Einstellung <strong>This workflow can be called by</strong>. Zur Auswahl stehen unter anderem
-            <strong>Any workflow</strong>, <strong>Only workflows in the same project</strong>,
-            <strong>Selected workflows</strong> und <strong>No other workflows</strong>.</p></li>
+          <p>Suche in dem Fenster die Einstellung <strong>This workflow can be called by</strong> („Dieser Workflow
+            darf aufgerufen werden von“). Zur Auswahl stehen unter anderem <strong>Any workflow</strong>,
+            <strong>Only workflows in the same project</strong>, <strong>Selected workflows</strong> und
+            <strong>No other workflows</strong>.</p></li>
         <li><h4>Für das Lernen offen lassen</h4>
           <p>Für dieses Kapitel reicht <strong>Any workflow</strong> in deiner Testumgebung.</p></li>
         <li><h4>Produktiv einschränken</h4>
@@ -301,25 +317,25 @@ return inputItems.map((item) =&gt; {
       </ol>
 
       <div class="callout callout--info">
-        <b class="t">Warum das wichtig ist</b>
+        <b class="t">Aufrufrechte sind keine Formalie</b>
         Ein Sub-Workflow ist ein internes Werkzeug. Wenn er schreibt, löscht, bezahlt, verschickt oder sensible Daten
         liest, darf er nicht beliebig aufrufbar sein.
       </div>
 
       <h2>Schritt 5: Haupt-Workflow anlegen</h2>
-      <p>Jetzt baust du den Aufrufer. Er erzeugt drei Leads, ruft den Baustein auf und verzweigt danach nach
-        <code>is_valid_email</code>.</p>
+      <p>Der Baustein ist fertig. Jetzt baust du den Aufrufer, also den Haupt-Workflow. Er erzeugt drei Demo-Leads,
+        ruft den Baustein auf und verzweigt danach anhand des Feldes <code>is_valid_email</code>.</p>
 
       <ol class="steps">
         <li><h4>Neuen Workflow erstellen</h4>
-          <p>Erstelle einen Workflow und nenne ihn <code>Lead-Import mit Baustein</code>.</p></li>
+          <p>Lege einen zweiten, neuen Workflow an und nenne ihn <code>Lead-Import mit Baustein</code>.</p></li>
         <li><h4>Manual Trigger hinzufügen</h4>
           <p>Füge als ersten Node einen <strong>Manual Trigger</strong> hinzu. Auf dem Canvas beschriftet n8n ihn mit
             <strong>When clicking ‘Execute workflow’</strong>.</p></li>
         <li><h4>Code-Node anhängen</h4>
           <p>Hänge einen <strong>Code</strong>-Node an und nenne ihn <code>Demo-Leads</code>.</p></li>
         <li><h4>Modus setzen</h4>
-          <p>Setze den Code-Node auf <strong>Run Once for All Items</strong>.</p></li>
+          <p>Setze den Code-Node auf <strong>Run Once for All Items</strong> und füge diesen Code ein:</p></li>
       </ol>
 
       <div class="code">
@@ -354,43 +370,45 @@ return inputItems.map((item) =&gt; {
 
       <ol class="steps" style="counter-reset: st 4;">
         <li><h4>Schritt ausführen</h4>
-          <p>Klicke im Node auf <strong>Execute step</strong>. Du solltest drei Items sehen.</p></li>
+          <p>Klicke im Node auf <strong>Execute step</strong>. Im Ausgabe-Bereich rechts erscheinen drei Items:
+            Ada, Grace und Katherine. Damit steht dein Testmaterial bereit.</p></li>
       </ol>
 
       <h2>Schritt 6: Sub-Workflow aufrufen</h2>
-      <p>Der Execute-Node ist die Brücke. Er nimmt die Items aus dem Haupt-Workflow, übergibt sie an den Baustein und
-        wartet auf die Rückgabe.</p>
+      <p>Jetzt verbindest du beide Workflows. Die Brücke ist der Execute-Node: Er nimmt die Items aus dem
+        Haupt-Workflow, übergibt sie an den Baustein und wartet auf die Rückgabe.</p>
 
       <ol class="steps">
         <li><h4>Execute Sub-workflow anhängen</h4>
-          <p>Ziehe vom Node <code>Demo-Leads</code> eine Verbindung ins Leere, suche
-            <code>execute sub-workflow</code> und wähle den Node <strong>Execute Sub-workflow</strong>.</p></li>
+          <p>Ziehe vom Node <code>Demo-Leads</code> eine Verbindung ins Leere. Die Node-Suche öffnet sich. Tippe
+            <code>execute sub-workflow</code> ein und wähle den Node <strong>Execute Sub-workflow</strong>.</p></li>
         <li><h4>Workflow auswählen</h4>
           <p>Lass <strong>Source</strong> auf <strong>Database</strong> und <strong>From list</strong> stehen. Wähle
-            in der Liste <code>Baustein · Lead normalisieren</code>.</p></li>
+            in der Liste deinen Baustein <code>Baustein · Lead normalisieren</code>.</p></li>
         <li><h4>Auf Abschluss warten</h4>
-          <p>Die zuständige Option heißt <strong>Wait For Sub-Workflow Completion</strong> und steckt unten im Bereich
-            <strong>Options</strong>. Sichtbar wird sie erst, wenn du dort auf <strong>Add option</strong> klickst und
-            sie auswählst. Das musst du hier nicht: Sie ist ohnehin eingeschaltet, solange du sie nicht ausdrücklich
-            hinzufügst und abschaltest. Ausgeschaltet könntest du danach nicht nach <code>is_valid_email</code>
-            verzweigen.</p></li>
+          <p>Der Haupt-Workflow soll auf das Ergebnis warten. Die zuständige Option heißt
+            <strong>Wait For Sub-Workflow Completion</strong> und steckt unten im Bereich <strong>Options</strong>.
+            Sichtbar wird sie erst, wenn du dort auf <strong>Add option</strong> klickst und sie auswählst. Das musst
+            du hier nicht tun: Sie ist ohnehin eingeschaltet, solange du sie nicht ausdrücklich hinzufügst und
+            abschaltest. Wäre sie aus, könntest du später nicht nach <code>is_valid_email</code> verzweigen.</p></li>
         <li><h4>Alle Items gemeinsam übergeben</h4>
-          <p>Nutze für dieses Beispiel den Modus <strong>Run once with all items</strong>. So verarbeitet der Baustein
-            die komplette Liste und gibt wieder eine Liste zurück. Den zweiten Modus
-            <strong>Run once for each item</strong> hat n8n mit 2.30 als deprecated markiert. Wählst du ihn, blendet
-            der Node einen Hinweis ein und empfiehlt stattdessen einen
+          <p>Nutze für dieses Beispiel den Modus <strong>Run once with all items</strong>. Der Baustein bekommt dann
+            die komplette Liste auf einmal und gibt wieder eine Liste zurück. Den zweiten Modus
+            <strong>Run once for each item</strong> hat n8n mit 2.30 als deprecated markiert, also als veraltet.
+            Wählst du ihn trotzdem, blendet der Node einen Hinweis ein und empfiehlt stattdessen einen
             <strong>Loop Over Items (Split in Batches)</strong>-Node vor dem Execute-Node.</p></li>
         <li><h4>Felder zuordnen</h4>
-          <p>Unter <strong>Workflow Inputs</strong> zieht n8n die vier Felder aus dem Trigger automatisch herein.
-            Ordne sie zu:
+          <p>Unter <strong>Workflow Inputs</strong> zeigt n8n automatisch die vier Felder an, die dein Baustein
+            erwartet. Ordne jedem Feld den passenden Wert aus den Demo-Leads zu:
             <code>name = {{$json.name}}</code>,
             <code>email = {{$json.email}}</code>,
             <code>company = {{$json.company}}</code>,
             <code>source = {{$json.source}}</code>.</p></li>
         <li><h4>In die Sub-Ausführung springen</h4>
-          <p>Nach einem Lauf zeigt der Execute-Node den Link <strong>View sub-execution</strong>. Er bringt dich direkt
-            in die Ausführung des Bausteins. Von dort führt ein Link wieder zurück in die Ausführung des
-            Haupt-Workflows. Das ist der schnellste Weg, wenn eine Rückgabe nicht so aussieht wie erwartet.</p></li>
+          <p>Führe den Node einmal aus. Danach zeigt er den Link <strong>View sub-execution</strong>. Ein Klick darauf
+            bringt dich direkt in die Ausführung des Bausteins. Von dort führt ein Link wieder zurück in die
+            Ausführung des Haupt-Workflows. Das ist der schnellste Weg, wenn eine Rückgabe nicht so aussieht wie
+            erwartet.</p></li>
       </ol>
 
       <figure class="figure">
@@ -436,28 +454,30 @@ return inputItems.map((item) =&gt; {
 
       <div class="callout callout--pareto">
         <b class="t">Der wichtigste Test</b>
-        Prüfe nach dem Execute-Node nicht nur, ob Items zurückkommen. Prüfe, ob ein absichtlich kaputtes Item
-        kontrolliert als fehlerhaft markiert wird.
+        Dass Items zurückkommen, sagt wenig. Prüfe, ob ein absichtlich kaputtes Item kontrolliert als fehlerhaft
+        markiert wird.
       </div>
 
       <h2>Schritt 7: Nach Rückgabe verzweigen</h2>
-      <p>Jetzt nutzt der Haupt-Workflow das Ergebnis. Gute Leads laufen weiter, fehlerhafte Leads gehen in eine
-        Prüfschleife.</p>
+      <p>Jetzt nutzt der Haupt-Workflow das Ergebnis. Gute Leads laufen weiter, fehlerhafte Leads gehen in einen
+        Prüfzweig.</p>
 
       <ol class="steps">
         <li><h4>IF-Node anhängen</h4>
           <p>Hänge hinter den Execute-Node einen <strong>IF</strong>-Node und nenne ihn
-            <code>E-Mail gültig?</code>.</p></li>
+            <code>E-Mail gültig?</code>. Ein IF-Node teilt die Items in zwei Ausgänge: True (Bedingung erfüllt) und
+            False (nicht erfüllt).</p></li>
         <li><h4>Bedingung setzen</h4>
-          <p>Setze die Bedingung auf <code>is_valid_email</code> ist <code>true</code>.</p></li>
+          <p>Setze die Bedingung auf: <code>is_valid_email</code> ist <code>true</code>.</p></li>
         <li><h4>True-Ausgang beschriften</h4>
-          <p>Hänge an den True-Ausgang zunächst einen <strong>No Operation, do nothing</strong>-Node und nenne ihn
-            <code>gute Leads</code>.</p></li>
+          <p>Hänge an den True-Ausgang einen <strong>No Operation, do nothing</strong>-Node und nenne ihn
+            <code>gute Leads</code>. Dieser Node tut nichts. Er ist nur ein Platzhalter mit sprechendem Namen.</p></li>
         <li><h4>False-Ausgang beschriften</h4>
           <p>Hänge an den False-Ausgang ebenfalls einen No-Op-Node und nenne ihn <code>prüfen</code>.</p></li>
         <li><h4>Workflow ausführen</h4>
-          <p>Klicke unten auf dem Canvas auf <strong>Execute workflow</strong>. Zwei Items sollten zum True-Ausgang
-            laufen, ein Item zum False-Ausgang.</p></li>
+          <p>Klicke unten auf dem Canvas auf <strong>Execute workflow</strong>. Wenn alles stimmt, laufen zwei Items
+            zum True-Ausgang und ein Item, Grace mit der kaputten E-Mail, zum False-Ausgang. Damit funktioniert dein
+            Gespann aus Haupt-Workflow und Baustein.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -467,8 +487,9 @@ return inputItems.map((item) =&gt; {
       </div>
 
       <h2>Schritt 8: Vertrag dokumentieren</h2>
-      <p>Sub-Workflows werden schnell gefährlich, wenn niemand mehr weiß, welche Felder erwartet werden. Dokumentiere
-        den Vertrag direkt im Workflow-Namen, in Node-Namen oder in einer kurzen Notiz.</p>
+      <p>Sub-Workflows werden schnell gefährlich, wenn niemand mehr weiß, welche Felder sie erwarten. Halte den
+        Vertrag deshalb fest: im Workflow-Namen, in Node-Namen oder in einer kurzen Notiz. Für unser Beispiel sieht
+        er so aus:</p>
 
       <table class="btable">
         <thead><tr><th>Teil des Vertrags</th><th>In diesem Beispiel</th></tr></thead>
@@ -489,8 +510,9 @@ return inputItems.map((item) =&gt; {
       </div>
 
       <h2>Schritt 9: Execute-Modi unterscheiden</h2>
-      <p>Der Aufrufmodus entscheidet, wie Items an den Sub-Workflow übergeben werden. Für Anfänger wirkt das wie eine
-        Kleinigkeit. Er ändert aber, wie lange ein Lauf dauert und wie du einen Fehler später wiederfindest.</p>
+      <p>Zum Schluss ein Überblick über die Aufrufmodi. Der Modus entscheidet, wie Items an den Sub-Workflow
+        übergeben werden. Das wirkt wie eine Kleinigkeit. Er ändert aber, wie lange ein Lauf dauert und wie du einen
+        Fehler später wiederfindest.</p>
 
       <table class="btable">
         <thead><tr><th>Modus</th><th>Was passiert?</th><th>Wann sinnvoll?</th></tr></thead>
@@ -503,11 +525,14 @@ return inputItems.map((item) =&gt; {
 
       <div class="callout callout--warn">
         <b class="t">Fire-and-forget sparsam nutzen</b>
-        Wenn der Haupt-Workflow nicht wartet, darf er keine Entscheidung aus der Rückgabe brauchen. Sonst baust du eine
-        Race Condition in ein No-Code-Werkzeug ein.
+        Fire-and-forget heißt: aufrufen und nicht auf das Ergebnis warten. Wenn der Haupt-Workflow nicht wartet, darf
+        er keine Entscheidung aus der Rückgabe brauchen. Sonst hängt dein Ergebnis vom zufälligen Timing beider
+        Workflows ab, eine sogenannte Race Condition.
       </div>
 
       <h2>Wenn etwas schiefgeht</h2>
+      <p>Zwei Workflows, ein Aufruf dazwischen: Da gibt es ein paar typische Stolperstellen. Die erste Zeile der
+        Tabelle ist die mit Abstand häufigste.</p>
       <table class="btable">
         <thead><tr><th>Symptom</th><th>Wahrscheinliche Ursache</th><th>Lösung</th></tr></thead>
         <tbody>

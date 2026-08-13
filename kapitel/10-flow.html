@@ -17,8 +17,8 @@
       <div class="chap-eyebrow"><span class="knum">10</span> Bausteine im Detail</div>
       <h1 class="chap-title">Flow-Logik: IF, Switch, Merge & Loops</h1>
       <p class="chap-lede">Bisher liefen unsere Workflows schnurgerade von links nach rechts. Jetzt bringen wir
-        <strong>Entscheidungen</strong> hinein: verschiedene Wege je nach Daten, getrennte Zweige wieder zusammenführen. Und wir
-        klären die Frage, wann du wirklich eine Schleife brauchst.</p>
+        <strong>Entscheidungen</strong> hinein: Je nach Daten geht es einen anderen Weg. Danach führen wir die getrennten Wege
+        wieder zusammen. Und wir klären, wann du wirklich eine Schleife brauchst. Spoiler: viel seltener, als du denkst.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 22 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Mittel</span>
@@ -34,10 +34,11 @@
       </div>
 
       <h2>IF: die Weiche mit zwei Ausgängen</h2>
-      <p>Der <strong>IF</strong>-Node prüft eine Bedingung und schickt jedes Item in <strong>einen von zwei Ausgängen</strong>:
-        <strong>true</strong> (Bedingung erfüllt) oder <strong>false</strong> (nicht erfüllt). Anders als der Filter wirft er nichts
-        weg. Beide Gruppen laufen in <em>getrennten Zweigen</em> weiter. Im Node-Panel steht er übrigens als <strong>If</strong>,
-        nicht in Großbuchstaben.</p>
+      <p>Der <strong>IF</strong>-Node ist eine Weiche. Er prüft für jedes Item eine Bedingung, zum Beispiel „ist die Temperatur
+        größer als 20?“. Je nach Antwort schickt er das Item in einen von zwei Ausgängen:
+        <strong>true</strong> heißt „Bedingung erfüllt“, <strong>false</strong> heißt „nicht erfüllt“. Anders als der Filter aus
+        Kapitel 9 wirft der IF-Node nichts weg. Beide Gruppen laufen weiter, nur eben in <em>getrennten Zweigen</em>. Im
+        Node-Panel steht der Node übrigens als <strong>If</strong>, nicht in Großbuchstaben.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -70,26 +71,34 @@
 
       <ol class="steps">
         <li><h4>IF anlegen &amp; öffnen</h4>
-          <p>Im Node-Panel nach „If“ suchen, anhängen, öffnen. Der Bereich <strong>Conditions</strong> sieht aus wie beim Filter
-            (Kapitel 9). Weitere Zeilen legst du mit <strong>Add Condition</strong> an.</p></li>
+          <p>Klicke auf das Plus hinter deinem letzten Node und tippe im Suchfeld „If“ ein. Klicke auf den Treffer
+            <strong>If</strong>. Der Node hängt jetzt am Workflow und öffnet sich. Du siehst den Bereich
+            <strong>Conditions</strong> (englisch für „Bedingungen“). Er sieht genauso aus wie beim Filter aus Kapitel 9.
+            Weitere Zeilen legst du bei Bedarf mit <strong>Add Condition</strong> an.</p></li>
         <li><h4>Bedingung setzen</h4>
-          <p>Links den Wert <code>{{ $json.tempC }}</code> eintragen. In der Mitte klappst du das Dropdown auf und wählst erst den
-            Datentyp <strong>Number</strong>, dann die Operation <em>is greater than</em>. Rechts <code>20</code> eintragen.</p></li>
+          <p>Trage links den Wert <code>{{ $json.tempC }}</code> ein. Klicke dann auf das Dropdown in der Mitte. Wähle dort
+            zuerst den Datentyp <strong>Number</strong> (Zahl) und dann die Operation <em>is greater than</em> („ist größer
+            als“). Trage rechts <code>20</code> ein.</p></li>
         <li><h4>Die zwei Ausgänge verbinden</h4>
-          <p>Vom <strong>oberen</strong> Ausgang (true) ziehst du zum „warm“-Zweig, vom <strong>unteren</strong> (false) zum
-            „kühl“-Zweig. Fertig ist die Verzweigung.</p></li>
+          <p>Schließe den Node. Auf dem Canvas hat der IF-Node jetzt zwei kleine Punkte an der rechten Seite. Der
+            <strong>obere</strong> ist der true-Ausgang, der <strong>untere</strong> der false-Ausgang. Ziehe mit gedrückter
+            Maustaste vom oberen Punkt eine Linie zum „warm“-Zweig und vom unteren zum „kühl“-Zweig. Fertig ist die
+            Verzweigung.</p></li>
       </ol>
 
-      <p>Ein Stolperstein beim IF-Node: Der Vergleich ist typstreng. Kommt <code>tempC</code> als Text aus der API, bricht der Node mit
-        einer Typmeldung ab, statt still <code>false</code> zu liefern. Du hast zwei Auswege. Entweder du wandelst den Wert vorher
-        um (Kapitel 9), oder du schaltest im Node den Regler <strong>Convert types where required</strong> ein. In der Doku steht
-        dieselbe Einstellung stellenweise noch unter ihrem alten Namen <em>Less Strict Type Validation</em>.</p>
+      <p>Ein Stolperstein: Der IF-Node nimmt Datentypen genau. Kommt <code>tempC</code> als Text aus der API (also als
+        <code>"18"</code> statt als Zahl <code>18</code>), bricht der Node mit einer Fehlermeldung zum Typ ab. Die Meldung sieht
+        dramatischer aus, als sie ist. Du hast zwei Auswege: Entweder du wandelst den Wert vorher in eine Zahl um
+        (Kapitel 9), oder du schaltest im Node den Regler <strong>Convert types where required</strong> ein („Typen bei Bedarf
+        umwandeln“). In der Doku steht dieselbe Einstellung stellenweise noch unter ihrem alten Namen
+        <em>Less Strict Type Validation</em>.</p>
 
       <h2>Switch: die Weiche mit vielen Ausgängen</h2>
-      <p>Brauchst du mehr als zwei Wege, nimm den <strong>Switch</strong>. Du legst mit <strong>Add Routing Rule</strong> mehrere
-        <strong>Routing Rules</strong> an, und jede Regel bekommt ihren eigenen Ausgang. So sortierst du z. B. nach Kategorie, Status
-        oder Sprache. Schaltest du in einer Regel <strong>Rename Output</strong> ein, trägt der Ausgang statt einer Nummer den Namen,
-        den du unter <strong>Output Name</strong> vergibst.</p>
+      <p>Brauchst du mehr als zwei Wege, nimm den <strong>Switch</strong>-Node. Hier legst du mit dem Knopf
+        <strong>Add Routing Rule</strong> mehrere <strong>Routing Rules</strong> an, also Verteil-Regeln. Jede Regel bekommt
+        ihren eigenen Ausgang. So sortierst du zum Beispiel nach Kategorie, Status oder Sprache. Die Ausgänge heißen zunächst
+        nur „0“, „1“, „2“. Schaltest du in einer Regel <strong>Rename Output</strong> ein, trägt der Ausgang stattdessen den
+        Namen, den du unter <strong>Output Name</strong> vergibst.</p>
 
       <table class="btable">
         <thead><tr><th>Switch-Modus</th><th>Sortiert nach …</th></tr></thead>
@@ -101,17 +110,17 @@
 
       <div class="callout callout--info">
         <b class="t">Switch = IF mit mehr Türen</b>
-        Denk an Switch als IF mit beliebig vielen Ausgängen. Zwei Wege → IF. Drei oder mehr → Switch. Für alles, was zu keiner Regel
-        passt, gibt es einen <strong>Fallback</strong>-Ausgang. Du holst ihn dir über <strong>Options</strong> →
-        <strong>Add option</strong> → <strong>Fallback Output</strong> → <strong>Extra Output</strong>. Lässt du die Einstellung auf
-        <em>None</em>, verschwinden nicht passende Items lautlos.
+        Denk an Switch als IF mit beliebig vielen Ausgängen. Zwei Wege → IF. Drei oder mehr → Switch. Für Items, die zu keiner
+        Regel passen, gibt es einen <strong>Fallback</strong>-Ausgang (Auffang-Ausgang). Du holst ihn dir im Node über
+        <strong>Options</strong> → <strong>Add option</strong> → <strong>Fallback Output</strong> → <strong>Extra Output</strong>.
+        Wichtig: Lässt du die Einstellung auf <em>None</em>, verschwinden nicht passende Items lautlos, ganz ohne Fehlermeldung.
       </div>
 
       <h2>Merge: getrennte Zweige zusammenführen</h2>
-      <p>Hast du verzweigt, willst du oft später wieder <strong>zusammenführen</strong>. Das macht der <strong>Merge</strong>-Node.
-        Er startet mit <strong>zwei Eingängen</strong> und einem Ausgang. Brauchst du mehr, setzt du das Feld
-        <strong>Number of Inputs</strong> höher. Das geht in jedem Modus außer <strong>Combine</strong>. Combine vergleicht immer
-        genau zwei Listen.</p>
+      <p>Nach einer Verzweigung willst du die Wege oft später wieder zusammenführen. Das macht der
+        <strong>Merge</strong>-Node (englisch „merge“ = verschmelzen). Er startet mit zwei Eingängen und einem
+        Ausgang. Brauchst du mehr Eingänge, setzt du das Feld <strong>Number of Inputs</strong> höher. Das geht in jedem Modus
+        außer <strong>Combine</strong>, denn Combine vergleicht immer genau zwei Listen.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -154,9 +163,9 @@
         </tbody>
       </table>
 
-      <p>Die drei <strong>Combine By</strong>-Varianten stehen im Node nicht direkt unter <strong>Mode</strong>. Erst
-        <strong>Mode</strong> auf <strong>Combine</strong> stellen, danach erscheint das zweite Dropdown <strong>Combine By</strong>.
-        Beim ersten Mal habe ich dort lange gesucht.</p>
+      <p>Kleiner Suchtipp: Die drei <strong>Combine By</strong>-Varianten findest du im Node nicht direkt im Dropdown
+        <strong>Mode</strong>. Stelle zuerst <strong>Mode</strong> auf <strong>Combine</strong>. Erst danach erscheint darunter
+        das zweite Dropdown <strong>Combine By</strong>. Beim ersten Mal habe ich dort lange gesucht.</p>
 
       <div class="callout callout--pareto">
         <b class="t">IF + Merge sind die Arbeitspferde</b>
@@ -165,7 +174,8 @@
       </div>
 
       <h2>Loops: meistens brauchst du sie nicht</h2>
-      <p>Der häufigste Anfänger-Reflex: „Ich habe eine Liste, ich brauche eine Schleife.“ Fast nie! Erinnere dich an Kapitel 5:
+      <p>Ein <strong>Loop</strong> ist eine Schleife: derselbe Schritt wird mehrfach hintereinander ausgeführt. Der häufigste
+        Anfänger-Reflex lautet: „Ich habe eine Liste, also brauche ich eine Schleife.“ Fast nie! Erinnere dich an Kapitel 5:
         <strong>Ein Node läuft automatisch pro Item.</strong> Hast du 100 Items, läuft der nächste Node 100-mal, ganz ohne
         Schleife.</p>
 
@@ -175,14 +185,15 @@
         aus Kapitel 9). Den Rest macht n8n durch Wiederholung pro Item von selbst.
       </div>
 
-      <p>Eine echte Schleife brauchst du nur in Sonderfällen. Im Node-Panel heißt sie
-        <strong>„Loop Over Items (Split in Batches)“</strong>, auf dem Canvas trägt der Node danach den kurzen Namen
-        „Loop Over Items“. Diese Fälle gibt es:</p>
+      <p>Eine echte Schleife brauchst du nur in Sonderfällen. Der passende Node heißt im Node-Panel
+        <strong>„Loop Over Items (Split in Batches)“</strong>. Auf dem Canvas trägt er danach den kurzen Namen
+        „Loop Over Items“. Diese Sonderfälle gibt es:</p>
       <ul>
-        <li><strong>Batching:</strong> Eine API erlaubt nur 10 Einträge pro Aufruf. Du setzt <strong>Batch Size</strong> auf 10 und
-          arbeitest die Liste in Häppchen ab.</li>
-        <li><strong>Rate-Limits / Pausen:</strong> du willst zwischen den Durchläufen warten (Kapitel 23).</li>
-        <li><strong>Zustand über Runden:</strong> jeder Durchlauf baut auf dem vorherigen auf.</li>
+        <li><strong>Batching:</strong> Eine API erlaubt nur 10 Einträge pro Aufruf. Du setzt im Node das Feld
+          <strong>Batch Size</strong> (Häppchengröße) auf 10 und arbeitest die Liste in Häppchen ab.</li>
+        <li><strong>Rate-Limits / Pausen:</strong> Du willst zwischen den Durchläufen warten, etwa weil die API sonst blockt
+          (Kapitel 23).</li>
+        <li><strong>Zustand über Runden:</strong> Jeder Durchlauf baut auf dem Ergebnis des vorherigen auf.</li>
       </ul>
 
       <figure class="figure">
@@ -216,10 +227,11 @@
           Schleife. Die Skizze zeigt den Datenfluss; am Node selbst sitzt done oben und loop darunter.</figcaption>
       </figure>
 
-      <p>Diese Reihenfolge musst du dir merken: Am Node sitzt <b>done</b> oben und <b>loop</b> darunter. So ist es seit der dritten
-        Version des Nodes, die im Herbst 2023 kam. Ältere Screenshots und Videos zeigen die umgekehrte Belegung, und genau daher
-        kommt die Verwechslung. Läuft dein Verarbeitungsschritt gar nicht oder nur ein einziges Mal ganz am Ende, hängt er am
-        falschen Ausgang.</p>
+      <p>Der Node hat zwei Ausgänge, und ihre Reihenfolge musst du dir merken: Am Node sitzt <b>done</b> („fertig“) oben und
+        <b>loop</b> („Schleife“) darunter. An <b>loop</b> hängst du die Verarbeitung, an <b>done</b> alles, was erst nach der
+        letzten Runde laufen soll. So ist es seit der dritten Version des Nodes, die im Herbst 2023 kam. Ältere Screenshots und
+        Videos zeigen die umgekehrte Belegung, und genau daher kommt die Verwechslung. Woran du den Fehler erkennst: Dein
+        Verarbeitungsschritt läuft gar nicht oder nur ein einziges Mal ganz am Ende. Dann hängt er am falschen Ausgang.</p>
 
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
@@ -233,22 +245,25 @@
       <hr>
 
       <h2>Mini-Übung: zwei Antworten je nach Temperatur</h2>
-      <p>Wir verzweigen den Wetter-Workflow: bei über 20 °C eine fröhliche, sonst eine kühle Nachricht.</p>
+      <p>Wir verzweigen jetzt den Wetter-Workflow aus Kapitel 9: Bei über 20 °C soll eine fröhliche Nachricht entstehen, sonst
+        eine kühle.</p>
       <ol class="steps">
         <li><h4>IF anhängen</h4>
-          <p>Hinter den Set-Node (mit Feld <code>tempC</code> aus Kapitel 9) einen <strong>IF</strong> setzen.</p></li>
+          <p>Öffne den Wetter-Workflow. Klicke auf das Plus hinter dem Set-Node (der mit dem Feld <code>tempC</code> aus
+            Kapitel 9), suche nach „If“ und wähle den <strong>If</strong>-Node aus.</p></li>
         <li><h4>Bedingung</h4>
-          <p>Wert <code>{{ $json.tempC }}</code> · Datentyp <strong>Number</strong> · Operation <em>is greater than</em> ·
-            <code>20</code>.</p></li>
+          <p>Trage im geöffneten Node ein: links den Wert <code>{{ $json.tempC }}</code>, in der Mitte den Datentyp
+            <strong>Number</strong> und die Operation <em>is greater than</em>, rechts <code>20</code>. Schließe den Node.</p></li>
         <li><h4>true-Zweig</h4>
-          <p>Vom <strong>oberen</strong> Ausgang einen Set-Node: Feld <code>text</code> =
-            <code>🏖️ Heute warm: {{ $json.tempC }} °C!</code></p></li>
+          <p>Ziehe vom <strong>oberen</strong> Ausgang eine Verbindung zu einem neuen Set-Node. Lege darin ein Feld
+            <code>text</code> an mit dem Wert <code>Heute warm: {{ $json.tempC }} °C!</code></p></li>
         <li><h4>false-Zweig</h4>
-          <p>Vom <strong>unteren</strong> Ausgang einen Set-Node: Feld <code>text</code> =
-            <code>🧥 Eher kühl: {{ $json.tempC }} °C.</code></p></li>
+          <p>Ziehe vom <strong>unteren</strong> Ausgang eine Verbindung zu einem zweiten Set-Node. Feld <code>text</code>,
+            Wert <code>Eher kühl: {{ $json.tempC }} °C.</code></p></li>
         <li><h4>Testen</h4>
-          <p>Klicke unten am Canvas auf <strong>Execute workflow</strong>. Bis n8n 1.x hieß derselbe Knopf „Test workflow“.
-            Beobachte, welcher Zweig sich pink einfärbt. Das ist der Weg, den dein Item genommen hat.</p></li>
+          <p>Klicke unten am Canvas auf <strong>Execute workflow</strong> (führt den ganzen Workflow einmal aus; bis n8n 1.x
+            hieß derselbe Knopf „Test workflow“). Beobachte, welcher Zweig sich pink einfärbt. Das ist der Weg, den dein Item
+            genommen hat. Der andere Zweig bleibt grau, und sein Set-Node zeigt keine Daten. Das ist richtig so.</p></li>
       </ol>
 
       <div class="callout callout--tip">
@@ -289,7 +304,7 @@
       </div>
 
       <p>Dein Werkzeugkasten für den Datenfluss ist jetzt komplett. Doch was, wenn unterwegs etwas <em>schiefgeht</em>? Eine API
-        antwortet nicht, ein Feld fehlt. Im nächsten Kapitel bauen wir Workflows, die Fehler <strong>abfangen</strong> und sauber
+        antwortet nicht, ein Feld fehlt. Im nächsten Kapitel bauen wir Workflows, die solche Fehler abfangen und sauber
         darauf reagieren.</p>
 
     </article>

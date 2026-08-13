@@ -28,7 +28,7 @@
       <div class="prereq">
         <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
-          <li>n8n läuft und kann Webhooks/Formulare von außen erreichbar machen. In n8n Cloud ist das sofort der Fall.</li>
+          <li>n8n läuft und ist aus dem Internet erreichbar, damit andere dein Formular aufrufen können. In n8n Cloud ist das sofort der Fall.</li>
           <li>Ein Google-Konto mit Zugriff auf Google Sheets.</li>
           <li>Ein Slack-Workspace, in dem du Nachrichten in einen Testkanal senden darfst.</li>
           <li>Google- und Slack-Credentials in n8n. Falls noch nicht vorhanden, legst du sie im Projekt an.</li>
@@ -43,8 +43,10 @@
 
       <h2>Das Ziel</h2>
       <p>Der Workflow besteht aus vier Schritten: Formular empfangen, Daten normalisieren, Zeile in Google Sheets anhängen,
-        Slack-Nachricht senden. Die Slack-Nachricht liest die bereinigten Daten später explizit aus dem Node
-        <strong>Daten vorbereiten</strong>, damit sie nicht davon abhängt, was der Google-Sheets-Node zurückgibt.</p>
+        Slack-Nachricht senden. „Normalisieren“ heißt einfach: Wir räumen die Formularwerte auf und geben allen Feldern
+        saubere, feste Namen. Ein Detail vorab: Die Slack-Nachricht holt sich ihre Daten später direkt aus dem Node
+        <strong>Daten vorbereiten</strong>, nicht aus dem Google-Sheets-Node davor. Warum, erklärt der Kasten unter der
+        Abbildung.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -83,11 +85,12 @@
 
       <div class="callout callout--info">
         <b class="t">Warum Slack später auf einen früheren Node zugreift</b>
-        Manche Nodes geben nach ihrer Aktion andere Daten zurück, als sie bekommen haben. Der Google-Sheets-Node reicht
-        genau die Spalten weiter, die er geschrieben hat. Ein Feld wie <code>slack_text</code>, für das es in der Tabelle
-        keine Spalte gibt, fehlt danach. Deshalb verwenden wir im Slack-Text
-        <code>$('Daten vorbereiten').item.json.Name</code> statt <code>$json.Name</code>. Das ist etwas länger, dafür bleibt
-        die Nachricht stabil, wenn du den Sheets-Node später umbaust.
+        Manche Nodes geben andere Daten weiter, als sie bekommen haben. Der Google-Sheets-Node reicht nur die Spalten
+        weiter, die er in die Tabelle geschrieben hat. Ein Feld wie <code>slack_text</code> hat keine Spalte in der Tabelle
+        und fehlt danach. Deshalb schreiben wir im Slack-Text
+        <code>$('Daten vorbereiten').item.json.Name</code> statt <code>$json.Name</code>. Übersetzt heißt das: „Hol dir das
+        Feld <code>Name</code> aus dem Node <code>Daten vorbereiten</code>.“ Das ist etwas länger, dafür bleibt die
+        Nachricht stabil, auch wenn du den Sheets-Node später umbaust.
       </div>
 
       <hr>
@@ -105,8 +108,9 @@
           <p>Schreibe in Zeile 1 exakt diese Überschriften: <code>Zeitpunkt</code>, <code>Name</code>, <code>E-Mail</code>,
             <code>Thema</code>, <code>Nachricht</code>, <code>Priorität</code>, <code>Status</code>.</p></li>
         <li><h4>Tabellen-ID merken</h4>
-          <p>In der Browser-Adresse steht zwischen <code>/d/</code> und <code>/edit</code> eine lange ID. Du musst sie nicht
-            abschreiben, aber du erkennst daran später die richtige Datei im Google-Sheets-Node.</p></li>
+          <p>Schau in die Adresszeile deines Browsers. Zwischen <code>/d/</code> und <code>/edit</code> steht eine lange
+            Zeichenkette, die ID der Tabelle. Du musst sie nicht abschreiben. Du erkennst daran später nur die richtige
+            Datei im Google-Sheets-Node.</p></li>
       </ol>
 
       <figure class="figure">
@@ -130,11 +134,13 @@
       <h2>Schritt 2: Workflow anlegen</h2>
       <ol class="steps">
         <li><h4>Neuen Workflow erstellen</h4>
-          <p>Gehe in n8n zur Workflow-Übersicht und klicke auf <strong>Create Workflow</strong>.</p></li>
+          <p>Gehe in n8n zur Workflow-Übersicht und klicke auf <strong>Create Workflow</strong>. Du siehst jetzt eine
+            leere Arbeitsfläche, den Canvas.</p></li>
         <li><h4>Workflow benennen</h4>
           <p>Klicke oben links auf den Namen und schreibe: <code>Formular zu Sheets und Slack</code>.</p></li>
         <li><h4>Auto-Save prüfen</h4>
-          <p>Warte, bis der Draft gespeichert ist.</p></li>
+          <p>n8n speichert deinen Entwurf (Draft) automatisch. Warte kurz, bis der Draft gespeichert ist. Du musst nichts
+            extra klicken.</p></li>
       </ol>
 
       <div class="callout callout--info">
@@ -149,10 +155,11 @@
 
       <ol class="steps">
         <li><h4>Trigger suchen</h4>
-          <p>Klicke auf das große <span class="kbd">+</span> in der Mitte, tippe <code>form</code> und wähle
-            <strong>n8n Form Trigger</strong>. Auf dem Canvas heißt der Node danach <code>On form submission</code>.</p></li>
+          <p>Klicke auf das große <span class="kbd">+</span> in der Mitte des Canvas. Ein Suchfeld öffnet sich. Tippe
+            <code>form</code> und wähle <strong>n8n Form Trigger</strong>. Auf dem Canvas heißt der Node danach
+            <code>On form submission</code>.</p></li>
         <li><h4>Node öffnen</h4>
-          <p>Doppelklicke den neuen Node. Die Detailansicht öffnet sich.</p></li>
+          <p>Doppelklicke den neuen Node. Die Detailansicht öffnet sich. Hier stellst du alles ein.</p></li>
         <li><h4>Formulartitel setzen</h4>
           <p>Trage bei <strong>Form Title</strong> ein: <code>Anfrage senden</code>.</p></li>
         <li><h4>Beschreibung setzen</h4>
@@ -162,14 +169,16 @@
             <strong>Label</strong> ein: <code>Name</code>. Stelle <strong>Element Type</strong> auf
             <strong>Text Input</strong>.</p></li>
         <li><h4>Pflichtfeld einschalten</h4>
-          <p>Ein frisch angelegtes Element zeigt nur <strong>Label</strong> und <strong>Element Type</strong>. Alles
-            Weitere holst du dir über <strong>Add Attributes</strong> dazu, darunter <strong>Required Field</strong>.
-            Diesen Schalter stellst du an. Zeigt deine Version ihn ohne Umweg an, umso besser.</p></li>
+          <p>Ein frisch angelegtes Element zeigt nur <strong>Label</strong> und <strong>Element Type</strong>. Weitere
+            Einstellungen holst du dir über <strong>Add Attributes</strong> dazu. Klicke darauf und wähle
+            <strong>Required Field</strong> (Pflichtfeld). Stelle den Schalter an. Zeigt deine Version den Schalter schon
+            ohne diesen Umweg an, umso besser.</p></li>
         <li><h4>Das Label ist der Schlüssel</h4>
-          <p><strong>Label</strong> steht im Formular über dem Eingabefeld, die Person liest es also. Es ist gleichzeitig
-            der Schlüssel, unter dem der Wert im Workflow ankommt. Hinter <strong>Add Attributes</strong> liegt außerdem
-            <strong>Custom Field Name</strong>. Sobald dort etwas steht, hat dieser Eintrag Vorrang und wird zum Schlüssel.
-            Lass ihn in diesem Kapitel leer, sonst passen die Expressions weiter unten nicht mehr.</p></li>
+          <p>Das <strong>Label</strong> hat zwei Aufgaben. Im Formular steht es über dem Eingabefeld, die Person liest es
+            also. Und im Workflow wird es zum Schlüssel, also zum Feldnamen, unter dem der eingetippte Wert ankommt.
+            Hinter <strong>Add Attributes</strong> liegt außerdem <strong>Custom Field Name</strong>. Sobald dort etwas
+            steht, wird stattdessen dieser Eintrag zum Schlüssel. Lass ihn in diesem Kapitel leer, sonst passen die
+            Expressions weiter unten nicht mehr.</p></li>
         <li><h4>Restliche Elemente anlegen</h4>
           <p>Lege nach demselben Muster die übrigen vier Elemente aus der folgenden Tabelle an.</p></li>
       </ol>
@@ -187,10 +196,11 @@
 
       <div class="callout callout--warn">
         <b class="t">Checkboxes liefern eine Liste, keinen Ja/Nein-Wert</b>
-        Das Element <strong>Checkboxes</strong> hat keinen An/Aus-Zustand. Es gibt die Beschriftungen zurück, die angehakt
-        wurden, als Liste. Bei uns ist das entweder <code>[]</code> oder <code>["Ja"]</code>. Eine leere Liste ist in
-        JavaScript wahr, deshalb funktioniert <code>{{ $json["Dringend?"] ? … }}</code> hier nicht. Wir fragen gleich die
-        Länge ab. Das habe ich beim ersten Mal falsch gemacht und mich über lauter dringende Anfragen gewundert.
+        Das Element <strong>Checkboxes</strong> liefert kein einfaches An/Aus. Es gibt eine Liste aller angehakten
+        Beschriftungen zurück. Bei uns ist das entweder <code>[]</code> (nichts angehakt) oder <code>["Ja"]</code>.
+        Tückisch: Eine leere Liste zählt in JavaScript als „wahr“. Deshalb funktioniert
+        <code>{{ $json["Dringend?"] ? … }}</code> hier nicht. Wir fragen später stattdessen die Länge der Liste ab. Das
+        habe ich beim ersten Mal falsch gemacht und mich über lauter dringende Anfragen gewundert.
       </div>
 
       <figure class="figure">
@@ -235,19 +245,22 @@
       <h2>Schritt 4: Formular testweise absenden</h2>
       <ol class="steps">
         <li><h4>Testlauf starten</h4>
-          <p>Klicke im Node auf <strong>Execute step</strong>, in der Abbildung <strong>▶ Schritt ausführen</strong>. Beim
-            Webhook-Node heißt derselbe Knopf <strong>Listen for test event</strong>. Beim Form Trigger nicht.</p></li>
+          <p>Klicke im geöffneten Node auf <strong>Execute step</strong>, in der Abbildung <strong>▶ Schritt
+            ausführen</strong>. Der Node wartet jetzt auf eine Einsendung. Nur zur Einordnung: Beim Webhook-Node heißt
+            derselbe Knopf <strong>Listen for test event</strong>.</p></li>
         <li><h4>Formular öffnen</h4>
-          <p>n8n öffnet die Testseite in einem neuen Browser-Tab. Blockiert dein Browser das Fenster, kopierst du die
-            <strong>Test URL</strong> aus dem Node und rufst sie von Hand auf.</p></li>
+          <p>n8n öffnet die Testseite mit deinem Formular in einem neuen Browser-Tab. Passiert nichts? Dann blockiert dein
+            Browser vermutlich Pop-ups. Kopiere in dem Fall die <strong>Test URL</strong> aus dem Node und rufe sie von
+            Hand auf.</p></li>
         <li><h4>Testdaten eintragen</h4>
           <p>Trage ein: Name <code>Anna Beispiel</code>, E-Mail <code>anna@example.com</code>, Thema <code>Workshop</code>,
             Nachricht <code>Ich möchte mehr Infos.</code>. Das Häkchen bei <strong>Dringend?</strong> lässt du leer.</p></li>
         <li><h4>Absenden</h4>
           <p>Klicke im Formular auf <strong>Submit</strong> bzw. <strong>Absenden</strong>.</p></li>
         <li><h4>Ausgang prüfen</h4>
-          <p>Zurück in n8n sollte im Ausgang des Triggers ein Item erscheinen. Wechsle auf <strong>JSON</strong> oder
-            <strong>Schema</strong> und vergleiche die Schlüssel mit deinen <strong>Labels</strong>.</p></li>
+          <p>Wechsle zurück in den n8n-Tab. Im Ausgang des Triggers siehst du jetzt ein Item, also ein Datenpaket mit
+            deinen Testeingaben. Wechsle auf <strong>JSON</strong> oder <strong>Schema</strong> und vergleiche die
+            Schlüssel mit deinen <strong>Labels</strong>. Sie müssen genau übereinstimmen. Damit ist der Trigger fertig.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -257,24 +270,25 @@
       </div>
 
       <h2>Schritt 5: Daten vorbereiten</h2>
-      <p>Jetzt normalisieren wir die Formularwerte. Das ist bewusst ein eigener Node: Die Tabelle und Slack bekommen danach
-        saubere, gleich benannte Felder.</p>
+      <p>Jetzt normalisieren wir die Formularwerte. Das ist bewusst ein eigener Node: Die Tabelle
+        und Slack bekommen danach saubere, gleich benannte Felder.</p>
 
       <ol class="steps">
         <li><h4>Edit-Fields-Node anhängen</h4>
-          <p>Schließe die Detailansicht. Ziehe vom Form-Trigger eine Linie ins Leere, suche <code>edit fields</code> und wähle
-            <strong>Edit Fields (Set)</strong>.</p></li>
+          <p>Schließe die Detailansicht. Ziehe vom kleinen Punkt rechts am Form-Trigger eine Linie ins Leere und lass los.
+            Das Suchfeld öffnet sich. Suche <code>edit fields</code> und wähle <strong>Edit Fields (Set)</strong>.</p></li>
         <li><h4>Node benennen</h4>
           <p>Nenne den Node <code>Daten vorbereiten</code>.</p></li>
         <li><h4>Node öffnen</h4>
-          <p>Doppelklicke den Node. Links solltest du die Formulardaten aus dem Test sehen.</p></li>
+          <p>Doppelklicke den Node. Links siehst du im Eingang die Formulardaten aus deinem Test.</p></li>
         <li><h4>Ausgabe schlank halten</h4>
           <p>Lass <strong>Include Other Input Fields</strong> ausgeschaltet. Das ist der Standard. Die Ausgabe enthält dann
             nur die Felder, die wir jetzt definieren.</p></li>
         <li><h4>Felder anlegen</h4>
-          <p>Klicke unter <strong>Fields to Set</strong> auf <strong>Add Field</strong> und lege die folgenden Felder an.
-            Der Typ bleibt überall <strong>String</strong>. Schalte das Wertfeld auf <strong>Expression</strong>, wo eine
-            Expression in der Tabelle steht.</p></li>
+          <p>Klicke unter <strong>Fields to Set</strong> auf <strong>Add Field</strong>. Lege so nacheinander alle Felder
+            aus der folgenden Tabelle an. Der Typ bleibt überall <strong>String</strong> (Text). Wo in der Tabelle eine
+            Expression steht, also ein Wert in <code>{{ … }}</code>, schaltest du das Wertfeld vorher auf
+            <strong>Expression</strong> um.</p></li>
       </ol>
 
       <table class="btable">
@@ -293,7 +307,8 @@
 
       <p>Die Zeile für <code>Priorität</code> liest sich sperrig, macht aber genau zwei Dinge. Das
         <code>|| []</code> fängt den Fall ab, dass das Feld gar nicht ankommt. Die Abfrage <code>.length > 0</code> prüft
-        dann, ob jemand angehakt hat.</p>
+        dann, ob jemand angehakt hat. Klicke zum Schluss auf <strong>▶ Schritt ausführen</strong>. Rechts im Ausgang siehst
+        du jetzt ein Item mit genau den Feldern aus der Tabelle, wie in Abb. 14.4.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -341,14 +356,15 @@
           <p>Schließe die Detailansicht. Ziehe vom Node <strong>Daten vorbereiten</strong> eine Linie ins Leere, suche
             <code>google sheets</code> und wähle <strong>Google Sheets</strong>.</p></li>
         <li><h4>Aktion wählen</h4>
-          <p>In der Aktionsliste klickst du auf <strong>Append row in sheet</strong>. Im Node stehen danach
-            <strong>Resource</strong> auf <strong>Sheet Within Document</strong> und <strong>Operation</strong> auf
-            <strong>Append Row</strong>. Verwechsle das nicht mit <strong>Append or Update Row</strong>: Diese Operation sucht
-            zuerst nach einer passenden Zeile und überschreibt sie. Wir wollen jedes Mal eine neue Zeile.</p></li>
+          <p>n8n zeigt dir eine Liste möglicher Aktionen. Klicke auf <strong>Append row in sheet</strong>, das heißt:
+            „Zeile an Tabelle anhängen“. Im Node stehen danach <strong>Resource</strong> auf
+            <strong>Sheet Within Document</strong> und <strong>Operation</strong> auf <strong>Append Row</strong>.
+            Verwechsle das nicht mit <strong>Append or Update Row</strong>: Diese Operation sucht zuerst nach einer
+            passenden Zeile und überschreibt sie. Wir wollen jedes Mal eine neue Zeile.</p></li>
         <li><h4>Credential erstellen oder auswählen</h4>
-          <p>Wähle deine Google-Sheets-Credential aus. Falls keine existiert, klickst du auf
-            <strong>Create new credential</strong>. Wie es dann weitergeht, hängt davon ab, wo dein n8n läuft. Der nächste
-            Kasten zeigt beide Wege.</p></li>
+          <p>Wähle deine Google-Sheets-Credential aus, also die gespeicherte Google-Anmeldung. Falls keine existiert,
+            klickst du auf <strong>Create new credential</strong>. Wie es dann weitergeht, hängt davon ab, wo dein n8n
+            läuft. Der Kasten unter dieser Schrittliste zeigt beide Wege.</p></li>
         <li><h4>Dokument auswählen</h4>
           <p>Stelle <strong>Document</strong> auf <strong>From List</strong> und wähle <code>n8n Formular-Anfragen</code>.</p></li>
         <li><h4>Tab auswählen</h4>
@@ -358,10 +374,12 @@
             Überschriften aus Zeile 1 und zeigt dir unter <strong>Values to Send</strong> für jede Spalte ein Eingabefeld.</p></li>
         <li><h4>Spalten füllen</h4>
           <p>Ordne jede Sheet-Spalte dem gleichnamigen Feld aus dem Eingang zu: <code>Zeitpunkt</code> → <code>{{ $json.Zeitpunkt }}</code>,
-            <code>Name</code> → <code>{{ $json.Name }}</code> usw. Achte darauf, dass jedes dieser Felder auf
-            <strong>Expression</strong> steht, sonst landet der Text <code>{{ … }}</code> wörtlich in der Tabelle.</p></li>
+            <code>Name</code> → <code>{{ $json.Name }}</code> und so weiter, bis <code>Status</code>. Achte darauf, dass
+            jedes dieser Felder auf <strong>Expression</strong> steht, sonst landet der Text <code>{{ … }}</code> wörtlich
+            in der Tabelle.</p></li>
         <li><h4>Schritt ausführen</h4>
-          <p>Klicke <strong>▶ Schritt ausführen</strong>. In Google Sheets sollte unten eine neue Zeile erscheinen.</p></li>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Wechsle dann in den Browser-Tab mit deiner Google-Tabelle: Unten
+            steht jetzt eine neue Zeile mit Annas Testdaten. Geschafft, n8n schreibt in deine Tabelle.</p></li>
       </ol>
 
       <div class="callout callout--info">
@@ -424,24 +442,27 @@
             <strong>Message</strong> und <strong>Operation</strong> auf <strong>Send</strong>.</p></li>
         <li><h4>Credential erstellen oder auswählen</h4>
           <p>Wähle deine Slack-Credential aus. Falls keine existiert: <strong>Create new credential</strong>. In n8n Cloud
-            gibt es seit Version 2.11.0 Managed OAuth für Slack. Du klickst dann nur noch auf
-            <strong>Connect my account</strong>, wählst deinen Workspace und erlaubst den Zugriff. Selbst gehostet legst du
-            vorher eine eigene Slack-App an und trägst <strong>Client ID</strong> und <strong>Client Secret</strong> ein.
-            Der Scope <code>chat:write</code> muss dabei gesetzt sein, sonst darf n8n keine Nachricht schreiben.</p></li>
+            gibt es seit Version 2.11.0 Managed OAuth für Slack. Das heißt: Du klickst nur auf
+            <strong>Connect my account</strong>, wählst deinen Workspace und erlaubst den Zugriff. Fertig. Selbst gehostet
+            legst du vorher eine eigene Slack-App an und trägst <strong>Client ID</strong> und
+            <strong>Client Secret</strong> ein. Der Scope <code>chat:write</code>, also die Schreib-Berechtigung, muss
+            dabei gesetzt sein, sonst darf n8n keine Nachricht schreiben.</p></li>
         <li><h4>Empfänger festlegen</h4>
           <p>Setze <strong>Send Message To</strong> auf <strong>Channel</strong>.</p></li>
         <li><h4>Kanal auswählen</h4>
           <p>Stelle <strong>Channel</strong> auf <strong>From List</strong> und wähle einen Testkanal, z. B.
             <code>#anfragen-test</code>. Nimm nicht sofort einen produktiven Kanal.</p></li>
         <li><h4>App in den Kanal einladen</h4>
-          <p>Öffne den Kanal in Slack und schreibe <code>/invite @NameDeinerApp</code>. Ohne diesen Schritt kennt Slack die
-            App im Kanal nicht und lehnt das Senden ab.</p></li>
+          <p>Öffne den Kanal in Slack und schreibe als Nachricht <code>/invite @NameDeinerApp</code>. Statt
+            <code>NameDeinerApp</code> setzt du den Namen deiner Slack-App ein. Ohne diesen Schritt kennt Slack die App im
+            Kanal nicht und lehnt das Senden ab.</p></li>
         <li><h4>Text auf Expression stellen</h4>
           <p><strong>Message Type</strong> bleibt auf <strong>Simple Text Message</strong>. Schalte das Feld
             <strong>Message Text</strong> auf <strong>Expression</strong>.</p></li>
         <li><h4>Nachricht einfügen</h4>
-          <p>Trage den folgenden Text ein. Beachte: Wir greifen bewusst auf den früheren Node
-            <code>Daten vorbereiten</code> zu, nicht auf den direkten Eingang des Slack-Nodes.</p></li>
+          <p>Trage den folgenden Text in <strong>Message Text</strong> ein. Beachte: Wir greifen bewusst auf den früheren
+            Node <code>Daten vorbereiten</code> zu, nicht auf den direkten Eingang des Slack-Nodes. Warum, stand im Kasten
+            am Kapitelanfang.</p></li>
       </ol>
 
       <div class="code">
@@ -457,7 +478,8 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
 
       <ol class="steps" style="counter-reset: st 8;">
         <li><h4>Schritt ausführen</h4>
-          <p>Klicke <strong>▶ Schritt ausführen</strong>. Im Slack-Testkanal sollte eine neue Nachricht erscheinen.</p></li>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Öffne Slack: Im Testkanal steht jetzt eine neue Nachricht mit
+            Annas Anfrage.</p></li>
         <li><h4>Nachricht kritisch lesen</h4>
           <p>Prüfe, ob alle Felder gefüllt sind, ob die Priorität stimmt und ob dein Team mit dieser Nachricht wirklich
             arbeiten kann.</p></li>
@@ -496,24 +518,26 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
 
       <div class="callout callout--warn">
         <b class="t">Wenn Slack nichts sendet</b>
-        Prüfe zuerst den Kanal und die Berechtigungen der Slack-App. Viele Fehler liegen gar nicht in n8n. Meistens wurde die
-        App nicht in den Kanal eingeladen oder ihr fehlt der Scope <code>chat:write</code>.
+        Such den Fehler zuerst in Slack, nicht in n8n. Meistens wurde die App nicht in den Kanal eingeladen, oder ihr
+        fehlt der Scope <code>chat:write</code>.
       </div>
 
       <h2>Schritt 8: Gesamten Workflow testen</h2>
+      <p>Bisher hast du jeden Node einzeln getestet. Jetzt lassen wir zum ersten Mal alles am Stück laufen.</p>
       <ol class="steps">
         <li><h4>Zurück zum Canvas</h4>
-          <p>Drücke <span class="kbd">Esc</span>, bis du den gesamten Workflow siehst.</p></li>
+          <p>Drücke <span class="kbd">Esc</span>, bis du wieder den gesamten Workflow siehst.</p></li>
         <li><h4>Auto-Save prüfen</h4>
-          <p>Warte, bis der Draft gespeichert ist.</p></li>
+          <p>Warte kurz, bis der Draft gespeichert ist.</p></li>
         <li><h4>Ganzen Workflow ausführen</h4>
           <p>Klicke unten am Canvas auf <strong>Execute workflow</strong>. n8n öffnet wieder die Testseite und wartet auf
             eine Einsendung. Diesmal laufen danach alle vier Nodes durch, nicht nur der Trigger.</p></li>
         <li><h4>Formular erneut absenden</h4>
-          <p>Sende eine zweite Testanfrage ab und beobachte den Workflow. Bleibt der Tab aus, rufst du die Test-URL wieder
-            von Hand auf.</p></li>
+          <p>Sende eine zweite Testanfrage ab und beobachte den Workflow: Die Nodes arbeiten nacheinander und werden grün.
+            Bleibt der Tab aus, rufst du die Test-URL wieder von Hand auf.</p></li>
         <li><h4>Beide Ausgänge prüfen</h4>
-          <p>Prüfe Google Sheets auf eine neue Zeile und Slack auf eine neue Nachricht. Beide müssen denselben Inhalt zeigen.</p></li>
+          <p>Prüfe Google Sheets auf eine neue Zeile und Slack auf eine neue Nachricht. Beide müssen denselben Inhalt
+            zeigen. Wenn ja: Deine Pipeline funktioniert von vorn bis hinten.</p></li>
       </ol>
 
       <div class="callout callout--info">
@@ -527,14 +551,17 @@ Priorität: {{ $('Daten vorbereiten').item.json["Priorität"] }}
         <li><h4>Auto-Save prüfen</h4>
           <p>Warte, bis der Draft gespeichert ist.</p></li>
         <li><h4>Workflow publishen</h4>
-          <p>Klicke oben rechts auf <strong>Publish</strong>. Erst diese veröffentlichte Version nutzt die Production-URL.</p></li>
+          <p>Klicke oben rechts auf <strong>Publish</strong>, also „veröffentlichen“. Erst diese veröffentlichte Version
+            läuft dauerhaft und nutzt die Production-URL.</p></li>
         <li><h4>Production-Formular-URL kopieren</h4>
-          <p>Öffne den Form-Trigger und kopiere die produktive Formular-URL. Die Test-URL ist nur fürs Bauen gedacht.</p></li>
+          <p>Öffne den Form-Trigger und kopiere die produktive Formular-URL. Die Test-URL ist nur fürs Bauen gedacht und
+            funktioniert später nicht mehr.</p></li>
         <li><h4>Produktions-Test mit Testdaten</h4>
-          <p>Öffne die Production-URL in einem privaten Browserfenster und sende noch einmal Testdaten ab.</p></li>
+          <p>Öffne die Production-URL in einem privaten Browserfenster und sende noch einmal Testdaten ab. So testest du
+            den Weg, den später echte Nutzer:innen gehen.</p></li>
         <li><h4>Execution-Historie prüfen</h4>
-          <p>Öffne <strong>Executions</strong> und prüfe den Lauf. Erst wenn dort alles grün ist und Sheets/Slack stimmen, ist
-            der Workflow wirklich einsatzbereit.</p></li>
+          <p>Öffne <strong>Executions</strong>, die Liste aller Läufe, und prüfe den neuesten Eintrag. Erst wenn dort alles
+            grün ist und Sheets/Slack stimmen, ist der Workflow wirklich einsatzbereit.</p></li>
       </ol>
 
       <div class="callout callout--pareto">

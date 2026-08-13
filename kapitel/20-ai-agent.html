@@ -16,9 +16,9 @@
 
       <div class="chap-eyebrow"><span class="knum">20</span> KI &amp; Agenten</div>
       <h1 class="chap-title">AI-Agent, Chat-Trigger, Memory &amp; Tools</h1>
-      <p class="chap-lede">In diesem Kapitel baust du einen kleinen Chat-Agenten, der Fragen entgegennimmt,
-        sich den Gesprächskontext merkt und bei Bedarf externe Werkzeuge nutzt. Der wichtige Unterschied zu Kapitel 17:
-        Hier ist die KI nicht nur ein Klassifikator. Sie entscheidet, ob ein Tool gebraucht wird.</p>
+      <p class="chap-lede">In diesem Kapitel baust du einen kleinen Chat-Agenten. Er nimmt Fragen entgegen,
+        merkt sich das Gespräch und nutzt bei Bedarf externe Werkzeuge, sogenannte Tools. Der Unterschied zu
+        Kapitel 17: Dort hat die KI nur Texte einsortiert. Hier entscheidet sie selbst, ob sie ein Werkzeug braucht.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 45 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Fortgeschrittene Grundlagen</span>
@@ -28,25 +28,29 @@
       <div class="prereq">
         <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
-          <li>Eine n8n-Instanz mit den AI-/LangChain-Nodes.</li>
-          <li>Eine Chat-Model-Credential, z. B. OpenAI, Anthropic, Mistral, Groq oder Azure OpenAI.</li>
-          <li>Für das Beispiel keine weitere Credential: Die Wetterdaten kommen über die freie Open-Meteo-API.</li>
+          <li>Eine n8n-Instanz mit den AI-/LangChain-Nodes. In den üblichen Installationen sind sie schon dabei.</li>
+          <li>Eine Credential (einen gespeicherten Zugangsschlüssel) für ein Chat-Modell, z. B. OpenAI, Anthropic,
+            Mistral, Groq oder Azure OpenAI.</li>
+          <li>Für das Beispiel keine weitere Credential: Die Wetterdaten kommen über die freie Open-Meteo-API. Sie
+            braucht keinen Schlüssel.</li>
           <li>Ein Testfenster im n8n-Chat. Veröffentliche den Chat erst nach den Tests.</li>
         </ul>
       </div>
 
       <div class="callout callout--warn">
         <b class="t">Agent heißt nicht Autonomie ohne Grenzen</b>
-        Ein Agent darf nur die Werkzeuge bekommen, die er wirklich braucht. Lesende Tools sind zum Lernen gut.
-        Schreibende Tools wie E-Mail senden, CRM ändern oder Dateien löschen gehören hinter eine Freigabe. Seit n8n 2.6.0
-        gibt es dafür einen eingebauten Human-review-Schritt. Wie du ihn setzt, steht in Schritt 12.
+        Ein Agent darf nur die Werkzeuge bekommen, die er wirklich braucht. Tools, die nur Daten lesen, sind zum Lernen
+        gut. Tools, die etwas verändern (E-Mail senden, CRM ändern, Dateien löschen), gehören hinter eine menschliche
+        Freigabe. Seit n8n 2.6.0 gibt es dafür einen eingebauten Human-review-Schritt. Wie du ihn setzt, steht in
+        Schritt 12.
       </div>
 
       <h2>Das Ziel</h2>
-      <p>Wir bauen einen Wetter-Chat. Der Nutzer schreibt eine Frage wie „Wie wird das Wetter morgen in Hamburg?“.
-        Der Chat Trigger startet den Workflow, der AI Agent nutzt zwei HTTP-Tools, merkt sich den Ort über Memory und
-        antwortet im Chat. Das Beispiel ist absichtlich klein: Es zeigt das Agenten-Muster, ohne einen riskanten
-        Geschäftsprozess auszulösen.</p>
+      <p>Wir bauen einen Wetter-Chat. Jemand schreibt eine Frage wie „Wie wird das Wetter morgen in Hamburg?“.
+        Der Chat Trigger startet daraufhin den Workflow. Der AI Agent nutzt zwei Tools, die per HTTP eine Wetter-API
+        abfragen. Über Memory, den Gesprächsspeicher, merkt er sich den Ort. Am Ende antwortet er im Chat.
+        Das Beispiel ist absichtlich klein: Es zeigt das Agenten-Muster, ohne einen riskanten Geschäftsprozess
+        auszulösen.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -81,7 +85,7 @@
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 20.1</span>Der Agent ist der Entscheidungsknoten. Chat Model, Memory und
-          Tools hängen als Unter-Nodes am Agenten.</figcaption>
+          Tools docken als Unter-Nodes direkt am Agenten an.</figcaption>
       </figure>
 
       <div class="callout callout--pareto">
@@ -103,47 +107,53 @@
 
       <div class="callout callout--info">
         <b class="t">Skeptische Faustregel</b>
-        Wenn der Ablauf deterministisch ist, nimm keinen Agenten. Wenn das Modell wirklich entscheiden muss, welches
-        Werkzeug passt, ist ein Agent sinnvoll.
+        Wenn der Ablauf immer aus denselben Schritten besteht, nimm keinen Agenten. Ein Agent lohnt sich erst, wenn das
+        Modell wirklich entscheiden muss, welches Werkzeug passt.
       </div>
 
       <h2>Zwei Wege zu einem Agenten</h2>
       <p>Seit 2026 gibt es neben dem AI-Agent-Node auch den <strong>Agent Builder</strong>. Dort ist ein Agent ein
-        eigenes Objekt im Projekt, gleichrangig neben den Workflows. Er steckt also in keinem Workflow. Du wählst links
-        dein Projekt, gehst auf den Tab <strong>Agents</strong> und klickst <strong>Create Agent</strong>. Danach
-        konfigurierst du Model, Instructions, Tools, Skills, Knowledge und Memory. Über <strong>Preview</strong> testest
-        du den Entwurf, mit <strong>Publish</strong> geht er live. Das Ganze ist noch jung: n8n bezeichnet die Agenten
-        selbst als Preview-Funktion. Selbst gehostet laufen sie ab n8n 2.32.3, und dafür muss <code>agents</code> in
-        <code>N8N_ENABLED_MODULES</code> stehen.</p>
+        eigenes Objekt im Projekt, gleichrangig neben den Workflows. Er steckt also in keinem Workflow. Der Weg dorthin:
+        Du wählst links dein Projekt, gehst auf den Tab <strong>Agents</strong> und klickst <strong>Create Agent</strong>.
+        Danach stellst du Model, Instructions, Tools, Skills, Knowledge und Memory ein. Über <strong>Preview</strong>
+        testest du den Entwurf. Mit <strong>Publish</strong> geht er live. Das Ganze ist noch jung: n8n bezeichnet die
+        Agenten selbst als Preview-Funktion, also als Vorschau. Selbst gehostet laufen sie ab n8n 2.32.3, und dafür muss
+        <code>agents</code> in der Umgebungsvariable <code>N8N_ENABLED_MODULES</code> stehen.</p>
       <p>Aus einem Workflow heraus nutzt du solche Agenten auf zwei Arten. „Create agents inline“ setzt einen Agenten
-        direkt als Node in den Workflow. „Message existing agents“ schickt eine Nachricht an einen bereits veröffentlichten
-        Agenten und holt dessen Antwort zurück. Wir bleiben hier trotzdem beim AI-Agent-Node, denn dort siehst du jeden
-        Baustein einzeln auf dem Canvas: Modell, Memory, Tools. Genau diese Sicht nimmt dir der Agent Builder ab.</p>
+        direkt als Node in den Workflow. „Message existing agents“ schickt eine Nachricht an einen bereits
+        veröffentlichten Agenten und holt dessen Antwort zurück. Wir bleiben in diesem Kapitel trotzdem beim
+        AI-Agent-Node. Der Grund: Dort siehst du jeden Baustein einzeln auf dem Canvas, also Modell, Memory und Tools.
+        Genau diese Sicht versteckt der Agent Builder, und zum Lernen willst du sie sehen.</p>
 
       <hr>
 
       <h2>Schritt 1: Workflow und Chat Trigger anlegen</h2>
-      <p>Der Chat Trigger startet bei jeder Nachricht eine Workflow-Ausführung. Eine Unterhaltung mit zehn Nachrichten
-        sind also zehn Ausführungen. Das ist für Kosten und Rate-Limits wichtig.</p>
+      <p>Der Chat Trigger startet bei jeder Nachricht eine eigene Workflow-Ausführung. Eine Unterhaltung mit zehn
+        Nachrichten sind also zehn Ausführungen. Das merkst du bei den Kosten und bei den Rate-Limits, also den
+        Anfragegrenzen deines Modell-Anbieters.</p>
 
       <ol class="steps">
         <li><h4>Neuen Workflow erstellen</h4>
-          <p>Erstelle einen Workflow und nenne ihn <code>Wetter-Chat-Agent</code>.</p></li>
+          <p>Erstelle einen neuen, leeren Workflow und nenne ihn <code>Wetter-Chat-Agent</code>.</p></li>
         <li><h4>Chat Trigger hinzufügen</h4>
-          <p>Klicke auf <strong>Add first step…</strong>, suche <code>chat trigger</code> und wähle
-            <strong>Chat Trigger</strong>.</p></li>
+          <p>Klicke in der Mitte des leeren Canvas auf <strong>Add first step…</strong>. Rechts öffnet sich das
+            Node-Panel. Tippe <code>chat trigger</code> in die Suche und wähle <strong>Chat Trigger</strong>. Der Node
+            liegt jetzt auf dem Canvas, und seine Detailansicht öffnet sich.</p></li>
         <li><h4>Öffentlichkeit kurz einschalten</h4>
-          <p>Setze <strong>Make Chat Publicly Available</strong> für einen Moment auf an. Solange der Schalter aus ist,
-            blendet n8n die beiden nächsten Felder gar nicht erst ein.</p></li>
+          <p>Setze <strong>Make Chat Publicly Available</strong> für einen Moment auf an. Der Grund: Solange der
+            Schalter aus ist, blendet n8n die beiden nächsten Felder gar nicht erst ein. Sobald er an ist, erscheinen
+            sie darunter.</p></li>
         <li><h4>Hosted Chat wählen</h4>
           <p>Wähle unter <strong>Mode</strong> den Eintrag <strong>Hosted Chat</strong>. n8n liefert die Chat-Seite dann
             selbst aus, und du brauchst für dieses Kapitel keinen eigenen Chat-Client.</p></li>
         <li><h4>Starttext setzen</h4>
           <p>Trage in <strong>Initial Message(s)</strong> z. B. <code>Frag mich nach dem Wetter in einer Stadt.</code>
-            ein. Jede Zeile in diesem Feld wird eine eigene Startnachricht.</p></li>
+            ein. Das ist die Begrüßung, die Nutzer beim Öffnen des Chats sehen. Jede Zeile in diesem Feld wird eine
+            eigene Startnachricht.</p></li>
         <li><h4>Öffentlichkeit wieder ausschalten</h4>
-          <p>Setze <strong>Make Chat Publicly Available</strong> zurück auf aus. Getestet wird im n8n-internen Chat.
-            Veröffentlichen kommt in Schritt 13, wenn die Tools laufen.</p></li>
+          <p>Setze <strong>Make Chat Publicly Available</strong> zurück auf aus. Keine Sorge, deine Eingaben bleiben
+            gespeichert. Getestet wird im n8n-internen Chat. Veröffentlichen kommt in Schritt 13, wenn die Tools
+            laufen.</p></li>
       </ol>
 
       <figure class="figure">
@@ -174,28 +184,31 @@
       </div>
 
       <h2>Schritt 2: AI Agent hinzufügen</h2>
-      <p>Der Agent bekommt die Chatnachricht vom Trigger. Er arbeitet als Tools Agent und erwartet ein Chat Model sowie
-        mindestens ein Tool. Stand Juli 2026 liefert n8n 2.32.x den AI Agent in der Node-Version 3.1 aus. Die frühere
-        Auswahl verschiedener Agent-Typen gibt es seit n8n 1.82.0 nicht mehr, alle AI-Agent-Nodes laufen als Tools Agent.
-        Für reine Textantworten wäre eine Basic LLM Chain schlichter.</p>
+      <p>Der Agent bekommt die Chatnachricht vom Trigger. Er arbeitet als Tools Agent, das heißt: Er kann Werkzeuge
+        aufrufen. Dafür erwartet er ein Chat Model und mindestens ein Tool. Stand Juli 2026 liefert n8n 2.32.x den
+        AI Agent in der Node-Version 3.1 aus. Die frühere Auswahl verschiedener Agent-Typen gibt es seit n8n 1.82.0
+        nicht mehr, alle AI-Agent-Nodes laufen als Tools Agent. Für reine Textantworten wäre eine Basic LLM Chain
+        schlichter.</p>
 
       <ol class="steps">
         <li><h4>AI Agent anhängen</h4>
-          <p>Schließe die Detailansicht. Ziehe vom Chat Trigger eine Linie ins Leere, suche <code>ai agent</code> und wähle
-            <strong>AI Agent</strong>.</p></li>
+          <p>Schließe die Detailansicht des Chat Triggers. Ziehe vom kleinen Punkt rechts am Chat Trigger eine Linie ins
+            Leere und lass los. Das Node-Panel öffnet sich. Suche <code>ai agent</code> und wähle
+            <strong>AI Agent</strong>. Der neue Node ist jetzt mit dem Trigger verbunden.</p></li>
         <li><h4>Prompt aus dem Chat übernehmen</h4>
-          <p>Setze <strong>Source for Prompt (User Message)</strong> auf <strong>Connected Chat Trigger Node</strong>.
-            Das ist die Voreinstellung, meist musst du also nichts ändern. Der Agent liest dann das Feld
-            <code>chatInput</code> aus dem direkt verbundenen Chat Trigger. In älteren Versionen
-            hieß dieses Feld schlicht <strong>Prompt</strong> und die Option <strong>Take from previous node
-            automatically</strong>. Die zweite Option heißt <strong>Define below</strong>; dann tippst du den Text selbst
-            in das Feld <strong>Prompt (User Message)</strong>.</p></li>
+          <p>Prüfe, dass <strong>Source for Prompt (User Message)</strong> auf <strong>Connected Chat Trigger
+            Node</strong> steht. Das ist die Voreinstellung, meist musst du also nichts ändern. Der Agent liest dann das
+            Feld <code>chatInput</code>, also den Text der Chatnachricht, aus dem direkt verbundenen Chat Trigger. In
+            älteren Versionen hieß dieses Feld schlicht <strong>Prompt</strong> und die Option <strong>Take from
+            previous node automatically</strong>. Die zweite Option heißt <strong>Define below</strong>; dann tippst du
+            den Text selbst in das Feld <strong>Prompt (User Message)</strong>.</p></li>
         <li><h4>System Message öffnen</h4>
-          <p>Klicke unten im Node auf <strong>Add Option</strong> und wähle <strong>System Message</strong>. Dort kommt
-            gleich die Arbeitsregel für den Agenten hinein.</p></li>
+          <p>Klicke unten im Node auf <strong>Add Option</strong> und wähle <strong>System Message</strong>. Die System
+            Message ist die Arbeitsregel für den Agenten. Trage den Text aus dem Kasten unter dieser Liste ein.</p></li>
         <li><h4>Max Iterations begrenzen</h4>
           <p>Füge über <strong>Add Option</strong> auch <strong>Max Iterations</strong> hinzu und setze den Wert für den
-            Anfang auf <code>4</code>. Voreingestellt sind <code>10</code>. Ein niedriges Limit verhindert lange
+            Anfang auf <code>4</code>. Voreingestellt sind <code>10</code>. Das Feld begrenzt, wie oft der Agent
+            nacheinander denken und Tools aufrufen darf. Ein niedriges Limit verhindert lange, teure
             Tool-Schleifen.</p></li>
       </ol>
 
@@ -221,28 +234,32 @@ Regeln:
 
       <div class="callout callout--info">
         <b class="t">Streaming ist voreingestellt an</b>
-        In den Optionen des Agenten steht <strong>Enable Streaming</strong> standardmäßig auf an. Die Antwort läuft dann
-        Stück für Stück in den Chat. Damit das greift, muss im Chat Trigger der <strong>Response Mode</strong> auf
-        <strong>Streaming</strong> stehen. Du findest ihn dort unten unter <strong>Options</strong>, hinter der
-        Schaltfläche <strong>Add Field</strong>. Voreingestellt ist <strong>When Last Node Finishes</strong>. Passt
-        beides nicht zusammen, zeigt n8n nach der Ausführung einen Hinweis im Ausgabe-Bereich an.
+        Streaming heißt: Die Antwort erscheint Wort für Wort im Chat statt erst am Ende komplett. In den Optionen des
+        Agenten steht <strong>Enable Streaming</strong> standardmäßig auf an. Damit das greift, muss im Chat Trigger der
+        <strong>Response Mode</strong> auf <strong>Streaming</strong> stehen. Du findest ihn dort unten unter
+        <strong>Options</strong>, hinter der Schaltfläche <strong>Add Field</strong>. Voreingestellt ist <strong>When
+        Last Node Finishes</strong>. Passt beides nicht zusammen, ist das kein Beinbruch: n8n zeigt nach der Ausführung
+        einen Hinweis im Ausgabe-Bereich an.
       </div>
 
       <h2>Schritt 3: Chat Model verbinden</h2>
-      <p>Der Agent selbst ist noch kein Modell. Er braucht ein Chat Model als Unter-Node.</p>
+      <p>Der Agent selbst ist noch kein Modell. Er braucht ein Chat Model als Unter-Node. Auf dem Canvas hat der
+        AI-Agent-Node dafür unten kleine Anschlüsse mit Plus-Zeichen.</p>
 
       <ol class="steps">
         <li><h4>Model-Anschluss öffnen</h4>
-          <p>Klicke am AI-Agent-Node auf den Anschluss <strong>Chat Model</strong>.</p></li>
+          <p>Klicke am AI-Agent-Node auf den Anschluss <strong>Chat Model</strong>. Eine Liste mit Modellen öffnet
+            sich.</p></li>
         <li><h4>Chat Model wählen</h4>
           <p>Wähle z. B. <strong>OpenAI Chat Model</strong>, <strong>Anthropic Chat Model</strong> oder ein anderes
-            unterstütztes Modell.</p></li>
+            unterstütztes Modell. Nimm den Anbieter, für den du eine Credential hast.</p></li>
         <li><h4>Credential auswählen</h4>
-          <p>Wähle deine Credential. Lege keine API-Keys im Prompt oder in Codefeldern ab.</p></li>
+          <p>Wähle im neuen Node deine Credential aus der Liste. Lege keine API-Keys im Prompt oder in Codefeldern
+            ab.</p></li>
         <li><h4>Temperatur niedrig halten</h4>
           <p>Klicke im Chat Model auf <strong>Add Option</strong>, wähle <strong>Sampling Temperature</strong> und setze
-            den Wert für dieses Beispiel auf <code>0.2</code>. Voreingestellt sind <code>0.7</code>. Faktenantworten sollen
-            stabil sein, nicht poetisch.</p></li>
+            den Wert für dieses Beispiel auf <code>0.2</code>. Voreingestellt sind <code>0.7</code>. Die Temperatur
+            steuert, wie viel Zufall in den Antworten steckt. Faktenantworten sollen stabil sein, nicht poetisch.</p></li>
       </ol>
 
       <figure class="figure">
@@ -274,51 +291,58 @@ Regeln:
       </figure>
 
       <h2>Schritt 4: Simple Memory anschließen</h2>
-      <p>Mit Memory fangen Folgefragen im selben Chat nicht bei null an. Ohne Memory versteht der Agent
-        „morgen dort?“ nicht zuverlässig.</p>
+      <p>Memory ist das Gedächtnis für eine Unterhaltung. Ohne Memory fängt jede Folgefrage bei null an, und
+        „morgen dort?“ versteht der Agent dann nicht zuverlässig.</p>
 
       <ol class="steps">
         <li><h4>Memory-Anschluss öffnen</h4>
-          <p>Klicke am AI-Agent-Node auf <strong>Memory</strong> und wähle <strong>Simple Memory</strong>.</p></li>
+          <p>Klicke am AI-Agent-Node auf den Anschluss <strong>Memory</strong> und wähle
+            <strong>Simple Memory</strong>.</p></li>
         <li><h4>Session ID setzen</h4>
-          <p>Setze <strong>Session ID</strong> auf <strong>Connected Chat Trigger Node</strong>. Damit nutzt der Speicher
-            die Session aus dem Chat Trigger.</p></li>
+          <p>Prüfe, dass <strong>Session ID</strong> auf <strong>Connected Chat Trigger Node</strong> steht. Die Session
+            ID ist die Kennung einer Unterhaltung. Mit dieser Einstellung nutzt der Speicher die Kennung aus dem Chat
+            Trigger, jede Unterhaltung bekommt also ihr eigenes Gedächtnis.</p></li>
         <li><h4>Fenster begrenzen</h4>
           <p>Setze <strong>Context Window Length</strong> z. B. auf <code>8</code>. Voreingestellt sind <code>5</code>.
-            Der Agent braucht nicht die komplette Lebensgeschichte des Chats.</p></li>
+            Der Wert bestimmt, wie viele vergangene Nachrichten der Agent mitliest. Er braucht nicht die komplette
+            Lebensgeschichte des Chats.</p></li>
         <li><h4>Chat Trigger mit Memory verbinden</h4>
-          <p>Wenn du im Chat Trigger später <strong>Load Previous Session</strong> auf <strong>From Memory</strong> setzt,
-            verbinde denselben Simple-Memory-Node auch mit dem Chat Trigger. n8n empfiehlt das ausdrücklich, damit beide
-            Nodes dieselbe Quelle lesen. Bei <strong>Connected Chat Trigger Node</strong> gilt eine Session nämlich nur
-            innerhalb eines Memory-Nodes. Zwei getrennte Memory-Nodes teilen sich nur dann eine Session, wenn du in beiden
-            auf <strong>Define below</strong> umstellst und denselben <strong>Key</strong> einträgst.</p></li>
+          <p>Diesen Schritt brauchst du erst später. Wenn du im Chat Trigger irgendwann <strong>Load Previous
+            Session</strong> auf <strong>From Memory</strong> setzt, verbinde denselben Simple-Memory-Node auch mit dem
+            Chat Trigger. n8n empfiehlt das ausdrücklich, damit beide Nodes dieselbe Quelle lesen. Bei
+            <strong>Connected Chat Trigger Node</strong> gilt eine Session nämlich nur innerhalb eines Memory-Nodes.
+            Zwei getrennte Memory-Nodes teilen sich nur dann eine Session, wenn du in beiden auf <strong>Define
+            below</strong> umstellst und denselben <strong>Key</strong> einträgst.</p></li>
       </ol>
 
       <div class="callout callout--warn">
         <b class="t">Simple Memory ist nicht immer produktionsfest</b>
-        Simple Memory legt den Verlauf lokal in der n8n-Instanz ab. Im Queue-Mode oder bei Multi-Main landen nicht alle
-        Nachrichten beim selben Worker, deshalb funktioniert der Node dort in einem publizierten Workflow nicht. n8n
-        blendet im Node selbst einen Hinweis dazu ein und verweist auf Redis, Postgres oder einen anderen persistenten
-        Memory-Node.
+        Simple Memory legt den Verlauf lokal in der n8n-Instanz ab. Läuft n8n verteilt über mehrere Prozesse (Queue-Mode
+        oder Multi-Main), landen nicht alle Nachrichten beim selben Worker. Deshalb funktioniert der Node dort in einem
+        publizierten Workflow nicht. Für dein Lernbeispiel ist das egal. n8n blendet im Node selbst einen Hinweis dazu
+        ein und verweist auf Redis, Postgres oder einen anderen persistenten Memory-Node.
       </div>
 
       <h2>Schritt 5: Das erste Tool für die Ortssuche</h2>
-      <p>Der Agent soll nicht raten, welche Koordinaten Hamburg hat. Das erste Tool ruft die Geocoding-API von Open-Meteo
-        auf und übersetzt einen Ortsnamen in Koordinaten.</p>
+      <p>Der Agent soll nicht raten, welche Koordinaten Hamburg hat. Das erste Tool ruft die Geocoding-API von
+        Open-Meteo auf. Geocoding heißt: Ein Ortsname wird in Koordinaten übersetzt.</p>
 
       <ol class="steps">
         <li><h4>Tool-Anschluss öffnen</h4>
-          <p>Klicke am AI-Agent-Node auf <strong>Tool</strong> und wähle den normalen <strong>HTTP Request</strong>-Node
-            als Tool. Den alten <strong>HTTP Request Tool</strong>-Node hat n8n ausgeblendet, er taucht in der Suche gar
-            nicht mehr auf.</p></li>
+          <p>Klicke am AI-Agent-Node auf den Anschluss <strong>Tool</strong> und wähle den normalen
+            <strong>HTTP Request</strong>-Node als Tool. Falls du nach einem eigenen Tool-Node suchst: Den alten
+            <strong>HTTP Request Tool</strong>-Node hat n8n ausgeblendet, er taucht in der Suche gar nicht mehr
+            auf.</p></li>
         <li><h4>Tool benennen</h4>
-          <p>Nenne das Tool <code>Ort suchen</code>.</p></li>
+          <p>Nenne das Tool <code>Ort suchen</code>. Über den Namen spricht der Agent das Tool später an.</p></li>
         <li><h4>Beschreibung eintragen</h4>
-          <p>Schreibe als Beschreibung: <code>Sucht zu einem Ortsnamen die wahrscheinlichsten Koordinaten.</code></p></li>
+          <p>Schreibe in das Feld <strong>Description</strong>: <code>Sucht zu einem Ortsnamen die wahrscheinlichsten
+            Koordinaten.</code> Die Beschreibung liest das Modell, um zu entscheiden, wann es dieses Tool
+            nutzt.</p></li>
         <li><h4>Methode setzen</h4>
-          <p>Setze <strong>Method</strong> auf <strong>GET</strong>.</p></li>
+          <p>Setze <strong>Method</strong> auf <strong>GET</strong>, also auf reines Abrufen von Daten.</p></li>
         <li><h4>URL eintragen</h4>
-          <p>Setze die URL auf die folgende Expression.</p></li>
+          <p>Kopiere die folgende Expression in das Feld <strong>URL</strong>.</p></li>
       </ol>
 
       <div class="code">
@@ -349,8 +373,8 @@ Regeln:
 
       <div class="callout callout--info">
         <b class="t">Was <code>$fromAI()</code> hier bedeutet</b>
-        <code>$fromAI('city')</code> ist kein Zugriff auf ein vorhandenes JSON-Feld. Es ist eine Aufforderung an das Modell:
-        „Fülle diesen Tool-Parameter sinnvoll aus.“ Die Funktion kennt vier Argumente in dieser Reihenfolge:
+        <code>$fromAI('city')</code> ist kein Zugriff auf ein vorhandenes JSON-Feld. Es ist eine Lücke, die das Modell
+        füllt: „Setze hier einen sinnvollen Wert ein.“ Die Funktion kennt vier Argumente in dieser Reihenfolge:
         <code>key</code>, <code>description</code>, <code>type</code>, <code>defaultValue</code>. Pflicht ist nur
         <code>key</code>. Bei <code>type</code> sind <code>string</code>, <code>number</code>, <code>boolean</code> und
         <code>json</code> erlaubt, ohne Angabe gilt <code>string</code>. Wenn du lieber klickst als tippst: Jedes
@@ -358,21 +382,24 @@ Regeln:
       </div>
 
       <h2>Schritt 6: Das zweite Tool für die Wetterdaten</h2>
-      <p>Das zweite Tool ruft die Wetterdaten mit Koordinaten ab. Der Agent soll erst den Ort suchen und dann mit den
-        Koordinaten das Wetter holen.</p>
+      <p>Das zweite Tool ruft mit den Koordinaten die Wetterdaten ab. Der Agent soll also erst den Ort suchen und dann
+        mit den gefundenen Koordinaten das Wetter holen.</p>
 
       <ol class="steps">
         <li><h4>Zweites HTTP-Request-Tool hinzufügen</h4>
-          <p>Füge am Tool-Anschluss des AI Agent einen weiteren normalen <strong>HTTP Request</strong>-Node als Tool hinzu.</p></li>
+          <p>Klicke am AI-Agent-Node noch einmal auf den Tool-Anschluss und füge einen weiteren normalen
+            <strong>HTTP Request</strong>-Node als Tool hinzu.</p></li>
         <li><h4>Tool benennen</h4>
           <p>Nenne es <code>Wetter holen</code>.</p></li>
         <li><h4>Beschreibung eintragen</h4>
-          <p>Schreibe: <code>Holt aktuelle Wetterdaten und Tageswerte für gegebene Koordinaten.</code></p></li>
+          <p>Schreibe in <strong>Description</strong>: <code>Holt aktuelle Wetterdaten und Tageswerte für gegebene
+            Koordinaten.</code></p></li>
         <li><h4>Methode setzen</h4>
           <p>Setze <strong>Method</strong> wieder auf <strong>GET</strong>.</p></li>
         <li><h4>URL eintragen</h4>
-          <p>Setze die URL auf diese Expression. Die Beschreibungen helfen dem Modell, Latitude und Longitude aus dem
-            Ergebnis von <code>Ort suchen</code> zu übernehmen.</p></li>
+          <p>Kopiere diese Expression in das Feld <strong>URL</strong>. Die Beschreibungen in den
+            <code>$fromAI()</code>-Lücken helfen dem Modell, Latitude und Longitude aus dem Ergebnis von
+            <code>Ort suchen</code> zu übernehmen.</p></li>
       </ol>
 
       <div class="code">
@@ -387,13 +414,14 @@ Regeln:
       </div>
 
       <h2>Schritt 7: Agentenregel für die Tool-Reihenfolge schärfen</h2>
-      <p>Jetzt ergänzen wir die System Message. Das ist keine Garantie, aber eine wichtige Leitplanke.</p>
+      <p>Jetzt sagen wir dem Agenten in der System Message, in welcher Reihenfolge er die Tools nutzen soll. Eine
+        Garantie ist das nicht, aber eine Leitplanke.</p>
 
       <ol class="steps">
         <li><h4>AI Agent öffnen</h4>
-          <p>Doppelklicke den AI-Agent-Node.</p></li>
+          <p>Doppelklicke den AI-Agent-Node auf dem Canvas.</p></li>
         <li><h4>System Message ergänzen</h4>
-          <p>Erweitere die System Message um die folgenden Regeln.</p></li>
+          <p>Hänge die folgenden Regeln unten an die vorhandene System Message an.</p></li>
       </ol>
 
       <div class="code">
@@ -408,19 +436,22 @@ Regeln:
       </div>
 
       <h2>Schritt 8: Ersten Chat-Test ausführen</h2>
-      <p>Prüfe jetzt die Werkzeugkette. Die Antwort allein sagt zu wenig.</p>
+      <p>Jetzt ist alles verbunden: Trigger, Agent, Modell, Memory, zwei Tools. Prüfe die Kette. Die Chatantwort allein
+        sagt zu wenig.</p>
 
       <ol class="steps">
         <li><h4>Chat öffnen</h4>
-          <p>Klicke auf dem Canvas auf <strong>Open chat</strong>. Damit öffnest du den internen Testchat, ohne den
-            Workflow zu veröffentlichen.</p></li>
+          <p>Klicke auf dem Canvas auf <strong>Open chat</strong>. Ein Chatfenster öffnet sich direkt im Editor. Das ist
+            der interne Testchat; der Workflow bleibt unveröffentlicht.</p></li>
         <li><h4>Konkrete Frage stellen</h4>
-          <p>Schreibe: <code>Wie wird das Wetter morgen in Hamburg?</code></p></li>
+          <p>Schreibe: <code>Wie wird das Wetter morgen in Hamburg?</code> Die erste Antwort kann ein paar Sekunden
+            dauern.</p></li>
         <li><h4>Antwort prüfen</h4>
-          <p>Die Antwort sollte Hamburg nennen und konkrete Wetterdaten enthalten. Sie darf keine exakten Werte erfinden,
-            wenn die API nichts geliefert hat.</p></li>
+          <p>Die Antwort sollte Hamburg nennen und konkrete Wetterdaten enthalten. Sie darf keine exakten Werte
+            erfinden, wenn die API nichts geliefert hat.</p></li>
         <li><h4>Execution öffnen</h4>
-          <p>Öffne die Ausführung. Prüfe, ob <code>Ort suchen</code> und <code>Wetter holen</code> aufgerufen wurden.</p></li>
+          <p>Öffne die Ausführung. Prüfe, ob <code>Ort suchen</code> und <code>Wetter holen</code> wirklich aufgerufen
+            wurden. Wenn ja: Deine Werkzeugkette steht.</p></li>
       </ol>
 
       <figure class="figure">
@@ -463,7 +494,7 @@ Regeln:
       </div>
 
       <h2>Schritt 9: Memory mit Folgefragen testen</h2>
-      <p>Memory ist erst dann sichtbar, wenn du absichtlich eine Folgefrage stellst.</p>
+      <p>Ob Memory funktioniert, siehst du erst, wenn du absichtlich eine Folgefrage stellst.</p>
 
       <ol class="steps">
         <li><h4>Erste Nachricht senden</h4>
@@ -471,11 +502,11 @@ Regeln:
         <li><h4>Folgefrage senden</h4>
           <p>Schreibe danach: <code>Wie wird das Wetter morgen dort?</code></p></li>
         <li><h4>Ort prüfen</h4>
-          <p>Die Antwort muss Leipzig verwenden. Wenn der Agent wieder nach dem Ort fragt, ist Memory nicht korrekt
-            verbunden oder die Session ID stimmt nicht.</p></li>
+          <p>Die Antwort muss Leipzig verwenden. Fragt der Agent stattdessen wieder nach dem Ort, ist Memory nicht
+            korrekt verbunden oder die Session ID stimmt nicht. Geh dann noch einmal zu Schritt 4.</p></li>
         <li><h4>Neuen Chat starten</h4>
           <p>Starte eine neue Unterhaltung. Frage wieder <code>Wie wird das Wetter morgen dort?</code>. Jetzt sollte der
-            Agent nachfragen, weil der alte Kontext nicht in diese neue Session gehört.</p></li>
+            Agent nachfragen. Das ist richtig so: Der alte Kontext gehört nicht in diese neue Session.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -485,12 +516,12 @@ Regeln:
       </div>
 
       <h2>Schritt 10: Antwort manuell formen, falls nötig</h2>
-      <p>Im einfachen Fall sendet der Chat Trigger die Agent-Ausgabe direkt zurück. Anders wird es, sobald nach dem
-        Agenten noch Nodes laufen. Dann hast du zwei Möglichkeiten. Entweder liefert der letzte Node ein Feld
-        <code>output</code> oder <code>text</code>. Oder du stellst im Chat Trigger unter <strong>Options</strong> den
-        <strong>Response Mode</strong> auf <strong>Using Response Nodes</strong> und schickst die Antwort über einen
-        Chat-Node. Diese Option siehst du beim Hosted Chat. Im Modus <strong>Embedded Chat</strong> heißt das Gegenstück
-        <strong>Using 'Respond to Webhook' Node</strong>.</p>
+      <p>Im einfachen Fall, so wie bei uns, sendet der Chat Trigger die Agent-Ausgabe direkt zurück. Anders wird es,
+        sobald nach dem Agenten noch weitere Nodes laufen. Dann hast du zwei Möglichkeiten. Entweder liefert der letzte
+        Node ein Feld namens <code>output</code> oder <code>text</code>. Oder du stellst im Chat Trigger unter
+        <strong>Options</strong> den <strong>Response Mode</strong> auf <strong>Using Response Nodes</strong> und
+        schickst die Antwort über einen Chat-Node. Diese Option siehst du beim Hosted Chat. Im Modus
+        <strong>Embedded Chat</strong> heißt das Gegenstück <strong>Using 'Respond to Webhook' Node</strong>.</p>
 
       <ol class="steps">
         <li><h4>Direktantwort beibehalten</h4>
@@ -512,8 +543,8 @@ Regeln:
       </div>
 
       <h2>Schritt 11: Fehlerfälle sichtbar machen</h2>
-      <p>Agentenfehler sind oft leise: falscher Ort, falscher Tool-Parameter, leere API-Antwort. Baue deshalb kleine
-        Kontrollfragen ein.</p>
+      <p>Agentenfehler sind oft leise: falscher Ort, falscher Tool-Parameter, leere API-Antwort. Der Chat wirkt dann
+        normal, aber die Antwort stimmt nicht. Die Tabelle zeigt die häufigsten Fälle und was du dagegen tust.</p>
 
       <table class="btable">
         <thead><tr><th>Fehler</th><th>Woran du ihn erkennst</th><th>Gegenmaßnahme</th></tr></thead>
@@ -533,15 +564,17 @@ Regeln:
       </div>
 
       <h2>Schritt 12: Freigabe vor riskanten Tool-Aufrufen</h2>
-      <p>Unser Wetter-Agent liest nur. Sobald ein Tool etwas verändert, gehört ein Mensch dazwischen. Seit n8n 2.6.0
-        baust du diese Freigabe nicht mehr aus Wait- und IF-Nodes zusammen. Sie hängt direkt an der Verbindung zwischen
-        Agent und Tool, und der Agent kommt an dem Tool ohne Zustimmung nicht vorbei.</p>
+      <p>Unser Wetter-Agent liest nur, für ihn brauchst du diesen Schritt also nicht. Aber sobald ein Tool etwas
+        verändert, gehört ein Mensch dazwischen. Seit n8n 2.6.0 baust du diese Freigabe nicht mehr aus Wait- und
+        IF-Nodes zusammen. Sie hängt direkt an der Verbindung zwischen Agent und Tool. Der Agent kommt an dem Tool ohne
+        Zustimmung nicht vorbei.</p>
 
       <ol class="steps">
         <li><h4>Verbindung zum Tool aufklappen</h4>
-          <p>Fahre auf dem Canvas über die Verbindung vom AI Agent zu dem Tool, das du absichern willst, und klicke auf
-            das <strong>+</strong>-Symbol. Der Tooltip dazu lautet <strong>Add human review step</strong>. Der zweite Weg
-            führt über den Anschluss <strong>Tool</strong> am Agenten, dort findest du dieselbe Rubrik.</p></li>
+          <p>Fahre auf dem Canvas mit der Maus über die Verbindungslinie vom AI Agent zu dem Tool, das du absichern
+            willst. Klicke auf das <strong>+</strong>-Symbol, das dort erscheint. Der Tooltip dazu lautet
+            <strong>Add human review step</strong>. Der zweite Weg führt über den Anschluss <strong>Tool</strong> am
+            Agenten, dort findest du dieselbe Rubrik.</p></li>
         <li><h4>Kanal auswählen</h4>
           <p>n8n öffnet das Tools-Panel mit der Rubrik <strong>Human review</strong>. Zur Auswahl stehen
             <strong>Chat</strong>, <strong>Slack</strong>, <strong>Discord</strong>, <strong>Telegram</strong>,
@@ -552,8 +585,9 @@ Regeln:
           <p>Verbinde die Tools, die eine Freigabe brauchen, mit dem Tool-Anschluss des Review-Schritts. Alle übrigen
             Tools bleiben direkt am Agenten und laufen weiterhin ohne Rückfrage.</p></li>
         <li><h4>Nachricht für die freigebende Person schreiben</h4>
-          <p>Im Review-Node stehen dir <code>$tool.name</code> und <code>$tool.parameters</code> zur Verfügung. Nimm beide
-            in die Nachricht auf, sonst muss jemand blind zustimmen.</p></li>
+          <p>Im Review-Node stehen dir die Expressions <code>$tool.name</code> und <code>$tool.parameters</code> zur
+            Verfügung: der Name des Tools und die Werte, mit denen es laufen soll. Nimm beide in die Nachricht auf,
+            sonst muss jemand blind zustimmen.</p></li>
         <li><h4>Ablehnung im System Prompt behandeln</h4>
           <p>Ergänze die System Message um den Hinweis, welche Tools eine Freigabe brauchen und was bei einer Ablehnung
             passieren soll. Ohne diesen Hinweis reagiert der Agent auf ein Nein oft ratlos.</p></li>
@@ -576,7 +610,7 @@ Regeln:
 
       <h2>Schritt 13: Chat sicher veröffentlichen</h2>
       <p>Erst wenn die Tests passen, machst du den Chat öffentlich. Öffentlich heißt: Jemand außerhalb des Editors kann
-        Ausführungen starten.</p>
+        über die Chat-URL Ausführungen starten.</p>
 
       <ol class="steps">
         <li><h4>Chat Trigger öffnen</h4>
@@ -584,18 +618,20 @@ Regeln:
         <li><h4>Public einschalten</h4>
           <p>Setze <strong>Make Chat Publicly Available</strong> auf an.</p></li>
         <li><h4>Authentifizierung wählen</h4>
-          <p>Wähle für Tests <strong>Basic Auth</strong> oder <strong>n8n User Auth</strong>. <strong>None</strong> ist nur
-            für absichtlich öffentliche Demos sinnvoll.</p></li>
+          <p>Wähle für Tests <strong>Basic Auth</strong> oder <strong>n8n User Auth</strong>, damit nur angemeldete
+            Personen chatten können. <strong>None</strong> ist nur für absichtlich öffentliche Demos sinnvoll.</p></li>
         <li><h4>CORS begrenzen</h4>
           <p>Die Einstellung heißt <strong>Allowed Origins (CORS)</strong> und liegt unter <strong>Options</strong>.
-            Voreingestellt ist <code>*</code>, also alle Herkünfte. Trage deine konkrete Domain ein, sobald du den Chat in
-            eine Website einbettest. Mehrere Domains gehen als kommagetrennte Liste.</p></li>
+            Sie legt fest, welche Websites den Chat einbetten dürfen. Voreingestellt ist <code>*</code>, also alle.
+            Trage deine konkrete Domain ein, sobald du den Chat in eine Website einbettest. Mehrere Domains gehen als
+            kommagetrennte Liste.</p></li>
         <li><h4>Load Previous Session prüfen</h4>
           <p>Wenn Nutzer frühere Chatnachrichten laden sollen, setze <strong>Load Previous Session</strong> auf
             <strong>From Memory</strong> und nutze denselben Memory-Node wie am Agenten. Erst mit dieser Einstellung
             erscheint am Chat Trigger überhaupt der Memory-Anschluss.</p></li>
         <li><h4>Workflow publishen</h4>
-          <p>Warte auf Auto-Save und klicke erst dann <strong>Publish</strong>.</p></li>
+          <p>Warte, bis n8n den Workflow automatisch gespeichert hat, und klicke erst dann auf
+            <strong>Publish</strong>. Ab jetzt ist dein Chat erreichbar.</p></li>
       </ol>
 
       <div class="callout callout--info">
@@ -649,10 +685,10 @@ Regeln:
       </div>
 
       <p>Das Grundmuster steht: Chat rein, Modell entscheidet, Tools liefern Daten, Memory hält den Gesprächskontext.
-        Bevor du weitergehst, nimm dir eine Übung vor. Hänge ein drittes Tool an, das absichtlich falsch beschrieben ist,
-        etwa <code>Holt Daten.</code>, und schau in der Execution zu, wie der Agent daneben greift. Diese eine Minute
-        erklärt mehr über Tool-Beschreibungen als jeder Merksatz. Im nächsten KI-Kapitel wird aus Gesprächsgedächtnis
-        ein Wissenssystem: RAG über eigene Dokumente.</p>
+        Bevor du weitergehst, nimm dir eine kleine Übung vor. Hänge ein drittes Tool an, das absichtlich vage
+        beschrieben ist, etwa <code>Holt Daten.</code>, und schau in der Execution zu, wie der Agent daneben greift.
+        Diese eine Minute erklärt mehr über Tool-Beschreibungen als jeder Merksatz. Im nächsten KI-Kapitel wird aus dem
+        Gesprächsgedächtnis ein Wissenssystem: RAG über eigene Dokumente.</p>
 
     </article>
     <nav id="prevnext"></nav>

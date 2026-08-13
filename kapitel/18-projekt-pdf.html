@@ -16,9 +16,10 @@
 
       <div class="chap-eyebrow"><span class="knum">18</span> Projekt 6</div>
       <h1 class="chap-title">PDF-/Rechnungs-Extraktion</h1>
-      <p class="chap-lede">In diesem Projekt liest n8n eine Rechnung als PDF, extrahiert den Text und erkennt
-        Rechnungsnummer, Datum und Betrag zuerst mit einfachen Regeln. Für schwierige Layouts springt KI ein. Am Ende
-        steht ein Rechnungseingang, den Buchhaltung oder Einkauf noch prüfen können. Gebucht wird hier nichts.</p>
+      <p class="chap-lede">In diesem Projekt liest n8n eine Rechnung als PDF und holt den Text heraus. Rechnungsnummer,
+        Datum und Betrag erkennt der Workflow zuerst mit einfachen Regeln. Nur bei schwierigen Layouts springt KI ein.
+        Am Ende steht eine Liste mit Rechnungen, die Buchhaltung oder Einkauf noch prüfen können. Gebucht oder bezahlt
+        wird hier nichts.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 55 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Mittel bis fortgeschritten</span>
@@ -28,11 +29,12 @@
       <div class="prereq">
         <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
-          <li>Ein Test-Postfach, das E-Mails mit PDF-Anhang empfangen kann. IMAP ist für dieses Kapitel am anschaulichsten.</li>
+          <li>Ein Test-Postfach, das E-Mails mit PDF-Anhang empfangen kann. Es sollte IMAP unterstützen. Das ist die
+            Technik, mit der n8n Mails abholt, und mit ihr arbeiten wir in diesem Kapitel.</li>
           <li>Eine selbst erstellte Testrechnung als PDF. Keine echten Rechnungen im ersten Durchlauf.</li>
-          <li>Eine Google-Sheets- oder Tabellen-Credential für die Ergebnisliste.</li>
-          <li>Eine Slack-Credential oder einen anderen Kanal für manuelle Prüfung.</li>
-          <li>Optional: eine Chat-Model-Credential für den KI-Fallback.</li>
+          <li>Eine Google-Sheets- oder Tabellen-Credential (gespeicherter Zugang) für die Ergebnisliste.</li>
+          <li>Eine Slack-Credential oder einen anderen Kanal, in dem Menschen unsichere Fälle prüfen.</li>
+          <li>Optional: eine Chat-Model-Credential (Zugang zu einem KI-Anbieter) für den KI-Fallback.</li>
         </ul>
       </div>
 
@@ -43,11 +45,11 @@
       </div>
 
       <h2>Das Ziel</h2>
-      <p>Der Workflow bekommt eine E-Mail mit PDF-Anhang. n8n liest den PDF-Text, extrahiert Rechnungsnummer, Datum,
-        Betrag und Lieferant per Regel-Code. Wenn diese Regeln nicht genug erkennen, geht derselbe Text in einen
-        KI-Extractor. Danach wird das Ergebnis geprüft: saubere Datensätze landen in einer Tabelle, unsichere Fälle in
-        einem Review-Kanal. Die Feldnamen und Voreinstellungen in diesem Kapitel haben den Stand Juli 2026 und
-        n8n 2.32.x.</p>
+      <p>Der Workflow bekommt eine E-Mail mit PDF-Anhang. n8n liest den Text aus dem PDF. Dann sucht ein kleines
+        Stück Code darin nach Rechnungsnummer, Datum, Betrag und Lieferant. Diese Suchmuster nennen wir die Regeln. Erkennen die
+        Regeln zu wenig, geht derselbe Text an einen KI-Node, der die Felder herausholt. Zum Schluss wird das Ergebnis
+        geprüft: Saubere Datensätze landen in einer Tabelle. Unsichere Fälle gehen in einen Review-Kanal, wo ein Mensch
+        draufschaut. Die Feldnamen und Voreinstellungen in diesem Kapitel haben den Stand Juli 2026 und n8n 2.32.x.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -89,8 +91,9 @@
 
       <div class="callout callout--pareto">
         <b class="t">Erst Regeln, dann KI</b>
-        Rechnungen sind strukturiert genug für einfache Regeln, aber uneinheitlich genug für Ausnahmen. Deshalb bauen wir
-        zweistufig: erst die billige Regel, die du im Code nachlesen kannst; danach das flexiblere, teurere Modell.
+        Rechnungen folgen meist einem festen Aufbau, aber jede Firma schreibt sie etwas anders. Deshalb bauen wir
+        zweistufig: erst die einfache Regel, die nichts kostet und die du im Code nachlesen kannst. Scheitert sie,
+        kommt das flexiblere, aber teurere KI-Modell dran.
       </div>
 
       <h2>Zwei Wege, ein Ergebnis</h2>
@@ -105,7 +108,8 @@
       <hr>
 
       <h2>Schritt 1: Testrechnung vorbereiten</h2>
-      <p>Wir starten kontrolliert. Erstelle eine kleine Rechnung, die du verstehst und deren erwartete Werte eindeutig sind.</p>
+      <p>Wir starten mit einer Rechnung, die wir selbst gebaut haben. So kennst du jeden Wert und weißt genau, was der
+        Workflow finden muss.</p>
 
       <ol class="steps">
         <li><h4>Textdokument öffnen</h4>
@@ -134,11 +138,14 @@ IBAN: DE89 3704 0044 0532 0130 00</pre>
 
       <ol class="steps" style="counter-reset: st 2;">
         <li><h4>Als PDF exportieren</h4>
-          <p>Exportiere oder drucke das Dokument als PDF. Nenne die Datei <code>rechnung-demo.pdf</code>.</p></li>
+          <p>Speichere das Dokument als PDF. In den meisten Programmen geht das über <em>Datei → Herunterladen/Exportieren
+            als PDF</em> oder über <em>Drucken → Als PDF speichern</em>. Nenne die Datei <code>rechnung-demo.pdf</code>.</p></li>
         <li><h4>Testmail senden</h4>
-          <p>Sende dir selbst eine E-Mail mit Betreff <code>n8n Rechnung Test</code> und hänge die PDF-Datei an.</p></li>
+          <p>Sende dir selbst eine E-Mail an dein Test-Postfach. Betreff: <code>n8n Rechnung Test</code>. Hänge die
+            PDF-Datei an.</p></li>
         <li><h4>Mail ungelesen lassen</h4>
-          <p>Lasse die E-Mail ungelesen, damit der Trigger sie sauber findet.</p></li>
+          <p>Öffne die E-Mail im Postfach nicht. Der Trigger sucht später nach ungelesenen Mails. Eine geöffnete Mail
+            würde er übersehen.</p></li>
       </ol>
 
       <div class="callout callout--info">
@@ -148,38 +155,45 @@ IBAN: DE89 3704 0044 0532 0130 00</pre>
       </div>
 
       <h2>Schritt 2: E-Mail-Trigger mit Anhang anlegen</h2>
-      <p>Wir nehmen den E-Mail-Eingang als realistische Quelle. Alternativ könntest du PDFs per Webhook oder Formular
-        hochladen; die Extraktionsschritte bleiben gleich.</p>
+      <p>Der Workflow soll starten, sobald eine Rechnung per E-Mail ankommt. Alternativ könntest du PDFs per Webhook
+        oder Formular hochladen; die Extraktionsschritte danach bleiben gleich.</p>
 
       <ol class="steps">
         <li><h4>Neuen Workflow erstellen</h4>
-          <p>Erstelle einen Workflow und nenne ihn <code>Rechnung aus PDF extrahieren</code>.</p></li>
+          <p>Erstelle einen neuen, leeren Workflow. Nenne ihn <code>Rechnung aus PDF extrahieren</code>.</p></li>
         <li><h4>E-Mail Trigger suchen</h4>
-          <p>Klicke auf das große <span class="kbd">+</span>, suche <code>email trigger</code> und wähle
-            <strong>Email Trigger (IMAP)</strong>.</p></li>
+          <p>Klicke in der Mitte auf das große <span class="kbd">+</span>. Rechts öffnet sich das Suchfeld. Tippe
+            <code>email trigger</code> ein und wähle <strong>Email Trigger (IMAP)</strong>. Der Node öffnet sich
+            automatisch.</p></li>
         <li><h4>Credential auswählen</h4>
-          <p>Wähle deine IMAP-Credential oder lege eine Test-Credential an.</p></li>
+          <p>Wähle oben im Node deine IMAP-Credential aus, also den gespeicherten Zugang zu deinem Postfach. Hast du
+            noch keine, lege dort eine Test-Credential an. Wie das geht, kennst du aus Kapitel 7.</p></li>
         <li><h4>Postfach prüfen</h4>
-          <p>Im Feld <strong>Mailbox Name</strong> steht bereits <code>INBOX</code>. Lass es so. Darunter steht
-            <strong>Action</strong> auf <strong>Mark as Read</strong>, auch das bleibt: n8n markiert jede abgeholte Mail
-            als gelesen. Für einen zweiten Testlauf brauchst du deshalb eine frische Testmail.</p></li>
+          <p>Im Feld <strong>Mailbox Name</strong> steht bereits <code>INBOX</code> (der Posteingang). Lass es so.
+            Darunter steht <strong>Action</strong> auf <strong>Mark as Read</strong> („als gelesen markieren“). Auch das
+            bleibt so: n8n markiert jede abgeholte Mail als gelesen. Für einen zweiten Testlauf brauchst du deshalb
+            jedes Mal eine frische, ungelesene Testmail.</p></li>
         <li><h4>Format auf Simple lassen</h4>
           <p><strong>Format</strong> steht ab Werk auf <strong>Simple</strong>. Genau das brauchen wir: Den Schalter
-            <strong>Download Attachments</strong> zeigt n8n nur bei <strong>Simple</strong>. Bei <strong>Resolved</strong>
-            kommen die Anhänge automatisch mit, der Schalter verschwindet dann.</p></li>
+            <strong>Download Attachments</strong> („Anhänge herunterladen“) zeigt n8n nur bei <strong>Simple</strong>.
+            Bei <strong>Resolved</strong> kommen die Anhänge automatisch mit, der Schalter verschwindet dann.</p></li>
         <li><h4>Anhänge herunterladen</h4>
-          <p>Schalte <strong>Download Attachments</strong> ein. Ohne diese Option sieht n8n nur die E-Mail, nicht die PDF-Datei.
-            Sobald der Schalter an ist, taucht darunter das Feld <strong>Property Prefix Name</strong> mit dem Wert
-            <code>attachment_</code> auf. Lass es stehen. n8n hängt an dieses Präfix eine laufende Nummer ab 0 an: Der
-            erste Anhang heißt <code>attachment_0</code>, der zweite <code>attachment_1</code>.</p></li>
+          <p>Schalte <strong>Download Attachments</strong> ein. Ohne diesen Schalter sieht n8n nur den Mailtext, nicht
+            die PDF-Datei. Sobald der Schalter an ist, taucht darunter das Feld <strong>Property Prefix Name</strong>
+            mit dem Wert <code>attachment_</code> auf. Lass es stehen. n8n hängt an dieses Präfix eine laufende Nummer
+            ab 0 an: Der erste Anhang heißt <code>attachment_0</code>, der zweite <code>attachment_1</code>.</p></li>
         <li><h4>Suche auf die Testmail begrenzen</h4>
-          <p>Einen eigenen Betrefffilter hat dieser Node nicht. Klicke unten auf <strong>Add option</strong> und wähle
-            <strong>Custom Email Rules</strong>. Voreingestellt ist <code>["UNSEEN"]</code>. Trage stattdessen
-            <code>["UNSEEN", ["SUBJECT", "n8n Rechnung Test"]]</code> ein. Das ist die Suchsyntax von node-imap, und n8n
-            liest sie als JSON.</p></li>
+          <p>Damit der Trigger nicht irgendeine Mail nimmt, sondern genau deine Testmail, brauchen wir einen Filter.
+            Einen eigenen Betrefffilter hat dieser Node nicht. Klicke deshalb unten auf <strong>Add option</strong> und
+            wähle <strong>Custom Email Rules</strong>. In dem neuen Feld steht <code>["UNSEEN"]</code> (heißt: nur
+            ungelesene Mails). Ersetze das durch <code>["UNSEEN", ["SUBJECT", "n8n Rechnung Test"]]</code>, also
+            ungelesen <em>und</em> mit diesem Betreff. Das ist die Suchsyntax von node-imap, und n8n liest sie als
+            JSON.</p></li>
         <li><h4>Trigger testen</h4>
-          <p>Klicke oben rechts auf <strong>▶ Schritt ausführen</strong> (engl. <em>Execute step</em>) und warte auf die
-            Testmail. Ein „Listen for test event“ gibt es hier nicht; diesen Knopf zeigt n8n nur beim Webhook-Node.</p></li>
+          <p>Klicke oben rechts auf <strong>▶ Schritt ausführen</strong> (engl. <em>Execute step</em>). n8n holt jetzt
+            die Testmail ab. Das kann ein paar Sekunden dauern. Ein „Listen for test event“ gibt es hier nicht; diesen
+            Knopf zeigt n8n nur beim Webhook-Node. Wenn es geklappt hat, siehst du rechts im Output-Bereich
+            <strong>1 Item</strong> mit den Daten deiner Mail.</p></li>
       </ol>
 
       <figure class="figure">
@@ -207,43 +221,47 @@ IBAN: DE89 3704 0044 0532 0130 00</pre>
 
       <div class="callout callout--warn">
         <b class="t">Wenn kein Binary-Feld erscheint</b>
-        Öffne den Output des Triggers und wechsle auf <strong>Binary</strong>. Ist dort nichts zu sehen, ist meist
-        <strong>Download Attachments</strong> aus, der Anhang fehlt wirklich, oder dein Testmail-Provider blockiert den Abruf.
+        Öffne den Output des Triggers und klicke oben auf den Reiter <strong>Binary</strong>. Dort zeigt n8n Dateien
+        wie unser PDF. Ist der Reiter leer, gibt es meist drei Ursachen: <strong>Download Attachments</strong> ist aus,
+        die Testmail hat wirklich keinen Anhang, oder dein Mail-Anbieter blockiert den Abruf. Prüfe die drei Punkte in
+        dieser Reihenfolge und führe den Schritt danach mit einer frischen, ungelesenen Testmail erneut aus.
       </div>
 
       <h2>Schritt 3: PDF-Text aus dem Anhang lesen</h2>
-      <p>Jetzt kommt der Kern: Aus der PDF-Datei wird reiner Text. Das funktioniert gut bei „echten“ PDFs mit Text. Bei
-        gescannten Bildern brauchst du später OCR.</p>
+      <p>Jetzt kommt der Kern: Aus der PDF-Datei wird reiner Text. Das funktioniert gut bei „echten“ PDFs, in denen der
+        Text als Text gespeichert ist. Bei gescannten Bildern brauchst du später OCR (Texterkennung aus Bildern).</p>
 
       <ol class="steps">
         <li><h4>Binary-Feldnamen merken</h4>
-          <p>Öffne den Output des Triggers und wechsle auf den Reiter <strong>Binary</strong>. Dort steht der Name des
-            Anhangs. Mit den Einstellungen aus Schritt 2 heißt er <code>attachment_0</code>. Merke dir diesen Namen.</p></li>
+          <p>Öffne den Output des Triggers und klicke auf den Reiter <strong>Binary</strong>. Dort steht der Name des
+            Anhangs. Mit den Einstellungen aus Schritt 2 heißt er <code>attachment_0</code>. Merke dir diesen Namen,
+            gleich musst du ihn eintippen.</p></li>
         <li><h4>Extract-Node anhängen</h4>
-          <p>Ziehe vom Trigger eine Linie ins Leere, suche <code>extract from file</code> und wähle
-            <strong>Extract from File</strong>. Im Node-Panel steht das zweite Wort klein; wir nennen ihn hier weiter
-            Extract-Node.</p></li>
+          <p>Ziehe vom kleinen Punkt rechts am Trigger eine Linie ins Leere und lasse los. Das Suchfeld öffnet sich.
+            Suche <code>extract from file</code> und wähle <strong>Extract from File</strong> („aus Datei
+            extrahieren“). Im Node-Panel steht das zweite Wort klein; wir nennen ihn hier weiter Extract-Node.</p></li>
         <li><h4>PDF-Operation wählen</h4>
           <p>Setze <strong>Operation</strong> auf <strong>Extract From PDF</strong>. Voreingestellt ist
-            <strong>Extract From CSV</strong>, das musst du also aktiv umstellen.</p></li>
+            <strong>Extract From CSV</strong>. Das musst du also aktiv umstellen, sonst passiert später ein Fehler.</p></li>
         <li><h4>Binary-Feld eintragen</h4>
-          <p>Trage in <strong>Input Binary Field</strong> den Namen ein, den du dir gerade gemerkt hast, also
-            <code>attachment_0</code>. Voreingestellt steht dort <code>data</code>, und das passt bei einem IMAP-Anhang
-            nicht.</p></li>
+          <p>Trage in <strong>Input Binary Field</strong> den gemerkten Namen ein, also <code>attachment_0</code>.
+            Voreingestellt steht dort <code>data</code>, und das passt bei einem IMAP-Anhang nicht.</p></li>
         <li><h4>Schritt ausführen</h4>
-          <p>Klicke <strong>▶ Schritt ausführen</strong>. Im JSON-Output steht das Feld <code>text</code> mit dem
-            Rechnungsinhalt. Daneben liefert der Node <code>numpages</code>, <code>info</code>, <code>metadata</code> und
-            <code>version</code>. Mit <code>numpages</code> siehst du sofort, ob wirklich das ganze PDF gelesen wurde.</p></li>
+          <p>Klicke <strong>▶ Schritt ausführen</strong>. Im JSON-Output erscheint das Feld <code>text</code>. Darin
+            steht der komplette Rechnungsinhalt als Text. Daneben liefert der Node <code>numpages</code> (Seitenzahl),
+            <code>info</code>, <code>metadata</code> und <code>version</code>. An <code>numpages</code> siehst du sofort,
+            ob wirklich das ganze PDF gelesen wurde. Wenn du deinen Rechnungstext im Feld <code>text</code> wiedererkennst,
+            hat der schwierigste Teil geklappt.</p></li>
       </ol>
 
       <div class="callout callout--info">
         <b class="t">Die Optionen des Extract-Nodes</b>
         Unter <strong>Options</strong> liegen vier Einstellungen, die bei Rechnungen wirklich vorkommen.
-        <strong>Join Pages</strong> ist an und klebt alle Seiten zu einem Text zusammen; ausgeschaltet bekommst du ein
-        Array mit einem Eintrag pro Seite. <strong>Max Pages</strong> begrenzt die gelesenen Seiten, <code>0</code> heißt
+        <strong>Join Pages</strong> ist an und klebt alle Seiten zu einem Text zusammen; ausgeschaltet bekommst du eine
+        Liste mit einem Eintrag pro Seite. <strong>Max Pages</strong> begrenzt die gelesenen Seiten, <code>0</code> heißt
         alle. <strong>Password</strong> brauchst du bei verschlüsselten PDFs. <strong>Keep Source</strong> entscheidet, ob
         die Felder des Eingangs-Items erhalten bleiben. Ohne diese Option ersetzt der Node das JSON komplett durch sein
-        Ergebnis.
+        Ergebnis. Für unsere Testrechnung musst du hier nichts ändern.
       </div>
 
       <figure class="figure">
@@ -268,37 +286,40 @@ IBAN: DE89 3704 0044 0532 0130 00</pre>
 
       <div class="callout callout--warn">
         <b class="t">Wenn der Text leer ist</b>
-        Viele PDFs sind nur Bilder. Dann kann der PDF-Node keinen Text finden. Für solche Fälle brauchst du OCR, z. B.
-        einen spezialisierten Dienst oder einen späteren KI-/Dokumenten-Parser mit Bildverständnis. Dieses Kapitel behandelt
-        zuerst maschinenlesbare PDFs.
+        Kein Grund zur Panik: Viele PDFs sind innen nur Bilder, etwa eingescannte Rechnungen. Dann kann der PDF-Node
+        keinen Text finden. Er hat nichts falsch gemacht, es gibt schlicht keinen Text. Für solche Fälle brauchst du
+        OCR, z. B. einen spezialisierten Dienst oder einen KI-/Dokumenten-Parser mit Bildverständnis. Dieses Kapitel
+        behandelt zuerst maschinenlesbare PDFs. Deine selbst exportierte Testrechnung gehört dazu.
       </div>
 
       <div class="callout callout--info">
         <b class="t">Wo das PDF währenddessen liegt</b>
-        In n8n 1.x lagen Binärdaten während der Ausführung standardmäßig im Arbeitsspeicher. Bei mehreren großen Anhängen
+        In n8n 1.x lagen Dateien während der Ausführung standardmäßig im Arbeitsspeicher. Bei mehreren großen Anhängen
         ging der Prozess dabei gern in die Knie. Mit n8n 2.0 ist dieser In-Memory-Modus weggefallen. Seitdem wählt n8n
-        automatisch: im normalen Betrieb <code>filesystem</code>, im Queue Mode <code>database</code>. Gesteuert wird das
-        über <code>N8N_DEFAULT_BINARY_DATA_MODE</code>. Für dich heißt das zweierlei. Große PDF-Anhänge sprengen dir den
-        Speicher nicht mehr so schnell. Dafür braucht deine Instanz genug Platz auf der Platte: Ist sie voll, scheitert
-        schon der Trigger beim Ablegen des Anhangs, und der Extract-Node bekommt gar nichts zu lesen.
+        automatisch: im normalen Betrieb <code>filesystem</code> (Festplatte), im Queue Mode <code>database</code>
+        (Datenbank). Gesteuert wird das über die Umgebungsvariable <code>N8N_DEFAULT_BINARY_DATA_MODE</code>. Für dich
+        heißt das zweierlei. Große PDF-Anhänge sprengen dir den Speicher nicht mehr so schnell. Dafür braucht deine
+        Instanz genug Platz auf der Platte: Ist sie voll, scheitert schon der Trigger beim Ablegen des Anhangs, und der
+        Extract-Node bekommt gar nichts zu lesen.
       </div>
 
       <h2>Schritt 4: Rechnungstext säubern</h2>
-      <p>Der extrahierte Text enthält oft Zeilenumbrüche, mehrere Leerzeichen und Seitentrenner. Vor Regeln und KI machen wir
-        daraus einen kompakten Text.</p>
+      <p>Der extrahierte Text enthält oft Zeilenumbrüche, doppelte Leerzeichen und Seitentrenner. Bevor Regeln und KI
+        damit arbeiten, machen wir daraus einen kompakten Text in einer Zeile.</p>
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
-          <p>Ziehe von <strong>PDF-Text lesen</strong> eine Linie ins Leere, suche <code>code</code> und wähle
-            <strong>Code</strong>.</p></li>
+          <p>Ziehe vom Extract-Node (<strong>PDF-Text lesen</strong>) eine Linie ins Leere, suche <code>code</code> und
+            wähle <strong>Code</strong>.</p></li>
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>Rechnungstext vorbereiten</code>.</p></li>
         <li><h4>Modus wählen</h4>
-          <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
+          <p>Stelle das Feld <strong>Mode</strong> auf <strong>Run Once for Each Item</strong>. Der Code läuft dann für
+            jedes Item einzeln.</p></li>
         <li><h4>Code einfügen</h4>
-          <p>Füge diesen Code ein. Der Extract-Node schreibt seinen Text nach <code>$json.text</code>; die beiden anderen
-            Feldnamen in der ersten Zeile sind nur ein Netz für den Fall, dass du später OCR oder einen anderen Node
-            davorhängst.</p></li>
+          <p>Lösche den Beispielcode im Editor und füge diesen Code ein. Der Extract-Node schreibt seinen Text nach
+            <code>$json.text</code>; die beiden anderen Feldnamen in der ersten Zeile sind nur ein Sicherheitsnetz für
+            den Fall, dass du später OCR oder einen anderen Node davorhängst.</p></li>
       </ol>
 
       <div class="code">
@@ -319,6 +340,9 @@ return {
 };</pre>
       </div>
 
+      <p>Klicke danach auf <strong>▶ Schritt ausführen</strong>. Im Output siehst du jetzt zwei neue Felder:
+        <code>pdf_text</code> mit dem aufgeräumten Text und <code>text_length</code> mit seiner Länge in Zeichen.</p>
+
       <div class="callout callout--pareto">
         <b class="t">Textlänge ist ein Qualitätsindikator</b>
         Wenn <code>text_length</code> sehr klein ist, stimmt die Extraktion wahrscheinlich nicht. Prüfe solche Fälle manuell,
@@ -326,18 +350,22 @@ return {
       </div>
 
       <h2>Schritt 5: Regel-Extraktion bauen</h2>
-      <p>Jetzt extrahieren wir die wichtigsten Felder mit einfachen Mustern. Das ist nicht „magisch“, aber gerade deshalb
-        gut prüfbar.</p>
+      <p>Jetzt suchen wir die wichtigsten Felder mit einfachen Textmustern heraus. Der Code sucht z. B. nach dem Wort
+        „Rechnungsdatum:“ und nimmt, was dahinter steht. Keine Magie, und genau das ist der Vorteil: Du kannst jede
+        Fundstelle nachvollziehen.</p>
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
-          <p>Hänge hinter <strong>Rechnungstext vorbereiten</strong> einen Code-Node.</p></li>
+          <p>Ziehe von <strong>Rechnungstext vorbereiten</strong> eine Linie ins Leere und wähle wieder
+            <strong>Code</strong>.</p></li>
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>Regel-Extraktion</code>.</p></li>
         <li><h4>Modus wählen</h4>
-          <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
+          <p>Stelle <strong>Mode</strong> wieder auf <strong>Run Once for Each Item</strong>.</p></li>
         <li><h4>Code einfügen</h4>
-          <p>Füge diesen Code ein:</p></li>
+          <p>Lösche den Beispielcode und füge diesen Code ein. Du musst ihn nicht Zeile für Zeile verstehen. Wichtig ist
+            die Idee: Für jedes Feld gibt es ein Suchmuster, und am Ende zählt der Code, wie viele der vier Pflichtfelder
+            gefunden wurden. Daraus entsteht der Wert <code>confidence</code> (Sicherheit von 0 bis 1).</p></li>
       </ol>
 
       <div class="code">
@@ -397,7 +425,8 @@ return {
           <p>Klicke <strong>▶ Schritt ausführen</strong>.</p></li>
         <li><h4>Ergebnis prüfen</h4>
           <p>Im Output sollte <code>invoice.total_gross</code> den Wert <code>952</code> enthalten und
-            <code>needs_ai</code> sollte <code>false</code> sein.</p></li>
+            <code>needs_ai</code> sollte <code>false</code> sein. Wenn das stimmt, haben die Regeln alle vier
+            Pflichtfelder erkannt. Deine Testrechnung braucht dann keine KI.</p></li>
       </ol>
 
       <div class="callout callout--warn">
@@ -407,20 +436,23 @@ return {
       </div>
 
       <h2>Schritt 6: Sicher genug? IF-Node einbauen</h2>
-      <p>Die Regeln bekommen einen Score. Alles mit <code>confidence &gt;= 0.75</code> speichern wir direkt. Alles darunter
-        geht in den KI-Fallback.</p>
+      <p>Jetzt entscheidet der Workflow selbst, welchen Weg ein Item nimmt. Alles mit <code>confidence &gt;= 0.75</code>
+        (also mindestens drei von vier Feldern erkannt) speichern wir direkt. Alles darunter geht in den KI-Fallback.</p>
 
       <ol class="steps">
         <li><h4>IF-Node anhängen</h4>
           <p>Ziehe von <strong>Regel-Extraktion</strong> eine Linie ins Leere, suche <code>if</code> und wähle
-            <strong>If</strong>. Im Node-Panel steht er so geschrieben, im Buch nennen wir ihn weiter IF-Node.</p></li>
+            <strong>If</strong>, den Verzweigungs-Node aus Kapitel 9. Im Node-Panel steht er so geschrieben, im Buch
+            nennen wir ihn weiter IF-Node.</p></li>
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>Regeln sicher?</code>.</p></li>
         <li><h4>Bedingung setzen</h4>
-          <p>Trage links <code>{{ $json.confidence }}</code> ein. Stelle den Datentyp auf <strong>Number</strong>, wähle
-            als Operator <strong>is greater than or equal to</strong> und trage rechts <code>0.75</code> ein.</p></li>
+          <p>Trage in das linke Feld der Bedingung <code>{{ $json.confidence }}</code> ein. Stelle den Datentyp auf
+            <strong>Number</strong> (Zahl). Wähle als Operator <strong>is greater than or equal to</strong> („ist größer
+            oder gleich“) und trage rechts <code>0.75</code> ein.</p></li>
         <li><h4>Ausgänge merken</h4>
-          <p>Der true-Ausgang ist der direkte Regelweg. Der false-Ausgang geht später zur KI.</p></li>
+          <p>Der Node hat jetzt zwei Ausgänge. Der obere (<strong>true</strong>) ist der direkte Regelweg: Die Regeln
+            waren sicher genug. Der untere (<strong>false</strong>) geht später zur KI.</p></li>
       </ol>
 
       <figure class="figure">
@@ -453,30 +485,33 @@ return {
       </figure>
 
       <h2>Schritt 7: Regel-Ergebnis in die Tabelle schreiben</h2>
-      <p>Der true-Ausgang des IF-Nodes ist der einfache Fall. Er enthält schon ein strukturiertes Objekt.</p>
+      <p>Der true-Ausgang des IF-Nodes ist der einfache Fall: Die Daten sind schon sauber sortiert und können direkt in
+        die Tabelle.</p>
 
       <ol class="steps">
         <li><h4>Tabelle vorbereiten</h4>
-          <p>Lege eine Tabelle <code>Rechnungseingang</code> mit diesen Spalten an:
-            <code>supplier</code>, <code>invoice_number</code>, <code>invoice_date</code>, <code>due_date</code>,
-            <code>total_gross</code>, <code>currency</code>, <code>iban</code>, <code>method</code>,
-            <code>confidence</code>, <code>review_status</code>.</p></li>
+          <p>Lege in Google Sheets eine Tabelle <code>Rechnungseingang</code> an. Schreibe diese Spaltennamen in die
+            erste Zeile: <code>supplier</code>, <code>invoice_number</code>, <code>invoice_date</code>,
+            <code>due_date</code>, <code>total_gross</code>, <code>currency</code>, <code>iban</code>,
+            <code>method</code>, <code>confidence</code>, <code>review_status</code>.</p></li>
         <li><h4>Google-Sheets-Node anhängen</h4>
-          <p>Ziehe vom true-Ausgang von <strong>Regeln sicher?</strong> eine Linie ins Leere und wähle
-            <strong>Google Sheets</strong>.</p></li>
+          <p>Ziehe vom oberen (true-)Ausgang von <strong>Regeln sicher?</strong> eine Linie ins Leere und wähle
+            <strong>Google Sheets</strong>. Wähle deine Credential aus.</p></li>
         <li><h4>Aktion wählen</h4>
           <p>Setze <strong>Resource</strong> auf <strong>Sheet Within Document</strong> und <strong>Operation</strong> auf
-            <strong>Append Row</strong>. Beide Operationen stehen im selben Node: <strong>Append Row</strong> hängt immer
-            eine neue Zeile an, <strong>Append or Update Row</strong> überschreibt eine vorhandene Zeile, wenn der
-            Schlüssel schon da ist. Für den ersten Durchlauf ist Anhängen ehrlicher, weil du jeden Testlauf einzeln
-            siehst.</p></li>
+            <strong>Append Row</strong> („Zeile anhängen“). <strong>Append or Update Row</strong> würde dagegen
+            eine vorhandene Zeile überschreiben, wenn der Schlüssel schon da ist. Für den ersten Durchlauf ist Anhängen
+            ehrlicher, weil du jeden Testlauf als eigene Zeile siehst. Wähle darunter dein Dokument und das
+            Tabellenblatt aus.</p></li>
         <li><h4>Felder zuordnen</h4>
-          <p>Setze die Spalten mit Expressions, z. B. <code>{{ $json.invoice.supplier }}</code>,
+          <p>Fülle die Spaltenfelder mit Expressions, z. B. <code>{{ $json.invoice.supplier }}</code>,
             <code>{{ $json.invoice.invoice_number }}</code> und <code>{{ $json.invoice.total_gross }}</code>.</p></li>
         <li><h4>Review-Status setzen</h4>
-          <p>Setze <code>review_status</code> auf <code>auto_rule_ok</code>.</p></li>
+          <p>Trage in die Spalte <code>review_status</code> den festen Text <code>auto_rule_ok</code> ein. So siehst du
+            später in der Tabelle, dass diese Zeile automatisch über den Regelweg kam.</p></li>
         <li><h4>Schritt ausführen</h4>
-          <p>Die Testrechnung sollte als eine Zeile in deiner Tabelle erscheinen.</p></li>
+          <p>Klicke <strong>▶ Schritt ausführen</strong> und öffne deine Tabelle. Die Testrechnung sollte dort als neue
+            Zeile stehen.</p></li>
       </ol>
 
       <div class="callout callout--pareto">
@@ -486,33 +521,36 @@ return {
       </div>
 
       <h2>Schritt 8: KI-Fallback für schwierige Rechnungen</h2>
-      <p>Jetzt bauen wir den zweiten Weg. Er bekommt denselben PDF-Text, soll aber strukturierte Felder liefern, auch wenn
-        die Begriffe anders heißen.</p>
+      <p>Jetzt bauen wir den zweiten Weg. Er bekommt denselben PDF-Text. Die KI soll daraus dieselben Felder herausholen,
+        auch wenn auf der Rechnung andere Begriffe stehen, etwa „Belegnummer“ statt „Rechnungsnummer“.</p>
 
       <ol class="steps">
         <li><h4>Information Extractor anhängen</h4>
-          <p>Ziehe vom false-Ausgang von <strong>Regeln sicher?</strong> eine Linie ins Leere, suche
-            <code>information extractor</code> und wähle <strong>Information Extractor</strong>.</p></li>
+          <p>Ziehe vom unteren (false-)Ausgang von <strong>Regeln sicher?</strong> eine Linie ins Leere, suche
+            <code>information extractor</code> und wähle <strong>Information Extractor</strong>. Dieser KI-Node ist
+            darauf spezialisiert, aus freiem Text feste Felder zu machen.</p></li>
         <li><h4>Modell verbinden</h4>
           <p>Unter dem Node hängt genau ein Anschluss, und er heißt <strong>Model</strong>. Nicht „Chat Model“ wie beim AI
             Agent. Klicke auf das <span class="kbd">+</span> darunter und wähle <strong>OpenAI Chat Model</strong> oder
             <strong>Anthropic Chat Model</strong>. Nutze eine Test-Credential. Die Modellliste im Feld <strong>Model</strong>
             lädt n8n aus deinem Konto; für Rechnungsköpfe reicht ein kleines, günstiges Modell.</p></li>
         <li><h4>Textfeld setzen</h4>
-          <p>Setze das Feld <strong>Text</strong> auf Expression: <code>{{ $json.pdf_text }}</code>.</p></li>
+          <p>Öffne wieder den Information Extractor. Stelle das Feld <strong>Text</strong> auf <strong>Expression</strong>
+            um und trage <code>{{ $json.pdf_text }}</code> ein. Das ist der Text, den die KI lesen soll.</p></li>
         <li><h4>Schema definieren</h4>
-          <p>Das Feld <strong>Schema Type</strong> hat drei Optionen: <strong>From Attribute Descriptions</strong>
-            (Voreinstellung), <strong>Generate From JSON Example</strong> und <strong>Define using JSON Schema</strong>.
-            Wähle <strong>Define using JSON Schema</strong> und trage unten im Feld <strong>Input Schema</strong> das
-            Schema ein.</p></li>
+          <p>Mit einem Schema sagst du der KI, welche Felder du zurückhaben willst. Das Feld <strong>Schema Type</strong>
+            hat drei Optionen: <strong>From Attribute Descriptions</strong> (Voreinstellung),
+            <strong>Generate From JSON Example</strong> und <strong>Define using JSON Schema</strong>.
+            Wähle <strong>Define using JSON Schema</strong>. Darunter erscheint das Feld <strong>Input Schema</strong>.
+            Trage dort das Schema aus dem nächsten Kasten ein.</p></li>
       </ol>
 
       <div class="callout callout--info">
         <b class="t">Warum nicht „Generate From JSON Example“?</b>
         Aus einem JSON-Beispiel leitet n8n nur die Struktur und die Datentypen ab. Deine deutschen Beschreibungen hinter
-        den Feldnamen fallen dabei unter den Tisch, und jedes Feld wird zu dem Typ, den dein Beispielwert gerade hat.
-        Ein echtes JSON Schema behält beides: <code>description</code> pro Feld und einen sauberen <code>type</code>.
-        Genau davon lebt die Extraktion.
+        den Feldnamen fallen dabei unter den Tisch. Ein echtes JSON Schema behält beides: eine <code>description</code>
+        (Beschreibung) pro Feld und einen sauberen <code>type</code> (Datentyp). Genau diese Beschreibungen sagen der KI,
+        was sie suchen soll.
       </div>
 
       <div class="code">
@@ -558,23 +596,26 @@ return {
       <div class="callout callout--warn">
         <b class="t">KI ersetzt keine Validierung</b>
         Auch wenn der KI-Node ein schönes JSON liefert: Betrag, Datum und Rechnungsnummer müssen danach geprüft werden.
-        KI kann bei ähnlichen Beträgen den falschen nehmen oder aus einem unklaren Layout zu selbstsicher schließen.
-        Der Information Extractor bringt seinen Parser übrigens schon mit. Einen eigenen Structured Output Parser als
-        Sub-Node hängst du hier also nicht an; den brauchst du nur bei der Basic LLM Chain und beim AI Agent.
+        KI kann bei ähnlichen Beträgen den falschen nehmen oder bei einem unklaren Layout zu selbstsicher wirken.
+        Übrigens: Der Information Extractor wandelt die KI-Antwort schon selbst in JSON um. Einen eigenen Structured
+        Output Parser als Sub-Node hängst du hier also nicht an; den brauchst du nur bei der Basic LLM Chain und beim
+        AI Agent.
       </div>
 
       <h2>Schritt 9: KI-Ergebnis normalisieren</h2>
-      <p>Der Information Extractor legt sein Ergebnis im Feld <code>output</code> ab, nicht flach im Item. Wir machen daraus
-        dasselbe Format wie beim Regelweg. Der Code unten fängt zusätzlich den Fall ab, dass ein Modell den JSON-Block als
+      <p>Normalisieren heißt: Wir bringen das KI-Ergebnis in dasselbe Format wie das Regel-Ergebnis. Der Information
+        Extractor legt seine Felder nämlich im Unterfeld <code>output</code> ab, nicht direkt im Item. Der Code unten
+        packt sie aus, prüft die Pflichtfelder und fängt zusätzlich den Fall ab, dass ein Modell das JSON als
         Zeichenkette zurückgibt.</p>
 
       <ol class="steps">
         <li><h4>Code-Node anhängen</h4>
-          <p>Hänge hinter den KI-Node einen Code-Node und nenne ihn <code>KI-Ergebnis prüfen</code>.</p></li>
+          <p>Ziehe vom Information Extractor eine Linie ins Leere, wähle <strong>Code</strong> und nenne den Node
+            <code>KI-Ergebnis prüfen</code>.</p></li>
         <li><h4>Modus wählen</h4>
-          <p>Setze <strong>Run Once for Each Item</strong>.</p></li>
+          <p>Stelle <strong>Mode</strong> auf <strong>Run Once for Each Item</strong>.</p></li>
         <li><h4>Code einfügen</h4>
-          <p>Füge diesen Code ein:</p></li>
+          <p>Lösche den Beispielcode und füge diesen Code ein:</p></li>
       </ol>
 
       <div class="code">
@@ -624,22 +665,24 @@ return {
 };</pre>
       </div>
 
-      <h2>Schritt 10: Wenn etwas schiefgeht, Review-Zweig für unsichere Fälle</h2>
-      <p>Der KI-Weg darf nicht automatisch speichern, wenn wichtige Felder fehlen. Dafür bauen wir einen zweiten IF-Node.</p>
+      <h2>Schritt 10: Review-Zweig für unsichere Fälle</h2>
+      <p>Der KI-Weg darf nicht automatisch speichern, wenn wichtige Felder fehlen. Dafür bauen wir einen zweiten IF-Node:
+        Unsichere Fälle gehen als Nachricht an einen Menschen, nur sichere Fälle landen in der Tabelle.</p>
 
       <ol class="steps">
         <li><h4>IF-Node anhängen</h4>
-          <p>Hänge hinter <strong>KI-Ergebnis prüfen</strong> einen IF-Node.</p></li>
+          <p>Ziehe von <strong>KI-Ergebnis prüfen</strong> eine Linie ins Leere und wähle wieder <strong>If</strong>.</p></li>
         <li><h4>Node benennen</h4>
           <p>Nenne ihn <code>Manuelle Prüfung nötig?</code>.</p></li>
         <li><h4>Bedingung setzen</h4>
-          <p>Trage links <code>{{ $json.needs_review }}</code> ein, stelle den Datentyp auf <strong>Boolean</strong> und
-            wähle als Operator <strong>is true</strong>.</p></li>
+          <p>Trage links <code>{{ $json.needs_review }}</code> ein. Stelle den Datentyp auf <strong>Boolean</strong>
+            (wahr/falsch) und wähle als Operator <strong>is true</strong>.</p></li>
         <li><h4>true-Ausgang an Slack hängen</h4>
-          <p>Verbinde den true-Ausgang mit Slack. Kanal: <code>#rechnung-review-test</code>.</p></li>
+          <p>Ziehe vom oberen (true-)Ausgang eine Linie ins Leere und wähle <strong>Slack</strong>. Wähle deine
+            Credential und als Kanal <code>#rechnung-review-test</code>.</p></li>
         <li><h4>Slack-Text setzen</h4>
-          <p>Schalte <strong>Message Text</strong> auf <strong>Expression</strong> und trage die Nachricht von unten
-            ein.</p></li>
+          <p>Schalte das Feld <strong>Message Text</strong> auf <strong>Expression</strong> um und trage die Nachricht
+            aus dem nächsten Kasten ein.</p></li>
       </ol>
 
       <div class="code">
@@ -654,10 +697,12 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
 
       <ol class="steps" style="counter-reset: st 5;">
         <li><h4>false-Ausgang speichern</h4>
-          <p>Verbinde den false-Ausgang mit deinem Google-Sheets-Node oder dupliziere den Node aus Schritt 7.</p></li>
+          <p>Der untere (false-)Ausgang bedeutet: Die KI war sicher genug. Verbinde ihn mit deinem Google-Sheets-Node
+            aus Schritt 7. Oder dupliziere den Node, wenn du getrennte Speicher-Nodes übersichtlicher findest.</p></li>
         <li><h4>Review-Status setzen</h4>
-          <p>Setze <code>review_status</code> für den KI-Erfolg auf <code>auto_ai_ok</code>. Für Slack-Fälle wird nichts
-            automatisch gespeichert oder nur mit <code>manual_review</code>, wenn du bewusst ein Review-Log willst.</p></li>
+          <p>Setze <code>review_status</code> für diesen KI-Erfolg auf <code>auto_ai_ok</code>. Für die Slack-Fälle wird
+            nichts automatisch gespeichert, oder nur mit dem Status <code>manual_review</code>, wenn du bewusst ein
+            Review-Log willst.</p></li>
       </ol>
 
       <figure class="figure">
@@ -690,21 +735,26 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
       </figure>
 
       <h2>Schritt 11: Konkrete Testfälle durchführen</h2>
-      <p>Ein einzelner Erfolgstest reicht hier nicht. Du brauchst bewusst gute, schwierige und schlechte Fälle.</p>
+      <p>Ein einzelner Erfolgstest reicht hier nicht. Du brauchst bewusst gute, schwierige und schlechte Fälle. Denke bei
+        jedem Test an eine frische, ungelesene Testmail.</p>
 
       <ol class="steps">
         <li><h4>Klare Testrechnung senden</h4>
-          <p>Sende die Demo-Rechnung aus Schritt 1. Erwartung: Regelweg, Tabelle, <code>review_status = auto_rule_ok</code>.</p></li>
+          <p>Sende die Demo-Rechnung aus Schritt 1. Erwartung: Regelweg, neue Zeile in der Tabelle,
+            <code>review_status = auto_rule_ok</code>.</p></li>
         <li><h4>Ungewöhnliche Rechnung senden</h4>
           <p>Ändere die Begriffe im PDF, z. B. <code>Belegnummer</code> statt <code>Rechnung Nr.</code> und
-            <code>zu zahlen</code> statt <code>Gesamtbetrag</code>. Erwartung: Regelweg scheitert teilweise, KI-Fallback
-            erkennt genug Felder.</p></li>
+            <code>zu zahlen</code> statt <code>Gesamtbetrag</code>. Erwartung: Die Regeln finden zu wenig, der
+            KI-Fallback springt ein und erkennt genug Felder.</p></li>
         <li><h4>Schlechte Rechnung senden</h4>
-          <p>Erstelle ein PDF als Screenshot oder lösche wichtige Felder. Erwartung: Slack-Review, keine blinde Speicherung.</p></li>
+          <p>Erstelle ein PDF aus einem Screenshot oder lösche wichtige Felder. Erwartung: Nachricht im Slack-Kanal,
+            keine blinde Speicherung.</p></li>
         <li><h4>Executions öffnen</h4>
-          <p>Prüfe bei jedem Test, welchen Weg das Item genommen hat: Regeln, KI-Fallback oder Review.</p></li>
+          <p>Öffne nach jedem Test die Liste <strong>Executions</strong> (die Ausführungsliste aus Kapitel 12). Klicke
+            den Lauf an und verfolge, welchen Weg das Item genommen hat: Regeln, KI-Fallback oder Review.</p></li>
         <li><h4>Workflow erst danach publishen</h4>
-          <p>Klicke nur dann auf <strong>Publish</strong>, wenn alle drei Fälle erwartungsgemäß laufen.</p></li>
+          <p>Klicke erst dann oben rechts auf <strong>Publish</strong>, wenn alle drei Fälle erwartungsgemäß laufen.
+            Ab dann läuft der Workflow von selbst, sobald eine passende Mail ankommt.</p></li>
       </ol>
 
       <div class="callout callout--pareto">
@@ -745,8 +795,8 @@ Fehlende Felder: {{ $json.missing.join(', ') || 'keine' }}</pre>
         5) Klare Rechnung, ungewöhnliche Rechnung, schlechte/gescannte Rechnung.
       </div>
 
-      <p>Dein Workflow wertet Dokumente jetzt aus, statt sie nur weiterzureichen, und er sagt dazu, wie sicher er sich ist.
-        Im nächsten Projekt verbinden wir mehrere dieser Bausteine zu einer größeren Content-Pipeline.</p>
+      <p>Geschafft: Dein Workflow wertet Dokumente jetzt aus, statt sie nur weiterzureichen. Und er sagt dazu, wie sicher
+        er sich ist. Im nächsten Projekt verbinden wir mehrere dieser Bausteine zu einer größeren Content-Pipeline.</p>
 
     </article>
     <nav id="prevnext"></nav>

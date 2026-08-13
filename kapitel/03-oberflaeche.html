@@ -17,7 +17,7 @@
       <div class="chap-eyebrow"><span class="knum">3</span> Grundlagen</div>
       <h1 class="chap-title">Die Oberfläche im Detail</h1>
       <p class="chap-lede">Dieses Kapitel ist deine Landkarte des n8n-Editors. Danach erkennst du jeden Bereich und
-        jeden wichtigen Knopf sofort wieder. Genau das brauchst du, um in Kapitel 4 zügig zu bauen.</p>
+        jeden wichtigen Knopf wieder – und in Kapitel 4 baust du, statt zu suchen.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 22 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Einstieg</span>
@@ -25,9 +25,11 @@
       </div>
 
       <h2>Die fünf Bereiche im Überblick</h2>
-      <p>Der Editor besteht aus fünf Bereichen. Präge sie dir an dieser einen Abbildung ein. Danach gehen wir jeden
-        einzeln durch. Eine Ebene darüber liegt die Seitenleiste mit <strong>Overview</strong>, <strong>Personal</strong>,
-        deinen Projekten und den <strong>Templates</strong>. Dorthin kommst du jederzeit über das n8-Logo oben links.</p>
+      <p>Der Editor ist der Bildschirm, auf dem du Workflows baust. Präge dir seine fünf Bereiche an dieser einen
+        Abbildung ein; danach gehen wir jeden einzeln durch. Eine Ebene über dem Editor liegt außerdem die
+        Seitenleiste. Dort findest du <strong>Overview</strong> (die Übersicht über alles), <strong>Personal</strong>
+        (deinen persönlichen Bereich), deine Projekte und die <strong>Templates</strong> (fertige Workflow-Vorlagen).
+        Dorthin kommst du jederzeit: Klicke oben links auf das n8-Logo.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -75,7 +77,7 @@
       <hr>
 
       <h2>A: Die Top-Toolbar</h2>
-      <p>Die Leiste ganz oben steuert den Workflow als Ganzes. Von links nach rechts:</p>
+      <p>Die Leiste ganz oben steuert den Workflow als Ganzes. Wir gehen sie von links nach rechts durch:</p>
 
       <figure class="figure">
         <div class="frame">
@@ -99,42 +101,46 @@
 
       <table class="btable">
         <tbody>
-          <tr><td>n8-Logo</td><td>Zurück zur Übersicht, im Original <strong>Overview</strong>. Dort findest du alle Workflows, Credentials und Ausführungen, auf die du Zugriff hast. Die Seitenleiste dieser Seite führt weiter zu Personal, zu deinen Projekten und zu den Templates.</td></tr>
-          <tr><td>Persönlich / Projekt</td><td>In welchem Bereich (Projekt) der Workflow liegt. Allein arbeitest du in „Persönlich“, in der englischen Oberfläche <strong>Personal</strong>.</td></tr>
-          <tr><td>Workflow-Name</td><td>Klick darauf, um umzubenennen. <strong>Benenne früh sinnvoll.</strong> Zwanzig Workflows namens „Unbenannt“ sind die Hölle.</td></tr>
-          <tr><td>Tags</td><td>Frei vergebbare Etiketten zum Sortieren vieler Workflows.</td></tr>
-          <tr><td>Auto-Save-Status</td><td>Zeigt, ob dein Draft gespeichert ist. n8n sichert Bearbeitungen von selbst, meist innerhalb von 1 bis 5 Sekunden. Einen eigenen Save-Knopf gibt es dafür nicht mehr.</td></tr>
-          <tr><td>Publish</td><td>Veröffentlicht die getestete Workflow-Version für Production-Trigger. Der kleine Pfeil daneben führt zu <strong>Unpublish</strong>.</td></tr>
-          <tr><td>Status / Versionen</td><td>Zeigt, ob gerade eine Version live ist und ob dein Draft davon abweicht. Die Liste der gespeicherten Versionen öffnest du über das Icon <strong>Workflow history</strong>.</td></tr>
+          <tr><td>n8-Logo</td><td>Bringt dich zurück zur Übersicht, im Original <strong>Overview</strong>. Dort siehst du alle Workflows, Credentials (gespeicherte Zugangsdaten für andere Dienste) und Ausführungen, auf die du Zugriff hast. Von dort führt die Seitenleiste weiter zu Personal, zu deinen Projekten und zu den Templates.</td></tr>
+          <tr><td>Persönlich / Projekt</td><td>Zeigt, in welchem Bereich (Projekt) der Workflow liegt. Arbeitest du allein, ist das „Persönlich“, in der englischen Oberfläche <strong>Personal</strong>.</td></tr>
+          <tr><td>Workflow-Name</td><td>Klicke direkt auf den Namen, um ihn zu ändern. Benenne früh sinnvoll. Zwanzig Workflows namens „Unbenannt“ sind die Hölle.</td></tr>
+          <tr><td>Tags</td><td>Frei vergebbare Etiketten. Damit sortierst du später viele Workflows.</td></tr>
+          <tr><td>Auto-Save-Status</td><td>Zeigt, ob dein Draft (Entwurf) gespeichert ist. n8n sichert deine Bearbeitungen von selbst, meist innerhalb von 1 bis 5 Sekunden. Einen eigenen Save-Knopf gibt es dafür nicht mehr.</td></tr>
+          <tr><td>Publish</td><td>Veröffentlicht die getestete Workflow-Version. Erst danach reagieren die Trigger im echten Betrieb (Production). Der kleine Pfeil daneben führt zu <strong>Unpublish</strong>, also dem Zurücknehmen der Veröffentlichung.</td></tr>
+          <tr><td>Status / Versionen</td><td>Zeigt, ob gerade eine Version live ist und ob dein Draft davon abweicht. Die Liste aller gespeicherten Versionen öffnest du über das Icon <strong>Workflow history</strong> (Versionsverlauf).</td></tr>
           <tr><td>Teilen / ⋯-Menü</td><td>Workflow teilen (<strong>Share</strong>), exportieren, importieren, duplizieren, löschen oder unpublishen.</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--warn">
         <b class="t">Der wichtigste Unterschied: Draft vs. Published</b>
-        <p style="margin:0 0 8px"><strong>Draft:</strong> Deine Änderungen sind gespeichert, aber noch nicht produktiv. Zum Bauen genau richtig.</p>
-        <p style="margin:0"><strong>Published:</strong> Diese Version läuft in Produktion. Schedules feuern, Production-Webhooks antworten
-        und App-Trigger nehmen echte Ereignisse an. Erst veröffentlichen, wenn der Workflow getestet ist.</p>
+        <p style="margin:0 0 8px"><strong>Draft (Entwurf):</strong> Deine Änderungen sind gespeichert, aber noch nicht produktiv. Zum Bauen und Ausprobieren genau richtig.</p>
+        <p style="margin:0"><strong>Published (veröffentlicht):</strong> Diese Version läuft in Produktion, also im echten Betrieb. Schedules (Zeitpläne) feuern, Production-Webhooks antworten
+        und App-Trigger nehmen echte Ereignisse an. Veröffentliche erst, wenn der Workflow getestet ist.</p>
       </div>
 
       <h2>Autosave, Publish und Unpublish</h2>
-      <p>n8n speichert Änderungen im Editor automatisch als Draft. Das ist bequem, aber didaktisch gefährlich:
-        gespeichert heißt noch nicht produktiv. Produktiv wird erst die veröffentlichte Version. In n8n 2.0 gab es dafür
-        anfangs noch einen eigenen <strong>Save</strong>-Knopf; seit dem Autosave im Januar 2026 ist er verschwunden.</p>
-      <p>Veröffentlichen kannst du mit dem <strong>Publish</strong>-Knopf oder mit <span class="kbd">Shift</span> +
+      <p>n8n speichert deine Änderungen im Editor automatisch als Draft. Bequem, aber mit einer Falle:
+        Gespeichert heißt noch nicht produktiv. In diese Falle tappt am Anfang fast jeder – der Workflow ist fertig
+        getestet, der Zeitplan feuert nachts trotzdem nicht, weil nie jemand auf Publish geklickt hat. Produktiv wird
+        erst die veröffentlichte Version. In n8n 2.0 gab es
+        anfangs noch einen eigenen <strong>Save</strong>-Knopf; seit dem Autosave im Januar 2026 ist er verschwunden.
+        Suche also nicht danach, es fehlt nichts.</p>
+      <p>Zum Veröffentlichen klickst du oben rechts auf <strong>Publish</strong> oder drückst <span class="kbd">Shift</span> +
         <span class="kbd">P</span>. Willst du einen Workflow wieder aus dem Betrieb nehmen, nutzt du
-        <strong>Unpublish</strong>. Den erreichst du über den Pfeil neben Publish, über die Workflow-Liste, über die
-        Versionshistorie oder mit <span class="kbd">Strg/⌘</span> + <span class="kbd">U</span>.</p>
+        <strong>Unpublish</strong>. Den erreichst du auf vier Wegen: über den kleinen Pfeil neben Publish, über die
+        Workflow-Liste, über die Versionshistorie oder mit <span class="kbd">Strg/⌘</span> + <span class="kbd">U</span>.</p>
 
       <hr>
 
       <h2>B: Die Tabs Editor und Ausführungen</h2>
-      <p>Direkt unter der Toolbar wechselst du zwischen zwei Ansichten desselben Workflows:</p>
+      <p>Direkt unter der Toolbar liegen zwei Reiter (Tabs). Mit ihnen wechselst du zwischen zwei Ansichten desselben
+        Workflows:</p>
       <ul>
-        <li><strong>Editor</strong> – die Arbeitsfläche zum Bauen (hier verbringst du 95 % der Zeit).</li>
-        <li><strong>Ausführungen (Executions)</strong> – die Historie: jeder vergangene Durchlauf mit Ergebnis,
-          Zeitstempel und, wenn etwas schiefging, der genauen Stelle, an der es hakte. Dein wichtigstes
-          Debugging-Werkzeug.</li>
+        <li><strong>Editor</strong> – die Arbeitsfläche zum Bauen. Hier verbringst du 95 % der Zeit.</li>
+        <li><strong>Ausführungen (Executions)</strong> – die Historie: jeder vergangene Durchlauf mit Ergebnis und
+          Zeitstempel. Ging etwas schief, siehst du hier die genaue Stelle, an der es hakte. Das ist dein wichtigstes
+          Werkzeug bei der Fehlersuche (Debugging).</li>
       </ul>
 
       <figure class="figure">
@@ -161,8 +167,8 @@
       <hr>
 
       <h2>C: Der Canvas</h2>
-      <p>Die große, gepunktete Fläche ist deine Werkbank. Hier ordnest, verbindest und testest du Nodes. Die wichtigsten
-        Gesten sitzen schnell:</p>
+      <p>Die große, gepunktete Fläche in der Mitte ist deine Werkbank. Hier ordnest, verbindest und testest du Nodes.
+        Diese Handgriffe brauchst du ständig – sie sitzen nach kurzer Zeit von allein:</p>
 
       <table class="btable">
         <thead><tr><th>Aktion</th><th>So geht's</th></tr></thead>
@@ -180,13 +186,15 @@
         </tbody>
       </table>
 
-      <p>Die Canvas Groups sind neu in n8n 2.x und machen lange Workflows wieder lesbar: Eine Gruppe lässt sich zuklappen,
-        umbenennen (Doppelklick auf den Namen) und als Ganzes verschieben. Nicht jede Auswahl lässt sich gruppieren. n8n
-        verlangt, dass die markierten Nodes eine zusammenhängende Kette bilden, dass kein Trigger dabei ist und dass keiner
-        der Nodes schon in einer anderen Gruppe steckt. Passt etwas davon nicht, bleibt <b>Group nodes</b> ausgegraut.</p>
+      <p>Die Canvas Groups (Gruppen) sind neu in n8n 2.x. Sie machen lange Workflows wieder lesbar: Eine Gruppe lässt
+        sich zuklappen, umbenennen (Doppelklick auf den Namen) und als Ganzes verschieben. Nicht jede Auswahl lässt sich
+        gruppieren. n8n verlangt drei Dinge: Die markierten Nodes bilden eine zusammenhängende Kette, kein Trigger ist
+        dabei, und keiner der Nodes steckt schon in einer anderen Gruppe. Passt etwas davon nicht, bleibt
+        <b>Group nodes</b> ausgegraut. Das ist kein Fehler. Prüfe einfach die drei Bedingungen.</p>
 
       <h2>D: Anatomie eines Nodes</h2>
-      <p>Jeder Node sieht nach demselben Schema aus. Wenn du diese Teile kennst, kennst du <em>alle</em> Nodes:</p>
+      <p>Jeder Node ist nach demselben Schema aufgebaut. Wenn du diese Teile einmal kennst, kennst du <em>alle</em>
+        Nodes:</p>
 
       <figure class="figure">
         <div class="frame">
@@ -203,7 +211,7 @@
               <div class="n8n-sticky" style="left:40px; top:40px; max-width:230px;">
                 <b>So liest du einen Node</b>
                 Links der <b>Eingang</b>, rechts der <b>Ausgang</b>, oben die Mini-Werkzeugleiste, oben rechts
-                das Status-Häkchen nach erfolgreichem Lauf, darunter die Zahl der erzeugten Items.
+                das Status-Häkchen nach erfolgreichem Lauf, darunter die Zahl der erzeugten Items (Datensätze).
               </div>
             </div>
           </div>
@@ -214,26 +222,27 @@
       <table class="btable">
         <tbody>
           <tr><td>Icon und Name</td><td>Sagt dir, welche Integration oder Funktion hinter dem Node steckt.</td></tr>
-          <tr><td>Eingang (links) ●</td><td>Hier kommen Daten vom vorherigen Node an. Trigger haben keinen Eingang.</td></tr>
-          <tr><td>Ausgang (rechts) ●</td><td>Hier verlassen die Daten den Node Richtung nächstem Node. Von hier ziehst du eine Verbindung.</td></tr>
+          <tr><td>Eingang (links) ●</td><td>Hier kommen die Daten vom vorherigen Node an. Trigger haben keinen Eingang.</td></tr>
+          <tr><td>Ausgang (rechts) ●</td><td>Hier verlassen die Daten den Node Richtung nächstem Node. Von diesem Punkt aus ziehst du eine Verbindung.</td></tr>
           <tr><td>▶ Ausführen (Execute step)</td><td>Führt nur diesen Node aus, samt allem, was davor nötig ist. Zum schrittweisen Testen ist das dein wichtigster Knopf.</td></tr>
-          <tr><td>⏻ Deaktivieren</td><td>Schaltet den Node stumm, ohne ihn zu löschen (Daten fließen durch ihn hindurch). Tastenkürzel: <span class="kbd">D</span>.</td></tr>
+          <tr><td>⏻ Deaktivieren</td><td>Schaltet den Node stumm, ohne ihn zu löschen. Die Daten fließen einfach durch ihn hindurch. Tastenkürzel: <span class="kbd">D</span>.</td></tr>
           <tr><td><i class="vic vic-trash"></i> Löschen</td><td>Entfernt den Node vom Canvas.</td></tr>
           <tr><td>⋯ Kontextmenü</td><td>Alles Weitere: Rename node, Pin node, Copy node, Duplicate node, Tidy up workflow, Convert node to sub-workflow. Duplizieren liegt hier, nicht mehr direkt in der Werkzeugleiste.</td></tr>
-          <tr><td>✓ / ✕ Badge</td><td>Ergebnis des letzten Laufs: grün = ok, rot = Fehler.</td></tr>
+          <tr><td>✓ / ✕ Badge</td><td>Ergebnis des letzten Laufs: grün = alles gut, rot = Fehler.</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout--tip">
         <b class="t">Trigger erkennst du an der Form</b>
-        Trigger-Nodes haben eine charakteristisch <strong>abgerundete linke Seite</strong> (wie in Abb. 3.1 der „Zeitplan“-Node)
-        und besitzen keinen Eingangspunkt. So unterscheidest du auf einen Blick, wo ein Workflow beginnt.
+        Trigger-Nodes haben eine <strong>abgerundete linke Seite</strong> (wie in Abb. 3.1 der „Zeitplan“-Node)
+        und keinen Eingangspunkt. So siehst du auf einen Blick, wo ein Workflow beginnt.
       </div>
 
       <hr>
 
       <h2>Nodes hinzufügen: das Auswahl-Panel</h2>
-      <p>Es gibt drei Wege, einen Node hinzuzufügen. Alle öffnen dasselbe Such-Panel:</p>
+      <p>Es gibt drei Wege, einen neuen Node hinzuzufügen. Alle drei öffnen dasselbe Such-Panel (ein Suchfenster mit
+        Liste):</p>
       <div class="clickpath">
         <span class="step"><span class="n">1</span> <span class="kbd">N</span> drücken</span>
         <span class="arrow">oder</span>
@@ -242,10 +251,10 @@
         <span class="step"><span class="n">3</span> vom Ausgang eines Nodes eine Linie ins Leere ziehen</span>
       </div>
       <p>Ältere Anleitungen nennen für den ersten Weg <span class="kbd">Tab</span>. n8n hat das Kürzel auf
-        <span class="kbd">N</span> umgestellt, damit sich der Editor mit der Tab-Taste durchsteppen lässt. Wenn du dir
-        unsicher bist, zeig mit der Maus auf den <span class="kbd">+</span>-Knopf: n8n blendet das gültige Kürzel als
-        Tooltip ein. Ist dein Workflow noch leer, siehst du statt des Plus den Knopf <strong>Add first step</strong>;
-        er öffnet dasselbe Panel.</p>
+        <span class="kbd">N</span> umgestellt, damit sich der Editor mit der Tab-Taste durchsteppen lässt. Bist du
+        unsicher, zeig mit der Maus auf den <span class="kbd">+</span>-Knopf: n8n blendet das gültige Kürzel als
+        Tooltip (kleinen Hinweistext) ein. Ist dein Workflow noch ganz leer, siehst du statt des Plus den Knopf
+        <strong>Add first step</strong>. Er öffnet dasselbe Panel.</p>
 
       <figure class="figure">
         <div class="frame" style="display:flex; justify-content:center; padding:24px; background:#eef0f4; border-radius:12px;">
@@ -289,8 +298,9 @@
       <hr>
 
       <h2>Die Node-Detailansicht (NDV)</h2>
-      <p>Doppelklickst du einen Node, öffnet sich die <strong>Node Detail View</strong>, kurz NDV. Hier konfigurierst du den
-        Node und siehst sein Ergebnis. Die Ansicht hat drei Spalten und sieht bei jedem Node gleich aus:</p>
+      <p>Doppelklicke auf einen Node, und ein großes Fenster öffnet sich: die <strong>Node Detail View</strong>, kurz
+        NDV. Hier stellst du den Node ein und siehst sein Ergebnis. Die Ansicht hat drei Spalten und sieht bei jedem
+        Node gleich aus:</p>
 
       <figure class="figure">
         <div class="frame">
@@ -353,20 +363,21 @@
       <div class="callout callout--pareto">
         <b class="t">Das wichtigste Arbeitsmuster in n8n</b>
         Du baust einen Node, klickst <strong>▶ Schritt ausführen</strong>, siehst rechts das Ergebnis, korrigierst und
-        führst erneut aus. Node für Node. Dieses „bauen → ausführen → schauen“ ist der Rhythmus, in dem fast jeder
-        Workflow entsteht.
+        führst erneut aus. Node für Node. Dieses „bauen → ausführen → anschauen“ ist der Rhythmus, in dem fast jeder
+        Workflow entsteht. Merke ihn dir – wir nutzen ihn ab Kapitel 4 ständig.
       </div>
 
       <h4>Fest vs. Expression: der kleine Umschalter über jedem Feld</h4>
-      <p>Fährst du mit der Maus über ein Feld, erscheinen zwei Reiter: <strong>Fest</strong> (in der englischen Oberfläche
-        <em>Fixed</em>, du tippst einen festen Wert) und <strong>Expression</strong> (der Wert wird aus den Daten berechnet,
-        z. B. <code>{{ $json.stadt }}</code>). So übernehmen Nodes Daten voneinander. Kapitel 5 und 6 gehen ausführlich
-        darauf ein.</p>
+      <p>Fährst du mit der Maus über ein Eingabefeld, erscheinen darüber zwei kleine Reiter. <strong>Fest</strong>
+        (in der englischen Oberfläche <em>Fixed</em>) heißt: Du tippst einen festen Wert ein. <strong>Expression</strong>
+        heißt: Der Wert wird aus den Daten berechnet, z. B. <code>{{ $json.stadt }}</code>. Über Expressions übernehmen
+        Nodes Daten voneinander. Das musst du jetzt noch nicht können – Kapitel 5 und 6 gehen ausführlich darauf ein.</p>
 
       <hr>
 
       <h2>Die wichtigsten Tastenkürzel</h2>
-      <p>Ein paar Kürzel sparen dir spürbar Zeit. Den Rest findest du im <a href="../index.html">Anhang A</a>.</p>
+      <p>Ein paar Kürzel sparen dir spürbar Zeit. Du musst sie nicht auswendig lernen, diese Tabelle reicht zum
+        Nachschlagen. Den Rest findest du im <a href="../index.html">Anhang A</a>.</p>
       <table class="btable">
         <thead><tr><th>Kürzel</th><th>Wirkung</th></tr></thead>
         <tbody>
@@ -396,8 +407,8 @@
         </ul>
       </div>
 
-      <p>Du kennst jetzt das Cockpit. Zeit, es zu fliegen: Im nächsten Kapitel bauen wir gemeinsam deinen ersten
-        vollständigen Workflow, jeder Klick einzeln.</p>
+      <p>Du kennst jetzt das Cockpit. Im nächsten Kapitel bauen wir darin deinen ersten vollständigen Workflow,
+        jeder Klick einzeln.</p>
 
     </article>
     <nav id="prevnext"></nav>

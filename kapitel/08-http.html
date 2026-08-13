@@ -17,7 +17,7 @@
       <div class="chap-eyebrow"><span class="knum">8</span> Bausteine im Detail</div>
       <h1 class="chap-title">Der HTTP-Request-Node: jede API ansprechen</h1>
       <p class="chap-lede">Für hunderte Dienste gibt es fertige Nodes. Für alle anderen gibt es den HTTP-Request-Node: Mit ihm
-        sprichst du jeden Webdienst an, der eine Schnittstelle (API) hat, auch wenn es keinen eigenen Node dafür gibt.
+        sprichst du jeden Webdienst an, der eine Schnittstelle (API) hat.
         Verstehst du diesen einen Node, kommst du an fast jede Web-API heran.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 22 Minuten</span>
@@ -35,8 +35,8 @@
       </div>
 
       <h2>Was bei einem HTTP-Request passiert</h2>
-      <p>Ein HTTP-Request ist wie ein adressierter Brief an einen Server. Er besteht immer aus denselben Teilen, und genau die
-        füllst du im Node aus:</p>
+      <p>Ein HTTP-Request ist eine Anfrage an einen Server, also an den Computer hinter einer Webadresse. Stell ihn dir wie
+        einen adressierten Brief vor. Er besteht immer aus denselben Teilen. Genau diese Teile füllst du im Node aus:</p>
 
       <table class="btable">
         <thead><tr><th>Teil</th><th>Wofür</th></tr></thead>
@@ -68,11 +68,12 @@
       </div>
 
       <h2>Der Node im Detail</h2>
-      <p>Öffne einen frischen HTTP-Request-Node (Doppelklick). Ganz oben rechts im Parameter-Bereich sitzt der Knopf
-        <strong>Import cURL</strong>. Darunter stehen <strong>Method</strong> und <strong>URL</strong>, dann die
-        <strong>Authentication</strong> und dann drei Schalter, die je einen Bereich aufklappen:
-        <strong>Send Query Parameters</strong>, <strong>Send Headers</strong> und <strong>Send Body</strong>. Am Fuß der Liste
-        steht <strong>Add option</strong>. Damit holst du dir die Zusatzoptionen, um die es weiter unten geht.</p>
+      <p>Leg einen neuen HTTP-Request-Node an und öffne ihn mit einem Doppelklick. Du siehst jetzt den Parameter-Bereich.
+        Ganz oben rechts sitzt der Knopf <strong>Import cURL</strong>. Darunter stehen die Felder <strong>Method</strong> und
+        <strong>URL</strong>, dann <strong>Authentication</strong>. Es folgen drei Schalter:
+        <strong>Send Query Parameters</strong>, <strong>Send Headers</strong> und <strong>Send Body</strong>. Schaltest du
+        einen davon ein, klappt darunter ein eigener Bereich auf. Ganz unten steht <strong>Add option</strong>. Damit holst du
+        dir die Zusatzoptionen, um die es weiter unten geht.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -101,9 +102,9 @@
       <h2>Query-Parameter sauber setzen</h2>
       <p>In Kapitel 4 haben wir die Parameter direkt in die URL geschrieben (<code>…/forecast?latitude=52.52&amp;longitude=13.41</code>).
         Das funktioniert. Aufgeräumter geht es so: Schalte <strong>Send Query Parameters</strong> ein. Darunter erscheint das
-        Feld <strong>Specify Query Parameters</strong>, dort bleibt <em>Using Fields Below</em> stehen. Jetzt trägst du jeden
-        Parameter als Name/Wert-Paar ein; weitere Zeilen holst du dir über <strong>Add Query Parameter</strong>. Das bleibt
-        übersichtlich, und jeder Wert kann eine Expression sein.</p>
+        Feld <strong>Specify Query Parameters</strong>. Lass es auf <em>Using Fields Below</em> stehen. Jetzt trägst du jeden
+        Parameter einzeln ein: links den Namen, rechts den Wert. Eine weitere Zeile bekommst du mit einem Klick auf
+        <strong>Add Query Parameter</strong>. Der Vorteil: Es bleibt übersichtlich, und jeder Wert kann eine Expression sein.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -128,7 +129,8 @@
 
       <div class="callout callout--tip">
         <b class="t">Import cURL: der größte Zeitsparer</b>
-        Viele API-Dokus zeigen ihre Beispiele als <code>curl</code>-Befehl. Klick oben rechts im Node auf
+        Viele API-Dokus zeigen ihre Beispiele als <code>curl</code>-Befehl, eine Textzeile, die mit dem Wort
+        <code>curl</code> beginnt. Klick oben rechts im Node auf
         <strong>Import cURL</strong>. Es öffnet sich das Fenster <strong>Import cURL command</strong> mit dem Feld
         <strong>cURL Command</strong>. Befehl hineinkopieren, auf <strong>Import</strong> klicken, fertig: n8n füllt Method, URL,
         Query-Parameter, Header und Body aus. Lies den Hinweis im Fenster mit. Der Import überschreibt alles, was du im Node
@@ -136,10 +138,10 @@
       </div>
 
       <h2>Daten senden: der Body bei POST</h2>
-      <p>Beim POST schickst du Inhalt mit. Stell <strong>Method</strong> auf <code>POST</code>, schalte <strong>Send Body</strong>
-        ein und wähle als <strong>Body Content Type</strong> den Eintrag <code>JSON</code>. Darunter erscheint
-        <strong>Specify Body</strong>; stell es auf <em>Using JSON</em>. Jetzt tippst du den Body in das Feld darunter.
-        Expressions sind darin überall erlaubt:</p>
+      <p>Beim POST schickst du Inhalt mit. Stell <strong>Method</strong> auf <code>POST</code>. Schalte
+        <strong>Send Body</strong> ein. Wähle als <strong>Body Content Type</strong> den Eintrag <code>JSON</code>. Darunter
+        erscheint das Feld <strong>Specify Body</strong>; stell es auf <em>Using JSON</em>. Jetzt tippst du den Body in das
+        Feld darunter. Expressions sind darin überall erlaubt:</p>
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Body (JSON) mit eingebetteter Expression</div>
@@ -158,13 +160,14 @@
       </div>
 
       <h2>Die Antwort lesen</h2>
-      <p>Nach „▶ Schritt ausführen“ steht die Antwort im Ausgang, meist als ein Item mit JSON. Wie n8n sie behandelt, stellst du
-        ganz unten im Node ein: Klick auf <strong>Add option</strong> und wähle <strong>Response</strong>. Der Eintrag klappt drei
-        Felder auf:</p>
+      <p>Klick auf „▶ Schritt ausführen“. Danach steht die Antwort rechts im Ausgang, meist als ein Item mit JSON. Wie n8n die
+        Antwort behandelt, stellst du ganz unten im Node ein: Klick auf <strong>Add option</strong> und wähle
+        <strong>Response</strong>. Der Eintrag klappt drei Felder auf:</p>
       <ul>
         <li><strong>Response Format:</strong> <em>Autodetect</em> reicht fast immer. Für Dateien (PDF, Bild) nimmst du <em>File</em>,
           für Antworten, die kein sauberes JSON sind, <em>Text</em>. <em>JSON</em> erzwingt die JSON-Auswertung, auch wenn der
-          Server einen anderen Content-Type meldet. Bei <em>File</em> und <em>Text</em> kommt das Feld
+          Server einen anderen Content-Type meldet (das ist seine Angabe, in welchem Format die Antwort kommt). Bei
+          <em>File</em> und <em>Text</em> kommt das Feld
           <strong>Put Output in Field</strong> dazu; es steht auf <code>data</code>.</li>
         <li><strong>Include Response Headers and Status:</strong> legt neben dem Body auch Statuscode und Header ins Item. Praktisch,
           wenn du den Code später auswerten willst.</li>
@@ -173,16 +176,17 @@
       </ul>
       <p>Eines suchst du hier vergeblich: ein Feld, das eine Liste in einzelne Items zerlegt. Das hat der Node nicht mehr. In
         n8n 1.x hieß die Option <em>Split Into Items</em>; heute steckt sie nur noch in den alten Node-Versionen 1 und 2. Neue
-        HTTP-Request-Nodes legt n8n als Version 4.x an. Antwortet eine API mit einer reinen Liste auf oberster Ebene, macht n8n
-        daraus ohnehin schon ein Item pro Eintrag. Steckt die Liste dagegen als Feld in der Antwort, etwa unter
-        <code>results</code>, häng den Node <strong>Split Out</strong> dahinter und trag den Feldnamen unter
-        <strong>Fields To Split Out</strong> ein. Danach läuft der nächste Node pro Eintrag (Kapitel 9).</p>
+        HTTP-Request-Nodes legt n8n als Version 4.x an. Du brauchst die Option aber selten. Antwortet eine API mit einer reinen
+        Liste auf oberster Ebene, macht n8n daraus schon von selbst ein Item pro Eintrag. Steckt die Liste dagegen als Feld in
+        der Antwort, etwa unter <code>results</code>, häng den Node <strong>Split Out</strong> dahinter. Trag dort den Feldnamen
+        unter <strong>Fields To Split Out</strong> ein. Danach läuft der nächste Node pro Eintrag (Kapitel 9).</p>
 
       <h2>Viele Seiten, viele Items: Pagination und Batching</h2>
       <p>Zwei weitere Einträge unter <strong>Add option</strong> lösen die häufigsten Probleme mit echten APIs.</p>
-      <p><strong>Pagination</strong> holt Ergebnisseiten nach. Viele Dienste geben pro Aufruf nur 50 oder 100 Einträge zurück und
-        verstecken den Rest hinter einer zweiten, dritten, vierten Seite. Füg die Option <strong>Pagination</strong> hinzu und
-        stell den <strong>Pagination Mode</strong> ein; neben <em>Off</em> stehen dort zwei Wege zur Wahl.</p>
+      <p><strong>Pagination</strong> holt Ergebnisseiten nach. Viele Dienste geben pro Aufruf nur 50 oder 100 Einträge zurück.
+        Den Rest verstecken sie hinter einer zweiten, dritten, vierten Seite. Füg über <strong>Add option</strong> die Option
+        <strong>Pagination</strong> hinzu und stell den <strong>Pagination Mode</strong> ein; neben <em>Off</em> stehen dort
+        zwei Wege zur Wahl.</p>
       <p>Der erste heißt <em>Update a Parameter in Each Request</em> und zählt bei jedem Aufruf einen Parameter hoch. Darunter
         steht die Liste <strong>Parameters</strong> mit den Feldern <strong>Type</strong> (bleibt auf <em>Query</em>),
         <strong>Name</strong> und <strong>Value</strong>. Unter <strong>Name</strong> trägst du ein, wie der Seitenzähler heißt,
@@ -195,11 +199,11 @@
         dreht der Node Runde um Runde, falls die Abbruchbedingung nicht greift. Das habe ich beim ersten Mal falsch gemacht und
         einer fremden API 4000 Requests geschickt.</p>
       <p><strong>Batching</strong> bremst dich absichtlich aus. Bekommt der Node 500 Items herein, feuert er ohne Batching 500
-        Requests hintereinander ab, und viele Dienste antworten darauf mit <code>429</code>. Füg die Option
-        <strong>Batching</strong> hinzu. <strong>Items per Batch</strong> steht dann auf 50, <strong>Batch Interval (ms)</strong>
-        auf 1000. Übersetzt: 50 Anfragen, eine Sekunde Pause, die nächsten 50. Bei einer strengen API setzt du
-        <strong>Items per Batch</strong> auf 1 und das Intervall hoch. Langsam, aber es kommt an. Kapitel 23 geht das im
-        Zusammenhang durch.</p>
+        Requests hintereinander ab. Viele Dienste antworten darauf mit dem Fehlercode <code>429</code> („zu viele Anfragen“).
+        Füg die Option <strong>Batching</strong> hinzu. <strong>Items per Batch</strong> steht dann auf 50,
+        <strong>Batch Interval (ms)</strong> auf 1000. Übersetzt: 50 Anfragen, eine Sekunde Pause, die nächsten 50. Bei einer
+        strengen API setzt du <strong>Items per Batch</strong> auf 1 und das Intervall hoch. Langsam, aber es kommt an.
+        Kapitel 23 geht das im Zusammenhang durch.</p>
 
       <div class="callout callout--info">
         <b class="t">Authentication: kurz angerissen</b>
@@ -235,14 +239,14 @@
 
       <ol class="steps">
         <li><h4>Einen HTTP-Node anlegen</h4>
-          <p>Häng an einen manuellen Trigger einen <strong>HTTP Request</strong> und öffne ihn.</p></li>
+          <p>Häng an einen manuellen Trigger einen <strong>HTTP Request</strong>-Node. Öffne ihn mit einem Doppelklick.</p></li>
         <li><h4>Method auf POST stellen</h4>
-          <p>Feld <strong>Method</strong> → <code>POST</code>.</p></li>
+          <p>Klick auf das Feld <strong>Method</strong> und wähle <code>POST</code>.</p></li>
         <li><h4>Die URL eintragen</h4>
-          <p>Ins <strong>URL</strong>-Feld: <code>https://postman-echo.com/post</code></p></li>
+          <p>Kopiere in das Feld <strong>URL</strong>: <code>https://postman-echo.com/post</code></p></li>
         <li><h4>Body einschalten</h4>
-          <p><strong>Send Body</strong> an, <strong>Body Content Type</strong> = <code>JSON</code>, <strong>Specify Body</strong> =
-            <em>Using JSON</em>.</p></li>
+          <p>Schalte <strong>Send Body</strong> ein. Stell <strong>Body Content Type</strong> auf <code>JSON</code> und
+            <strong>Specify Body</strong> auf <em>Using JSON</em>.</p></li>
         <li><h4>Den Body eintippen</h4>
           <p>Trag dieses JSON ein (gern mit Expression beim Zeitstempel):</p></li>
       </ol>
@@ -257,7 +261,8 @@
 
       <ol class="steps" style="counter-reset: st 5;">
         <li><h4>Ausführen</h4>
-          <p>„▶ Schritt ausführen“ klicken. Rechts erscheint die Antwort.</p></li>
+          <p>Klick oben auf „▶ Schritt ausführen“. Rechts im Ausgang erscheint die Antwort. Das kann ein, zwei Sekunden
+            dauern.</p></li>
         <li><h4>Die Spiegelung finden</h4>
           <p>Such im Ergebnis das Feld <code>data</code>. Der Echo-Dienst gibt dort exakt deinen Body zurück. Damit ist bewiesen,
             dass dein POST samt JSON sauber angekommen ist. Daneben liegen noch <code>args</code>, <code>files</code>,
@@ -293,7 +298,7 @@
           </div>
         </div>
         <figcaption><span class="fig-tag">Abb. 8.3</span>Der Echo-Dienst spiegelt unter <code>data</code> exakt den gesendeten
-          Body zurück. Das ist der Beweis, dass dein POST funktioniert hat. Die Abbildung zeigt nur die beiden wichtigen Felder;
+          Body zurück; dein POST hat also funktioniert. Die Abbildung zeigt nur die beiden wichtigen Felder;
           in der echten Antwort stehen zusätzlich <code>args</code>, <code>files</code>, <code>form</code>, <code>headers</code>
           und <code>json</code>.</figcaption>
       </figure>

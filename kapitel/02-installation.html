@@ -16,8 +16,9 @@
 
       <div class="chap-eyebrow"><span class="knum">2</span> Grundlagen</div>
       <h1 class="chap-title">Installation & Setup</h1>
-      <p class="chap-lede">Drei Wege führen zu n8n. Wähle einen. Wechseln kannst du später jederzeit, denn deine
-        Workflows lassen sich exportieren und importieren.</p>
+      <p class="chap-lede">Es gibt drei Wege, n8n zum Laufen zu bringen. Du wählst einen davon. Falsch entscheiden
+        kannst du dich nicht: Deine Workflows lassen sich jederzeit exportieren und auf einem anderen Weg wieder
+        importieren.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 16 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Einstieg</span>
@@ -25,6 +26,9 @@
       </div>
 
       <h2>Welcher Weg ist der richtige für dich?</h2>
+      <p>Kurz zu den Begriffen: <strong>Cloud</strong> heißt, n8n läuft auf den Servern der n8n-Firma und du nutzt es
+        einfach im Browser. <strong>Lokal</strong> heißt, n8n läuft direkt auf deinem eigenen Rechner. <strong>Docker</strong>
+        ist ein Programm, das Anwendungen in einer abgeschotteten Box (einem „Container“) laufen lässt.</p>
       <table class="btable">
         <thead><tr><th>Weg</th><th>Aufwand</th><th>Für wen?</th></tr></thead>
         <tbody>
@@ -36,31 +40,35 @@
 
       <div class="callout callout--pareto">
         <b class="t">Empfehlung fürs Buch</b>
-        Wenn du nur loslegen willst: Nimm <strong>① Cloud</strong>. Du sparst dir jegliche Technik und siehst exakt die
-        Oberfläche aus diesem Buch. Self-Hosting (② / ③) zeige ich für später. Den Teil kannst du überspringen und
-        gleich zu Kapitel 3 gehen.
+        Wenn du einfach loslegen willst: Nimm <strong>① Cloud</strong>. Du musst nichts installieren und siehst exakt
+        die Oberfläche aus diesem Buch. Die Wege ② und ③ („Self-Hosting“, also selbst betreiben) zeige ich für später.
+        Diese Abschnitte kannst du jetzt überspringen und gleich zu Kapitel 3 gehen.
       </div>
 
       <h2>Weg ①: n8n Cloud (empfohlen)</h2>
       <ol class="steps">
         <li><h4>Registrierungsseite öffnen</h4>
-          <p>Gehe im Browser auf <code>n8n.io</code> und klicke im großen Kopfbereich auf <strong>„Get started for free“</strong>.
-            Oben rechts in der Navigationsleiste führt der Button <strong>„Get Started“</strong> an dieselbe Stelle.
-            Wenn du dir das Suchen sparen willst, tippe direkt <code>app.n8n.cloud/register</code> ein. Du landest auf
-            einer Anmeldemaske.</p>
+          <p>Öffne deinen Browser und tippe in die Adresszeile <code>n8n.io</code>. Klicke dann im großen Kopfbereich
+            der Seite auf den Button <strong>„Get started for free“</strong> (auf Deutsch: kostenlos loslegen). Falls du
+            ihn nicht findest: Oben rechts in der Navigationsleiste führt der Button <strong>„Get Started“</strong> an
+            dieselbe Stelle. Noch schneller geht es, wenn du direkt <code>app.n8n.cloud/register</code> in die
+            Adresszeile tippst. In allen Fällen landest du auf einer Anmeldemaske.</p>
         </li>
         <li><h4>Konto anlegen</h4>
-          <p>Gib E-Mail und Passwort ein (oder melde dich mit Google/GitHub an). Das Passwort braucht mindestens acht
-            Zeichen und darin wenigstens eine Ziffer und einen Großbuchstaben. Bestätige anschließend deine
-            E-Mail-Adresse, falls n8n dich dazu auffordert.</p>
+          <p>Gib deine E-Mail-Adresse und ein Passwort ein. Alternativ meldest du dich mit einem Klick über dein
+            Google- oder GitHub-Konto an. Das Passwort braucht mindestens acht Zeichen, darunter eine Ziffer und
+            einen Großbuchstaben. Vielleicht schickt n8n dir danach eine Bestätigungs-Mail. Dann klickst du auf den
+            Link darin.</p>
         </li>
         <li><h4>Workspace-Namen festlegen</h4>
-          <p>n8n richtet dir einen eigenen Workspace unter einer Adresse wie <code>dein-name.app.n8n.cloud</code> ein.
-            Das dauert nur Sekunden. Die Testphase läuft 14 Tage und schaltet dir in dieser Zeit die Funktionen des
-            Pro-Plans frei.</p>
+          <p>n8n richtet dir jetzt einen eigenen <strong>Workspace</strong> ein, also deinen persönlichen
+            Arbeitsbereich im Netz. Er bekommt eine Adresse wie <code>dein-name.app.n8n.cloud</code>. Das Einrichten
+            dauert nur Sekunden. Die Testphase läuft 14 Tage. In dieser Zeit kannst du die Funktionen des Pro-Plans
+            kostenlos nutzen.</p>
         </li>
         <li><h4>Du landest im leeren Editor</h4>
-          <p>Glückwunsch. Genau diese Oberfläche begleitet dich durch das ganze Buch:</p>
+          <p>Glückwunsch, das war schon alles. Du siehst jetzt eine fast leere Fläche mit einem großen <strong>+</strong>
+            in der Mitte. Genau diese Oberfläche begleitet dich durch das ganze Buch:</p>
         </li>
       </ol>
 
@@ -91,9 +99,11 @@
       </figure>
 
       <h2>Weg ②: n8n lokal mit npx</h2>
-      <p>Ist auf deinem Rechner Node.js installiert, startest du n8n mit einem einzigen Befehl. Stand Juli 2026
+      <p>Dieser Weg setzt voraus, dass auf deinem Rechner <strong>Node.js</strong> installiert ist. Node.js ist eine
+        kostenlose Laufzeitumgebung, mit der JavaScript-Programme wie n8n auf deinem Rechner laufen. Stand Juli 2026
         verlangt n8n eine Node.js-Version zwischen <strong>20.19 und 24.x</strong>, beide Grenzen eingeschlossen.
-        Öffne ein Terminal und tippe:</p>
+        Öffne dann ein <strong>Terminal</strong>, also das Fenster, in das du Textbefehle eintippst (auf dem Mac heißt
+        das Programm „Terminal“, unter Windows „PowerShell“). Tippe dort diesen Befehl ein und drücke Enter:</p>
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Terminal</div>
@@ -101,8 +111,8 @@
 npx n8n</pre>
       </div>
 
-      <p>Beim ersten Start lädt n8n sich herunter (das kann ein, zwei Minuten dauern). Danach erscheint im Terminal
-        eine Zeile wie diese:</p>
+      <p>Beim ersten Start lädt sich n8n herunter. Das kann ein bis zwei Minuten dauern, in denen im Terminal
+        viel Text vorbeiläuft. Das ist normal, du musst nichts tun. Am Ende erscheint eine Zeile wie diese:</p>
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Terminal-Ausgabe</div>
@@ -111,6 +121,9 @@ npx n8n</pre>
 
 <span class="cm">Press "o" to open in Browser.</span></pre>
       </div>
+
+      <p>Sobald du diese Zeile siehst, läuft n8n. Du kannst jetzt einfach die Taste <code>o</code> drücken, dann
+        öffnet sich der Browser von selbst. Oder du machst es von Hand:</p>
 
       <div class="clickpath">
         <span class="step"><span class="n">1</span> Browser öffnen</span>
@@ -122,22 +135,28 @@ npx n8n</pre>
         <span class="step"><span class="n">4</span> fertig</span>
       </div>
 
-      <p>Beim ersten Aufruf legst du ein <strong>Owner-Konto</strong> an: Name, E-Mail, Passwort. Auch hier gilt die
-        Regel von mindestens acht Zeichen mit Ziffer und Großbuchstabe. Das Konto liegt nur auf deinem Rechner und
-        schützt den Editor. Keine Daten gehen nach außen.</p>
+      <p><code>localhost:5678</code> bedeutet übrigens: „mein eigener Rechner, Tür Nummer 5678“. Die Adresse
+        funktioniert nur bei dir, sie führt nicht ins Internet. Beim ersten Aufruf legst du ein
+        <strong>Owner-Konto</strong> an (Owner = Besitzer dieser n8n-Installation): Name, E-Mail, Passwort. Auch hier
+        gilt die Regel von mindestens acht Zeichen mit Ziffer und Großbuchstabe. Das Konto liegt nur auf deinem
+        Rechner und schützt den Editor. Keine Daten gehen nach außen. Danach siehst du denselben leeren Editor wie in
+        Abb. 2.1.</p>
 
       <div class="callout callout--warn">
         <b class="t">Achtung: Daten weg beim Schließen?</b>
-        Mit <code>npx n8n</code> liegen deine Workflows in einem versteckten Ordner <code>~/.n8n</code>. Darin steht die
-        Datenbankdatei <code>database.sqlite</code> und dein Verschlüsselungsschlüssel. Solange du den Ordner nicht
-        löschst, bleibt alles erhalten, auch nach einem Neustart. Schließt du nur das Terminal, ist n8n bloß gestoppt
-        und nicht gelöscht. Mit <code>npx n8n</code> startest du es wieder.
+        Keine Sorge. Mit <code>npx n8n</code> liegen deine Workflows in einem versteckten Ordner <code>~/.n8n</code>
+        in deinem Benutzerverzeichnis. Darin stehen die Datenbankdatei <code>database.sqlite</code> und dein
+        Verschlüsselungsschlüssel. Solange du diesen Ordner nicht löschst, bleibt alles erhalten, auch nach einem
+        Neustart des Rechners. Schließt du nur das Terminal, ist n8n bloß gestoppt, nicht gelöscht. Mit
+        <code>npx n8n</code> startest du es wieder.
       </div>
 
       <h2>Weg ③: Docker (für dauerhaftes Self-Hosting)</h2>
-      <p>Für den Dauerbetrieb ist Docker die praktischste Variante: n8n läuft im Container, getrennt vom Rest deines
-        Systems. Du brauchst dafür eine installierte Docker-Umgebung. Der folgende Befehl startet n8n und legt die
-        Daten in einem benannten Volume ab, damit beim Neustart nichts verloren geht:</p>
+      <p>Für den Dauerbetrieb ist Docker die praktischste Variante. n8n läuft dann in einem Container, getrennt vom
+        Rest deines Systems. Voraussetzung: Docker ist auf deinem Rechner
+        installiert. Öffne dann ein Terminal und führe die folgenden zwei Befehle nacheinander aus. Der erste legt ein
+        <strong>Volume</strong> an, einen dauerhaften Speicherplatz für deine Daten. Der zweite startet n8n. So geht
+        beim Neustart nichts verloren:</p>
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Terminal</div>
@@ -156,41 +175,45 @@ docker run -it --rm <span class="ky">\</span>
   docker.n8n.io/n8nio/n8n</pre>
       </div>
 
-      <p>Die drei <code>-e</code>-Zeilen sind kein Beiwerk. <code>TZ</code> stellt die Zeitzone des Betriebssystems im
-        Container, auf die sich Systembefehle und Skripte beziehen. <code>GENERIC_TIMEZONE</code> setzt die Zeitzone für
+      <p>Die drei Zeilen mit <code>-e</code> setzen sogenannte Umgebungsvariablen, also Einstellungen, die du n8n beim
+        Start mitgibst. Lass keine davon weg. <code>TZ</code> stellt die Zeitzone des Betriebssystems im Container
+        ein. Darauf beziehen sich Systembefehle und Skripte. <code>GENERIC_TIMEZONE</code> setzt die Zeitzone für
         zeitgesteuerte Nodes wie den Schedule Trigger. Ohne diese Angabe rechnet n8n mit seinem Standardwert
-        <code>America/New_York</code>, und dein „täglich um 8 Uhr“ feuert um 14 Uhr deutscher Zeit. Meist merkst du das
-        erst, wenn dein Morgenreport nachmittags ankommt. <code>N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true</code> setzt
-        strenge Dateirechte auf die Konfigurationsdatei, in der auch dein Verschlüsselungsschlüssel liegt.</p>
+        <code>America/New_York</code>. Dein „täglich um 8 Uhr“ feuert dann um 14 Uhr deutscher Zeit. Meist merkst du
+        das erst, wenn dein Morgenreport nachmittags ankommt. <code>N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true</code>
+        setzt strenge Dateirechte auf die Konfigurationsdatei, in der auch dein Verschlüsselungsschlüssel liegt.</p>
 
-      <p>Auch hier öffnest du danach <code>http://localhost:5678</code>. Für einen echten Server kommen später noch
-        eine feste Domain, HTTPS und weitere Umgebungsvariablen dazu. Das vertiefen wir in Kapitel 24 (Deployment).</p>
+      <p>Sobald der zweite Befehl läuft, öffnest du im Browser <code>http://localhost:5678</code>, legst wie bei Weg ② dein
+        Owner-Konto an und bist im Editor. Für einen echten Server kommen später noch eine feste Domain, HTTPS und
+        weitere Umgebungsvariablen dazu. Das vertiefen wir in Kapitel 24 (Deployment).</p>
 
       <div class="callout callout--info">
         <b class="t">Task Runner musst du nicht mehr einschalten</b>
-        Seit n8n 2.0 sind Task Runner standardmäßig an. Code-Nodes laufen also von sich aus isoliert, ohne dass du
-        etwas konfigurierst. Die Variable <code>N8N_RUNNERS_ENABLED</code>, die in älteren Anleitungen für 1.x
-        auftaucht, ist ab 2.0 deprecated und im Befehl oben bewusst nicht enthalten. Für die Lernkapitel reicht damit
-        eine normale Einzelinstanz. Interessant wird das Thema erst im Dauerbetrieb: Dort empfiehlt n8n den externen
-        Modus, bei dem die Runner in eigenen Containern starten. Das ordnen wir in Kapitel 25 ein.
+        In älteren Anleitungen für n8n 1.x taucht die Variable <code>N8N_RUNNERS_ENABLED</code> auf. Die brauchst du
+        nicht mehr. Seit n8n 2.0 sind Task Runner standardmäßig an, Code-Nodes laufen also von sich aus isoliert und
+        sicher. Die Variable ist ab 2.0 deprecated (veraltet) und fehlt im Befehl oben deshalb mit Absicht. Für die
+        Lernkapitel reicht eine normale Einzelinstanz. Erst im Dauerbetrieb wird das Thema interessant: Dort empfiehlt
+        n8n den externen Modus, bei dem die Runner in eigenen Containern starten. Das ordnen wir in Kapitel 25 ein.
       </div>
 
       <div class="callout callout--info">
         <b class="t">Cloud gegen Self-Hosting: der eine echte Unterschied</b>
-        In der Cloud funktionieren Webhooks sofort, denn du bekommst eine öffentlich erreichbare Adresse. Lokal ist
-        dein <code>localhost</code> von außen nicht erreichbar. Für Webhook-Tests brauchst du dann einen Tunnel, den
-        wir in Kapitel 7 zeigen. n8n baut ihn inzwischen über cloudflared, weshalb dafür auch bei einer npm-Installation
-        Docker auf dem Rechner liegen muss. Für die ersten Kapitel spielt das alles keine Rolle.
+        In der Cloud funktionieren Webhooks (Nachrichten, die andere Dienste an deinen Workflow schicken) sofort, denn
+        du bekommst eine öffentlich erreichbare Adresse. Lokal ist dein <code>localhost</code> von außen nicht
+        erreichbar. Für Webhook-Tests brauchst du dann einen Tunnel, den wir in Kapitel 7 zeigen. n8n baut ihn
+        inzwischen über cloudflared, weshalb dafür auch bei einer npm-Installation Docker auf dem Rechner liegen muss.
+        Für die ersten Kapitel spielt das alles keine Rolle.
       </div>
 
       <h2>Was du beim ersten Login siehst</h2>
       <p>Egal welcher Weg: Nach dem allerersten Start fragt n8n ein paar Dinge ab (Owner-Konto, optional eine kurze
-        Umfrage „Wofür nutzt du n8n?“). Danach bist du im Editor. Vielleicht begrüßt dich ein leerer Canvas mit dem
-        großen <strong>+</strong> wie in Abb. 2.1, vielleicht auch ein Begrüßungsfenster mit zwei großen Buttons. Nimm
-        dort den, der einen leeren Workflow anlegt; in der englischen Oberfläche heißt er
-        <strong>Start from Scratch</strong>. Ein dritter Fall ist die Übersichtsseite mit der Workflow-Liste. Dann
-        klickst du dort auf <strong>Create Workflow</strong>. Manchmal schiebt n8n vorher noch eine kurze Tour
-        dazwischen; die kannst du gefahrlos wegklicken.</p>
+        Umfrage „Wofür nutzt du n8n?“). Danach bist du im Editor. Wundere dich nicht, wenn dein Bildschirm etwas
+        anders aussieht als hier beschrieben. Es gibt drei mögliche Varianten, und alle sind in Ordnung. Erste
+        Variante: ein leerer Canvas (die große Arbeitsfläche) mit dem großen <strong>+</strong> wie in Abb. 2.1.
+        Zweite Variante: ein Begrüßungsfenster mit zwei großen Buttons. Klicke dort auf den Button, der einen leeren
+        Workflow anlegt; in der englischen Oberfläche heißt er <strong>Start from Scratch</strong>. Dritte Variante:
+        eine Übersichtsseite mit einer Workflow-Liste. Dann klickst du dort auf <strong>Create Workflow</strong>.
+        Manchmal schiebt n8n vorher noch eine kurze Tour dazwischen. Die kannst du gefahrlos wegklicken.</p>
 
       <div class="prereq">
         <h4><i class="vic vic-check-circle"></i> Checkliste: Bereit für Kapitel 3?</h4>
@@ -201,8 +224,8 @@ docker run -it --rm <span class="ky">\</span>
         </ul>
       </div>
 
-      <p>Steht das? Perfekt. Im nächsten Kapitel nehmen wir diese Oberfläche systematisch auseinander: jeden Bereich
-        und jeden wichtigen Button. Danach fühlst du dich dort nie wieder verloren.</p>
+      <p>Kannst du alle drei Punkte abhaken? Dann ist dieses Kapitel erledigt. Im nächsten nehmen wir die Oberfläche
+        auseinander, jeden Bereich und jeden wichtigen Button, damit du später nicht suchen musst.</p>
 
     </article>
     <nav id="prevnext"></nav>

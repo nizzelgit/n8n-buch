@@ -16,55 +16,62 @@
 
       <div class="chap-eyebrow"><span class="knum">0.1</span> Orientierung</div>
       <h1 class="chap-title">Das 80/20 von n8n — die wichtigen 35 %</h1>
-      <p class="chap-lede">n8n listet inzwischen fast 2000 Integrationen, und jeder Node bringt eigene Optionen mit.
-        Die gute Nachricht: Ein kleiner Kern erklärt fast alles, was du je bauen wirst. Dieses Kapitel ist die
-        Landkarte dazu. Der Rest des Buchs füllt sie aus.</p>
+      <p class="chap-lede">n8n listet inzwischen fast 2000 Integrationen, also fertige Anbindungen an andere Programme.
+        Das klingt nach viel Lernstoff. Ist es aber nicht: Ein kleiner Kern erklärt fast alles, was du je bauen wirst.
+        Dieses Kapitel ist die Landkarte dazu. Der Rest des Buchs füllt sie aus.</p>
       <div class="chap-meta">
         <span><i class="vic vic-clock"></i> ca. 12 Minuten</span>
         <span><i class="vic vic-target"></i> Niveau: Einstieg</span>
         <span><i class="vic vic-zap"></i> Grundlage für alle weiteren Kapitel</span>
       </div>
 
-      <p>Bevor wir irgendetwas installieren oder klicken, lohnt sich eine mentale Landkarte. Wenn du die folgenden
-        sieben Bausteine verstehst, kannst du dir fast jeden Workflow selbst herleiten, auch solche, die in diesem
-        Buch gar nicht vorkommen. Alles andere sind Varianten und Spezialfälle.</p>
+      <p>Bevor wir irgendetwas installieren oder klicken, bauen wir eine Landkarte im Kopf. Du musst hier noch
+        nichts ausprobieren, nur lesen. Wenn du die folgenden sieben Bausteine verstehst, kannst du dir später
+        fast jeden Workflow selbst herleiten, auch solche, die in diesem Buch gar nicht vorkommen. Alles andere
+        sind Varianten und Spezialfälle.</p>
 
       <div class="callout callout--pareto">
         <b class="t">Die Kernidee in einem Satz</b>
         Ein n8n-Workflow ist eine <strong>Kette von Bausteinen (Nodes)</strong>, durch die <strong>Daten (Items)</strong>
-        von links nach rechts fließen; jeder Node bekommt Daten herein, tut <em>eine</em> Sache und gibt Daten weiter.
+        von links nach rechts fließen. Jeder Node bekommt Daten herein, tut <em>eine</em> Sache und gibt Daten weiter.
+        Ein „Workflow“ ist dabei einfach ein Ablauf, den n8n für dich automatisch ausführt.
       </div>
 
       <h2>Die 7 Bausteine, die fast alles erklären</h2>
 
       <h3>1. Der Auslöser (Trigger): „Wann soll es losgehen?“</h3>
-      <p>Jeder Workflow braucht mindestens einen Auslöser. Am Anfang ist es genau einer. Er beantwortet die Frage,
-        <em>wann</em> der Workflow startet. In der Praxis brauchst du fast immer nur drei:</p>
+      <p>Jeder Workflow braucht mindestens einen Auslöser (englisch: Trigger). Am Anfang ist es genau einer.
+        Er beantwortet die Frage, <em>wann</em> der Workflow startet. In der Praxis brauchst du fast immer nur drei:</p>
       <ul>
-        <li><strong>Manual Trigger</strong> – im Node-Panel heißt der Eintrag „Trigger manually“. Du startest den
-          Workflow dann mit dem Knopf <strong>Execute workflow</strong>, der in älteren Versionen „Test workflow“
-          hieß. Zum Bauen und Ausprobieren.</li>
+        <li><strong>Manual Trigger</strong> – der Start per Hand. Im Node-Panel (der Auswahlliste, aus der du neue
+          Nodes hinzufügst) heißt der Eintrag „Trigger manually“. Gestartet wird dann mit dem Knopf
+          <strong>Execute workflow</strong>; in älteren Versionen hieß er „Test workflow“. Diesen Trigger nutzt du
+          zum Bauen und Ausprobieren.</li>
         <li><strong>Zeitplan (Schedule Trigger)</strong> – „jeden Tag um 8 Uhr“. Für Reports, Backups, Erinnerungen.</li>
-        <li><strong>Webhook</strong> – „immer wenn jemand dieses Formular abschickt / dieses System mir Daten schickt“.
-          Das Tor zu praktisch jeder anderen Software.</li>
+        <li><strong>Webhook</strong> – „immer wenn jemand dieses Formular abschickt“ oder „immer wenn dieses andere
+          System mir Daten schickt“. Das Tor zu praktisch jeder anderen Software.</li>
       </ul>
       <p>Eine Sache, über die ich beim Umstieg auf n8n 2.0 selbst gestolpert bin: Schedule und Webhook laufen erst
-        von allein, wenn du den Workflow veröffentlichst. Deine Änderungen speichert n8n zwar automatisch, aber
-        nur als <strong>Draft</strong>, und ein Draft ändert am Produktivbetrieb nichts. Erst <strong>Publish</strong>
-        schiebt genau diesen Stand live. Solange du nicht publiziert hast, startest du jede Ausführung selbst.
-        Den alten Schalter „Active“ aus n8n 1.x gibt es dafür nicht mehr.</p>
+        von allein, wenn du den Workflow veröffentlichst. n8n speichert deine Änderungen zwar automatisch, aber nur
+        als <strong>Draft</strong> (Entwurf). Ein Entwurf läuft nie von allein. Erst wenn du auf
+        <strong>Publish</strong> (veröffentlichen) klickst, geht genau dieser Stand live. Vorher startest du jede
+        Ausführung selbst per Knopf. Falls du irgendwo vom Schalter „Active“ liest: Den gab es in n8n 1.x, heute
+        nicht mehr.</p>
       <div class="callout callout--pareto"><b class="t">Merke</b>Schedule + Webhook decken geschätzt 80 % aller realen Startpunkte ab.</div>
 
       <h3>2. Daten holen: der HTTP-Request-Node</h3>
       <p>n8n hat fertige Nodes für Google Sheets, Slack, Telegram, Notion und hunderte mehr. Der wichtigste einzelne
-        Node ist trotzdem <strong>HTTP Request</strong>. Damit sprichst du <em>jede</em> Internet-Schnittstelle (API) an,
-        auch die, für die es keinen fertigen Node gibt. Wer den HTTP-Node beherrscht, ist von keiner Integration abhängig.</p>
+        Node ist trotzdem <strong>HTTP Request</strong>. Eine API ist eine Internet-Schnittstelle: eine Adresse, unter
+        der ein Programm Daten für andere Programme bereitstellt. Mit dem HTTP-Request-Node sprichst du <em>jede</em>
+        solche Schnittstelle an, auch die, für die es keinen fertigen Node gibt. Wer diesen Node beherrscht, ist von
+        keiner Integration abhängig.</p>
 
       <h3>3. Daten umformen: Edit Fields (Set) und der Code-Node</h3>
       <p>Zwischen „Daten rein“ und „Daten raus“ liegt fast immer ein bisschen Umbau: Felder umbenennen, zusammenfügen,
         ausrechnen, filtern. Dafür reichen meist zwei Werkzeuge. Der <strong>Edit Fields (Set)</strong>-Node deckt die
-        einfachen Fälle ab; auf dem Canvas heißt er dann kurz „Edit Fields“. Der <strong>Code-Node</strong> übernimmt
-        alles, was Logik braucht.</p>
+        einfachen Fälle ab; auf dem Canvas (der Arbeitsfläche, auf der du Workflows baust) heißt er kurz „Edit Fields“.
+        Der <strong>Code-Node</strong> übernimmt alles, was Logik braucht. Keine Sorge: Für die meisten Workflows
+        brauchst du ihn gar nicht.</p>
 
       <h3>4. Entscheiden: If und Switch</h3>
       <p>„Wenn der Betrag über 1000 € liegt, schicke es an den Chef, sonst direkt verbuchen.“ Solche Verzweigungen
@@ -77,13 +84,17 @@
         ein Eintrag im CRM. Das sind Aktions-Nodes. Sie funktionieren alle nach demselben Muster, das du einmal lernst.</p>
 
       <h3>6. Der rote Faden: Items und Expressions</h3>
-      <p>Daten reisen als <strong>Items</strong> (kleine Datenpakete im JSON-Format) durch den Workflow. Um in einem späteren
-        Node auf einen Wert aus einem früheren zuzugreifen, nutzt du <strong>Expressions</strong>, also kleine Platzhalter wie
-        <code>{{ $json.email }}</code>. Das ist der wichtigste „Trick“, um Nodes miteinander zu verdrahten.</p>
+      <p>Daten reisen als <strong>Items</strong> durch den Workflow. Ein Item ist ein kleines Datenpaket, zum Beispiel
+        „eine E-Mail“ oder „eine Tabellenzeile“, notiert im JSON-Format (einer einfachen Textschreibweise für Daten).
+        Um in einem späteren Node auf einen Wert aus einem früheren zuzugreifen, nutzt du <strong>Expressions</strong>:
+        kleine Platzhalter wie <code>{{ $json.email }}</code>. Beim Ausführen setzt n8n dort den echten Wert ein.
+        Das ist der wichtigste „Trick“, um Nodes miteinander zu verdrahten.</p>
 
       <h3>7. Verlässlichkeit: Fehlerbehandlung</h3>
-      <p>Sobald ein Workflow echte Arbeit macht, wird auch mal etwas schiefgehen (API down, falsche Daten).
-        Wer früh lernt, wie man Fehler abfängt, baut Automatisierungen, denen man vertrauen kann.</p>
+      <p>Sobald ein Workflow echte Arbeit macht, geht auch mal etwas schief: Ein Dienst ist gerade nicht erreichbar,
+        oder Daten sehen anders aus als erwartet. Das ist normal und kein Grund zur Panik. Lern trotzdem früh,
+        solche Fehler abzufangen: Genau da liegt der Unterschied zwischen einem Bastel-Workflow und einem,
+        dem man vertraut.</p>
 
       <h2>Die Landkarte als Bild</h2>
       <p>So greifen diese Bausteine ineinander. Genau dieses Muster wirst du in fast jedem Projekt wiedererkennen:</p>
@@ -149,8 +160,9 @@
 
       <div class="callout callout--tip">
         <b class="t">Die beruhigende Wahrheit</b>
-        Die ersten drei Zeilen sind die wichtigen 35 %. „Logisch denken“ kannst du längst. JSON und einfache
-        Expressions lernst du in zwei Kapiteln. Damit baust du bereits die Mehrheit aller Workflows in diesem Buch.
+        Die ersten drei Zeilen der Tabelle sind die wichtigen 35 %. „Logisch denken“ kannst du längst. JSON und
+        einfache Expressions lernst du in zwei Kapiteln. Damit baust du bereits die Mehrheit aller Workflows in
+        diesem Buch. Programmieren im klassischen Sinn ist nirgends Pflicht.
       </div>
 
       <h2>Wie der Rest des Buchs darauf aufbaut</h2>

@@ -29,7 +29,7 @@
         <h4><i class="vic vic-clipboard"></i> Was du brauchst</h4>
         <ul>
           <li>n8n läuft, und du siehst den Editor (so wie am Ende von Kapitel 2).</li>
-          <li><strong>Kein</strong> Konto und <strong>kein</strong> API-Schlüssel. Wir nutzen eine offene, kostenlose Wetter-API namens <em>Open-Meteo</em>.</li>
+          <li><strong>Kein</strong> Konto und <strong>kein</strong> API-Schlüssel. Wir nutzen eine offene, kostenlose Wetter-API namens <em>Open-Meteo</em>. Eine API ist eine Internet-Adresse, unter der Programme Daten abholen können.</li>
           <li>Optional ganz am Ende: ein Telegram-Bot, falls du das Ergebnis aufs Handy schicken willst (reine Kür, du kannst es weglassen).</li>
         </ul>
       </div>
@@ -41,9 +41,9 @@
       </div>
 
       <h2>Das Ziel: So sieht der fertige Workflow aus</h2>
-      <p>Damit du weißt, wohin die Reise geht: Am Ende hast du genau diese drei verbundenen Nodes gebaut und erfolgreich
-        ausgeführt. Achte auf die Pfeile zwischen den Nodes. Sie zeigen die Richtung, in die die Daten fließen, immer von
-        links nach rechts.</p>
+      <p>Am Ende dieses Kapitels stehen diese drei verbundenen Nodes auf deinem Canvas, alle mit grünem Häkchen. Achte
+        auf die Pfeile zwischen den Nodes. Sie zeigen die Richtung, in die die Daten fließen, immer von links nach
+        rechts.</p>
 
       <figure class="figure">
         <div class="frame">
@@ -82,7 +82,7 @@
         <li><h4>Den Knopf zum Anlegen finden</h4>
           <p>Schau in die <strong>obere rechte Ecke</strong>. Dort sitzt der Knopf <strong>„Create workflow“</strong>
             (auf Deutsch etwa „Workflow erstellen“). Klicke ihn an. Neben dem Knopf gibt es noch einen kleinen Pfeil für
-            andere Dinge wie Credential oder Ordner. Den ignorierst du hier.</p></li>
+            andere Dinge, etwa ein Credential (so nennt n8n gespeicherte Zugangsdaten) oder einen Ordner. Den Pfeil ignorierst du hier.</p></li>
         <li><h4>Was du jetzt siehst</h4>
           <p>Es öffnet sich eine leere, gepunktete Arbeitsfläche (der Canvas). In der Mitte steht ein großes
             <span class="kbd">+</span> mit der Beschriftung <strong>„Add first step…“</strong>. Oben links steht der
@@ -112,13 +112,13 @@
       <h2>Schritt 3: Auto-Save und Draft verstehen</h2>
       <ol class="steps">
         <li><h4>Auto-Save abwarten</h4>
-          <p>n8n speichert deine Bearbeitungen automatisch als Draft, laut Doku innerhalb von einer bis fünf Sekunden.
+          <p>n8n speichert deine Bearbeitungen automatisch als <strong>Draft</strong>, also als Entwurf. Laut Doku passiert das innerhalb von einer bis fünf Sekunden.
             Warte nach dem Umbenennen kurz. Oben im Kopf springt die Anzeige erst auf <strong>„Saving“</strong>, danach
             auf <strong>„Saved“</strong>. Von Hand speichern musst du also nichts, einen Save-Knopf gibt es dafür
             auch nicht mehr.</p></li>
         <li><h4>Publish noch nicht klicken</h4>
-          <p>In diesem Kapitel bauen und testen wir nur. <strong>Publish</strong> brauchst du erst, wenn ein Trigger später
-            automatisch produktiv laufen soll.</p></li>
+          <p>In diesem Kapitel bauen und testen wir nur. <strong>Publish</strong> (veröffentlichen) brauchst du erst, wenn ein
+            Trigger später automatisch produktiv laufen soll.</p></li>
       </ol>
       <div class="callout callout--tip">
         <b class="t">Gespeichert ist nicht veröffentlicht</b>
@@ -171,7 +171,7 @@
         <li><h4>Was jetzt passiert</h4>
           <p>Das Panel schließt sich. Auf dem Canvas liegt nun ein Node mit abgerundeter linker Seite. Daran erkennst du
             einen Trigger. Er hat nur <strong>rechts</strong> einen kleinen Verbindungspunkt (Ausgang) und
-            <strong>keinen</strong> Eingang links. Genau richtig, denn er ist der Anfang. Unter dem Node steht der
+            <strong>keinen</strong> Eingang links: Er ist ja der Anfang. Unter dem Node steht der
             Vorgabename, den n8n vergibt: <code>When clicking ‘Execute workflow’</code>.</p></li>
       </ol>
 
@@ -205,8 +205,8 @@
 
       <div class="callout callout--warn">
         <b class="t">Wenn etwas schiefgeht</b>
-        <p style="margin:0 0 6px">• <strong>Versehentlich den Node verschoben</strong> statt eine Linie gezogen? Dann hattest du nicht den
-          kleinen Kreis, sondern den Node-Körper gegriffen. Schieb den Node zurück und ziele erneut genau auf den Punkt rechts.</p>
+        <p style="margin:0 0 6px">• <strong>Versehentlich den Node verschoben</strong> statt eine Linie gezogen? Das passiert am Anfang jedem.
+          Du hattest den Node-Körper gegriffen statt den kleinen Kreis. Schieb den Node zurück und ziele erneut auf den Punkt rechts.</p>
         <p style="margin:0">• <strong>Panel hat sich nicht geöffnet?</strong> Du hast die Linie evtl. auf einem bestehenden Node losgelassen.
           Zieh erneut und lass über <em>leerer</em> Fläche los.</p>
       </div>
@@ -214,8 +214,9 @@
       <h2>Schritt 6: Den HTTP-Node öffnen und die URL eintragen</h2>
       <ol class="steps">
         <li><h4>Node öffnen</h4>
-          <p><strong>Doppelklicke</strong> den neuen „HTTP Request“-Node. Es öffnet sich die große Detailansicht (NDV) mit drei
-            Spalten: links <em>Eingang</em>, Mitte <em>Parameter</em>, rechts <em>Ausgang</em>.</p></li>
+          <p><strong>Doppelklicke</strong> den neuen „HTTP Request“-Node. Es öffnet sich die große Detailansicht des Nodes.
+            n8n nennt sie kurz <strong>NDV</strong> (Node Detail View). Sie hat drei Spalten: links <em>Eingang</em>,
+            Mitte <em>Parameter</em>, rechts <em>Ausgang</em>.</p></li>
         <li><h4>Die Methode prüfen</h4>
           <p>In der mittleren Spalte steht ganz oben das Feld <strong>„Method“</strong>. Es steht bereits auf <strong>GET</strong>.
             Genau das wollen wir (GET = „hol mir Daten“). Nichts ändern.</p></li>
@@ -282,10 +283,11 @@
           <p>Klicke <strong>oben rechts im NDV</strong> auf <strong>„▶ Schritt ausführen“</strong> (engl. <em>Execute step</em>).
             n8n ruft jetzt die URL auf. Das dauert meist unter einer Sekunde.</p></li>
         <li><h4>Das Ergebnis erscheint rechts</h4>
-          <p>In der <strong>rechten Spalte (Ausgang)</strong> taucht JSON auf. Oben rechts steht <strong>„1 Item“</strong>. Stell
-            sicher, dass der Reiter auf <strong>„JSON“</strong> steht (Reiter: Tabelle / JSON / Schema).</p></li>
+          <p>In der <strong>rechten Spalte (Ausgang)</strong> tauchen Daten im JSON-Format auf. JSON ist ein Textformat,
+            in dem Computer Daten strukturiert notieren. Oben rechts steht <strong>„1 Item“</strong>. Über den Daten siehst du
+            drei Reiter: Tabelle / JSON / Schema. Stell sicher, dass <strong>„JSON“</strong> ausgewählt ist.</p></li>
         <li><h4>Den wichtigen Wert finden</h4>
-          <p>Such im Ergebnis das Objekt <code>current</code> und darin <code>temperature_2m</code>. Genau diesen Pfad
+          <p>Such im Ergebnis das Objekt <code>current</code> und darin <code>temperature_2m</code>. Diesen Pfad
             brauchen wir gleich: <strong><code>current.temperature_2m</code></strong>. Merk ihn dir.</p></li>
       </ol>
 
@@ -324,7 +326,7 @@
         <p style="margin:0 0 6px">• <strong>Rote Fehlermeldung statt JSON?</strong> Meistens ein Tippfehler in der URL. Lösch das URL-Feld
           komplett und füge die Zeile aus dem Codeblock oben noch einmal sauber ein.</p>
         <p style="margin:0">• <strong>„ENOTFOUND“ / Netzwerkfehler?</strong> Dann hat n8n gerade keinen Internetzugang (z. B. lokal hinter
-          einem strengen Firewall). Prüfe deine Verbindung und versuch es erneut.</p>
+          einer strengen Firewall). Prüfe deine Verbindung und versuch es erneut.</p>
       </div>
 
       <div class="callout callout--tip">
@@ -345,8 +347,9 @@
       <hr>
 
       <h2>Schritt 9: Aus den Daten einen lesbaren Satz bauen</h2>
-      <p>Rohes JSON verschickt man niemandem. Mit dem <strong>Edit-Fields-Node</strong> (im Panel: „Edit Fields (Set)“) bauen
-        wir daraus einen fertigen Satz. Dabei schreibst du deine erste <strong>Expression</strong>.</p>
+      <p>So ein roher Datenblock ist für Menschen mühsam zu lesen. Mit dem <strong>Edit-Fields-Node</strong> (im Panel:
+        „Edit Fields (Set)“) bauen wir daraus einen fertigen Satz. Dabei schreibst du deine erste <strong>Expression</strong>,
+        also eine kleine Formel, in die n8n echte Daten einsetzt.</p>
 
       <ol class="steps">
         <li><h4>Den nächsten Node anhängen</h4>
@@ -357,10 +360,10 @@
             erscheint, verbunden mit dem HTTP-Node.</p></li>
         <li><h4>Node öffnen</h4>
           <p><strong>Doppelklick</strong> auf den neuen Node. Die NDV öffnet sich. Im <strong>Eingang</strong> (linke Spalte) siehst
-            du jetzt die Daten, die aus dem HTTP-Node kommen. Perfekt, denn die brauchen wir gleich.</p></li>
+            du jetzt die Daten, die aus dem HTTP-Node kommen. Die brauchen wir gleich.</p></li>
         <li><h4>Den Modus prüfen</h4>
           <p>Oben in der Parameter-Spalte steht <strong>„Mode“</strong> auf <strong>„Manual Mapping“</strong> (Felder von Hand setzen).
-            Genau richtig, nichts ändern. Die zweite Option heißt <strong>„JSON“</strong>, die lassen wir hier links liegen.</p></li>
+            Das passt, nichts ändern. Die zweite Option heißt <strong>„JSON“</strong>, die lassen wir hier links liegen.</p></li>
         <li><h4>Ein neues Feld hinzufügen</h4>
           <p>Darunter liegt der Bereich <strong>„Fields to Set“</strong>. Er ist noch leer und zeigt untereinander drei
             Zeilen: den Hinweis <em>„Drag input fields here“</em>, ein kleines <em>„or“</em> und darunter blau
@@ -382,14 +385,14 @@
 
       <div class="code">
         <div class="code__bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp; Wert des Feldes „nachricht“ (Modus: Expression)</div>
-<pre>🌤️ In Berlin sind es gerade {{ $json.current.temperature_2m }} °C bei {{ $json.current.wind_speed_10m }} km/h Wind.</pre>
+<pre>Wetter-Update: In Berlin sind es gerade {{ $json.current.temperature_2m }} °C bei {{ $json.current.wind_speed_10m }} km/h Wind.</pre>
       </div>
 
       <div class="callout callout--tip">
         <b class="t">Profi-Abkürzung statt Abtippen</b>
         Du musst <code>{{ $json.current.temperature_2m }}</code> nicht von Hand schreiben. Wechsle in der linken Spalte
         (Eingang) auf den Reiter <strong>„Schema“</strong>, such das Feld <code>temperature_2m</code> und zieh es per
-        Drag-and-drop direkt in das Value-Feld. n8n fügt die fertige Expression automatisch ein. Genau dafür ist der
+        Drag-and-drop direkt in das Value-Feld. n8n fügt die fertige Expression automatisch ein. Dafür ist der
         Hinweis <em>„Drag input fields here“</em> da, den du eben gesehen hast.
       </div>
 
@@ -418,14 +421,14 @@
                   <div class="row">
                     <label>Value</label>
                     <div class="ndv-fxtab"><b>Fest</b><b class="is-active">Expression</b></div>
-                    <input class="n8n-input is-expr" value="🌤️ In Berlin sind es {{ $json.current.temperature_2m }} °C …">
+                    <input class="n8n-input is-expr" value="Wetter-Update: In Berlin sind es {{ $json.current.temperature_2m }} °C …">
                   </div>
                 </div></div>
               <div class="ndv-panel"><div class="ndv-panel__head">Ausgang ➡ <span class="count">1 Item</span></div>
                 <div class="ndv-panel__body">
                   <div class="ndv-viewtabs"><b>Tabelle</b><b class="is-active">JSON</b><b>Schema</b></div>
                   <div class="n8n-json" style="margin-top:10px;">{
-  <span class="k">"nachricht"</span>: <span class="s">"🌤️ In Berlin sind es 17.4 °C bei 12.3 km/h Wind."</span>
+  <span class="k">"nachricht"</span>: <span class="s">"Wetter-Update: In Berlin sind es 17.4 °C bei 12.3 km/h Wind."</span>
 }</div>
                 </div></div>
             </div>
@@ -445,8 +448,8 @@
         <b class="t">Was bedeutet <code>$json</code> genau?</b>
         <code>$json</code> heißt immer „die Daten, die gerade in <em>diesen</em> Node hereinkommen“, also die Ausgabe des
         direkt davor liegenden HTTP-Nodes. Mit den Punkten hangelst du dich durch die Verschachtelung:
-        <code>$json.current.temperature_2m</code> = „nimm <code>current</code>, darin <code>temperature_2m</code>“. Genau das
-        vertiefen wir im nächsten Kapitel.
+        <code>$json.current.temperature_2m</code> = „nimm <code>current</code>, darin <code>temperature_2m</code>“. Mehr dazu
+        im nächsten Kapitel.
       </div>
 
       <div class="callout callout--warn">
@@ -478,7 +481,7 @@
       <div class="callout callout--pareto">
         <b class="t">Das Grundmuster trägt weit</b>
         Du hast einen vollständigen Workflow gebaut: Er holt echte Daten aus dem Internet und formt sie in einen Satz um.
-        Genau dieses Skelett (<em>Trigger → Daten holen → umformen</em>) steckt in der Mehrheit aller Automatisierungen,
+        Dieses Skelett (<em>Trigger → Daten holen → umformen</em>) steckt in der Mehrheit aller Automatisierungen,
         die du je bauen wirst.
       </div>
 
@@ -548,9 +551,9 @@
         <li>Einen einzelnen Schritt und den ganzen Workflow ausführen und das Ergebnis prüfen.</li>
       </ul>
 
-      <p>Die Expression hat sich fast wie Zauberei angefühlt? Sie ist eine Rechenvorschrift, die n8n vor jedem Lauf frisch
-        einsetzt. Mehr nicht. Das nächste Kapitel macht aus dem Bauchgefühl echtes Verständnis: Items, JSON und der
-        Datenfluss.</p>
+      <p>Die Expression hat sich fast wie Zauberei angefühlt? Sie ist nur eine Vorlage mit Platzhaltern, die n8n vor jedem
+        Lauf frisch mit den aktuellen Daten füllt. Mehr nicht. Das nächste Kapitel macht aus dem Bauchgefühl echtes
+        Verständnis: Items, JSON und der Datenfluss.</p>
 
     </article>
     <nav id="prevnext"></nav>
